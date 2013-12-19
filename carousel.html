@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Carousel - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+<script type="text/javascript" src="js/raw/carousel.js"></script>
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">&lt; Back to All JavasScript Projects</a>
+</div>
+<div class="container">
+
+    <div class="script-header">
+    	<h1>Carousel</h1>
+        <a href="docs.html#carousel">Documentation</a>
+	</div>
+    
+    <div class="carousel animals" data-carousel="curr:1">
+    	<a href="javascript:void(0);" class="pag prev" rel="prv">&larr;</a>
+        <a href="javascript:void(0);" class="pag next" rel="nxt">&rarr;</a>
+        <div class="viewer">
+            <ul>
+                <li><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/elephant.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/tiger.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/wolf.jpg" /></li>
+            </ul>
+        </div>
+        
+        <div class="jump"></div>       
+    </div>
+    
+    <div class="fixer" style="height:20px;"></div>
+    
+    <div class="carousel animals onlyOne" data-carousel="rotate:true">
+    	<a href="javascript:void(0);" class="pag prev" rel="prv">&larr;</a>
+        <a href="javascript:void(0);" class="pag next" rel="nxt">&rarr;</a>
+        <div class="viewer">
+            <ul>
+                <li><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/elephant.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/tiger.jpg" /></li>
+                <li><img alt="" src="images/carousel-imgs/wolf.jpg" /></li>
+            </ul>
+        </div><div class="jump"></div> 
+    </div>
+    
+</div>
+
+<script type="text/javascript">ML.El.evt(window, 'load', function() {ML.CarouselHandler();}, true);</script>
+</body>
+</html>

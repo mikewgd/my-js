@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Fade (In/Out) - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+<script type="text/javascript" src="js/raw/fading.js"></script>
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">< Back to All JavasScript Projects</a>
+</div>
+<div class="container">
+
+	<div class="script-header">
+		<h1>Fading Animation</h1>
+        <a href="docs.html#fade">Documentation</a>
+  	</div>
+    
+	<a href="javascript:void(0);" class="example fl" onclick="ML.Fading.prop({ele: 'fade1', start: 80, to: 0, repeat: false});" id="fade1" style="opacity:.8;filter:alpha(opacity=80);">My opacity is it set to .8 (80) and when clicked I will fade to 0 and when clicked again I will NOT fade back to .8 (8) from 0</a>
+    <a href="javascript:void(0);" class="example fl" onclick="ML.Fading.prop({ele: 'fade2', to: 50, repeat: true});" id="fade2">My opacity is not set and will be using the default value and I will fade to .5 (50) and then when clicked again I will fade back<br />to my original opacity.</a>
+    <a href="javascript:void(0);" class="example fl" onclick="ML.Fading.prop({ele: 'fade3'});" id="fade3">Im using all default values and settings.</a>
+    <a href="javascript:void(0);" class="example fl" onclick="ML.Fading.prop({ele: 'fade4', repeat: true, cycle: true});" id="fade4">Im using default opacity values and when I fade to 0, I will fade back to my original opacity.</a>
+    <a href="javascript:void(0);" class="example fl" onmouseout="ML.Fading.prop({ele: 'fade5', start: 100, to: 50, repeat: true });" onmouseover="ML.Fading.prop({ele: 'fade5', start: 50, to: 100, repeat: true });" id="fade5" style="opacity:.5;filter:alpha(opacity=50);">Opacity Hover</a>
+    
+    <div style="clear:both;display:block;width:100%; height:20px;"></div>
+    <div class="notes">
+    	<h3>Notes</h3>
+        <ul>
+        	<li>IE6 will just automatically cycle through the animation.</li>
+        	<li>IE6-IE9 does not behave properly when just putting repeat: true and no cycle.</li>
+        </ul>
+    </div>
+    
+</div>
+</body>
+</html>

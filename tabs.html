@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Tabs - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+<script type="text/javascript" src="js/raw/tabs.js"></script>
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">< Back to All JavasScript Projects</a>
+</div>
+
+<div class="container">
+
+	<div class="script-header">
+		<h1>Tabs</h1>
+        <a href="docs.html#tabs">Documentation</a>
+	</div>
+        
+    <ul class="tabs tabs::holder:tab-contents">
+        <li class="active"><a href="#folio">Folio</a></li>
+        <li class="active"><a href="#contact">Contact</a></li>
+    </ul>
+    
+    <div class="tab-contents" id="tab-contents">
+        <div class="tab-content">
+            <h2>Folio</h2> 
+            <p>Do you like what you see? Please <a href="#contact" target="internal">contact me</a>.</p>
+        </div>
+        
+        <div class="tab-content">
+            <h2>Contact</h2>
+            <p>I am some content</p>
+        </div>
+    </div>
+    
+    <p>You can <a href="#contact" target="internal">contact me</a> or see my <a href="#folio" target="internal">folio</a></p>
+        
+    
+</div>
+
+<script>addLoadEvent(function() {ML.Tabs.init();})</script>
+</body>
+</html>

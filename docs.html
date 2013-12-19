@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<title>Documentation</title>
+</head>
+
+<body>
+
+<div class="usage" id="carousel">
+<h1>Carousel</h1>
+<div class="contents">
+<p>When creating a carousel please give it a unique id.</p>
+<p>The HTML Structure should :</p>
+<pre><code>&lt;div class=&quot;carousel&quot; id=&quot;<strong>animals</strong>&quot;&gt;<br />    &lt;a href=&quot;#&quot; class=&quot;pag prev&quot; style=&quot;visibility:hidden&quot;&gt;Previous&lt;/a&gt;<br />    &lt;div class=&quot;holder&quot;&gt;<br />        &lt;div class=&quot;viewer&quot;&gt;<br />            &lt;ul&gt;
+                &lt;li&gt;&lt;!-- Carousel item --&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;!-- Carousel item --&gt;&lt;/li&gt;
+            &lt;/ul&gt;<br />        &lt;/div&gt;<br />        <em>*&lt;div class=&quot;jump&quot;&gt;&lt;/div&gt; </em>      <br />    &lt;/div&gt;<br />    &lt;a href=&quot;#&quot; class=&quot;pag next&quot;&gt;Next&lt;/a&gt;<br />&lt;/div&gt;</code></pre>
+<p>The order of the &lt;div&gt; tags is not necessary. The necessary &lt;div&gt; tags are <strong>&lt;div class=&quot;viewer&quot;&gt;</strong>, <strong>&lt;a href=&quot;#&quot; class=&quot;pag prev&quot;&gt;</strong> and <strong>&lt;a href=&quot;#&quot; class=&quot;pag next&quot;&gt;</strong><br />
+  <em>*&lt;div class=&quot;jump&quot;&gt;</em> is optional if you want jump links (links at the bottom that go right to a slide in the carousel.</p>
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the script</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the carousel. All you need to do is call <strong>ML.Carousel.setup({carousel:'unique-id', jump:true, increment:2});</strong> The only really important one to fill out it is <strong>carousel</strong>.<strong> Jump</strong> is if you want jump links, by default it is set to false.<strong> Increment </strong>deals with the animation.</p>
+</div>
+</div>
+
+<div class="usage" id="overlays">
+<h1>Overlays</h1>
+<div class="contents">
+<h3>Tooltips & Modals</h3>
+<p class="imp">Be sure to follow the proper naming conventions when giving your element a unique rel attribute and id of the tooltip.<br />
+Example: <code>&lt;a rel=&quot;*&amp;id&quot;&gt;</code> = this may be ok, but you CAN NOT have an id with those characters. <br />
+<br />
+They must meet this criteria: <br />
+-Begin with a letter A-Z or a-z <br />
+-Followed by: letters (A-Za-z), digits (0-9), hyphens ("-"), and underscores ("_").</p>
+<div style="height:10px;clear:both;"></div>
+<h3>Tooltips</h3>
+<p>There are two types of tooltips: <strong>static</strong> and <strong>dynamic</strong>. <em>Static</em> being the HTML is already on the page and <em>Dynamic</em> meaning it is created and put into the DOM.</p>
+<p class="imp">You must add class "tooltip::" to the element you would like a tooltip for!<br />You do not have to use a link to activate the tooltip, it can be any element!</p>
+<p>You can either use the default settings (defined in the JS) or you can set your own. To set your own custom settings you add them to the class of the element you want a tooltip for (i.e. <code>&lt;a href=&quot;#&quot; rel=&quot;cows&quot; class=&quot;tooltip::direction:top:width:100&quot;&gt;</code>). There are ONLY two settings you can define: direction (top, bottom, left, right) and width. Each setting is separated by a &quot;:&quot; </p>
+<p><strong>For Static Tooltips:</strong> You must place a unique <code>rel</code> attribute in the element you would like a tooltip for. This will be used to reference the tooltip id. See the example below for the HTML structure of the tooltip and what I mean in terms of referencing the tooltip.</p>
+<pre><code>&lt;a href=&quot;#&quot; class=&quot;tooltip::direction:top:width:140&quot; rel=&quot;<strong>cows</strong>&quot;&gt;I have a tooltip&lt;/a&gt;
+
+&lt;!-- HTML STRUCTURE for Tooltip --&gt;
+&lt;div id=&quot;<strong>cows</strong>&quot; class=&quot;tooltip hidden&quot;&gt;
+    &lt;span class=&quot;arrow&quot;&gt;&lt;/span&gt;
+    &lt;div class=&quot;content&quot;&gt;&lt;!--Place content here that you would like to be displayed--&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p class="imp">So you see rel and the id of the tooltip must be the same!</p>
+<p>So, this example is saying that when I hover over the link a tooltip with an id of cows, will appear on top of the link and will be 140px in width.</p>
+<p><strong>For Dynamic Tooltips:</strong> All you need to do is place what you want displayed in the tooltip in the <code>title</code> attribute. So no need to add HTML structure for the tooltip or put a unique <code>rel</code> attribute in the element. You can really place anything in the title attribute, but if JS is disabled you will see your Operating System's default tooltip for elements with a <code>title</code> attribute. And if you have text that is bold, it will look like this: I am &lt;strong&gt;content&lt;/strong&gt; inside a tooltip. With Javascript enabled it will look like: I am <strong>content</strong> inside a tooltip. The OS default tooltip can not render HTML code.</p>
+<div style="height:10px;clear:both;"></div>
+<h3>Modals</h3>
+<p>There are 3 types of modals: <strong>static</strong>, <strong>dynamic-ajax</strong> and <strong>dynamic-iframe</strong>. <em>Static</em> being the HTML is already on the page. <em>Dynamic-ajax</em> is a page being displayed via Ajax and <em>Dynamic-iframe</em> is for displaying only an iframe.</p>
+<p class="imp">You must add class "modal::" to the link you would like a modal for!</p>
+<p>You can either use the default settings (defined in the JS) or you can set your own .To set your own custom settings you add them to the class of the element you want a modal for (i.e. <code>&lt;a href=&quot;#&quot; rel=&quot;cows&quot; class=&quot;modal::width:100:height:100&quot;&gt;</code>). There are ONLY two settings you can define: height and width. Each setting is separated by a &quot;:&quot;. There is another setting that is used for iframe modals (will mention below).</p>
+<p><strong>For Static Modals:</strong> You must place a unique <code>rel</code> attribute in the linkt you would like a modal for. This will be used to reference the modal id. See the example below for the HTML structure of the modal and what I mean in terms of referencing thetmodal.</p>
+<pre><code>&lt;a href=&quot;&quot; class=&quot;modal::width:140:height:200&quot; rel=&quot;<strong>cows</strong>&quot;&gt;Im a modal link&lt;/a&gt;
+
+&lt;!-- HTML STRUCTURE for Modal --&gt;
+&lt;div id=&quot;<strong>cows</strong>&quot; class=&quot;modal hidden&quot;&gt;
+    &lt;div class=&quot;header&quot;&gt;<br />        &lt;!-- Place your header text here, I currently am using an &lt;h1&gt; tag. --&gt;
+    &lt;/div&gt;<br />    &lt;div class=&quot;content&quot;&gt;<br />        &lt;!-- Place content in here --&gt;<br />    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p class="imp">So you see rel and the id of the modal must be the same!</p>
+<p>So, this example is saying that when I click the link, the modal displayed has an id of cows, will appear centered on the page and will have a width of 140px and a height of 200px.</p>
+<p><strong>For Dynamic-iframe Modals:</strong> The page you want displayed in the iframe, place in the <code>href</code> attribute of the link. Give it a <code>rel</code> attribute of "iframe" and the header for the modal add to the class name (this will be added to the <code>&lt;h1&gt;</code> tag on the modal header.  See below for proper link syntax:</p>
+<pre><code>&lt;a href=&quot;http://mikewgd.com&quot; rel=&quot;iframe&quot; class=&quot;modal::width:200:height:100:header:Mikewgd.com&quot;&gt;</code></pre>
+<p><strong>For Dynamic-ajax Modals:</strong> The location of the file you would like to be Ajax'ed in goes in the <code>href</code> attribute of the link. Give it a <code>rel</code> attribute of "ajax" and the content for that page will be ajaxed in and will show up inside a modal. See below for proper link syntax:</p>
+<pre><code>&lt;a href=&quot;ajax-files/hello.html&quot; rel=&quot;ajax&quot; class=&quot;modal::width:200:height:100&quot;&gt;</code></pre>
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the scripts</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that are needed for the tooltips and/or modals to work. To call the modals: <strong>ML.Modal.init();</strong> and to call the tooltips: <strong>ML.Tooltip.init();</strong></p>
+<p>You can place these in either a window.onload or with the addLoadEvent which you will see when viewing the source of the page.</p>
+<p>However since all settings are placed within a Javascript object you can esentially place them on a certain ele(link,span) by giving it a specific id or by putting an onclick on the ele(link,span) [I'de stay away from inline JS though].</p>
+<p>This means you would not need to call the <strong>ML.Modal.init();</strong> and/or <strong>ML.Tooltip.init();</strong> Being able to do this allows you to change the events the functions are activated as well. So instead of click on a link to activate a modal you can make it happen when you hover over a link. Here is an example for both:</p> 
+<pre><code>&lt;a href=&quot;#&quot; id=&quot;modal-example-link&quot;&gt;link&lt;/a&gt;
+&lt;a href=&quot;#&quot; id=&quot;tooltip-example-link&quot;&gt;link&lt;/a&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    addLoadEvent(function() {
+        _$('modal-example-link').onclick = function() {
+            ML.Modal.show({id: 'modal-example', width: 400, height: 100});
+        }
+
+        _$('modal-example-link').onmouseover = function() {
+            ML.Tooltip.show({id: 'tooltip-example', width: 400, direction: 'left'});
+        }
+     })
+&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+</div>
+</div>
+
+<div class="usage" id="toggler">
+<h1>Toggler</h1>
+<div class="contents">
+<p>There are two types of toggles: <strong>regular</strong> and <strong>slide</strong>. <em>Regular</em> is a basic hide and show of your content. <em>Slide toggle</em> slides the content up and down.</p>
+<p><strong>For Both toggles:</strong> You <strong>MUST</strong> give a unique <code>rel</code> attribute in your <code>&lt;a&gt;</code> tag. This will be to reference the element you would like to toggle. So follow the same rules when giving ids to elements. You MUST also add &quot;toggle&quot; to the class name of your <code>&lt;a&gt;</code> in order for either toggles to work.</p>
+<p>I have also created an attribute for the link called "text" which you place on the <code>&lt;a&gt;</code>. This is the text you would like displayed when your content is displayed. See the example below:</p>
+<pre><code>&lt;a href=&quot;#&quot; class=&quot;toggle&quot; rel=&quot;<strong>unique-id</strong>&quot; text=&quot;Close It&quot;&gt;Open It&lt;/a&gt;
+
+&lt;div id=&quot;<strong>unique-id</strong>&quot;&gt;
+    &lt;p&gt;I am content to be toggled, yay!&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+<p class="imp">So the rel of the link must = the id you want to toggle!</p>
+<p>So this example says its a <strong>regular toggle</strong> and we are toggling an element with an<strong> id of "unique-id"</strong>. The <strong>text to open the toggle is "Open It"</strong> and when the content is displayed the <strong>link's text changes to "Close It"</strong>.</p>
+<p>For Slide Toggle: All you need to do is add "slide" to the link class name:</p>
+<pre><code>&lt;a href=&quot;#&quot; class=&quot;<strong>slide</strong> toggle&quot; rel=&quot;unique-id&quot; text=&quot;Close It&quot;&gt;</code></pre>
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the script</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the toggler. All you need to do is call <strong>ML.Toggler.init();</strong>.</p>
+</div>
+</div>
+
+<div class="usage" id="slide-panel">
+<h1>Slide Panel</h1>
+<div class="contents">
+<p>Slide Panel is a lot like the slide toggle.</p>
+<p>When you click on a tab, the content or "panel" slides down.</p>
+<p>Follow the HTML structure below and you MUST give the panel a unique id!</p>
+<pre><code>&lt;div class=&quot;curtain&quot; id=&quot;<strong>unique-id</strong>&quot;&gt;<br />    &lt;div class=&quot;contents&quot;&gt;
+        &lt;!-- Place content in here. Padding should be appended to the &quot;contents&quot; class --&gt;<br />    &lt;/div&gt;<br />    &lt;a href=&quot;#&quot; class=&quot;tab&quot; text=&quot;up&quot;&gt;down&lt;/a&gt;<br />&lt;/div&gt;</code></pre>
+<p class="imp">The "tab" or link to slide the panel up or down MUST be placed after the <code>&lt;div class=&quot;contents&quot;&gt;</code></p>
+<p>Place all margins and padding on <code>&lt;div class=&quot;contents&quot;&gt;</code> as well.</p>
+<p>If you choose to have the text change when the tab is fully opened and fully closed. Place the text you would like displayed when the panel is fully opened in the <code>text</code> attribute of the link. The text that you want displayed when the panel is fully closed place in the link.<br />
+EX: <code>&lt;a href=&quot;#&quot; class=&quot;tab&quot; text=&quot;shown when opened&quot;&gt;shown when closed&lt;/a&gt;</code></p>
+
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the script</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the panels. All you need to do is call <strong>ML.SlidePanel.setup({id: 'unique-id1, unique-id2'});</strong>. Place the id or ids within single or double quotes. If more than one separate each by a comma and a space after the comma.</p>
+</div>
+</div>
+
+<div class="usage" id="form-elems">
+<h1>Form Elements</h1>
+<div class="contents">
+<p>To use the custom form elements (radio buttons, checkboxes, select menu and scroller (buggy*)). All you need to do is add the scripts located in the head of this page.</p>
+<p>They do not rely on each other at all! So, you can just have the custom radios/checkboxes and not the select menu.</p>
+<p class="imp">Be sure to add type to the <code>&lt;input&gt;</code> tag. So for radios use: <code>&lt;input type="radio" /&gt;</code> and for checkbox: <code>&lt;input type="checkbox" /&gt;</code></p>
+<p class="imp">For a custom <code>&lt;select&gt;</code> tag. Just be sure to use the actual tag.</p>
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the scripts</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the custom elements to display. All you need to do is call <strong>ML.Form_RadioCheck.init();</strong> (for custom radios/checkboxes) and/or
+<strong>ML.Form_Select.init();</strong> (custom select menu).</p>
+<p>You can place these in either a window.onload or with the addLoadEvent which you will see when viewing the source of the page.</p>
+</div>
+</div>
+
+<div class="usage" id="accordion">
+<h1>Accordion</h1>
+<div class="contents">
+<p>There are two types of accordions: <strong>multi-toggler</strong> (toggle more than one at a time) and <strong>single-toggler</strong> (toggle only one at a time).</p>
+<p>The HTML structure of the accordion (both types) should be like this and you <strong>MUST</strong> give a unique id:</p>
+<pre><code>&lt;ul class=&quot;accordion&quot; id=&quot;<strong>unique-id</strong>&quot;&gt;
+    &lt;li&gt;
+        &lt;a class=&quot;acc&quot; href=&quot;#&quot;&gt;link&lt;/a&gt;
+        &lt;div class=&quot;content&quot;&gt;
+            &lt;!-- Place content in here --&gt;
+        &lt;/div&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p>You may also choose to have one open when you arrive to the page. By placing &quot;open&quot; as the class name of the li element you want opened. Just a note: Only one should be opened for the single-toggler.</p>
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the script</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the accordion. All you need to do is call <strong>ML.Accordion.init({id: 'unique-id', toggle: 1 or 0})</strong>. If you put 1 for toggle the elements will only toggle one at a time and 0 is a multi-toggle. If nothing is entered, the default is 0. If you want to make 2 accordions. You would do 'id, id, id'.</p>
+</div>
+</div>
+
+<div class="usage" id="fade">
+<h1>Fading Animation</h1>
+<div class="contents">
+<p>This script will fade in and out elements. You MUST give the element a unique id! The script would be activated on any type of JS Event Handler. Such as a 'click', 'load', 'mouse over', 'mouse leave', and etc...</p>
+        <p>In order to use the script you must include the <code>fading.js</code> file.</p>
+        <p>When using the script there are several paramaters that you need pass through the object: 'ele', 'to', 'start', 'repeat' and 'cycle'. The ele is required, the last three (to, start, repeat and cycle) defaults will be used (defined in the JS).</p>
+		<p>If you have opacity set on an element be sure to place that number in 'to' and multiple by hundred. So if your element has <code>opacity:.5</code>, you would be 50 in 'to'. Consider the example below:</p>
+        
+        <pre><code>1 &lt;a href=&quot;#&quot; id=&quot;fade-link&quot;&gt;Click me&lt;/a&gt;
+2
+3 &lt;div id=&quot;fade-test&quot; style=&quot;opacity:.5;filter:alpha(opacity=50);&quot;&gt;Faded element&lt;/a&gt;
+4
+5 &lt;script&gt;
+6   _$('fade-link').onclick = function() {<br />7      ML.Fading.prop({ele: 'fade-test', to: 0, start: 50, repeat: true, cycle: true});
+8   }
+9 &lt;/script&gt;</code></pre>
+<p>1 - A link with an id of "fade-link" so we can reference to it later.</p>
+<p>3 - This is the element we are fading and has an id of &quot;fade-test&quot;. The <code>filter:alpha(opacity=50);</code> is for IE. All you do is take the opacity value in this case (.5) and multiple by 100 and you get 50.</p>
+<p>6-8 - When you click on the link with an id of "fade-link" it will fade the element "fade-test" from .5(50) opacity to 0 and once it reaches opacity 0, it will than fade back to .5(50) opacity.</p>
+<p><strong>Repeat</strong> takes 2 options: <em>true</em> or <em>false</em>. When putting <em>true</em> when you hover/click/etc.. on the element it will go to the desired opacity and when you hover/click/etc.. on the element again it will go from the element's current opacity to the opacity the element's original opacity. When putting <em>false</em> when you  hover/click/etc.. on the element it will go to the desired opacity and when you hover/click/etc.. on the element again it will stay at the current opacity and will not repeat the animation.</p>
+<p><strong>Cycle</strong> takes 2 options as well: <em>true</em> or <em>false</em>.When putting true when you hover/click/etc.. on the elment it will go to the desired opacity and then it will go back to the original opacity and when you hover/click/etc.. on the element it will do the same thing over again.</p>
+<p class="imp">If you put repeat: false and put cycle: true, it will make cycle=false. Cycle relies on Repeat!</p>
+<p>The examples below are using inline JS which is NOT recommended! It is purely for testing the script and providing examples.</p>
+</div>
+</div>
+
+<div class="usage" id="inp-control">
+<h1>Input Control</h1>
+<div class="contents">
+<p>Clears the input onfocus and if a value you entered is different than the default value nothing will happen.</p>
+<div style="clear:both; height:10px;"></div>
+<h3>Activating the script</h3>
+<p>Pretty simple implementing this script. If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for this to work. All you need to do is call <strong>ML.Form_InputControl.init(); </strong> And your good to go!</p>
+</div>
+</div>
+
+<div class="usage" id="tabs">
+<h1>Tabs</h1>
+<div class="contents">
+<p>Here is the HTML structure needed for creating tabs:</p>
+<pre><code>&lt;ul class=&quot;<strong>tabs::</strong>holder:<strong>tab-contents</strong>&quot;&gt;<br />    &lt;li&gt;&lt;a href=&quot;#unique&quot;&gt;Tab Name 1&lt;/a&gt;&lt;/li&gt;<br />    &lt;li&gt;&lt;a href=&quot;#unique&quot;&gt;Tab Name 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;<br />    <br />&lt;div id=&quot;<strong>tab-contents</strong>&quot;&gt;<br />    &lt;div&gt;&lt;!-- Tab Content 1 goes here [Tab Name 1 Contents] --&gt;&lt;/div&gt;<br />    &lt;div&gt;&lt;!-- Tab Content 2 goes here [Tab Name 2 Contents] --&gt;&lt;/div&gt;<br />&lt;/div&gt;</code></pre>
+<p>The first thing is to create a &lt;ul&gt; element and be sure to add <strong>tabs::</strong> to the class name. You will notice that the class name is: &quot;tabs::holder:tab-contents&quot;<br />
+- &quot;tabs::&quot; signifies that we are using tabs<br />
+- &quot;holder:tab-contents&quot; this is the <strong>id of the element that is holding each of the contents for our tabs</strong><br />
+(going by the html above, the holder is the element with the <strong>id of &quot;tab-contents&quot;</strong></p>
+<p>Also be sure to give each tab link a unique href attribute beginning with a hash (#). </p>
+<p>Here is a detailed example:</p>
+<pre><code>00 &lt;ul class=&quot;tabs<strong> tabs::</strong>holder:<strong>tab-contents</strong>&quot;&gt;<br />01     &lt;li&gt;&lt;a href=&quot;#fruits&quot;&gt;Fruits I Like&lt;/a&gt;&lt;/li&gt;<br />02     &lt;li&gt;&lt;a href=&quot;#veggies&quot;&gt;Veggies I like&lt;/a&gt;&lt;/li&gt;
+03 &lt;/ul&gt;<br />04<br />05 &lt;div id=&quot;<strong>tab-contents</strong>&quot;&gt;<br />06     &lt;div class=&quot;content&quot;&gt;
+07         &lt;h1&gt;Fruits that I like&lt;/h1&gt;
+08         &lt;p&gt;Apples, Oranges, Pears, Cherries, Cranberries and Plums.&lt;/p&gt;
+09     &lt;/div&gt;<br />10     &lt;div class=&quot;content&quot;&gt;
+11         &lt;h1&gt;Veggies that I like&lt;/h1&gt;
+12         &lt;p&gt;Carrots, Tomatoes, Celery, Cucumbers and Radishes.&lt;/p&gt;
+13     &lt;/div&gt;<br />14 &lt;/div&gt;</code></pre>
+<p>00 - 03 is code need for the tabs. You MUST give the &lt;ul&gt; element a class of <strong>tabs::</strong> and after that you put <strong>holder:IDofDivHolding</strong> tab contents i.e. #tab-contents.<br />
+  By default 01 will be active and that means you will see 06-09 and 10-13 will be hidden.
+</p>
+<p>So clicking on the link with the href=#&quot;veggies&quot; (line 02) will show lines 10-13 and 06-09 will be hidden.</p>
+<p>Also, you will notice when you click on a tab and refresh the page it stays on that tab. This is why giving the<strong> links unique href attributes following a hash (#)</strong><br />
+  is very important!
+</p>
+<p><strong>Linking to Tabs:</strong><br />
+- <em>When linking to a tab from another page (i.e. a page that does not have the tabs on it): </em>all you need to do is is append the unique hash on the link.<br />
+For Example: <code>&lt;a href=&quot;pageWithTabsOnIt.html#veggies&quot;&gt;click&lt;/a&gt;</code> -- when clicked it will show the tab with the href of #veggies and will show/hide the appropriate<br />
+tab contents.
+<br />
+- <em>Linking to a tab on the same page (i.e. a link on the page that has the tabs on them): </em>once again you need to append the unique has on the link.<br />
+Correct Syntax: <code>&lt;a href=&quot;#veggies&quot; target=&quot;internal&quot;&gt;Click me&lt;/a&gt;</code>, I will show the tab with #veggies active and the appropriate content.
+</p>
+<div style="clear:both; height:10px;"></div>
+<h3>Activating the script</h3>
+<p>Pretty simple implementing this script. If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for this to work. All you need to do is call <strong>ML.Tabs.init();</strong> And your good to go!</p>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Toggler - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">< Back to All JavasScript Projects</a>
+</div>
+<div class="container">
+
+    <div class="script-header">
+		<h1>Toggler</h1>
+        <a href="docs.html#toggler">Documentation</a>
+    </div>
+
+	<div class="fl" style="width:200px;">
+    	<h3 class="tight">Regular Toggle 1</h3>
+    	<a href="javascript:void(0);" class="toggle0">Toggle Me</a>
+    	<div id="toggle0" style="background:#ccc;padding:5px;display:none;">
+    		<p style="margin-top:0;margin-bottom:0;">I am hidden content.</p>
+    	</div>
+    </div>
+    
+    <div class="fl" style="width:200px;">
+    	<h3 class="tight">Regular Toggle 2</h3>
+    	<a href="javascript:void(0);" class="toggle1">Toggle Me</a>
+    	<div id="toggle1" style="background:#ccc;padding:5px;">
+    		<p style="margin-top:0;margin-bottom:0;">I am hidden content.</p>
+    	</div>
+    </div>
+    
+    <div class="fl" style="width:200px;margin:0 10px 0 10px;">
+    	<h3 class="tight">Slide Toggle 1</h3>
+    	<a href="javascript:void(0);" class="slidetoggle0">Toggle Me</a>
+        <div id="slidetoggle0" style="background:#ccc; display:none">
+            <div style="padding:5px;">
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;margin-bottom:0;">I am hidden content.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fl" style="width:200px;">
+    	<h3 class="tight">Slide Toggle 2</h3>
+    	<a href="javascript:void(0);" class="slidetoggle1">Toggle Me</a>
+        <div id="slidetoggle1" style="background:#ccc;">
+            <div style="padding:5px;">
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;">I am hidden content.</p>
+                <p style="margin-top:0;margin-bottom:0;">I am hidden content.</p>
+            </div>
+        </div>
+    </div>
+     
+</div>
+
+<script type="text/javascript" src="js/raw/toggler.js"></script>
+
+<!-- FPO -->
+<script>
+	var regTogs = 'toggle', slideTogs = 'slidetoggle';
+	
+	for (var i=0; i<2; i++) {
+		var t = ML.$C('.'+regTogs+i)[0];
+		ML.El.evt(t, 'click', function (e) {
+			var content = ML.El.clicked(e).className
+			ML.Toggle(ML.$(content));
+		}, true);	
+	}
+	
+	for (var i=0; i<2; i++) {
+		var t = ML.$C('.'+slideTogs+i)[0];
+		ML.El.evt(t, 'click', function (e) {
+			var content = ML.El.clicked(e).className
+			ML.slideToggle(ML.$(content), function() {alert('Sliding complete');});
+		}, true);	
+	}
+</script>
+</body>
+</html>

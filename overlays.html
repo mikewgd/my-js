@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Overlays (Tooltips & Modals) - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+<script type="text/javascript" src="js/raw/tooltip.js"></script>
+<script type="text/javascript" src="js/raw/modal.js"></script>
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">< Back to All JavasScript Projects</a>
+</div>
+<div class="container">   
+
+	<div class="script-header">
+		<h1>Overlays</h1>
+		<a href="docs.html#overlays">Documentation</a>
+    </div>
+    
+	<h2>Tooltips</h2>
+    <ul class="list">
+    	<li><a href="javascript:void(0);" data-tooltip rel="unique-id1">Tooltip (Default Settings)</a> - Default settings (width/direction).</li>
+        <li><a href="javascript:void(0);" data-tooltip="direction:bottom" rel="unique-id1">Tooltip (Set Direction)</a> - Default width and a set direction (bottom).</li>
+        <li><a href="javascript:void(0);" data-tooltip="width:100" rel="unique-id1">Tooltip (Set Width)</a> - 100px width and default direction.</li>
+        <li><a href="javascript:void(0);" data-tooltip="direction:top:width:100" rel="unique-id1">Tooltip (Settings Applied)</a> -  100px width and a set direction (top).</li>
+        <li><a href="javascript:void(0);" data-tooltip="direction:top:width:100" title="The content for this tooltip is being driven by the title attribute in the link">Tooltip (Settings Applied)</a> - Same settings as above, but the content of the tooltip is taken from title attribute. The HTML structure is being created.<br />
+        <em>This should be used if you want a tooltip with minimal text and formatting (i.e. using headers, bold text, etc...).</em></li>
+    </ul>
+    
+    <!--<h2>Modals</h2>
+    <ul class="list">
+    	<li><a href="#" class="modal::" rel="unique-id3">Modal (Default Settings)</a> - Default settings (width/height).</li>
+        <li><a href="#" class="modal::width:600" rel="unique-id3" dimensions="W:600">Modal (Set Width)</a> - 600px width and default height.</li>
+        <li><a href="#" class="modal::height:150" rel="unique-id3" dimensions="H:150">Modal (Set Height)</a> - Default width and a set height of 150px.</li>
+        <li><a href="#" class="modal::width:600:height:150" rel="unique-id3" dimensions="W:600|H:150">Modal (Settings Applied)</a> - 600px width a set height of 150px.</li>
+        <li><a href="http://www.amodesigns.net" class="modal::width:600:height:150:header:Amodesigns" rel="iframe">Modal (Settings Applied, iFrame)</a> - Same settings as above, but the modal is created by the JS. It's for having an iframe inside a modal. </li>
+        <li><a href="files/ajax-overlay.html" class="modal::width:600:height:150" rel="ajax">Modal (Settings Applied, aJax)</a> - Same settings as above, but the modal is created by the JS. The content is Ajax'ed in.</li>
+    </ul>-->
+</div>
+
+<script type="text/javascript">
+	ML.El.evt(window, 'load', function() {
+		ML.TooltipHandler();
+	}, true);
+</script>
+
+<div class="tooltip hidden" id="unique-id1">
+    <span class="arrow"></span>
+    <div class="content">
+        <h1 class="tight">Hello! I am a tooltip</h1>
+        <p class="tight">Im some text about the tooltip.</p>
+    </div>
+</div>
+
+<div class="modal hidden" id="unique-id3">
+    <div class="header">
+        <h1>Hello! I am a modal header</h1>
+    </div>
+    <div class="content">
+      <p>I am some modal text</p>
+    </div>
+</div>
+    
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Accordion - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+<script type="text/javascript" src="js/raw/accordion.js"></script>
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">&lt; Back to All JavasScript Projects</a>
+</div>
+
+<div class="container">
+
+    <div class="script-header">
+		<h1>Accordion</h1>
+        <a href="docs.html#accordion">Documentation</a>
+    </div>
+    
+    <div class="fl">
+        <h2>Toggle 1 at a time</h2>
+        <ul class="accordion acc-ex">
+            <li class=" open">
+                <a class="acc" href="javascript:void(0);">Alphabet</a>
+                <div class="content">
+                    <p>A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z</p>
+                </div>
+            </li>
+            <li>
+                <a class="acc" href="javascript:void(0);">Common House Pets</a>
+                <div class="content">
+                    <p>Cats, dogs, birds, hamsters, snakes, lizards &amp; etc...</p>
+                </div>
+            </li>
+            <li>
+                <a class="acc" href="javascript:void(0);">The 7 Sins</a>
+                <div class="content">
+                    <p>Pride, Anger, Gluttony, Envy, Sloth, Lust &amp; Greed</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="fl" style="margin-left:20px">    
+        <h2>Toogle multiple at a time</h2>
+        <ul class="accordion acc-ex" data-acc="multiple">
+            <li class="open">
+                <a class="acc" href="javascript:void(0);">Alphabet</a>
+                <div class="content">
+                    <p>A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z</p>
+                </div>
+            </li>
+            <li>
+                <a class="acc" href="javascript:void(0);">Common House Pets</a>
+                <div class="content">
+                    <p>Cats, dogs, birds, hamsters, snakes, lizards &amp; etc...</p>
+                </div>
+            </li>
+            <li>
+                <a class="acc" href="javascript:void(0);">The 7 Sins</a>
+                <div class="content">
+                    <p>Pride, Anger, Gluttony, Envy, Sloth, Lust &amp; Greed</p>
+                </div>
+            </li>
+        </ul> 
+    </div>
+       
+</div>
+<script type="text/javascript">ML.El.evt(window, 'load', function() {ML.AccordionHandler();}, true);</script>
+</body>
+</html>

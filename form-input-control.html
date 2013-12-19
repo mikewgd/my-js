@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Input Control - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<script type="text/javascript" src="js/globals.js"></script>
+
+<!--[if IE 6]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">< Back to All JavasScript Projects</a>
+</div> 
+<div class="container">
+
+    <div class="script-header">
+        <h1>Clear Input Placeholder Text</h1>
+        <a href="docs.html#inp-control">Documentation</a>
+    </div>
+       
+    <form id="random" method="" action="">
+        <label for="first-name">First Name:</label><br />
+        <input type="text" id="first-name" name="first-name" />
+        
+        <div style="height:10px;clear:both;"></div>
+        
+        <label for="last-name">Last Name:</label><br />
+        <input type="text" id="last-name" name="last-name" placeholder="Smith" /> 
+        
+        <button type="submit">send</button>           
+    </form>
+    
+    <div style="clear:both;display:block;width:100%; height:20px;"></div>
+    <div class="notes">
+    	<h3>Notes</h3>
+        <ul>
+        	<li>When form is submitted logic will need to be put in place so placeholder value does not get passed when placeholder not supported.</li>
+        </ul>
+    </div>
+   
+</div>
+<script type="text/javascript" src="js/raw/input.js"></script>
+</body>
+</html>

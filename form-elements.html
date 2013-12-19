@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Form Elements - Raw</title>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/scripts.css" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<script type="text/javascript" src="js/globals.js"></script>
+<!--[if lte IE 7]>
+<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
+<![endif]-->
+</head>
+<body>
+<div style="margin-bottom:20px;">
+<a class="go-back" href="../javascript.php">< Back to All JavasScript Projects</a>
+</div>
+<div class="container">
+
+	<div class="script-header">
+		<h1>Form Elements</h1>
+        <a href="docs.html#form-elems">Documentation</a>
+    </div>
+    
+	<form id="random" method="" action="">
+        
+        <strong>Radios with same "name" attribute</strong><br />
+
+        <input type="radio" id="male" name="sex" value="male" />
+        <label for="male">Male</label>        
+        <div style="height:5px;clear:both;"></div>
+        
+        <input type="radio" id="female" name="sex" value="female" />
+        <label for="female">Female</label>
+        <div style="height:5px;clear:both;"></div>
+        
+        <input type="radio" id="none" name="sex" value="none" />
+        <label for="none">None</label>
+        <div style="height:10px;clear:both;"></div>
+        
+        <strong>Radios with different "name" attributes</strong><br />
+
+        <input type="radio" id="hello" name="hello" />
+        <label for="hello">Hello</label>
+        <div style="height:5px;clear:both;"></div>
+        <input type="radio" id="green" name="green" />
+        <label for="green">Green</label>
+        <div style="height:10px;clear:both;"></div>
+        
+        <input type="checkbox" name="age" id="age10-20" value="ages10-20" />
+        <label for="age10-20">Age(s) 10 - 20</label>
+        <div style="height:2px;clear:both;"></div>
+        <input type="checkbox" name="age" id="age20-30" value="ages20-30" />
+        <label for="age20-30">Age(s) 20 - 30</label>
+        <div style="height:2px;clear:both;"></div>
+        <input type="checkbox" name="age" checked id="age30-40" value="ages30-40" />
+        <label for="age30-40">Age(s) 30 - 40</label>
+        <div style="height:2px;clear:both;"></div>
+        <input type="checkbox" name="age" id="age50up" value="ages50up" />
+        <label for="age50up">Age(s) 50+</label>
+
+        <div style="height:10px;clear:both;"></div>        
+        <input type="text" name="ti" id="ti" value="text input" />
+        <div style="height:10px;clear:both;"></div>        
+       	<input type="checkbox" name="age" id="dis1" disabled="disabled" value="dis1" />
+        <label for="dis1">Disabled</label>
+        <div style="height:2px;clear:both;"></div>
+        <input type="radio" name="age" id="dis2" disabled="disabled" value="dis2" />
+        <label for="dis2">Disabled</label>
+        <div style="height:10px;clear:both;"></div>    
+            
+        <label for="month-born">Month you were born: </label>
+        <select id="month-born" name="month-born">
+        	<option value="0">January</option>
+        	<option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="10">December</option>
+        </select>
+        
+        <div style="height:10px;clear:both;"></div>    
+            
+        <label for="year-born">Year Range: </label>
+        <select id="year-born" name="year-born">
+        	<option value="1900-1940">1900-1940</option>
+        	<option value="1950-1990">1950-1990</option>
+            <option value="1990-2001">1990-2001</option>
+            <option value="2001-2012">2001-2012</option>
+            <option value="2013-Curr">2013-Current</option>
+        </select>
+        
+        <div style="height:10px;clear:both;"></div> 
+        
+        <button type="submit">submit</button>
+            
+    </form>
+    
+</div>
+<!-- FPO Attached Events -->
+<script>
+	//ML.El.evt(ML.$('age50up'), 'click', function(e) {alert('age 50 and up');}, true);
+	//ML.El.evt(ML.$('male'), 'click', function(e) {alert('male');}, true);
+	//ML.El.evt(ML.$('green'), 'click', function(e) {alert('green');}, true);
+	//ML.El.evt(ML.$('hello'), 'focus', function(e) {alert('hello');}, true);
+	
+	//ML.El.evt(ML.$('month-born'), 'change', function(e) {alert('changed');}, true)
+	//ML.El.evt(ML.$('year-born'), 'click', function(e) {alert('clicked');}, true)
+</script>
+
+<script type="text/javascript" src="js/raw/radiocheck.js"></script>
+<script type="text/javascript" src="js/raw/select.js"></script>
+</body>
+</html>
