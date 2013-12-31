@@ -68,7 +68,7 @@ ML = {
 	* @param {HTMLElement} arr - array to be looped through.
     * @param {function} callback - function to be called in the loop.
 	*/
-	loop : function(arr, callback) {		
+	loop: function(arr, callback) {		
 		for(i=0;i<arr.length;i++) {
 			if (typeof arr[i] == 'object') ML.El.clean(arr[i]);
 			callback.call(this,arr[i],i);
@@ -151,7 +151,7 @@ ML = {
 	*** @param {String} remove - base of string to be removed, i.e. "modal::".
 	*** @param {String} sep - string to separate each property, i.e. ":".
 	*/
-	ParObj : function(args) {
+	ParObj: function(args) {
 		var obj = {},
 			passedData = args.elem,
 			stripData = (!args.remove) ? passedData : passedData.substr(passedData.indexOf(args.remove),passedData.length);
@@ -409,7 +409,7 @@ ML.El = {
 	* @param {HTMLElement} element - element you want to get the style for.
 	* @param {String} styleProp - style property you want the value of.
     */
-	getStyl : function(element, styleProp) {	
+	getStyl: function(element, styleProp) {	
 		var y;
 		
 		if (element.currentStyle == undefined) {
@@ -431,7 +431,7 @@ ML.El = {
 	* @param {Object} args - arguments passed.
 	*** @param {Object} arg.props - styles you want applied to the element.
     */
-	styl : function(element, arg) {
+	styl: function(element, arg) {
 		var props = arg;
 		
 		for (var prop in props) {
@@ -469,6 +469,39 @@ ML.El = {
     */
 	data: function(element, attr) {
 		return element.getAttribute('data-'+attr);
+	},
+	
+	animate: function (el, props, func) {
+		var timer, currProps = {},
+			stopAnim = false;
+		
+		function getCurrs() {
+			currProps = {};
+			
+			for (var prop in props) {
+				var currProp = parseInt(ML.El.getStyl(el, prop).replace('px', ''));
+				currProps[prop] = currProp;
+			}
+		}
+					
+		function move () {
+			getCurrs();
+			
+			for (var prop in props) {
+				el.style[prop] = (currProps[prop]+1) + 'px';
+				
+				if (props[prop] === currProps[prop]+1) stopAnim = true;
+			}
+			
+			timer = setTimeout(move, 1);		
+			if (stopAnim) {
+				clearTimeout(timer);
+				func();
+			}
+		}
+		
+		move();
+		getCurrs();
 	}
 	
 }
@@ -489,7 +522,7 @@ ML.Ajax = {
 	* @param {String} elem - id of the element you want the ajax response to appear.
 	* @param {String} setURL - url of the ajax request. 
     */
-	init : function(elem, setURL) {
+	init: function(elem, setURL) {
 		var self = this,
 			xmlhttp;
 					
@@ -527,7 +560,7 @@ ML.Ajax = {
 	* @param {String} container - id of the element you want the ajax response to appear.
 	* @param {String} visibility - shows or hides the loader, will only show if value is "show". 
     */
-	loader : function(container, visibility) {
+	loader: function(container, visibility) {
 		var center = _$(container).offsetHeight/2-15,
 			loader = '<div class="loader"><img src="'+this.ajaxLoaderPath+'" style="margin-top:'+center+'px" /></div>';
 			

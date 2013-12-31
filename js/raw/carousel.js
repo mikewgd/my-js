@@ -199,7 +199,7 @@ ML.Carousel = function(car, settings, func) {
 				self.incr = self.incr+n;
 				
 				ul.style.left = ((fwd) ? currLeft-self.incr : currLeft+self.incr) +'px';
-				self.animation = setTimeout(function() {anim()},0);
+				self.animation = setTimeout(anim,0);
 				
 				var newLeft = Math.abs(parseInt(ul.style.left.replace('px', '')));
 				

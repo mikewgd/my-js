@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="js/globals.js"></script>
 <title>Untitled Document</title>
 <style>
 	#test {
@@ -19,14 +20,39 @@
 
 <div id="test"></div>
 <script>
-	var ML = {};
 	var test = document.getElementById('test');
 	
 	ML.animate = function (el, props, func) {
 		var timer;
+		var inc = 0;
+		var currProps = {};
+		var stopAnim = false;
 		
-		console.log(props);
+		function getCurrs() {
+			currProps = {};
+			
+			for (var prop in props) {
+				var currProp = parseInt(ML.El.getStyl(el, prop).replace('px', ''));
+				currProps[prop] = currProp;
+			}
+		}
+					
+		function move () {
+			inc++;				
+			getCurrs();
+			
+			for (var prop in props) {
+				el.style[prop] = (currProps[prop]+1) + 'px';
+				
+				if (props[prop] === currProps[prop]+1) stopAnim = true;
+			}
+			
+			timer = setTimeout(move, 1);		
+			if (stopAnim) clearTimeout(timer);
+		}
 		
+		move();
+		getCurrs();
 		
 	}
 	
