@@ -363,9 +363,9 @@ ML.El = {
 	* @param {HTMLElement} elem - element you want to get the center position of.
     */
 	center: function (elem) {
-		var win = ML.windowDimen(elem);
-		var mvX = (win.w - elem.offsetWidth) / 2 + "px";
-		var mvY = (win.h - elem.offsetHeight) / 2 + "px";
+		var win = ML.windowDimen(elem),
+			mvX = (win.w - elem.offsetWidth) / 2 + "px",
+			mvY = (win.h - elem.offsetHeight) / 2 + "px";
 		
 		while(elem!= null) {
 			elem.style.top = mvY;
@@ -471,37 +471,67 @@ ML.El = {
 		return element.getAttribute('data-'+attr);
 	},
 	
+	/**
+    * @function animate
+    * Animates an element.
+	*
+	* @param {HTMLElement} el - element you want to animate.
+	* @param {Object} props - css properties you want to animate.
+	* @param {Function} func (optional) - function to be called after completion of animation.
+    */
 	animate: function (el, props, func) {
 		var timer, currProps = {},
-			stopAnim = false;
+			stopAnim = false, inc = 0, counter = 0;
 		
+		/**
+		* @function getCurrs
+		* Gets the current css values of the properties beng animated.
+		*/
 		function getCurrs() {
 			currProps = {};
-			
+						
 			for (var prop in props) {
-				var currProp = parseInt(ML.El.getStyl(el, prop).replace('px', ''));
+				var currProp = parseFloat(ML.El.getStyl(el, prop).replace('px', ''));
 				currProps[prop] = currProp;
+				
+				if (prop == 'opacity') {					
+					currProps.filter = 'alpha(opacity='+prop*100+')';	
+				}
 			}
 		}
-					
+			
+		/**
+		* @function move
+		* Animates the element with the new css values provided.
+		*/
 		function move () {
 			getCurrs();
+			counter++;
 			
 			for (var prop in props) {
-				el.style[prop] = (currProps[prop]+1) + 'px';
+				inc = 0;
+				(props[prop] < currProps[prop]) ? inc-- : inc++;
 				
-				if (props[prop] === currProps[prop]+1) stopAnim = true;
+				if (prop == 'opacity') {
+					props[prop] = props[prop]*100;
+					el.style.opacity = (currProps[prop]+inc/100);
+				} else {
+					el.style[prop] = (currProps[prop]+inc) + 'px';
+				}
+				
+				if (props[prop] === currProps[prop]+inc) stopAnim = true;
 			}
 			
-			timer = setTimeout(move, 1);		
+			timer = setTimeout(move, 10);		
 			if (stopAnim) {
 				clearTimeout(timer);
-				func();
+				if (func) func();
+				inc = 0;
+				counter = 0;
 			}
 		}
 		
 		move();
-		getCurrs();
 	}
 	
 }

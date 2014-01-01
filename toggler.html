@@ -24,7 +24,7 @@
 	<div class="fl" style="width:200px;">
     	<h3 class="tight">Regular Toggle 1</h3>
     	<a href="javascript:void(0);" class="toggle0">Toggle Me</a>
-    	<div id="toggle0" style="background:#ccc;padding:5px;display:none;">
+    	<div id="toggle0" class="bg-gray" style="padding:5px;display:none;">
     		<p style="margin-top:0;margin-bottom:0;">I am hidden content.</p>
     	</div>
     </div>
@@ -32,7 +32,7 @@
     <div class="fl" style="width:200px;">
     	<h3 class="tight">Regular Toggle 2</h3>
     	<a href="javascript:void(0);" class="toggle1">Toggle Me</a>
-    	<div id="toggle1" style="background:#ccc;padding:5px;">
+    	<div id="toggle1" class="bg-gray" style="padding:5px;">
     		<p style="margin-top:0;margin-bottom:0;">I am hidden content.</p>
     	</div>
     </div>
@@ -40,7 +40,7 @@
     <div class="fl" style="width:200px;margin:0 10px 0 10px;">
     	<h3 class="tight">Slide Toggle 1</h3>
     	<a href="javascript:void(0);" class="slidetoggle0">Toggle Me</a>
-        <div id="slidetoggle0" style="background:#ccc; display:none">
+        <div id="slidetoggle0" class="bg-gray" style="display:none">
             <div style="padding:5px;">
                 <p style="margin-top:0;">I am hidden content.</p>
                 <p style="margin-top:0;">I am hidden content.</p>
@@ -54,7 +54,7 @@
     <div class="fl" style="width:200px;">
     	<h3 class="tight">Slide Toggle 2</h3>
     	<a href="javascript:void(0);" class="slidetoggle1">Toggle Me</a>
-        <div id="slidetoggle1" style="background:#ccc;">
+        <div id="slidetoggle1" class="bg-gray" style="background:#ccc;">
             <div style="padding:5px;">
                 <p style="margin-top:0;">I am hidden content.</p>
                 <p style="margin-top:0;">I am hidden content.</p>
@@ -85,7 +85,7 @@
 		var t = ML.$C('.'+slideTogs+i)[0];
 		ML.El.evt(t, 'click', function (e) {
 			var content = ML.El.clicked(e).className
-			ML.slideToggle(ML.$(content), function() {alert('Sliding complete');});
+			ML.slideToggle(ML.$(content), function() {/*alert('Sliding complete');*/});
 		}, true);	
 	}
 </script>

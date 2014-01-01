@@ -8,7 +8,7 @@ ML.Fading = {
 	cycle : false,
 	
 	prop : function(args) {
-		var element = _$(args.ele),
+		var element = ML.$(args.ele),
 			starting = (!args.start) ? this.highest : args.start,
 			to = (!args.to) ? this.lowest : args.to,
 			rep = (args.repeat==undefined) ? this.repeat : args.repeat,

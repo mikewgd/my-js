@@ -7,8 +7,8 @@
 	* @property {function} func (optional) - function you want performed after each toggle.
 	*/
 	ML.Toggle = function (c, func) {
-		var content = c;
-		var currVis = ML.El.getStyl(content, 'display');
+		var content = c,
+			currVis = ML.El.getStyl(content, 'display');
 		
 		content.style.display = (currVis == 'block') ? 'none' : 'block';
 		if (func) func((currVis == 'block') ? false : true);
@@ -22,48 +22,27 @@
 	* @property {function} func (optional) - function you want performed after each toggle.
 	*/
 	ML.slideToggle = function (c, func) {
-		var content = c;
-		var currVis = ML.El.getStyl(content, 'display');
-						
-		var slide = (currVis == 'block') ? 'up' : 'down';
-		var increment = 0,
-			animation = null;
+		var content = c, actualHeight,
+			currVis = ML.El.getStyl(content, 'display'),
+			slide = (currVis == 'block') ? 'up' : 'down';
 		
-		ML.El.styl(content, {
-			overflow: 'hidden',
-			display: 'block',
-			height: 'auto'
-		});
+		content.style.overflow = 'hidden';
 		
-		content.setAttribute('data-height', content.offsetHeight);
-		content.style.height = (slide == 'down') ? '0px' : content.offsetHeight+'px'
-
-		animate();
-		
-		/**
-		* @function currHeight
-		* Returns the current height of the content element.
-		*/
-		function currHeight() {
-			var styleHeight = content.style.height.split('px')[0];
-			return parseInt(styleHeight);
+		if (slide == 'down') {
+			content.style.display = 'block';
+			actualHeight = content.offsetHeight;
+			content.style.height = 0;
+		} else {
+			actualHeight = 0;
 		}
 		
-		/**
-		* @function animate
-		* Handles on animating the content up and down.
-		*/
-		function animate() {
-			increment++;
-						
-			content.style.height = ((slide == 'down') ? increment : ML.El.data(content, 'height')-increment)+'px';
-			animation = setTimeout(animate, 0);
-						
-			if (currHeight() == ML.El.data(content, 'height') || currHeight() == 0) {
-				clearTimeout(animation);
-				if (currHeight() == 0) content.style.display = 'none';	
-				if (func) func((currVis == 'block') ? false : true);
+		ML.El.animate(content, {height: (slide == 'down') ? actualHeight : 0}, function() {
+			if (actualHeight == 0) {
+				content.removeAttribute('style');
+				content.style.display = 'none';	
 			}
-		}
+
+			if (func) func((currVis == 'block') ? false : true);
+		});
 	}
 }());
