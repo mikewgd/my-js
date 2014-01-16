@@ -1,4 +1,4 @@
-ML.Modal = {
+ML.Modal2 = {
 	
 	defaults : {width: 800, height: 'auto', header: 'Modal Header'},
 	

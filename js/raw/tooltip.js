@@ -10,6 +10,7 @@ ML.TooltipHandler = function () {
 		var attr = ML.El.data;
 		
 		if (attr(tags[i], 'tooltip') !== null) {
+			if (tags[i].title) tags[i].rel = 'mlTooltip-'+i;	
 			var t = new ML.Tooltip(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'tooltip')}));
 			t.init();
 		}
@@ -45,7 +46,6 @@ ML.Tooltip = function(tip, settings) {
 		*/
 		init : function () {
 			if (this.link.title){
-				this.link.setAttribute('rel', 'dyn-'+Math.floor(Math.random()*100)+Math.floor(Math.random()*10));
 				this.create(this.link);
 				this.link.removeAttribute('title');
 			} else {
