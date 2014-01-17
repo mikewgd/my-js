@@ -48,11 +48,10 @@ ML.Tooltip = function(tip, settings) {
 			if (this.link.title){
 				this.create(this.link);
 				this.link.removeAttribute('title');
-			} else {
-				this.el = ML.$(this.link.rel)
 			}
-							
-			if (this.el == null) {return false;}
+			
+			if (this.link.rel == null || this.link.rel == undefined) {return false;}
+			this.el = ML.$(this.link.rel);	
 			
 			this.bindEvents();
 		},
@@ -78,7 +77,7 @@ ML.Tooltip = function(tip, settings) {
 			var div = ML.El.create('div', {'class': 'tooltip hidden', id: dyn.rel});
 			div.innerHTML = this.template.replace('{{message}}', dyn.title);
 			document.body.appendChild(div);
-			this.el = div;
+			//this.el = div;
 		},
 		
 		/**

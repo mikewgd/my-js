@@ -1,3 +1,76 @@
+/**
+* @class ModalHandler
+* @namespace ML
+* Handles calling the Modal class.
+*/
+ML.ModalHandler = function () {
+	var tags = ML._$('*', document.body);
+	
+	for (var i=0; i<tags.length; i++) {
+		var attr = ML.El.data;
+		
+		if (attr(tags[i], 'modal') !== null) {
+			if (tags[i].rel == 'iframe' || tags[i].rel == 'ajax') {
+				var rel = tags[i].rel; // Store rel attribute
+				tags[i].rel = 'mlModal-'+rel+'-'+i;
+			}	
+
+			var m = new ML.Modal(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'modal')}));
+			m.init();
+		}
+	}
+};
+
+
+/**
+* @class Modal
+* @namespace ML
+*
+* @property {FILL} FILL - fill.
+*/
+ML.Modal = function(modLink, settings) {
+	
+	var defaults = {width: 800, height: 'auto', header: 'Modal Header'};
+	
+	return {
+		width: parseInt(settings.width) || defaults.width,
+		height: parseInt(settings.height) || defaults.height,
+		modalHeader: settings.header || defaults.header,
+		link: modLink,
+		el: null,
+		template: '<div class="header">{{modalHeader}}</div><div class="content">{{contents}}</div>',
+
+		init : function () {
+			if (this.link.title){
+				this.create(this.link);
+				this.link.removeAttribute('title');
+			} else {
+				this.el = ML.$(this.link.rel)
+			}
+							
+			if (this.el == null) {return false;}
+			
+			this.bindEvents();
+		},
+		
+		
+		bindEvents: function() {
+			var self = this;
+			
+			ML.El.evt(self.link, 'mouseover', function(e) {self.show();}, true);
+			ML.El.evt(self.link, 'mouseout', function(e) {self.hide();}, true);
+		},
+		
+		create: function(dyn) {
+			var div = ML.El.create('div', {'class': 'tooltip hidden', id: dyn.rel});
+			div.innerHTML = this.template.replace('{{message}}', dyn.title);
+			document.body.appendChild(div);
+			this.el = div;
+		}
+	}
+	
+};
+
 ML.Modal2 = {
 	
 	defaults : {width: 800, height: 'auto', header: 'Modal Header'},
@@ -38,7 +111,7 @@ ML.Modal2 = {
 	create : function(link, num) {
 		var iframe = ML.create({tag: 'iframe', attrs:{src: link.href, border: 0, width: '100%', height: '100%'}}),
 			modal = ML.create({tag: 'div', attrs: {'class': 'modal hidden', id: link.rel}}),
-			template = '<div class="header"></div><div class="content"></div>';
+			template = '';
 			
 		modal.innerHTML = template;
 
