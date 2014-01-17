@@ -171,6 +171,7 @@ ML.Carousel = function(car, settings, func) {
 		* Animates the carousel to slide to each desired slide.
 		* 
 		* @param {String} dir - direction for the holder to go nxt (next), prv (previous).
+		* @param {Boolean} override (optional) - overrides the increment.
 		*/
 		animate: function (dir, override) {
 			var self = this,
