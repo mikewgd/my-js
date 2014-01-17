@@ -45,12 +45,14 @@ ML.Tooltip = function(tip, settings) {
 		* Initialization of functions. Also creates the dynamic tooltip.
 		*/
 		init : function () {
+			// if no rel attribute return, tooltip will not work.
+			if (this.link.rel == null || this.link.rel == undefined) {return false;}
+			
 			if (this.link.title){
 				this.create(this.link);
 				this.link.removeAttribute('title');
 			}
 			
-			if (this.link.rel == null || this.link.rel == undefined) {return false;}
 			this.el = ML.$(this.link.rel);	
 			
 			this.bindEvents();

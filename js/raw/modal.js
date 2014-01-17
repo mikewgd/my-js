@@ -7,7 +7,7 @@ ML.ModalHandler = function () {
 	var tags = ML._$('*', document.body);
 	
 	for (var i=0; i<tags.length; i++) {
-		var attr = ML.El.data;
+		var attr = ML.El.data, rel = 'reg';
 		
 		if (attr(tags[i], 'modal') !== null) {
 			if (tags[i].rel == 'iframe' || tags[i].rel == 'ajax') {
@@ -15,7 +15,7 @@ ML.ModalHandler = function () {
 				tags[i].rel = 'mlModal-'+rel+'-'+i;
 			}	
 
-			var m = new ML.Modal(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'modal')}));
+			var m = new ML.Modal(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'modal')}), rel);
 			m.init();
 		}
 	}
@@ -28,7 +28,7 @@ ML.ModalHandler = function () {
 *
 * @property {FILL} FILL - fill.
 */
-ML.Modal = function(modLink, settings) {
+ML.Modal = function(modLink, settings, type) {
 	
 	var defaults = {width: 800, height: 'auto', header: 'Modal Header'};
 	
@@ -38,17 +38,16 @@ ML.Modal = function(modLink, settings) {
 		modalHeader: settings.header || defaults.header,
 		link: modLink,
 		el: null,
+		dynamic: (type !== 'reg') ? true : false,
 		template: '<div class="header">{{modalHeader}}</div><div class="content">{{contents}}</div>',
 
 		init : function () {
-			if (this.link.title){
-				this.create(this.link);
-				this.link.removeAttribute('title');
-			} else {
-				this.el = ML.$(this.link.rel)
-			}
+			// if no rel attribute return, modal will not work.
+			if (this.link.rel == null || this.link.rel == undefined) {return false;}
+			
+			if (this.dynamic) this.create(this.link.rel);
 							
-			if (this.el == null) {return false;}
+			this.el = ML.$(this.link.rel);
 			
 			this.bindEvents();
 		},
@@ -62,7 +61,7 @@ ML.Modal = function(modLink, settings) {
 		},
 		
 		create: function(dyn) {
-			var div = ML.El.create('div', {'class': 'tooltip hidden', id: dyn.rel});
+			var div = ML.El.create('div', {'class': 'modal hidden', id: dyn.rel});
 			div.innerHTML = this.template.replace('{{message}}', dyn.title);
 			document.body.appendChild(div);
 			this.el = div;
