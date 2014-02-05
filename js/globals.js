@@ -552,7 +552,10 @@ ML.Ajax = function(params) {
 		type = params.type || 'GET',
 		data = params.data || '', xmlhttp;
 		
+	console.log(params);
+		
 	if (window.location.host == '') {
+		params.error('Must be hosted on a server');
 		return;	
 	} else {
 		xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");

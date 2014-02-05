@@ -14,8 +14,11 @@ ML.ModalHandler = function () {
 				var rel = tags[i].rel; // Store rel attribute
 				tags[i].rel = 'mlModal-'+rel+'-'+i;
 			}	
-
-			var m = new ML.Modal(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'modal')}), rel);
+			
+			var options = ML.ParObj({elem: ML.El.data(tags[i], 'modal')});
+			options.type = rel; // add to object
+			
+			var m = new ML.Modal(tags[i],  options);
 			m.init();
 		}
 	}
@@ -28,7 +31,7 @@ ML.ModalHandler = function () {
 *
 * @property {FILL} FILL - fill.
 */
-ML.Modal = function(modLink, settings, type) {
+ML.Modal = function(modLink, settings) {
 	
 	var defaults = {width: 800, height: 'auto', header: 'Modal Header'};
 	
@@ -38,7 +41,7 @@ ML.Modal = function(modLink, settings, type) {
 		modalHeader: settings.header || defaults.header,
 		link: modLink,
 		el: null,
-		dynamic: (type !== 'reg') ? true : false,
+		dynamic: (settings.type !== 'reg') ? true : false,
 		template: '<div class="header">{{modalHeader}}</div><div class="content">{{contents}}</div>',
 
 		init : function () {
@@ -56,18 +59,33 @@ ML.Modal = function(modLink, settings, type) {
 		bindEvents: function() {
 			var self = this;
 			
-			ML.El.evt(self.link, 'mouseover', function(e) {self.show();}, true);
-			ML.El.evt(self.link, 'mouseout', function(e) {self.hide();}, true);
+			//ML.El.evt(self.link, 'mouseover', function(e) {self.show();}, true);
+			//ML.El.evt(self.link, 'mouseout', function(e) {self.hide();}, true);
 		},
 		
 		create: function(dyn) {
+			var s = this,
+				div = ML.El.create('div', {'class': 'modal hidden', id: dyn.rel}),
+				iframe = '<iframe src="'+s.link.href+'" border="0" width="100%" height="100%"></iframe>';
+				
+			s.template = s.template.replace('{{modalHeader}}', s.modalHeader);
 			
-			// Need to update ajax function
-			console.log(type);
-			var div = ML.El.create('div', {'class': 'modal hidden', id: dyn.rel});
-			this.template.replace('{{modalHeader}}', this.modalHeader);
+			if (settings.type == 'iframe') {
+				s.template = s.template.replace('{{contents}}', iframe);
+			} else {
+				var ajax = new ML.Ajax({
+					url: s.link.href,
+					success: function(data) {
+						s.template = s.template.replace('{{contents}}', data);	
+					},
+					error: function(data){
+						console.log(data);
+					}
+				});	
+			}
 			
-			this.el = div;
+			div.innerHTML = s.template;
+			s.el = div;			
 			
 			document.body.appendChild(div);
 		}
