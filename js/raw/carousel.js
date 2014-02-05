@@ -32,7 +32,6 @@ ML.CarouselHandler = function () {
 * @property {Function} animation - setTimeout function for animation.
 */
 ML.Carousel = function(car, settings, func) {
-	
 	var defaults = {curr: 0, rotate: false};
 	
 	return {
@@ -282,5 +281,4 @@ ML.Carousel = function(car, settings, func) {
 			self.animate(d, true);
 		}
 	}
-	
 };

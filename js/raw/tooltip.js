@@ -29,7 +29,6 @@ ML.TooltipHandler = function () {
 * @property {HTMLElement} arrow - arrow element in tooltip.
 */
 ML.Tooltip = function(tip, settings) {
-	
 	var defaults = {width: 300, direction: 'right'};
 	
 	return {
@@ -165,5 +164,4 @@ ML.Tooltip = function(tip, settings) {
 			}
 		}
 	}
-	
 };

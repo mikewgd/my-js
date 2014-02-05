@@ -10,7 +10,6 @@ window.ML = window.ML || function () {};
 * Base class for JS functionality.
 */
 ML = {
-	
 	/**
     * @function $
     * Returns an element based on it's id.
@@ -252,7 +251,6 @@ ML = {
 	toggleClass: function(elem, classN) {
 		(ML.hasClass(elem, classN)) ? ML.removeClass(elem, classN) : ML.addClass(elem, classN);
 	}
-	
 }
 
 /**
@@ -533,7 +531,6 @@ ML.El = {
 		
 		move();
 	}
-	
 }
 
 /**

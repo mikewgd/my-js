@@ -21,7 +21,6 @@ ML.AccordionHandler = function () {
 * @property {Boolean} multiple - toggling multiple at a time (true=yes, false=no).
 */
 ML.Accordion = function(acc, toggle) {
-	
 	return {
 		el: acc,
 		multiple: toggle,
@@ -94,5 +93,4 @@ ML.Accordion = function(acc, toggle) {
 			}
 		}
 	}
-	
 };
