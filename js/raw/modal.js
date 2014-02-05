@@ -45,7 +45,7 @@ ML.Modal = function(modLink, settings, type) {
 			// if no rel attribute return, modal will not work.
 			if (this.link.rel == null || this.link.rel == undefined) {return false;}
 			
-			if (this.dynamic) this.create(this.link.rel);
+			if (this.dynamic) this.create(this.link);
 							
 			this.el = ML.$(this.link.rel);
 			
@@ -61,10 +61,15 @@ ML.Modal = function(modLink, settings, type) {
 		},
 		
 		create: function(dyn) {
+			
+			// Need to update ajax function
+			console.log(type);
 			var div = ML.El.create('div', {'class': 'modal hidden', id: dyn.rel});
-			div.innerHTML = this.template.replace('{{message}}', dyn.title);
-			document.body.appendChild(div);
+			this.template.replace('{{modalHeader}}', this.modalHeader);
+			
 			this.el = div;
+			
+			document.body.appendChild(div);
 		}
 	}
 	

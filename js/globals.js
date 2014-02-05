@@ -540,66 +540,48 @@ ML.El = {
 * @class Ajax
 * @namespace ML
 *
-* @property {String} loaderPath - location of where the ajax loader is.
+* Usage:
+	new ML.Ajax({
+		url: 'file/test.html',
+		type: 'GET',
+		beforeRequest: function () {alert('I happen before request');},
+		complete: function () {alert('I completed my request');},
+		success: function (data) {alert('I successfully completed my request. And here is the data returned: '+data);},
+		error: function () {alert ('I failed at some point during the request');}
+	});
 */
-ML.Ajax = {
-	loaderPath: 'images/ajax-loader.gif',
-	
-	/**
-    * @function init
-    * Making the ajax request/call.
-	*
-	* @param {String} elem - id of the element you want the ajax response to appear.
-	* @param {String} setURL - url of the ajax request. 
-    */
-	init: function(elem, setURL) {
-		var self = this,
-			xmlhttp;
-					
-		if(window.location.host =='') {
-			alert('Cross origin requests are not supported. Please run on a server or Ajax will not function properly.');
-			return false;
-		} else {
-			if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-				xmlhttp = new XMLHttpRequest();
-			} else {// code for IE6, IE5
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-			}
+ML.Ajax = function(params) {
+	var url = params.url || window.location,
+		type = params.type || 'GET',
+		data = params.data || '', xmlhttp;
+		
+	if (window.location.host == '') {
+		return;	
+	} else {
+		xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+		
+		ML.El.evt(xmlhttp, 'readystatechange', function() {
+			var _this = this;
+			params.beforeRequest();
 			
-			xmlhttp.onreadystatechange = function(e) {
-				if (xmlhttp.readyState <= 3) {
-					self.ajaxLoader(elem,'show');
-				}
+			if (_this.readyState == 4) {
+				params.complete();
 				
-				if (xmlhttp.readyState == 4 && (xmlhttp.status==200)) {
-					self.ajaxLoader(elem,'show');
-					
-					_$(elem).innerHTML = xmlhttp.responseText;
+				if (_this.status == 200) {
+					var response = _this.responseText;	
+					params.success(response);
+				} else {
+					params.error({status: _this.status, state:_this.readyState});
 				}
+			} else {
+				params.error({status: _this.status, state:_this.readyState});
 			}
-			
-			xmlhttp.open("GET",setURL,true);
-			xmlhttp.send();
-		}
-	},
-	
-	/**
-    * @function loader
-    * Loader for ajax call.
-	*
-	* @param {String} container - id of the element you want the ajax response to appear.
-	* @param {String} visibility - shows or hides the loader, will only show if value is "show". 
-    */
-	loader: function(container, visibility) {
-		var center = _$(container).offsetHeight/2-15,
-			loader = '<div class="loader"><img src="'+this.ajaxLoaderPath+'" style="margin-top:'+center+'px" /></div>';
-			
-		if(visibility == 'show') {
-			_$(container).innerHTML = loader;
-		} 
+		}, true);
+		
+		xmlhttp.open(type, url, true);
+		xmlhttp.send();
 	}
-	
-}
+};
 
 // Allows indexOf to work cross browser
 if(!Array.prototype.indexOf){Array.prototype.indexOf=function(e){"use strict";if(this==null){throw new TypeError}var t=Object(this);var n=t.length>>>0;if(n===0){return-1}var r=0;if(arguments.length>1){r=Number(arguments[1]);if(r!=r){r=0}else if(r!=0&&r!=Infinity&&r!=-Infinity){r=(r>0||-1)*Math.floor(Math.abs(r))}}if(r>=n){return-1}var i=r>=0?r:Math.max(n-Math.abs(r),0);for(;i<n;i++){if(i in t&&t[i]===e){return i}}return-1}}
