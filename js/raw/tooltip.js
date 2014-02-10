@@ -15,15 +15,6 @@ ML.TooltipHandler = function () {
 			t.init();
 		}
 	}
-	
-	function hide () {
-		var tooltips = ML.$C('.tooltip');
-		
-		for (var i=0; i<tooltips.length; i++) {
-			ML.removeClass(tooltips[i], 'top bottom left right');
-			ML.addClass(tooltips[i], 'hidden');
-		}
-	}
 };
 
 /**
