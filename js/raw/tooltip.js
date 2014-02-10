@@ -43,7 +43,7 @@ ML.Tooltip = function(tip, settings) {
 		* @function init
 		* Initialization of functions. Also creates the dynamic tooltip.
 		*/
-		init : function () {
+		init: function () {
 			// if no rel attribute return, tooltip will not work.
 			if (this.link.rel == null || this.link.rel == undefined) {return false;}
 			
@@ -70,7 +70,7 @@ ML.Tooltip = function(tip, settings) {
 		
 		/**
 		* @function create
-		* Creates a custom tooltip and adds it to the DOM.
+		* Creates a custom tooltip(s) and adds them to the DOM.
 		* 
 		* @param {HTMLElement} dyn - element that needs a custom tooltip.
 		*/

@@ -32,7 +32,6 @@ ML.ModalHandler = function () {
 * @property {FILL} FILL - fill.
 */
 ML.Modal = function(modLink, settings) {
-	
 	var defaults = {width: 800, height: 'auto', header: 'Modal Header'};
 	
 	return {
@@ -43,19 +42,28 @@ ML.Modal = function(modLink, settings) {
 		el: null,
 		dynamic: (settings.type !== 'reg') ? true : false,
 		template: '<div class="header">{{modalHeader}}</div><div class="content">{{contents}}</div>',
-
-		init : function () {
+		
+		/**
+		* @function init
+		* Initialization of functions. Also creates the dynamic modal.
+		*/
+		init: function () {			
 			// if no rel attribute return, modal will not work.
 			if (this.link.rel == null || this.link.rel == undefined) {return false;}
 			
+			// Creates a modal if it is dynamic, ie iframe or ajax
 			if (this.dynamic) this.create(this.link);
 							
 			this.el = ML.$(this.link.rel);
 			
+			this.createClose();			
 			this.bindEvents();
 		},
 		
-		
+		/**
+		* @function bindEvents
+		* Binds events to the link (modal activation).
+		*/
 		bindEvents: function() {
 			var self = this;
 			
@@ -63,6 +71,12 @@ ML.Modal = function(modLink, settings) {
 			//ML.El.evt(self.link, 'mouseout', function(e) {self.hide();}, true);
 		},
 		
+		/**
+		* @function create
+		* Creates a custom modal and adds it to the DOM.
+		* 
+		* @param {HTMLElement} dyn - element that needs a custom modal.
+		*/
 		create: function(dyn) {
 			var s = this,
 				div = ML.El.create('div', {'class': 'modal hidden', id: dyn.rel}),
@@ -77,9 +91,10 @@ ML.Modal = function(modLink, settings) {
 					url: s.link.href,
 					success: function(data) {
 						s.template = s.template.replace('{{contents}}', data);	
-					},
-					error: function(data){
-						console.log(data);
+						
+						// Need to redefine this
+						div.innerHTML = s.template;
+						s.el = div;
 					}
 				});	
 			}
@@ -87,10 +102,32 @@ ML.Modal = function(modLink, settings) {
 			div.innerHTML = s.template;
 			s.el = div;			
 			
+			ML.El.clean(s.el);
+						
+			// Add the modal to the body.
 			document.body.appendChild(div);
+		},
+		
+		/**
+		* @function createOverlay
+		* Creates an overlay on the page to cover the content.
+		*/
+		createOverlay: function () {
+			var darkness = ML.El.create('div', {id:'darkness'})
+			ML.addClass(darkness, 'overlay');
+			document.body.appendChild(darkness);
+			
+			ML.El.styl(ML._$('body')[0], {margin:0, padding: 0, width: '100%', height: '100%'});
+		},
+		
+		/**
+		* @function createClose
+		* Creates the close link to close the modal.
+		*/
+		createClose: function() {
+			
 		}
 	}
-	
 };
 
 ML.Modal2 = {
@@ -116,29 +153,6 @@ ML.Modal2 = {
 			}
 		}
 		ML.Modal.createOverlay();
-	},
-	
-	createOverlay : function() {
-		// create the darkness in the document
-		var darkness = document.createElement('div'),
-			bod = _$$('body');
-			
-		darkness.setAttribute('id', 'darkness');
-		document.body.appendChild(darkness);
-		darkness.style.display = 'none';
-
-		ML.setStyle(darkness.parentNode, {props: {margin:0, padding: 0, width: '100%', height: '100%'}})
-	},
-	
-	create : function(link, num) {
-		var iframe = ML.create({tag: 'iframe', attrs:{src: link.href, border: 0, width: '100%', height: '100%'}}),
-			modal = ML.create({tag: 'div', attrs: {'class': 'modal hidden', id: link.rel}}),
-			template = '';
-			
-		modal.innerHTML = template;
-
-		document.body.appendChild(modal);
-		(modal.id.match(/iframe*/ig)) ? modal.childNodes[1].appendChild(iframe) : ML.ajax(link.rel, link.href);
 	},
 
 	settings : function(pr, link) {

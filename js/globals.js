@@ -552,20 +552,18 @@ ML.Ajax = function(params) {
 		type = params.type || 'GET',
 		data = params.data || '', xmlhttp;
 		
-	console.log(params);
-		
 	if (window.location.host == '') {
-		params.error('Must be hosted on a server');
+		params.success('ERROR: Must be hosted on a server');
 		return;	
 	} else {
 		xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
 		
-		ML.El.evt(xmlhttp, 'readystatechange', function() {
+		ML.El.evt(xmlhttp, 'readystatechange', function(e) {
 			var _this = this;
-			params.beforeRequest();
+			if (params.beforeRequest) params.beforeRequest();
 			
 			if (_this.readyState == 4) {
-				params.complete();
+				if (params.complete) params.complete();
 				
 				if (_this.status == 200) {
 					var response = _this.responseText;	
@@ -574,7 +572,7 @@ ML.Ajax = function(params) {
 					params.error({status: _this.status, state:_this.readyState});
 				}
 			} else {
-				params.error({status: _this.status, state:_this.readyState});
+				//params.error({status: _this.status, state:_this.readyState});
 			}
 		}, true);
 		
