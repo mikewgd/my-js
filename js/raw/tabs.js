@@ -1,3 +1,7 @@
+ML.TabHandler = {
+	
+}
+
 ML.Tabs = {
 	
 	tabs: [],
