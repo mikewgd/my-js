@@ -206,12 +206,21 @@ ML = {
 	*
 	* @param {HTMLElement} elem - element of class name you want removed.
 	* @param {String} classN - class name to be removed.
+	* @param {Boolean} multiple (optional) - to be used if removing multiple class names.
     */
-	removeClass: function(elem, classN) {
+	removeClass: function(elem, classN, multiple) {
 		var currClass = this.trim(elem.className),
 			regex = new RegExp("(^|\\s)"+classN+"(\\s|$)", "g");
 			
 		elem.className = this.trim(currClass.replace(regex, " "));
+		
+		if (multiple) {
+			var classNames = classN.split(' ');
+			
+			for (var i=0; i<classNames.length; i++) {
+				this.removeClass(elem, classNames[i]);
+			}
+		}
 	},
 	
 	/**

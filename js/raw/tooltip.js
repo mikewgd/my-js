@@ -15,6 +15,15 @@ ML.TooltipHandler = function () {
 			t.init();
 		}
 	}
+	
+	function hide () {
+		var tooltips = ML.$C('.tooltip');
+		
+		for (var i=0; i<tooltips.length; i++) {
+			ML.removeClass(tooltips[i], 'top bottom left right');
+			ML.addClass(tooltips[i], 'hidden');
+		}
+	}
 };
 
 /**
@@ -78,19 +87,24 @@ ML.Tooltip = function(tip, settings) {
 			var div = ML.El.create('div', {'class': 'tooltip hidden', id: dyn.rel});
 			div.innerHTML = this.template.replace('{{message}}', dyn.title);
 			document.body.appendChild(div);
-			//this.el = div;
 		},
 		
 		/**
 		* @function show
 		* Shows the tooltip and put the set width on it and etc...
+		*
+		* @param {Boolean} selfInvoke (optional) - if invoking the tooltip manually.
 		*/
-		show: function () {
-			var self = this,
-				tooltip = self.el,
+		show: function (selfInvoke) {
+			var self = this;
+			
+			if (selfInvoke) {self.el = ML.$(tip.rel);}
+			
+			var tooltip = self.el,
 				tags = tooltip.getElementsByTagName('*');
 						
 			ML.removeClass(tooltip, 'hidden');
+			ML.removeClass(tooltip, 'top bottom left right', true);
 			ML.addClass(tooltip, self.direction);
 			tooltip.style.width = self.width+'px';
 			
@@ -109,7 +123,7 @@ ML.Tooltip = function(tip, settings) {
 			var tooltips = ML.$C('.tooltip');
 			
 			for (var i=0; i<tooltips.length; i++) {
-				ML.removeClass(tooltips[i], this.direction);
+				ML.removeClass(tooltips[i], 'top bottom left right', true);
 				ML.addClass(tooltips[i], 'hidden');
 			}
 		},
