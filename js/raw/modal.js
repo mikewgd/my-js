@@ -29,7 +29,13 @@ ML.ModalHandler = function () {
 * @class Modal
 * @namespace ML
 *
-* @property {FILL} FILL - fill.
+* @property {Number} width - width for modal.
+* @property {Number} height - height for modal.
+* @property {String} modalHeader - the modal header to be used when making an iframe.
+* @property {HTMLElement} link - link element that activates the modal.
+* @property {HTMLElement} el - the modal element.
+* @property {Boolean} dynamic - whether to create a modal on the fly.
+* @property {String} template - html structure for a modal.
 */
 ML.Modal = function(modLink, settings) {
 	var defaults = {width: 800, height: 'auto', header: 'Modal Header'};
@@ -56,7 +62,8 @@ ML.Modal = function(modLink, settings) {
 							
 			this.el = ML.$(this.link.rel);
 			
-			this.createClose();			
+			ML.El.clean(this.el);
+			this.createOverlay();
 			this.bindEvents();
 		},
 		
@@ -65,10 +72,23 @@ ML.Modal = function(modLink, settings) {
 		* Binds events to the link (modal activation).
 		*/
 		bindEvents: function() {
-			var self = this;
+			var self = this,
+				overlay = ML.$('darkness'),
+				close = ML.$C('.close');
 			
-			//ML.El.evt(self.link, 'mouseover', function(e) {self.show();}, true);
-			//ML.El.evt(self.link, 'mouseout', function(e) {self.hide();}, true);
+			ML.El.evt(self.link, 'click', function(e) {
+				self.show();
+				e.preventDefault();
+			}, true);
+
+			ML.El.evt(overlay, 'click', function(e) {self.hide();}, true);
+
+			ML.El.evt(window, 'resize', function(e) {self.resizing();}, true);
+
+			ML.El.evt(document, 'click', function(e) {
+				var clicked = ML.El.clicked(e);
+				if (ML.hasClass(clicked, 'close')) {self.hide();}
+			}, true);
 		},
 		
 		/**
@@ -80,20 +100,19 @@ ML.Modal = function(modLink, settings) {
 		create: function(dyn) {
 			var s = this,
 				div = ML.El.create('div', {'class': 'modal hidden', id: dyn.rel}),
-				iframe = '<iframe src="'+s.link.href+'" border="0" width="100%" height="100%"></iframe>';
+				iframe = '<iframe src="'+s.link.href+'" border="0" width="100%" height="100%"></iframe>',
+				closeBtn = '<a href="javascript:void(0);" class="close">X</a>';
 				
-			s.template = s.template.replace('{{modalHeader}}', s.modalHeader);
+			s.template = s.template.replace('{{modalHeader}}', '<h1>'+s.modalHeader+'</h1>'+closeBtn);
 			
 			if (settings.type == 'iframe') {
 				s.template = s.template.replace('{{contents}}', iframe);
 			} else {
 				var ajax = new ML.Ajax({
 					url: s.link.href,
-					success: function(data) {
-						s.template = s.template.replace('{{contents}}', data);	
-						
+					success: function(data) {						
 						// Need to redefine this
-						div.innerHTML = s.template;
+						div.innerHTML = data;
 						s.el = div;
 					}
 				});	
@@ -113,121 +132,69 @@ ML.Modal = function(modLink, settings) {
 		* Creates an overlay on the page to cover the content.
 		*/
 		createOverlay: function () {
-			var darkness = ML.El.create('div', {id:'darkness'})
-			ML.addClass(darkness, 'overlay');
-			document.body.appendChild(darkness);
-			
-			ML.El.styl(ML._$('body')[0], {margin:0, padding: 0, width: '100%', height: '100%'});
+			if (ML.$('darkness') == null) {
+				var darkness = ML.El.create('div', {id:'darkness', 'class':'overlay'})
+				ML.addClass(darkness, 'overlay');
+				document.body.appendChild(darkness);
+				
+				ML.El.styl(ML._$('body')[0], {margin:0, padding: 0, width: '100%', height: '100%'});
+			}
 		},
-		
+
 		/**
-		* @function createClose
-		* Creates the close link to close the modal.
+		* @function show
+		* Handles showing and positioning the modal. Also shows the overlay.
+		*
+		* @param {Boolean} selfInvoke (optional) - if invoking the modal manually.
 		*/
-		createClose: function() {
-			
+		show: function (selfInvoke) {
+			if (selfInvoke) {this.el = ML.$(modLink.rel);}
+
+			var overlay = ML.$('darkness'),
+				modal = this.el,
+				height = modal.offsetHeight;
+
+			ML.removeClass(modal, 'hidden');
+			modal.removeAttribute('style');
+
+			ML.El.styl(overlay, {display:'block', visibility:'visible', 'height': ML.docDimen().h+'px'});
+
+			// Centers the modal with margin & etc...
+			ML.El.styl(modal, {
+				'width':this.width+'px', 
+				'height':this.height+'px',
+				'top':'50%',
+				'marginTop': '-'+height/2+'px',
+				'left':'50%',
+				'marginLeft': '-'+this.width/2+'px'
+			});
+		},
+
+		/**
+		* @function hide
+		* Hides the overlay and modal.
+		*/
+		hide: function () {
+			var overlay = ML.$('darkness'),
+				modal = this.el;
+
+			ML.addClass(modal, 'hidden');
+			modal.removeAttribute('style');
+			overlay.removeAttribute('style');
+		},
+
+		/**
+		* @function resize
+		* Triggered when the window is resized. So accurate height is given to overlay "darkness".
+		*/
+		resizing: function() {
+			var overlay = ML.$('darkness'),
+				display = ML.El.getStyl(overlay,'display');
+
+			// Only adjust height if overlay is shown.
+			if (display == 'block') {
+				ML.El.styl(overlay, {'height': ML.docDimen().h+'px'});
+			}
 		}
 	}
 };
-
-ML.Modal2 = {
-	
-	defaults : {width: 800, height: 'auto', header: 'Modal Header'},
-	
-	init : function() {
-		var links = _$$('a');
-		// look for any <a> with class name of modal
-		for (var i=0; i<links.length; i++) {
-			if(links[i].className.match(/modal::*/ig)) {
-				// if rel has iframe or ajax create a modal
-				if(links[i].rel.match(/iframe/) || links[i].rel.match(/ajax/)) {
-					links[i].rel = links[i].rel+'-'+i;
-					ML.Modal.create(links[i], i);
-				} 
-				
-				links[i].onclick = function() {
-					props = this.className;
-					ML.Modal.settings(props, this);
-					return false;
-				}
-			}
-		}
-		ML.Modal.createOverlay();
-	},
-
-	settings : function(pr, link) {
-		var self = this,
-			settings = ML.ParObj({sep:':', elem: pr, remove: 'modal::'});
-		
-		// all settings are placed into an object
-		var params = {id: link.rel, set:settings};
-		ML.Modal.show(params);
-	},
-
-	show : function(args) {
-		var modal = _$(args.id),
-			modalHeight = (!args.set.height) ? this.defaults.height : args.set.height,
-			modalWidth = (!args.set.width) ? this.defaults.width : args.set.width,
-			title = (!args.set.header) ? this.defaults.header : args.set.header;
-				
-		// if id doesnt exist, stop here
-		if(modal == null) {return false;} 
-				
-		// removes the style attribute so starting fresh each time
-		modal.removeAttribute('style');
-		
-		cleanWhitespace(modal);
-		var header = modal.childNodes[0],
-			content = modal.childNodes[1];
-			
-		if(modal.id.match(/iframe/)) { 
-			header.innerHTML = '<h1>'+title+'</h1>';
-		}
-	
-		modal.style.width = modalWidth + 'px';
-		modal.style.height = modalHeight + 'px';
-		ML.setStyle(content,{props: {'height': modalHeight-header.offsetHeight-26 + 'px', 'overflow': 'hidden'}});
-		
-		var darkness = _$('darkness');
-		
-		ML.setStyle(darkness,{props: {'height': ML._screen.height()+'px', 'width': ML._screen.width()+'px', 'display': 'block', 'visibility': 'visible'}});
-		
-		removeClass(modal, 'hidden');
-		pos = centerElement(modal);
-		ML.setStyle(modal, {props: {'top': pos.x, 'left': pos.y}});
-
-		// create the close button
-		var X = ML.create({tag: 'a', attrs: {'href': 'javascript:void(0);', 'id': 'close-'+modal.id, 'class': 'close'}});
-		X.innerHTML = 'X';
-		
-		(_$$('a', header).length > 0) ? null : header.appendChild(X);
-		
-		X.onclick = function() {
-			ML.Modal.hide();
-			return false;
-		}
-		ML.Modal.resizing(modal, darkness);
-	},
-	
-	hide : function() {
-		var div = _$$('div');
-		
-		ML.loop(div,function (item,index){
-			if(hasClass(item, 'modal')) {
-				addClass(item, 'hidden');
-				item.style.top = '-99999em';
-				
-				ML.setStyle(_$('darkness'), {props: {display: 'none', visibility: 'hidden'}});
-				cleanWhitespace(item);
-			}
-		});
-	},
-	
-	resizing : function(modal, darkness) {
-		window.onresize = function() {
-			var pos = centerElement(modal);
-			ML.setStyle(darkness, {props: {'height': ML._screen.height()+'px', 'width': '100%'/*ML._screen.width()+'px'*/}});
-			ML.setStyle(modal, {props: {'top': pos.x, 'left': pos.y}});
-		}
-	}
-}

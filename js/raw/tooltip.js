@@ -94,6 +94,7 @@ ML.Tooltip = function(tip, settings) {
 			var tooltip = self.el,
 				tags = tooltip.getElementsByTagName('*');
 						
+			self.hide(); // added to close all active tooltips.
 			ML.removeClass(tooltip, 'hidden');
 			ML.removeClass(tooltip, 'top bottom left right', true);
 			ML.addClass(tooltip, self.direction);
