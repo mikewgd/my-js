@@ -24,7 +24,6 @@ ML.ModalHandler = function () {
 	}
 };
 
-
 /**
 * @class Modal
 * @namespace ML
@@ -83,7 +82,7 @@ ML.Modal = function(modLink, settings) {
 
 			ML.El.evt(overlay, 'click', function(e) {self.hide();}, true);
 
-			ML.El.evt(window, 'resize', function(e) {self.resizing();}, true);
+			ML.El.evt(window, 'resize', function(e) {self.resize();}, true);
 
 			ML.El.evt(document, 'click', function(e) {
 				var clicked = ML.El.clicked(e);
@@ -152,22 +151,27 @@ ML.Modal = function(modLink, settings) {
 
 			var overlay = ML.$('darkness'),
 				modal = this.el,
-				height = modal.offsetHeight;
+				height = modal.offsetHeight,
+				modalParentTag = modal.parentNode.tagName.toLowerCase(), leftPos, topPos;
 
 			ML.removeClass(modal, 'hidden');
 			modal.removeAttribute('style');
 
 			ML.El.styl(overlay, {display:'block', visibility:'visible', 'height': ML.docDimen().h+'px'});
+			ML.El.styl(modal, {width:this.width+'px', height:this.height+'px'});
+			
+			// Parent tag is not body get dimensions off window
+			if (modalParentTag == 'body') {
+				leftPos = topPos = '50%';
+				ML.El.styl(modal, {'marginTop': '-'+height/2+'px', 'marginLeft': '-'+this.width/2+'px'});
+			} else {
+				var center = ML.El.center(modal);
+				topPos = center.y;
+				leftPos = center.x;
+			}
 
-			// Centers the modal with margin & etc...
-			ML.El.styl(modal, {
-				'width':this.width+'px', 
-				'height':this.height+'px',
-				'top':'50%',
-				'marginTop': '-'+height/2+'px',
-				'left':'50%',
-				'marginLeft': '-'+this.width/2+'px'
-			});
+			// Centers the modal
+			ML.El.styl(modal, {'top':topPos, 'left':leftPos});
 		},
 
 		/**
@@ -187,13 +191,13 @@ ML.Modal = function(modLink, settings) {
 		* @function resize
 		* Triggered when the window is resized. So accurate height is given to overlay "darkness".
 		*/
-		resizing: function() {
+		resize: function() {
 			var overlay = ML.$('darkness'),
 				display = ML.El.getStyl(overlay,'display');
 
 			// Only adjust height if overlay is shown.
 			if (display == 'block') {
-				ML.El.styl(overlay, {'height': ML.docDimen().h+'px'});
+				ML.El.styl(overlay, {'height': ML.windowDimen().h+'px'});
 			}
 		}
 	}
