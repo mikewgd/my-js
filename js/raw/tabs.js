@@ -1,8 +1,26 @@
-ML.TabHandler = {
+/**
+* @class TabHandler
+* @namespace ML
+* Handles calling the Tabs class.
+*/
+ML.TabHandler = function () {
+	var tags = ML._$('*', document.body);
 	
-}
+	for (var i=0; i<tags.length; i++) {
+		var attr = ML.El.data;
+		
+		if (attr(tags[i], 'tab-holder') !== null) {
+			var tab = new ML.Tabs(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'tooltip')}));
+			t.init();
+		}
+	}
+};
 
-ML.Tabs = {
+ML.Tabs = function () {
+	};
+
+
+ML.Tabs2 = {
 	
 	tabs: [],
 	tabContents: [],

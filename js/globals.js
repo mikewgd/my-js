@@ -277,7 +277,7 @@ ML.El = {
     * Adds events to elements.
 	* Also adds all the events to an array to keep track of them.
 	*
-	* @param {HTMLElement} el - element that event should be attched/added to.
+	* @param {HTMLElement} el - element that event should be attached/added to.
     * @param {String} type - type of event to be added to element, minus "on".
 	* @param {function} func - callback function to be called on click.
 	* @param {Boolean} capture - true/false
@@ -286,12 +286,44 @@ ML.El = {
 		if (el.addEventListener)  // other browsers
 			el.addEventListener(type, func, capture);
 		else if (el.attachEvent) { // ie 8 and below
-			el.attachEvent("on"+type, func);
+			el.attachEvent('on'+type, func);
 		} else { // for older browsers
-			el[type] = func;
+			el['on'+type] = func;
 		}
 		
 		this.Events.push([el, type, func]);
+	},
+	
+	/** 
+	* @function evtTrigger
+	* Triggers an event on an element.
+	* Courtesy: http://stackoverflow.com/users/1120798/sergey-gospodarets
+	*
+	* @param {HTMLElement} el - element event is attached/added to.
+    * @param {String} type - event bound to element that you want to trigger.
+	*/
+	evtTrigger: function (el, type) {
+		var event;
+		
+		if(document.createEvent){
+			event = document.createEvent('HTMLEvents');
+			event.initEvent(type,true,true);
+		} else if(document.createEventObject){// IE < 9
+			event = document.createEventObject();
+			event.eventType = type;
+		}
+		
+		event.type = type;
+		
+		if(el.dispatchEvent){
+			el.dispatchEvent(event);
+		} else if(el.fireEvent){// IE < 9
+			el.fireEvent('on'+event.eventType,event);// can trigger only real event (e.g. 'click')
+		} else if(el[type]){
+			el[type]();
+		} else if(el['on'+type]){
+			el['on'+type]();
+		}
 	},
 	
 	/**
@@ -370,7 +402,7 @@ ML.El = {
 	* @param {HTMLElement} elem - element you want to get the center position of.
     */
 	center: function (elem) {
-		var win = ML.windowDimen(elem),
+		var win = ML.windowDimen(),
 			mvX = (win.w - elem.offsetWidth) / 2 + "px",
 			mvY = (win.h - elem.offsetHeight) / 2 + "px";
 		

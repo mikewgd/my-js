@@ -71,6 +71,10 @@
     
 </div>
 
-<script>addLoadEvent(function() {ML.Tabs.init();})</script>
+<script type="text/javascript">
+	ML.El.evt(window, 'load', function() {
+		ML.TabHandler();
+	}, true);
+</script>
 </body>
 </html>
