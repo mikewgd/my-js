@@ -4,20 +4,39 @@
 * Handles calling the Tabs class.
 */
 ML.TabHandler = function () {
-	var tags = ML._$('*', document.body);
+	var ul = ML._$('ul', document.body), tabHolder, tab;
 	
-	for (var i=0; i<tags.length; i++) {
+	for (var i=0; i<ul.length; i++) {
 		var attr = ML.El.data;
 		
-		if (attr(tags[i], 'tab-holder') !== null) {
-			var tab = new ML.Tabs(tags[i],  ML.ParObj({elem: ML.El.data(tags[i], 'tooltip')}));
-			t.init();
+		if (attr(ul[i], 'tab-holder') !== null) {
+			var dataTabHolder = ML.El.data(ul[i], 'tab-holder'),
+				isClass = (dataTabHolder.charAt(0) == '.') ? true : false;
+			
+			tabHolder = (isClass) ? ML.$C(dataTabHolder) : ML.$(dataTabHolder.replace('#', ''));
+			tab = new ML.Tabs(ul[i], tabHolder);
+			
+			tab.init();
 		}
 	}
 };
 
-ML.Tabs = function () {
-	};
+ML.Tabs = function (ul, tabHolder) {
+	ML.El.clean(ul);
+	ML.El.clean(tabHolder[0]);
+	
+	var liLength = ul.childNodes.length;
+	
+	return {
+		tabs: ul.childNodes,
+		tabContents: tabHolder.childNodes,
+		amt: liLength,
+		
+		init: function () {
+			/*alert('f');*/
+		}
+	}
+};
 
 
 ML.Tabs2 = {
