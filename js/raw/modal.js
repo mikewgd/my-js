@@ -188,7 +188,7 @@ ML.Modal = function(modLink, settings) {
 		},
 
 		/**
-		* @function resizing
+		* @function resize
 		* Triggered when the window is resized. So accurate height is given to overlay "darkness".
 		*/
 		resize: function() {
