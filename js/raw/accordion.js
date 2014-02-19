@@ -33,7 +33,7 @@ ML.Accordion = function(acc, toggle) {
             this.hideLis();
             this.bindEvents();
 
-            if (this.el.id) {
+            if (this.el.id && window.location.hash) {
                 this.windowSet();
             }
         },
