@@ -88,16 +88,16 @@
 			var self = this;
 			
 			ML.loop(self.inputs, function(inp, i) {
-				ML.El.evt(inp, 'focus', function(e) {self.focusBlur(e, 'focus');}, true);
-				ML.El.evt(inp, 'blur', function(e) {self.focusBlur(e, 'blur');}, true);
-				ML.El.evt(inp, 'click', function(e) {self.ref();}, true);
+				ML.El.evt(inp, 'focus', function(e) {self.focusBlur(e);});
+				ML.El.evt(inp, 'blur', function(e) {self.focusBlur(e);});
+				ML.El.evt(inp, 'click', function(e) {self.ref();});
 				
 				if (!ML.hasClass(self.customs[i], 'disabled')) {
 					ML.El.evt(self.customs[i], 'mouseup', function(e) {
 						var clicked = ML.El.clicked(e);
 						self.check.call(clicked);
 						self.attachOldEvt(inp, 'click');
-					}, true);
+					});
 				}
 			});
 		},
@@ -107,20 +107,19 @@
 		* Focus and blur event attached to <input>, but made to match corresponding custom.
 		*
 		* @param {Object} evt - event being passed on "focus" or "blur".
-		* @param {String} type - either focus or blur.
 		*/
-		focusBlur: function (evt, type) {
+		focusBlur: function (evt) {
 			var e = evt || window.event,
 				inp = ML.El.clicked(e),
 				span =  inp.nextSibling;
-			
-			if (type == 'focus') {
+
+			if (evt.type == 'focus') {
 				ML.addClass(span, "focus");
 			} else { 
 				ML.removeClass(span, "focus");
 			}
 			
-			this.attachOldEvt(inp, type);
+			this.attachOldEvt(inp, evt.type);
 			
 			if (typeof e.preventDefault !== 'undefined') {
 				e.preventDefault();    

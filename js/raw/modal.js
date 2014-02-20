@@ -78,16 +78,16 @@ ML.Modal = function(modLink, settings) {
 			ML.El.evt(self.link, 'click', function(e) {
 				self.show();
 				e.preventDefault();
-			}, true);
+			});
 
-			ML.El.evt(overlay, 'click', function(e) {self.hide();}, true);
+			ML.El.evt(overlay, 'click', function(e) {self.hide();});
 
-			ML.El.evt(window, 'resize', function(e) {self.resize();}, true);
+			ML.El.evt(window, 'resize', function(e) {self.resize();});
 
 			ML.El.evt(document, 'click', function(e) {
 				var clicked = ML.El.clicked(e);
 				if (ML.hasClass(clicked, 'close')) {self.hide();}
-			}, true);
+			});
 		},
 		
 		/**

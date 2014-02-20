@@ -283,6 +283,8 @@ ML.El = {
 	* @param {Boolean} capture - true/false
 	*/
 	evt: function (el, type, func, capture) {
+		if (capture == undefined) capture = false;
+
 		if (el.addEventListener)  // other browsers
 			el.addEventListener(type, func, capture);
 		else if (el.attachEvent) { // ie 8 and below
@@ -615,7 +617,7 @@ ML.Ajax = function(params) {
 			} else {
 				//params.error({status: _this.status, state:_this.readyState});
 			}
-		}, true);
+		});
 		
 		xmlhttp.open(type, url, true);
 		xmlhttp.send();

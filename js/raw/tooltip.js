@@ -64,8 +64,8 @@ ML.Tooltip = function(tip, settings) {
 		bindEvents: function() {
 			var self = this;
 			
-			ML.El.evt(self.link, 'mouseover', function(e) {self.show();}, true);
-			ML.El.evt(self.link, 'mouseout', function(e) {self.hide();}, true);
+			ML.El.evt(self.link, 'mouseover', function(e) {self.show();});
+			ML.El.evt(self.link, 'mouseout', function(e) {self.hide();});
 		},
 		
 		/**

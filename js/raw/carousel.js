@@ -145,7 +145,7 @@ ML.Carousel = function(car, settings, func) {
 					self.stopCycle();
 					self.animate(link.rel, false);
 					return false;
-				}, true);
+				});
 			});
 			
 			ML.loop(jumpLinks, function (item, i) {
@@ -160,8 +160,7 @@ ML.Carousel = function(car, settings, func) {
 					
 					self.stopCycle();
 					self.animate(d, true);
-					
-				}, true);
+				});
 			});
 		},
 		

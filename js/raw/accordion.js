@@ -78,7 +78,7 @@ ML.Accordion = function(acc, toggle) {
 
                     ML.El.evt(item, 'click', function(e) {
                         self.expandCollapse(ML.El.clicked(e).parentNode);
-                    }, true);
+                    });
                 }
             });
         },

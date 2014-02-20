@@ -78,7 +78,7 @@
 		ML.El.evt(t, 'click', function (e) {
 			var content = ML.El.clicked(e).className
 			ML.Toggle(ML.$(content));
-		}, true);	
+		});	
 	}
 	
 	for (var i=0; i<2; i++) {
@@ -86,7 +86,7 @@
 		ML.El.evt(t, 'click', function (e) {
 			var content = ML.El.clicked(e).className
 			ML.slideToggle(ML.$(content), function() {/*alert('Sliding complete');*/});
-		}, true);	
+		});	
 	}
 </script>
 </body>

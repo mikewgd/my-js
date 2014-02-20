@@ -51,19 +51,19 @@
 				
 					self.moveCursor(inp);
 					self.cursorTimer = setTimeout(function() {self.moveCursor(inp)}, 1);
-				}, true);
+				});
 				
 				ML.El.evt(self.el, 'blur', function (e){
 					ML.removeClass(ML.El.clicked(e), 'focus');
 					clearTimeout(self.cursorTimer);
-				}, true);
+				});
 				
 				ML.El.evt(self.el, 'click', function (e) {
 					if (ML.hasClass(ML.El.clicked(e), 'focus')) self.moveCursor(ML.El.clicked(e));
-				}, true);
+				});
 				
 				if (self.ph !== null) {
-					ML.El.evt(input, 'keyup', function (e) {self.clearUnclear(ML.El.clicked(e));}, true);
+					ML.El.evt(input, 'keyup', function (e) {self.clearUnclear(ML.El.clicked(e));});
 				}
 			},
 

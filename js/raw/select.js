@@ -147,23 +147,23 @@
 						self.selectOption(custom, args);
 						self.attachOldEvt(custom.previousSibling, 'change');
 					}
-				}, true);
+				});
 				
 				// Removes selected state from <li>
 				ML.El.evt(optEvt, 'mouseover', function(e){
 					var clicked = ML.El.clicked(e), ul = clicked.parentNode.parentNode;
 					ML.loop(ML._$('li', ul), function(li, i){ML.removeClass(li, 'selected');});
-				}, true);
+				});
 			} else {
 				ML.loop(self.selects, function(select, i) {
-					ML.El.evt(select, 'focus', function(e) {self.focusBlur(e, 'focus');}, true);
-					ML.El.evt(select, 'blur', function(e) {self.focusBlur(e, 'blur');}, true);
+					ML.El.evt(select, 'focus', function(e) {self.focusBlur(e);}, true);
+					ML.El.evt(select, 'blur', function(e) {self.focusBlur(e);});
 					ML.El.evt(select, 'change', function(e) {
 						var el = ML.El.clicked(e), selected = el.selectedIndex;
 						var args = {index:selected, value:el.childNodes[selected].value, text:el.childNodes[selected].innerHTML}
 						
 						self.selectOption(el.nextSibling, args);
-					}, true);
+					});
 				});
 				
 				ML.El.evt(document, 'click', function(e) {
@@ -171,7 +171,7 @@
 					
 					if (ML.hasClass(clicked, 'disabled') || ML.hasClass(clicked.parentNode, 'disabled')) return;
 					self.toggle(clicked, clicked.parentNode);
-				}, true);
+				});
 			}
 		}, 
 
@@ -235,21 +235,20 @@
 		* Focus and blur event attached to <select>, but made to match corresponding custom.
 		*
 		* @param {Object} evt - event being passed on "focus" or "blur".
-		* @param {String} type - either focus or blur.
 		*/
-		focusBlur: function (evt, type) {
+		focusBlur: function (evt) {
 			var e = evt || window.event,
 				sel = ML.El.clicked(e),
 				div =  sel.nextSibling;
 			
-			if (type == 'focus') {
+			if (evt.type == 'focus') {
 				ML.addClass(div, "focus");
 			} else { 
 				if (ML.hasClass(div, 'active')) ML.removeClass(div, 'active');
 				ML.removeClass(div, "focus");
 			}
 			
-			this.attachOldEvt(sel, type);
+			this.attachOldEvt(sel, evt.type);
 			
 			if (typeof e.preventDefault !== 'undefined') {
 				e.preventDefault();    

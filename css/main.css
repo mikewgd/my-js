@@ -36,7 +36,7 @@ div.notes ul li {list-style-position:inside;}
 
 /* Documentation */
 .usage {margin:20px; background:#f0f0f0;border:1px solid #ccc;}
-.usage h1 {background:#fff;margin:0;line-height:40px;padding-left:15px; border-bottom:1px solid #ccc;}
+.usage h2 {background:#fff;margin:0;line-height:40px;padding-left:15px; border-bottom:1px solid #ccc;}
 .usage .contents {padding:10px;}
 .usage .contents p {margin:0 0 10px 0;line-height:16px;}
 .usage .contents h3 {margin:0;}
