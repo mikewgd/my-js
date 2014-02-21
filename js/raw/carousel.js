@@ -222,7 +222,7 @@ ML.Carousel = function(car, settings, func) {
 			var self = this,
 				curr = self.curr;
 				
-			if (!init && func) func(curr);
+			if (!init && func) func(curr, self.el);
 			
 			// Arrow control
 			ML.loop(self.pag, function (item, i) {

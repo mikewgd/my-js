@@ -9,8 +9,9 @@
 <body>
 
 <h1>My Scripts</h1>
-<p>Please feel free to use any of these scripts for your own personal use (reference, etc..).</p>
-<p>If you find any bugs/suggestions/comments please feel free to email me through my website (http://mikewgd.com). Always looking for newer and better ways to do code. </p>
+<p>Please feel free to use any of these scripts for your own personal use (reference, etc..). <br />
+Also please excuse any grammatical mistakes:)</p>
+<p>If you find any bugs/suggestions/comments please feel free to email me through my website (<a href="http://mikewgd.com">http://mikewgd.com</a>). Always looking for newer and better ways to do code. </p>
 
 http://milianw.de/projects/markdownify/demo.php
 
@@ -27,26 +28,67 @@ http://milianw.de/projects/markdownify/demo.php
 <p>You can also access any item in an accordion by giving the ul a unique id. To link to the 2nd item in the accordion your url would be: http://yourwebsite.com/accordion.html#acc-{ID}-{1}</p>
 <br />
 <h3>Activating the script</h3>
-<p>Include the accordion JavaScript file and all you need to do is  call <strong>ML.AccordionHandler();</strong>. Doing this just loops through any accordion on the page and performs the necessary functions. You can initialize it manually by doing<strong> new ML.Accordion(AccordionElement, multpleToggle=true/false);</strong>.</p>
+<p>Include the accordion JavaScript file and all you need to do is  call <strong>ML.AccordionHandler();</strong>. Doing this just loops through any accordion on the page and performs the necessary functions. </p>
+<p>You can initialize it manually by doing:</p>
+<pre><code>var accordion = new ML.Accordion(ML.$('accEle'), false); 
+accordion.init();</code></pre>
+<p>The second parameter <strong>must</strong> be include either true or false (multi-toggle). It can <strong>NOT</strong> be left blank.</p>
 </div>
 </div>
 <hr />
 
-
 <div class="usage" id="carousel">
 <h2>Carousel</h2>
 <div class="contents">
-<p>When creating a carousel please give it a unique id.</p>
-<p>The HTML Structure should :</p>
-<pre><code>&lt;div class=&quot;carousel&quot; id=&quot;<strong>animals</strong>&quot;&gt;<br />    &lt;a href=&quot;#&quot; class=&quot;pag prev&quot; style=&quot;visibility:hidden&quot;&gt;Previous&lt;/a&gt;<br />    &lt;div class=&quot;holder&quot;&gt;<br />        &lt;div class=&quot;viewer&quot;&gt;<br />            &lt;ul&gt;
-                &lt;li&gt;&lt;!-- Carousel item --&gt;&lt;/li&gt;
-                &lt;li&gt;&lt;!-- Carousel item --&gt;&lt;/li&gt;
-            &lt;/ul&gt;<br />        &lt;/div&gt;<br />        <em>*&lt;div class=&quot;jump&quot;&gt;&lt;/div&gt; </em>      <br />    &lt;/div&gt;<br />    &lt;a href=&quot;#&quot; class=&quot;pag next&quot;&gt;Next&lt;/a&gt;<br />&lt;/div&gt;</code></pre>
-<p>The order of the &lt;div&gt; tags is not necessary. The necessary &lt;div&gt; tags are <strong>&lt;div class=&quot;viewer&quot;&gt;</strong>, <strong>&lt;a href=&quot;#&quot; class=&quot;pag prev&quot;&gt;</strong> and <strong>&lt;a href=&quot;#&quot; class=&quot;pag next&quot;&gt;</strong><br />
-  <em>*&lt;div class=&quot;jump&quot;&gt;</em> is optional if you want jump links (links at the bottom that go right to a slide in the carousel.</p>
-<div style="height:10px;clear:both;"></div>
+<h3>HTML Structure</h3>
+<p>The order of the HTML does not matter for this script. As long as they are children of the <code>&lt;div class=&quot;carousel&quot; /&gt;</code>. I would keep the slides in the unordered list structure.</p>
+<pre><code>&lt;div class=&quot;carousel&quot;&gt;<br />    &lt;a href=&quot;javascript:void(0);&quot; class=&quot;pag prev&quot; rel=&quot;prv&quot;&gt;&amp;larr;&lt;/a&gt;<br />    &lt;a href=&quot;javascript:void(0);&quot; class=&quot;pag next&quot; rel=&quot;nxt&quot;&gt;&amp;rarr;&lt;/a&gt;<br />
+    &lt;div class=&quot;viewer&quot;&gt;<br />        &lt;ul&gt;<br />            &lt;li&gt;&lt;!-- Slide Content --&gt;&lt;/li&gt;<br />        &lt;/ul&gt;<br />    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<h3>Notes, Tips and Etc...</h3>
+<p>If you want jump links (i.e. the dots) just include <code>&lt;div class=&quot;jump&quot;&gt;&lt;/div&gt;</code> as a child element.</p>
+<p>There are 2 settings you can apply to the carousel: auto-rotate and current slide. All you need to do is add <code>data-carousel=&quot;curr:2:rotate:true&quot;</code> to the <code>&lt;div class=&quot;carousel&quot; /&gt;</code> (I.e Current slide will start on slide 3 and it will auto-rotate)</p>
+<p>You may also choose to have a function(s) fire once the animation is complete and you can do this by applying a callback to the initialization of the carousel. Please look for details regarding this under the section <strong>Activating the script</strong> for the carousel.</p>
+<br />
 <h3>Activating the script</h3>
-<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the carousel. All you need to do is call <strong>ML.Carousel.setup({carousel:'unique-id', jump:true, increment:2});</strong> The only really important one to fill out it is <strong>carousel</strong>.<strong> Jump</strong> is if you want jump links, by default it is set to false.<strong> Increment </strong>deals with the animation.</p>
+<p>Include the carousel JavaScript file and all you need to do is  call <strong>ML.CarouselHandler();</strong>. Doing this just loops through any carousel on the page and performs the necessary functions.</p>
+<p>You can initialize it manually by doing:</p>
+<pre><code>var carousel = new ML.Accordion(ML.$('carEle'), {curr: 1, rotate: true}, function(i, el){
+    if (carousel.total == i) {
+        alert('last slide');
+        el.style.marginRight = '14px';   
+    }
+}); 
+
+carousel.init();</code></pre>
+<p>Setting the current slide and auto-rotate are optional. Current slide defaults to 0 and rotate is set to false unless stated.</p>
+<p>The callback function passes in the current slide and the carousel element which you can access in your callback function.</p>
+</div>
+</div>
+<hr />
+
+<div class="usage" id="form-elems">
+<h2>Form Elements</h2>
+<div class="contents">
+<p>To use the custom form elements (radio buttons, checkboxes, select menu and scroller (buggy*)). All you need to do is add the scripts located in the head of this page.</p>
+<p>They do not rely on each other at all! So, you can just have the custom radios/checkboxes and not the select menu.</p>
+<p class="imp">Be sure to add type to the <code>&lt;input&gt;</code> tag. So for radios use: <code>&lt;input type="radio" /&gt;</code> and for checkbox: <code>&lt;input type="checkbox" /&gt;</code></p>
+<p class="imp">For a custom <code>&lt;select&gt;</code> tag. Just be sure to use the actual tag.</p>
+<div style="height:10px;clear:both;"></div>
+<h3>Activating the scripts</h3>
+<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the custom elements to display. All you need to do is call <strong>ML.Form_RadioCheck.init();</strong> (for custom radios/checkboxes) and/or
+<strong>ML.Form_Select.init();</strong> (custom select menu).</p>
+<p>You can place these in either a window.onload or with the addLoadEvent which you will see when viewing the source of the page.</p>
+</div>
+</div>
+
+<div class="usage" id="inp-control">
+<h2>Input Control</h2>
+<div class="contents">
+<p>Clears the input onfocus and if a value you entered is different than the default value nothing will happen.</p>
+<div style="clear:both; height:10px;"></div>
+<h3>Activating the script</h3>
+<p>Pretty simple implementing this script. If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for this to work. All you need to do is call <strong>ML.Form_InputControl.init(); </strong> And your good to go!</p>
 </div>
 </div>
 
@@ -66,13 +108,7 @@ They must meet this criteria: <br />
 <p class="imp">You must add class "tooltip::" to the element you would like a tooltip for!<br />You do not have to use a link to activate the tooltip, it can be any element!</p>
 <p>You can either use the default settings (defined in the JS) or you can set your own. To set your own custom settings you add them to the class of the element you want a tooltip for (i.e. <code>&lt;a href=&quot;#&quot; rel=&quot;cows&quot; class=&quot;tooltip::direction:top:width:100&quot;&gt;</code>). There are ONLY two settings you can define: direction (top, bottom, left, right) and width. Each setting is separated by a &quot;:&quot; </p>
 <p><strong>For Static Tooltips:</strong> You must place a unique <code>rel</code> attribute in the element you would like a tooltip for. This will be used to reference the tooltip id. See the example below for the HTML structure of the tooltip and what I mean in terms of referencing the tooltip.</p>
-<pre><code>&lt;a href=&quot;#&quot; class=&quot;tooltip::direction:top:width:140&quot; rel=&quot;<strong>cows</strong>&quot;&gt;I have a tooltip&lt;/a&gt;
-
-&lt;!-- HTML STRUCTURE for Tooltip --&gt;
-&lt;div id=&quot;<strong>cows</strong>&quot; class=&quot;tooltip hidden&quot;&gt;
-    &lt;span class=&quot;arrow&quot;&gt;&lt;/span&gt;
-    &lt;div class=&quot;content&quot;&gt;&lt;!--Place content here that you would like to be displayed--&gt;&lt;/div&gt;
-&lt;/div&gt;</code></pre>
+<pre><code></code></pre>
 <p class="imp">So you see rel and the id of the tooltip must be the same!</p>
 <p>So, this example is saying that when I hover over the link a tooltip with an id of cows, will appear on top of the link and will be 140px in width.</p>
 <p><strong>For Dynamic Tooltips:</strong> All you need to do is place what you want displayed in the tooltip in the <code>title</code> attribute. So no need to add HTML structure for the tooltip or put a unique <code>rel</code> attribute in the element. You can really place anything in the title attribute, but if JS is disabled you will see your Operating System's default tooltip for elements with a <code>title</code> attribute. And if you have text that is bold, it will look like this: I am &lt;strong&gt;content&lt;/strong&gt; inside a tooltip. With Javascript enabled it will look like: I am <strong>content</strong> inside a tooltip. The OS default tooltip can not render HTML code.</p>
@@ -82,40 +118,20 @@ They must meet this criteria: <br />
 <p class="imp">You must add class "modal::" to the link you would like a modal for!</p>
 <p>You can either use the default settings (defined in the JS) or you can set your own .To set your own custom settings you add them to the class of the element you want a modal for (i.e. <code>&lt;a href=&quot;#&quot; rel=&quot;cows&quot; class=&quot;modal::width:100:height:100&quot;&gt;</code>). There are ONLY two settings you can define: height and width. Each setting is separated by a &quot;:&quot;. There is another setting that is used for iframe modals (will mention below).</p>
 <p><strong>For Static Modals:</strong> You must place a unique <code>rel</code> attribute in the linkt you would like a modal for. This will be used to reference the modal id. See the example below for the HTML structure of the modal and what I mean in terms of referencing thetmodal.</p>
-<pre><code>&lt;a href=&quot;&quot; class=&quot;modal::width:140:height:200&quot; rel=&quot;<strong>cows</strong>&quot;&gt;Im a modal link&lt;/a&gt;
-
-&lt;!-- HTML STRUCTURE for Modal --&gt;
-&lt;div id=&quot;<strong>cows</strong>&quot; class=&quot;modal hidden&quot;&gt;
-    &lt;div class=&quot;header&quot;&gt;<br />        &lt;!-- Place your header text here, I currently am using an &lt;h1&gt; tag. --&gt;
-    &lt;/div&gt;<br />    &lt;div class=&quot;content&quot;&gt;<br />        &lt;!-- Place content in here --&gt;<br />    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+<pre><code></code></pre>
 <p class="imp">So you see rel and the id of the modal must be the same!</p>
 <p>So, this example is saying that when I click the link, the modal displayed has an id of cows, will appear centered on the page and will have a width of 140px and a height of 200px.</p>
 <p><strong>For Dynamic-iframe Modals:</strong> The page you want displayed in the iframe, place in the <code>href</code> attribute of the link. Give it a <code>rel</code> attribute of "iframe" and the header for the modal add to the class name (this will be added to the <code>&lt;h1&gt;</code> tag on the modal header.  See below for proper link syntax:</p>
-<pre><code>&lt;a href=&quot;http://mikewgd.com&quot; rel=&quot;iframe&quot; class=&quot;modal::width:200:height:100:header:Mikewgd.com&quot;&gt;</code></pre>
+<pre><code></code></pre>
 <p><strong>For Dynamic-ajax Modals:</strong> The location of the file you would like to be Ajax'ed in goes in the <code>href</code> attribute of the link. Give it a <code>rel</code> attribute of "ajax" and the content for that page will be ajaxed in and will show up inside a modal. See below for proper link syntax:</p>
-<pre><code>&lt;a href=&quot;ajax-files/hello.html&quot; rel=&quot;ajax&quot; class=&quot;modal::width:200:height:100&quot;&gt;</code></pre>
+<pre><code></code></pre>
 <div style="height:10px;clear:both;"></div>
 <h3>Activating the scripts</h3>
 <p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that are needed for the tooltips and/or modals to work. To call the modals: <strong>ML.Modal.init();</strong> and to call the tooltips: <strong>ML.Tooltip.init();</strong></p>
 <p>You can place these in either a window.onload or with the addLoadEvent which you will see when viewing the source of the page.</p>
 <p>However since all settings are placed within a Javascript object you can esentially place them on a certain ele(link,span) by giving it a specific id or by putting an onclick on the ele(link,span) [I'de stay away from inline JS though].</p>
 <p>This means you would not need to call the <strong>ML.Modal.init();</strong> and/or <strong>ML.Tooltip.init();</strong> Being able to do this allows you to change the events the functions are activated as well. So instead of click on a link to activate a modal you can make it happen when you hover over a link. Here is an example for both:</p> 
-<pre><code>&lt;a href=&quot;#&quot; id=&quot;modal-example-link&quot;&gt;link&lt;/a&gt;
-&lt;a href=&quot;#&quot; id=&quot;tooltip-example-link&quot;&gt;link&lt;/a&gt;
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-    addLoadEvent(function() {
-        _$('modal-example-link').onclick = function() {
-            ML.Modal.show({id: 'modal-example', width: 400, height: 100});
-        }
-
-        _$('modal-example-link').onmouseover = function() {
-            ML.Tooltip.show({id: 'tooltip-example', width: 400, direction: 'left'});
-        }
-     })
-&lt;/script&gt;
-&lt;/body&gt;</code></pre>
+<pre><code></code></pre>
 </div>
 </div>
 
@@ -125,46 +141,22 @@ They must meet this criteria: <br />
 <p>There are two types of toggles: <strong>regular</strong> and <strong>slide</strong>. <em>Regular</em> is a basic hide and show of your content. <em>Slide toggle</em> slides the content up and down.</p>
 <p><strong>For Both toggles:</strong> You <strong>MUST</strong> give a unique <code>rel</code> attribute in your <code>&lt;a&gt;</code> tag. This will be to reference the element you would like to toggle. So follow the same rules when giving ids to elements. You MUST also add &quot;toggle&quot; to the class name of your <code>&lt;a&gt;</code> in order for either toggles to work.</p>
 <p>I have also created an attribute for the link called "text" which you place on the <code>&lt;a&gt;</code>. This is the text you would like displayed when your content is displayed. See the example below:</p>
-<pre><code>&lt;a href=&quot;#&quot; class=&quot;toggle&quot; rel=&quot;<strong>unique-id</strong>&quot; text=&quot;Close It&quot;&gt;Open It&lt;/a&gt;
-
-&lt;div id=&quot;<strong>unique-id</strong>&quot;&gt;
-    &lt;p&gt;I am content to be toggled, yay!&lt;/p&gt;
-&lt;/div&gt;</code></pre>
+<pre><code></code></pre>
 <p class="imp">So the rel of the link must = the id you want to toggle!</p>
 <p>So this example says its a <strong>regular toggle</strong> and we are toggling an element with an<strong> id of "unique-id"</strong>. The <strong>text to open the toggle is "Open It"</strong> and when the content is displayed the <strong>link's text changes to "Close It"</strong>.</p>
 <p>For Slide Toggle: All you need to do is add "slide" to the link class name:</p>
-<pre><code>&lt;a href=&quot;#&quot; class=&quot;<strong>slide</strong> toggle&quot; rel=&quot;unique-id&quot; text=&quot;Close It&quot;&gt;</code></pre>
+<pre><code></code></pre>
 <div style="height:10px;clear:both;"></div>
 <h3>Activating the script</h3>
 <p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the toggler. All you need to do is call <strong>ML.Toggler.init();</strong>.</p>
 </div>
 </div>
-<div class="usage" id="form-elems">
-  <h2>Form Elements</h2>
-<div class="contents">
-<p>To use the custom form elements (radio buttons, checkboxes, select menu and scroller (buggy*)). All you need to do is add the scripts located in the head of this page.</p>
-<p>They do not rely on each other at all! So, you can just have the custom radios/checkboxes and not the select menu.</p>
-<p class="imp">Be sure to add type to the <code>&lt;input&gt;</code> tag. So for radios use: <code>&lt;input type="radio" /&gt;</code> and for checkbox: <code>&lt;input type="checkbox" /&gt;</code></p>
-<p class="imp">For a custom <code>&lt;select&gt;</code> tag. Just be sure to use the actual tag.</p>
-<div style="height:10px;clear:both;"></div>
-<h3>Activating the scripts</h3>
-<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the custom elements to display. All you need to do is call <strong>ML.Form_RadioCheck.init();</strong> (for custom radios/checkboxes) and/or
-<strong>ML.Form_Select.init();</strong> (custom select menu).</p>
-<p>You can place these in either a window.onload or with the addLoadEvent which you will see when viewing the source of the page.</p>
-</div>
-</div>
 
 
 
 
-<div class="usage" id="inp-control">
-<h2>Input Control</h2>
-<div class="contents">
-<p>Clears the input onfocus and if a value you entered is different than the default value nothing will happen.</p>
-<div style="clear:both; height:10px;"></div>
-<h3>Activating the script</h3>
-<p>Pretty simple implementing this script. If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for this to work. All you need to do is call <strong>ML.Form_InputControl.init(); </strong> And your good to go!</p>
-</div>
-</div>
+
+
+
 </body>
 </html>
