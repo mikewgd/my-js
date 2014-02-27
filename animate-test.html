@@ -1,0 +1,142 @@
+<!-- http://learn.javascript.ru/ -->
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<style>
+body {
+  padding: 10px
+}
+
+.carousel {
+  position: relative;
+  width: 398px;
+  padding: 10px 40px;
+  border: 1px solid #CCC;
+  border-radius: 15px;
+  background: #eee;
+}
+.carousel img {
+  width: 130px;
+  height: 130px;
+  display: block; /* если не поставить block, в ряде браузеров будет inline -> лишнее пространтсво вокруг элементов */
+}
+.carousel .arrow {
+  position: absolute;
+  top: 57px;
+  padding: 3px 8px 8px 9px;
+  background: #ddd;
+  border-radius: 15px;
+  font-size: 24px;
+  color: #444;
+  text-decoration: none;
+}
+
+.carousel .arrow:hover {
+  background: #ccc;
+}
+.carousel .left-arrow {
+  left: 7px;
+}
+.carousel .right-arrow {
+  right: 7px;
+}
+.gallery {
+  width: 390px;
+  overflow: hidden;
+}
+.gallery ul {
+  height: 130px;
+  width: 9999px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery ul li {
+  float: left;
+}
+</style>
+<script src="animate-test.js"></script>
+<script type="text/javascript" src="js/globals.js"></script>
+</head>
+
+<body>
+
+<div class="carousel">
+<a href="#" class="arrow left-arrow" id="prev">&#8249; </a>
+  <div class="gallery">
+    <ul id="images">
+      <li><img src="images/carousel-imgs/eagle.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/elephant.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/giraffe.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/lion.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/tiger.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/wolf.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/eagle.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/elephant.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/tiger.jpg" alt=""></li>
+      <li><img src="images/carousel-imgs/wolf.jpg" alt=""></li>
+    </ul>
+  </div>
+<a href="#" class="arrow right-arrow" id="next">&#8250; </a>
+</div>
+
+<script>
+
+/* этот код помечает картинки, для удобства разработки */
+var lis = document.getElementsByTagName('li');
+for(var i=0; i<lis.length; i++) {
+  lis[i].style.position='relative';
+  var span = document.createElement('span');
+  span.style.cssText='position:absolute;left:0;top:0';
+  span.innerHTML = i+1;
+  lis[i].appendChild(span);
+}
+
+/* конфигурация */
+var width = 130; // ширина изображения
+var count = 3; // количество изображений
+
+var ul = document.getElementById('images');
+var imgs = ul.getElementsByTagName('li');
+
+var position = 0; // текущий сдвиг влево
+
+document.getElementById('prev').onclick = function() {
+  if (position >= 0) return false; // уже прокручено до конца влево
+
+  // последнее передвижение влево может быть не на 3, а на 2 или 1 элемент
+  var newPosition = Math.min(position + width*count, 0);
+  animate({
+    elem: ul,
+    prop: "marginLeft",
+    start: position,
+    end: newPosition,
+    duration: 250,
+    delay: 20
+  });
+  position = newPosition;
+  return false;
+}
+
+document.getElementById('next').onclick = function() {
+  if (position <= -width*(imgs.length-count)) return false; // уже прокручено до конца вправо
+
+  // последнее передвижение вправо может быть не на 3, а на 2 или 1 элемент
+  var newPosition = Math.max(position-width*count, -width*(imgs.length-count));
+
+  animate({
+    elem: ul,
+    prop: "marginLeft",
+    start: position,
+    end: newPosition,
+    duration: 450,
+    delay: 20
+  });
+  position = newPosition;
+  return false;
+};
+
+</script>
+</body>
+</html>
