@@ -13,9 +13,9 @@
 	* @namespace ML
 	* Adds placeholder functionality if not supported and adds a class of "focus" when input is focused.
 	*
-	* @property {String} ph - value of "placeholder" attribute.
-	* @property {HTMLElement} el - input field.
-	* @property {function} cursorTimer - timer for activating the move cursor function, needed for Chrome.
+	* @param {String} ph - value of "placeholder" attribute.
+	* @param {HTMLElement} el - input field.
+	* @param {function} cursorTimer - timer for activating the move cursor function, needed for Chrome.
 	*/
 	ML.InputControl = function (input) {
 		return {

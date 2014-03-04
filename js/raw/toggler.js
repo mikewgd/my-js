@@ -3,8 +3,8 @@
 	* @class Toggle
 	* @namespace ML
 	*
-	* @property {HTMLElement} c - element you want toggled.
-	* @property {function} func (optional) - function you want performed after each toggle.
+	* @param {HTMLElement} c - element you want toggled.
+	* @param {function} func (optional) - function you want performed after each toggle.
 	*/
 	ML.Toggle = function (c, func) {
 		var content = c,
@@ -18,8 +18,8 @@
 	* @class slideToggle
 	* @namespace ML
 	*
-	* @property {HTMLElement} c - element you want toggled.
-	* @property {function} func (optional) - function you want performed after each toggle.
+	* @param {HTMLElement} c - element you want toggled.
+	* @param {function} func (optional) - function you want performed after each toggle.
 	*/
 	ML.slideToggle = function (c, func) {
 		var content = c, actualHeight,

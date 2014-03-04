@@ -1,44 +1,44 @@
 /**
- * @namespace ML
- * Main namespace for all scripts.
- */
+* @namespace ML
+* Main namespace for all scripts.
+*/
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
 /**
- * @namespace ML
- * Base class for JS functionality.
- */
+* @namespace ML
+* Base class for JS functionality.
+*/
 ML = {
     /**
-     * @function $
-     * Returns an element based on it's id.
-     *
-     * @param {String} id - the name of the id you would like to retrieve.
-     */
+    * @function $
+    * Returns an element based on it's id.
+    *
+    * @param {String} id - the name of the id you would like to retrieve.
+    */
     $: function(id) {
         return document.getElementById(id);
     },
 
     /**
-     * @function _$
-     * Returns an element based on its tag name.
-     * If you provide a parent you can limit the amount of elements that get returned.
-     *
-     * @param {String} tag - name of tag you want to return.
-     * @param {HTMLElement} parent (optional) - parent of the tag you want to return.
-     */
+    * @function _$
+    * Returns an element based on its tag name.
+    * If you provide a parent you can limit the amount of elements that get returned.
+    *
+    * @param {String} tag - name of tag you want to return.
+    * @param {HTMLElement} parent (optional) - parent of the tag you want to return.
+    */
     _$: function(tag, parent) {
         var p = parent || document;
         return p.getElementsByTagName(tag);
     },
 
     /**
-     * @function _$C
-     * Returns an element based on its class name.
-     *
-     * @param {String} cn - class name to search for, i.e. '.test'.
-     */
+    * @function _$C
+    * Returns an element based on its class name.
+    *
+    * @param {String} cn - class name to search for, i.e. '.test'.
+    */
     $C: function(cn) {
         var d = document,
             elms = [],
@@ -62,12 +62,12 @@ ML = {
     },
 
     /**
-     * @function loop
-     * Loops through an array with callback function.
-     *
-     * @param {HTMLElement} arr - array to be looped through.
-     * @param {function} callback - function to be called in the loop.
-     */
+    * @function loop
+    * Loops through an array with callback function.
+    *
+    * @param {HTMLElement} arr - array to be looped through.
+    * @param {function} callback - function to be called in the loop.
+    */
     loop: function(arr, callback) {
         for (i = 0; i < arr.length; i++) {
             if (typeof arr[i] == 'object') ML.El.clean(arr[i]);
@@ -76,10 +76,10 @@ ML = {
     },
 
     /**
-     * @function windowDimen
-     * Returns the width and height of the window.
-     * Thanks to http://www.howtocreate.co.uk/tutorials/javascript/browserwindow (revised)
-     */
+    * @function windowDimen
+    * Returns the width and height of the window.
+    * Thanks to http://www.howtocreate.co.uk/tutorials/javascript/browserwindow (revised)
+    */
     windowDimen: function() {
         var h = 0,
             w = 0;
@@ -101,9 +101,9 @@ ML = {
     },
 
     /**
-     * @function docDimen
-     * Returns the width and height of the document.
-     */
+    * @function docDimen
+    * Returns the width and height of the document.
+    */
     docDimen: function() {
         var w = Math.max(
             Math.max(document.body.scrollWidth, document.documentElement.scrollWidth),
@@ -124,10 +124,10 @@ ML = {
     },
 
     /**
-     * @function compStyle
-     * If there is no window.getComputedStyle, it overwrites it.
-     * Credits: http://snipplr.com/view/13523/getcomputedstyle-for-ie/
-     */
+    * @function compStyle
+    * If there is no window.getComputedStyle, it overwrites it.
+    * Credits: http://snipplr.com/view/13523/getcomputedstyle-for-ie/
+    */
     compStyle: function() {
         if (!window.getComputedStyle) {
             window.getComputedStyle = function(el, pseudo) {
@@ -150,14 +150,14 @@ ML = {
     },
 
     /**
-     * @function ParObj
-     * Parses a string into an object.
-     *
-     * @param {Object} args - arguments passed.
-     *** @param {String} elem - string to be parsed.
-     *** @param {String} remove - base of string to be removed, i.e. "modal::".
-     *** @param {String} sep - string to separate each property, i.e. ":".
-     */
+    * @function ParObj
+    * Parses a string into an object.
+    *
+    * @param {Object} args - arguments passed.
+    *** @param {String} elem - string to be parsed.
+    *** @param {String} remove - base of string to be removed, i.e. "modal::".
+    *** @param {String} sep - string to separate each property, i.e. ":".
+    */
     ParObj: function(args) {
         var obj = {},
             passedData = args.elem,
@@ -174,13 +174,13 @@ ML = {
     },
 
     /**
-     * @function contains
-     * Returns true/false if a string has another string inside it.
-     * If there is more than one instance an object is returned.
-     *
-     * @param {String} haystack - string to look at.
-     * @param {String} needle - string to locate in the haystack.
-     */
+    * @function contains
+    * Returns true/false if a string has another string inside it.
+    * If there is more than one instance an object is returned.
+    *
+    * @param {String} haystack - string to look at.
+    * @param {String} needle - string to locate in the haystack.
+    */
     contains: function(haystack, needle) {
         var count = 0,
             _split = haystack.split(' ')
@@ -203,24 +203,24 @@ ML = {
     },
 
     /**
-     * @function trim
-     * Returns a string with whitepace removed.
-     *
-     * @param {String} str - string.
-     */
+    * @function trim
+    * Returns a string with whitepace removed.
+    *
+    * @param {String} str - string.
+    */
     trim: function(str) {
         return str.replace(/(^\s+|\s+$)/g, '');
     },
 
     /**
-     * @function removeClass
-     * Removes a class name from an element.
-     * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
-     *
-     * @param {HTMLElement} elem - element of class name you want removed.
-     * @param {String} classN - class name to be removed.
-     * @param {Boolean} multiple (optional) - to be used if removing multiple class names.
-     */
+    * @function removeClass
+    * Removes a class name from an element.
+    * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+    *
+    * @param {HTMLElement} elem - element of class name you want removed.
+    * @param {String} classN - class name to be removed.
+    * @param {Boolean} multiple (optional) - to be used if removing multiple class names.
+    */
     removeClass: function(elem, classN, multiple) {
         var currClass = this.trim(elem.className),
             regex = new RegExp("(^|\\s)" + classN + "(\\s|$)", "g");
@@ -237,25 +237,25 @@ ML = {
     },
 
     /**
-     * @function hasClass
-     * Returns true or false if an element has a specifc class name.
-     * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
-     *
-     * @param {HTMLElement} elem - element that may have the class name specified.
-     * @param {String} classN - class name to be checked for.
-     */
+    * @function hasClass
+    * Returns true or false if an element has a specifc class name.
+    * Thanks to http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+    *
+    * @param {HTMLElement} elem - element that may have the class name specified.
+    * @param {String} classN - class name to be checked for.
+    */
     hasClass: function(elem, classN) {
         var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)");
         return regex.test(elem.className);
     },
 
     /**
-     * @function addClass
-     * Adds a class name to a given element.
-     *
-     * @param {HTMLElement} elem - element that you want a class name added to.
-     * @param {String} classN - new class name you want added to element.
-     */
+    * @function addClass
+    * Adds a class name to a given element.
+    *
+    * @param {HTMLElement} elem - element that you want a class name added to.
+    * @param {String} classN - new class name you want added to element.
+    */
     addClass: function(elem, classN) {
         var currClass = this.trim(elem.className),
             addedClass = (currClass.length == 0) ? classN : currClass + ' ' + classN;
@@ -264,37 +264,37 @@ ML = {
     },
 
     /**
-     * @function toggleClass
-     * Toggles the class name of an element.
-     *
-     * @param {HTMLElement} elem - element who's class you want to be toggled.
-     * @param {String} classN - class name to be toggled.
-     */
+    * @function toggleClass
+    * Toggles the class name of an element.
+    *
+    * @param {HTMLElement} elem - element who's class you want to be toggled.
+    * @param {String} classN - class name to be toggled.
+    */
     toggleClass: function(elem, classN) {
         (ML.hasClass(elem, classN)) ? ML.removeClass(elem, classN) : ML.addClass(elem, classN);
     }
 }
 
 /**
- * @class El
- * @namespace ML
- * Base functionality for elements.
- *
- * @property {Object} Events - holds all events added using the handler.
- */
+* @class El
+* @namespace ML
+* Base functionality for elements.
+*
+* @property {Object} Events - holds all events added using the handler.
+*/
 ML.El = {
     Events: [],
 
     /**
-     * @function evt
-     * Adds events to elements.
-     * Also adds all the events to an array to keep track of them.
-     *
-     * @param {HTMLElement} el - element that event should be attached/added to.
-     * @param {String} type - type of event to be added to element, minus "on".
-     * @param {function} func - callback function to be called on click.
-     * @param {Boolean} capture - true/false
-     */
+    * @function evt
+    * Adds events to elements.
+    * Also adds all the events to an array to keep track of them.
+    *
+    * @param {HTMLElement} el - element that event should be attached/added to.
+    * @param {String} type - type of event to be added to element, minus "on".
+    * @param {function} func - callback function to be called on click.
+    * @param {Boolean} capture - true/false
+    */
     evt: function(el, type, func, capture) {
         if (capture == undefined) capture = false;
 
@@ -310,13 +310,13 @@ ML.El = {
     },
 
     /**
-     * @function evtTrigger
-     * Triggers an event on an element.
-     * Courtesy: http://stackoverflow.com/users/1120798/sergey-gospodarets
-     *
-     * @param {HTMLElement} el - element event is attached/added to.
-     * @param {String} type - event bound to element that you want to trigger.
-     */
+    * @function evtTrigger
+    * Triggers an event on an element.
+    * Courtesy: http://stackoverflow.com/users/1120798/sergey-gospodarets
+    *
+    * @param {HTMLElement} el - element event is attached/added to.
+    * @param {String} type - event bound to element that you want to trigger.
+    */
     evtTrigger: function(el, type) {
         var event;
 
@@ -342,12 +342,12 @@ ML.El = {
     },
 
     /**
-     * @function clean
-     * Returns an element with no whitespace.
-     * This is useful when retrieving elements for the DOM. Since there is usually whitespace between elements.
-     *
-     * @param {HTMLElement} node - element.
-     */
+    * @function clean
+    * Returns an element with no whitespace.
+    * This is useful when retrieving elements for the DOM. Since there is usually whitespace between elements.
+    *
+    * @param {HTMLElement} node - element.
+    */
     clean: function(node) {
         for (var i = 0; i < node.childNodes.length; i++) {
             var child = node.childNodes[i];
@@ -364,12 +364,12 @@ ML.El = {
     },
 
     /**
-     * @function clicked
-     * Returns the element that was clicked om.
-     * Good when used on the document.
-     *
-     * @param {HTMLElement} evt - element clicked on.
-     */
+    * @function clicked
+    * Returns the element that was clicked om.
+    * Good when used on the document.
+    *
+    * @param {HTMLElement} evt - element clicked on.
+    */
     clicked: function(evt) {
         var element = evt.target || evt.srcElement;
         if (element.nodeType == 3) element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
@@ -377,12 +377,12 @@ ML.El = {
     },
 
     /**
-     * @function position
-     * Returns the x and y position of an element.
-     * Credits go to Eric Pascarello of CodeRanch for this function
-     *
-     * @param {HTMLElement} elem - element you want to get the position of.
-     */
+    * @function position
+    * Returns the x and y position of an element.
+    * Credits go to Eric Pascarello of CodeRanch for this function
+    *
+    * @param {HTMLElement} elem - element you want to get the position of.
+    */
     position: function(elem) {
         var posX = 0;
         var posY = 0;
@@ -399,11 +399,11 @@ ML.El = {
     },
 
     /**
-     * @function dimens
-     * Returns the width, height, x and y position of an element.
-     *
-     * @param {HTMLElement} elem - element you want to get the dimensions for.
-     */
+    * @function dimens
+    * Returns the width, height, x and y position of an element.
+    *
+    * @param {HTMLElement} elem - element you want to get the dimensions for.
+    */
     dimens: function(elem) {
         return {
             width: elem.style.width || elem.offsetWidth,
@@ -414,11 +414,11 @@ ML.El = {
     },
 
     /**
-     * @function center
-     * Returns the x and y of an element to make it centered to the window.
-     *
-     * @param {HTMLElement} elem - element you want to get the center position of.
-     */
+    * @function center
+    * Returns the x and y of an element to make it centered to the window.
+    *
+    * @param {HTMLElement} elem - element you want to get the center position of.
+    */
     center: function(elem) {
         var win = ML.windowDimen(),
             mvX = (win.w - elem.offsetWidth) / 2 + "px",
@@ -437,15 +437,15 @@ ML.El = {
     },
 
     /**
-     * @function create
-     * Returns an element to be created in the DOM and adds attributes.
-     * NOTE: It is best to put it in a variable.
-     * Usage: var test = ML.El.create(element, 'attribute': 'attributeValue'});
-     *
-     * @param {String} tag - tag you want to created, i.e "div", "span", etc...
-     * @param {Object} args - arguments passed.
-     *** @param {Object} attrs - attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
-     */
+    * @function create
+    * Returns an element to be created in the DOM and adds attributes.
+    * NOTE: It is best to put it in a variable.
+    * Usage: var test = ML.El.create(element, {'attribute': 'attributeValue'});
+    *
+    * @param {String} tag - tag you want to created, i.e "div", "span", etc...
+    * @param {Object} args - arguments passed.
+    *** @param {Object} attrs - attributes you want on the tag, i.e. class="test", src="img.jpg", etc...
+    */
     create: function(element, arg) {
         var elem = document.createElement(element);
 
@@ -462,13 +462,13 @@ ML.El = {
     },
 
     /**
-     * @function getStyl
-     * Returns a style for a specific element.
-     * Credits: http://www.quirksmode.org/dom/getstyles.html
-     *
-     * @param {HTMLElement} element - element you want to get the style for.
-     * @param {String} styleProp - style property you want the value of.
-     */
+    * @function getStyl
+    * Returns a style for a specific element.
+    * Credits: http://www.quirksmode.org/dom/getstyles.html
+    *
+    * @param {HTMLElement} element - element you want to get the style for.
+    * @param {String} styleProp - style property you want the value of.
+    */
     getStyl: function(element, styleProp) {
         var y;
 
@@ -483,14 +483,14 @@ ML.El = {
     },
 
     /**
-     * @function styl
-     * Adds styles to an element.
-     * Usage: ML.El.styl(element, 'display': 'none', 'overflow': 'hidden'});
-     *
-     * @param {HTMLElement} element - element you want styled.
-     * @param {Object} args - arguments passed.
-     *** @param {Object} arg.props - styles you want applied to the element.
-     */
+    * @function styl
+    * Adds styles to an element.
+    * Usage: ML.El.styl(element, 'display': 'none', 'overflow': 'hidden'});
+    *
+    * @param {HTMLElement} element - element you want styled.
+    * @param {Object} args - arguments passed.
+    *** @param {Object} arg.props - styles you want applied to the element.
+    */
     styl: function(element, arg) {
         var props = arg;
 
@@ -500,12 +500,12 @@ ML.El = {
     },
 
     /**
-     * @function getAttr
-     * Returns an attribute for a specific element
-     *
-     * @param {HTMLElement} element - element to get an attribute for.
-     * @param {String} attr - attribute you want returned.
-     */
+    * @function getAttr
+    * Returns an attribute for a specific element
+    *
+    * @param {HTMLElement} element - element to get an attribute for.
+    * @param {String} attr - attribute you want returned.
+    */
     getAttr: function(element, attr) {
         var att;
 
@@ -521,91 +521,141 @@ ML.El = {
     },
 
     /**
-     * @function data
-     * Returns a data attribute for an element.
-     *
-     * @param {HTMLElement} element - element to get an attribute for.
-     * @param {String} attr - attribute you want returned, sans the "data-".
-     */
+    * @function data
+    * Returns a data attribute for an element.
+    *
+    * @param {HTMLElement} element - element to get an attribute for.
+    * @param {String} attr - attribute you want returned, sans the "data-".
+    */
     data: function(element, attr) {
         return element.getAttribute('data-' + attr);
-    },
-
-    /**
-     * @function animate
-     * Animates an element.
-     *
-     * @param {HTMLElement} el - element you want to animate.
-     * @param {Object} props - css properties you want to animate.
-     * @param {Function} func (optional) - function to be called after completion of animation.
-     */
-    animate: function(el, props, func) {
-        var timer, currProps = {},
-            stopAnim = false,
-            inc = 0,
-            counter = 0;
-
-        /**
-         * @function getCurrs
-         * Gets the current css values of the properties beng animated.
-         */
-        function getCurrs() {
-            currProps = {};
-
-            for (var prop in props) {
-                var currProp = parseFloat(ML.El.getStyl(el, prop).replace('px', ''));
-                currProps[prop] = currProp;
-
-                if (prop == 'opacity') {
-                    currProps.filter = 'alpha(opacity=' + prop * 100 + ')';
-                }
-            }
-        }
-
-        /**
-         * @function move
-         * Animates the element with the new css values provided.
-         */
-        function move() {
-            getCurrs();
-            counter++;
-
-            for (var prop in props) {
-                inc = 0;
-                (props[prop] < currProps[prop]) ? inc-- : inc++;
-
-                if (prop == 'opacity') {
-                    props[prop] = props[prop] * 100;
-                    el.style.opacity = (currProps[prop] + inc / 100);
-                } else {
-                    el.style[prop] = (currProps[prop] + inc) + 'px';
-                }
-
-                if (props[prop] === currProps[prop] + inc) stopAnim = true;
-            }
-
-            timer = setTimeout(move, 10);
-            if (stopAnim) {
-                clearTimeout(timer);
-                if (func) func();
-                inc = 0;
-                counter = 0;
-            }
-        }
-
-        move();
     }
 }
 
 
+/**
+settings.delay, settings.duration, settings.animType
+*/
 
-ML.Animate = function(el, props, callback) {
-    var start;
+/**
+* @class animate
+* @namespace ML
+* Credit: http://learn.javascript.ru/js-animation, http://learn.javascript.ru/files/tutorial/js/animate.js
+* But modified
+*
+* @param {HTMLElement} el - element you want to apply an animation to.
+* @param {Object} props - css properties to be animated.
+* @param {Object} settings - settings passed
+*** @param {String} settings.duration - the duration of the animation, defaults to 400ms
+*** @param {String} settings.delay - the delay of the animation, defaults to 13
+*** @param {String} settings.animType - type of animation (bounce, ease, etc..), defaults to linear
+* @param {Function} callback - function to be called after animation.
+*
+* Usage:
+    new ML.animate(ML.$('el'), {
+        width: 100,
+        height: 100}, 
+        {delay: 15, duration: 500, animType: 'bouce'}, function() {
+            alert('animation is complete');
+    });
+*/
+ML.animate = function(el, props, settings, callback) {
+    if (settings == undefined) {
+        settings = false;
+    }
+
+    var timer, currProps = {},
+        progress = false, time = new Date,
+        duration = settings.duration || 400,
+        delay = settings.delay || 13,
+        complete = (typeof settings == 'function') ? settings : callback,
+        animType = (settings.animType == undefined) ? linear : ML.animate[settings.animType];
+
+    /**
+    * @function getCurrs
+    * Gets the current css values of the properties beng animated.
+    */
+    function getCurrs() {
+        currProps = {};
+
+        for (var prop in props) {
+
+            var currProp = parseFloat(ML.El.getStyl(el, prop).replace('px', ''));
+            currProps[prop] = currProp;
+
+            if (prop == 'opacity') {
+                currProps.filter = 'alpha(opacity=' + prop * 100 + ')';
+            }
+        }
+    }
+
+    /**
+    * @function move
+    * Animates the element with the new css values provided.
+    */
+    function move() {
+        getCurrs();
+
+        timer = setInterval(function() {
+            progress = (new Date - time) / duration;
+
+            if (progress > 1) progress = 1;
+
+            for (var prop in props) {
+                var value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * animType(progress));
+                el.style[prop] = value + 'px';
+            }
+
+            if (progress == 1) {
+                clearInterval(timer);
+                if (complete) complete();
+            }
+            
+        }, delay);
+    }
+
+    /**
+    * @function(s)
+    * Time functions for animation types, i.e easing, linear, etc...
+    * Explanation here: http://learn.javascript.ru/js-animation#дуга
+    */
+    function elastic(progress) {
+        return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * 1.5 / 3 * progress);
+    }
+
+    function linear(progress) {return progress;}
+
+    function quad(progress) {return Math.pow(progress, 2);}
+
+    function quint(progress) {return Math.pow(progress, 5);}
+
+    function circ(progress) {return 1 - Math.sin(Math.acos(progress));}
+
+    function back(progress) {
+        return Math.pow(progress, 2) * ((1 + 1.5) * progress - 1.5);
+    }
+
+    function bounce(progress) {
+        for (var a = 0, b = 1, result; 1; a += b, b /= 2) {
+            if (progress >= (7 - 4 * a) / 11) {
+                return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
+            }
+        }
+    }
+
+    move();
 };
 
 /**
 * @class Ajax
 * @namespace ML
+*
+* @param {String} params.url - the url of the request you want to make, defaults to window location.
+* @param {String} params.type - type of request, default 'GET'.
+* @param {Function} params.beforeRequest - function called before request.
+* @param {Function} params.complete - completed request function.
+* @param {Function} params.success - function made when a request is successful with data returned.
+* @param {Function} params.error - function called when there is an error in the reuquest
 *
 * Usage:
 	new ML.Ajax({
