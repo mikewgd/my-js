@@ -1,4 +1,6 @@
 (function () {	
+	var toggleAnimating = false; // Detect if the slide toggle is animating.
+
 	/**
 	* @class Toggle
 	* @namespace ML
@@ -22,11 +24,14 @@
 	* @param {function} func (optional) - function you want performed after each toggle.
 	*/
 	ML.slideToggle = function (c, func) {
+		if (toggleAnimating) return;
+
 		var content = c, actualHeight,
 			currVis = ML.El.getStyl(content, 'display'),
 			slide = (currVis == 'block') ? 'up' : 'down';
 		
 		content.style.overflow = 'hidden';
+		toggleAnimating = true;
 		
 		if (slide == 'down') {
 			content.style.display = 'block';
@@ -35,14 +40,16 @@
 		} else {
 			actualHeight = 0;
 		}
-		
-		ML.El.animate(content, {height: (slide == 'down') ? actualHeight : 0}, function() {
+
+		ML.animate(content, {height: actualHeight}, function() {
 			if (actualHeight == 0) {
 				content.removeAttribute('style');
 				content.style.display = 'none';	
 			}
 
 			if (func) func((currVis == 'block') ? false : true);
+
+			toggleAnimating = false;
 		});
 	}
 }());
