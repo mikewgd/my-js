@@ -50,7 +50,8 @@ on the page and performs the necessary functions.
 
 You can initialize it manually by doing:
 
-    var accordion = new ML.Accordion(ML.$('accEle'), false);accordion.init();
+    var accordion = new ML.Accordion(ML.$('accEle'), false);
+    accordion.init();
 
 The second parameter **must** be include either true or false
 (multi-toggle). It can **NOT** be left blank.
@@ -66,7 +67,16 @@ The order of the HTML does not matter for this script. As long as they
 are children of the `<div class="carousel" />`. I would keep the slides
 in the unordered list structure.
 
-    <div class="carousel">    <a href="javascript:void(0);" class="pag prev" rel="prv">&larr;</a>    <a href="javascript:void(0);" class="pag next" rel="nxt">&rarr;</a>    <div class="viewer">        <ul>            <li><!-- Slide Content --></li>        </ul>    </div></div>
+    <div class="carousel">
+		<a href="javascript:void(0);" class="pag prev" rel="prv">&larr;</a>
+		<a href="javascript:void(0);" class="pag next" rel="nxt">&rarr;</a>
+
+		<div class="viewer">
+			<ul>
+				<li><!-- Slide Content --></li>
+			</ul>
+		</div>
+	</div>
 
 #### Notes, Tips and Etc…
 
@@ -111,7 +121,18 @@ There is no special HTML structure for doing custom radio buttons,
 checkboxes and select menus. Just code the elements how you would
 normally, like so:
 
-    <input type="radio" id="radio" name="radio" value="radio" /><label for="radio">Radio</label><input type="checkbox" name="checkbox" id="checkbox" value="checkbox" /><label for="checkbox">Checkbox</label><label for="select">Select</label><select id="select" name="select">    <option value="Select Option 1">Option 1</option>    <option value="Select Option 2">Option 2</option>    <option value="Select Option 3">Option 3</option></select>
+    <input type="radio" id="radio" name="radio" value="radio" />
+    <label for="radio">Radio</label>
+
+    <input type="checkbox" name="checkbox" id="checkbox" value="checkbox" />
+    <label for="checkbox">Checkbox</label>
+
+    <label for="select">Select</label>
+    <select id="select" name="select">
+        <option value="Select Option 1">Option 1</option>
+     	<option value="Select Option 2">Option 2</option>
+     	<option value="Select Option 3">Option 3</option>
+ 	</select>
 
   
 #### Activating the script
@@ -148,7 +169,19 @@ There are two types of tooltips: **static** (HTML coded on page) and
 
 #### HTML Structure
 
-    <!-- Element that activates Tooltip (static) --><a href="javascript:void(0);" data-tooltip rel="unique-id">tooltip link</a><!-- Element that activates Tooltip (dynamic) --><a href="javascript:void(0);" data-tooltip rel="unique-id-1" title="Tooltip content goes here.">tooltip link</a><!-- Tooltip Structure --><div class="tooltip hidden" id="unique-id">    <span class="arrow"></span>    <div class="content">        <!-- Tooltip content -->    </div></div>
+    <!-- Element that activates Tooltip (static) -->
+    <a href="javascript:void(0);" data-tooltip rel="unique-id">tooltip link</a>
+
+    <!-- Element that activates Tooltip (dynamic) -->
+    <a href="javascript:void(0);" data-tooltip rel="unique-id-1" title="Tooltip content goes here.">tooltip link</a>
+
+    <!-- Tooltip Structure -->
+    <div class="tooltip hidden" id="unique-id">
+    	<span class="arrow"></span>
+    	<div class="content">
+    		<!-- Tooltip content -->
+    	</div>
+    </div>
 
 #### Notes, Tips and Etc…
 
@@ -172,7 +205,10 @@ functions.
 
 You can also call a tooltip manually:
 
-    var tooltipArgs = {width:200, direction: 'left'},    tooltip = new ML.Tooltip(ML.$('tooltipEle'), tooltipArgs);tooltip.show(true);
+    var tooltipArgs = {width:200, direction: 'left'},    
+    	tooltip = new ML.Tooltip(ML.$('tooltipEle'), tooltipArgs);
+
+    tooltip.show(true);
 
 Setting the width and direction are optional. Width is defaulted to 100
 and direction is set defaulted to appear on the right side of the link.
@@ -187,7 +223,26 @@ There are two types of modals: **static** (HTML coded on page) and
 
 #### HTML Structure
 
-    <!-- Element that activates Modal (static) --><a href="javascript:void(0);" rel="unique-id">modal link</a><!-- Element that activates Modal (dynamic - iframe) --><a href="http://www.amodesigns.net" rel="iframe">modal link</a><!-- Element that activates Tooltip (dynamic - ajaxed in) --><a href="files/ajax-overlay.html" rel="ajax">modal link</a><!-- Modal Structure --><div class="modal hidden" id="unique-id">    <div class="header">        <!-- Place heading here <h1>, <h2>, <h3>, etc... (optional) -->        <a href="javascript:void(0);" class="close">X</a>    </div>    <div class="content">        <!-- Place modal content here -->    </div></div>
+    <!-- Element that activates Modal (static) -->
+    <a href="javascript:void(0);" rel="unique-id">modal link</a>
+
+    <!-- Element that activates Modal (dynamic - iframe) -->
+    <a href="http://www.amodesigns.net" rel="iframe">modal link</a>
+
+    <!-- Element that activates Tooltip (dynamic - ajaxed in) -->
+    <a href="files/ajax-overlay.html" rel="ajax">modal link</a>
+
+    <!-- Modal Structure -->
+    <div class="modal hidden" id="unique-id">
+    	<div class="header">
+    		<!-- Place heading here <h1>, <h2>, <h3>, etc... (optional) -->
+    		<a href="javascript:void(0);" class="close">X</a>
+    	</div>
+
+    	<div class="content">
+    		<!-- Place modal content here -->
+    	</div>
+    </div>
 
 #### Notes, Tips and Etc…
 
@@ -215,7 +270,10 @@ page with `data-modal` on the page and performs the necessary functions.
 
 You can also call a modal manually:
 
-    var modalArgs = {width:200, height: 400},    modal = new ML.Tooltip(ML.$('modalEle'), modalArgs);modal.show(true);
+    var modalArgs = {width:200, height: 400},
+    	modal = new ML.Tooltip(ML.$('modalEle'), modalArgs);
+
+    modal.show(true);
 
 Setting the width, height and header are optional. Width is defaulted to
 600, height is defaulted to auto and header is defaulted to Modal
@@ -231,7 +289,13 @@ There are two types of toggles: **regular** (typical hide and show) and
 
 #### HTML Structure
 
-    <!-- Toggle Link --><a href="javscript:void(0);" class="toggleContent">toggle link</a><!-- Toggle Content --><div id="toggleContent">    <!-- Content goes here --></div>
+    <!-- Toggle Link -->
+    <a href="javscript:void(0);" class="toggleContent">toggle link</a>
+
+    <!-- Toggle Content -->
+    <div id="toggleContent">
+    	<!-- Content goes here -->
+   	</div>
 
 #### Notes, Tips and Etc…
 
@@ -256,7 +320,20 @@ Include the toggle JavaScript file.
 
 Then apply an event handler to the toggle link like below:
 
-    var toggleLink = ML.$('toggleLink');/* Regular Toggle */ML.El.evt(toggleLink, 'click', function (e) {    var content = ML.El.clicked(e).className    ML.Toggle(ML.$(content));});ML.El.evt(toggleLink, 'click', function (e) {    var content = ML.El.clicked(e).className    ML.slideToggle(ML.$(content), function(shown) {alert('Im being shown? '+shown)});}); 
+    var toggleLink = ML.$('toggleLink');
+
+    /* Regular Toggle */
+    ML.El.evt(toggleLink, 'click', function (e) {
+    	var content = ML.El.clicked(e).className;
+    	ML.Toggle(ML.$(content));
+    });
+
+    ML.El.evt(toggleLink, 'click', function (e) {
+    	var content = ML.El.clicked(e).className;
+    	ML.slideToggle(ML.$(content), function(shown) {
+    		alert('Im being shown? '+shown);
+    	});
+    }); 
 
 The callback function passes in whether the content being toggled is
 shown or hidden (true/false). This callback function is completely
