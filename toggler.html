@@ -85,7 +85,7 @@
 		var t = ML.$C('.'+slideTogs+i)[0];
 		ML.El.evt(t, 'click', function (e) {
 			var content = ML.El.clicked(e).className
-			ML.slideToggle(ML.$(content), function() {/*alert('Sliding complete');*/});
+			ML.slideToggle(ML.$(content), function(shown) {/*alert('Sliding complete');*/});
 		});	
 	}
 </script>

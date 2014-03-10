@@ -8,144 +8,176 @@
 
 <body>
 
-<h1>My Scripts</h1>
-<p>Please feel free to use any of these scripts for your own personal use (reference, etc..). <br />
-Also please excuse any grammatical mistakes:)</p>
-<p>If you find any bugs/suggestions/comments please feel free to email me through my website (<a href="http://mikewgd.com">http://mikewgd.com</a>). Always looking for newer and better ways to do code. </p>
-
-http://milianw.de/projects/markdownify/demo.php
-
+<div class="usage-descrip">
+	<h1>My Scripts</h1>
+	<p>Please feel free to use any of these scripts for your own personal use (reference, etc..). <br />
+	Also please excuse any grammatical mistakes:)</p>
+	<p>If you find any bugs/suggestions/comments please feel free to email me through my website (<a href="http://mikewgd.com">http://mikewgd.com</a>). Always looking for newer and better ways to do code. </p>
+</div>
 
 <div class="usage" id="accordion">
-<h2>Accordion</h2>
-<div class="contents">
-<p>There are two types of accordions: <strong>multi-toggle</strong> (toggle more than one at a time) and <strong>single-toggle</strong> (toggle only one at a time).</p>
-<h3>HTML Structure</h3>
-<pre><code>&lt;ul class=&quot;accordion&quot;&gt;<br />    &lt;li&gt;<br />        &lt;a class=&quot;acc&quot; href=&quot;javascript:void(0);&quot;&gt;link&lt;/a&gt;<br />        &lt;div class=&quot;content&quot;&gt;<br />            &lt;!-- Place your content here --&gt;<br />        &lt;/div&gt;<br />    &lt;/li&gt;<br />&lt;/ul&gt;</code></pre>
-<h3>Notes, Tips and Etc...</h3>
-<p>You may also choose to have an item open when you arrive to the page. Add &quot;open&quot; to the li  class name. Just a note: Only one should be opened for the single-toggler.</p>
-<p>When using a multi-toggle accordion add <code>data-acc=&quot;multiple&quot;</code> to the ul element.</p>
-<p>You can also access any item in an accordion by giving the ul a unique id. To link to the 2nd item in the accordion your url would be: http://yourwebsite.com/accordion.html#acc-{ID}-{1}</p>
-<br />
-<h3>Activating the script</h3>
-<p>Include the accordion JavaScript file and all you need to do is  call <strong>ML.AccordionHandler();</strong>. Doing this just loops through any accordion on the page and performs the necessary functions. </p>
-<p>You can initialize it manually by doing:</p>
-<pre><code>var accordion = new ML.Accordion(ML.$('accEle'), false); 
-accordion.init();</code></pre>
-<p>The second parameter <strong>must</strong> be include either true or false (multi-toggle). It can <strong>NOT</strong> be left blank.</p>
-</div>
+	<h2>Accordion</h2>
+
+	<div class="contents">
+		<p>There are two types of accordions: <strong>multi-toggle</strong> (toggle more than one at a time) and <strong>single-toggle</strong> (toggle only one at a time).</p>
+
+		<h3>HTML Structure</h3>
+		<pre><code>&lt;ul class=&quot;accordion&quot;&gt;<br />    &lt;li&gt;<br />        &lt;a class=&quot;acc&quot; href=&quot;javascript:void(0);&quot;&gt;link&lt;/a&gt;<br />        &lt;div class=&quot;content&quot;&gt;<br />            &lt;!-- Place your content here --&gt;<br />        &lt;/div&gt;<br />    &lt;/li&gt;<br />&lt;/ul&gt;</code></pre>
+
+		<h3>Notes, Tips and Etc...</h3>
+		<p>You may also choose to have an item open when you arrive to the page. Add &quot;open&quot; to the li  class name. Just a note: Only one should be opened for the single-toggler.</p>
+		<p>When using a multi-toggle accordion add <code>data-acc=&quot;multiple&quot;</code> to the ul element.</p>
+		<p>You can also access any item in an accordion by giving the ul a unique id. To link to the 2nd item in the accordion your url would be: http://yourwebsite.com/accordion.html#acc-{ID}-{1}</p>
+		<br />
+	
+		<h3>Activating the script</h3>
+		<p>Include the accordion JavaScript file and all you need to do is  call <strong>ML.AccordionHandler();</strong>. Doing this just loops through any accordion on the page and performs the necessary functions. </p>
+		<p>You can initialize it manually by doing:</p>
+
+		<pre><code>var accordion = new ML.Accordion(ML.$('accEle'), false);<br />accordion.init();</code></pre>
+
+		<p>The second parameter <strong>must</strong> be include either true or false (multi-toggle). It can <strong>NOT</strong> be left blank.</p>
+	</div>
 </div>
 <hr />
 
 <div class="usage" id="carousel">
-<h2>Carousel</h2>
-<div class="contents">
-<h3>HTML Structure</h3>
-<p>The order of the HTML does not matter for this script. As long as they are children of the <code>&lt;div class=&quot;carousel&quot; /&gt;</code>. I would keep the slides in the unordered list structure.</p>
-<pre><code>&lt;div class=&quot;carousel&quot;&gt;<br />    &lt;a href=&quot;javascript:void(0);&quot; class=&quot;pag prev&quot; rel=&quot;prv&quot;&gt;&amp;larr;&lt;/a&gt;<br />    &lt;a href=&quot;javascript:void(0);&quot; class=&quot;pag next&quot; rel=&quot;nxt&quot;&gt;&amp;rarr;&lt;/a&gt;<br />
-    &lt;div class=&quot;viewer&quot;&gt;<br />        &lt;ul&gt;<br />            &lt;li&gt;&lt;!-- Slide Content --&gt;&lt;/li&gt;<br />        &lt;/ul&gt;<br />    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-<h3>Notes, Tips and Etc...</h3>
-<p>If you want jump links (i.e. the dots) just include <code>&lt;div class=&quot;jump&quot;&gt;&lt;/div&gt;</code> as a child element.</p>
-<p>There are 2 settings you can apply to the carousel: auto-rotate and current slide. All you need to do is add <code>data-carousel=&quot;curr:2:rotate:true&quot;</code> to the <code>&lt;div class=&quot;carousel&quot; /&gt;</code> (I.e Current slide will start on slide 3 and it will auto-rotate)</p>
-<p>You may also choose to have a function(s) fire once the animation is complete and you can do this by applying a callback to the initialization of the carousel. Please look for details regarding this under the section <strong>Activating the script</strong> for the carousel.</p>
-<br />
-<h3>Activating the script</h3>
-<p>Include the carousel JavaScript file and all you need to do is  call <strong>ML.CarouselHandler();</strong>. Doing this just loops through any carousel on the page and performs the necessary functions.</p>
-<p>You can initialize it manually by doing:</p>
-<pre><code>var carousel = new ML.Carousel(ML.$('carEle'), {curr: 1, rotate: true}, function(i, el){
-    if (carousel.total == i) {
-        alert('last slide');
-        el.style.marginRight = '14px';   
-    }
-}); 
-
-carousel.init();</code></pre>
-<p>Setting the current slide and auto-rotate are optional. Current slide defaults to 0 and rotate is set to false unless stated.</p>
-<p>The callback function passes in the current slide and the carousel element which you can access in your callback function.</p>
-</div>
+	<h2>Carousel</h2>
+	
+	<div class="contents">
+		<h3>HTML Structure</h3>
+		<p>The order of the HTML does not matter for this script. As long as they are children of the <code>&lt;div class=&quot;carousel&quot; /&gt;</code>. I would keep the slides in the unordered list structure.</p>
+		
+		<pre><code>&lt;div class=&quot;carousel&quot;&gt;<br />    &lt;a href=&quot;javascript:void(0);&quot; class=&quot;pag prev&quot; rel=&quot;prv&quot;&gt;&amp;larr;&lt;/a&gt;<br />    &lt;a href=&quot;javascript:void(0);&quot; class=&quot;pag next&quot; rel=&quot;nxt&quot;&gt;&amp;rarr;&lt;/a&gt;<br /><br />    &lt;div class=&quot;viewer&quot;&gt;<br />        &lt;ul&gt;<br />            &lt;li&gt;&lt;!-- Slide Content --&gt;&lt;/li&gt;<br />        &lt;/ul&gt;<br />    &lt;/div&gt;<br />&lt;/div&gt;</code></pre>
+		
+		<h3>Notes, Tips and Etc...</h3>
+		<p>If you want jump links (i.e. the dots) just include <code>&lt;div class=&quot;jump&quot;&gt;&lt;/div&gt;</code> as a child element.</p>
+		<p>There are 2 settings you can apply to the carousel: auto-rotate and current slide. All you need to do is add <code>data-carousel=&quot;curr:2:rotate:true&quot;</code> to the <code>&lt;div class=&quot;carousel&quot; /&gt;</code> (I.e Current slide will start on slide 3 and it will auto-rotate)</p>
+		<p>You may also choose to have a function(s) fire once the animation is complete and you can do this by applying a callback to the initialization of the carousel. Please look for details regarding this under the section <strong>Activating the script</strong> for the carousel.</p>
+		<br />
+		
+		<h3>Activating the script</h3>
+		<p>Include the carousel JavaScript file and all you need to do is  call <strong>ML.CarouselHandler();</strong>. Doing this just loops through any carousel on the page and performs the necessary functions.</p>
+		<p>You can initialize it manually by doing:</p>
+		
+		<pre><code>var carouselArgs = {curr: 1, rotate: true},<br />    carousel = new ML.Carousel(ML.$('carEle'), carouselArgs, function(i, el){alert('happens after each slide');});<br /><br />carousel.init();</code></pre>
+		
+		<p>Setting the current slide and auto-rotate are optional. Current slide defaults to 0 and rotate is set to false unless stated.</p>
+		<p>The callback function passes in the current slide and the carousel element which you can access in your callback function.</p>
+	</div>
 </div>
 <hr />
 
 <div class="usage" id="form-elems">
-<h2>Form Elements</h2>
-<div class="contents">
-<h3>HTML Structure</h3>
-<p>There is no special HTML structure for doing custom radio buttons, checkboxes and select menus. Just code the elements how you would normally, like so:</p>
-<pre><code>&lt;input type=&quot;radio&quot; id=&quot;radio&quot; name=&quot;radio&quot; value=&quot;radio&quot; /&gt;<br />&lt;label for=&quot;radio&quot;&gt;Radio&lt;/label&gt;
+	<h2>Form Elements</h2>
 
-&lt;input type=&quot;checkbox&quot; name=&quot;checkbox&quot; id=&quot;checkbox&quot; value=&quot;checkbox&quot; /&gt;<br />&lt;label for=&quot;checkbox&quot;&gt;Checkbox&lt;/label&gt;
-
-&lt;label for=&quot;select&quot;&gt;Select&lt;/label&gt;<br />&lt;select id=&quot;select&quot; name=&quot;select&quot;&gt;<br />    &lt;option value=&quot;Select Option 1&quot;&gt;Option 1&lt;/option&gt;<br />    &lt;option value=&quot;Select Option 2&quot;&gt;Option 2&lt;/option&gt;<br />    &lt;option value=&quot;Select Option 3&quot;&gt;Option 3&lt;/option&gt;<br />&lt;/select&gt;</code></pre>
-<br />
-<h3>Activating the script</h3>
-<p>Include the radiocheck.js or select.js file to the bottom of the page to use these custom form element.</p>
-</div>
+	<div class="contents">
+		<h3>HTML Structure</h3>
+		<p>There is no special HTML structure for doing custom radio buttons, checkboxes and select menus. Just code the elements how you would normally, like so:</p>
+		
+		<pre><code>&lt;input type=&quot;radio&quot; id=&quot;radio&quot; name=&quot;radio&quot; value=&quot;radio&quot; /&gt;<br />&lt;label for=&quot;radio&quot;&gt;Radio&lt;/label&gt;<br /><br />&lt;input type=&quot;checkbox&quot; name=&quot;checkbox&quot; id=&quot;checkbox&quot; value=&quot;checkbox&quot; /&gt;<br />&lt;label for=&quot;checkbox&quot;&gt;Checkbox&lt;/label&gt;<br /><br />&lt;label for=&quot;select&quot;&gt;Select&lt;/label&gt;<br />&lt;select id=&quot;select&quot; name=&quot;select&quot;&gt;<br />    &lt;option value=&quot;Select Option 1&quot;&gt;Option 1&lt;/option&gt;<br />    &lt;option value=&quot;Select Option 2&quot;&gt;Option 2&lt;/option&gt;<br />    &lt;option value=&quot;Select Option 3&quot;&gt;Option 3&lt;/option&gt;<br />&lt;/select&gt;</code></pre>
+		<br />
+		
+		<h3>Activating the script</h3>
+		<p>Include the radiocheck.js or select.js file to the bottom of the page to use these custom form element.</p>
+	</div>
 </div>
 <hr />
 
 <div class="usage" id="inp-control">
-<h2>Input Control</h2>
-<div class="contents">
-<h3>HTML Structure</h3>
-<p>There is no special HTML structure. Just code the input how you would normally:</p>
-<pre><code>&lt;input type=&quot;text&quot; id=&quot;input&quot; name=&quot;input&quot; placeholder=&quot;input placeholder&quot; /&gt;</code></pre>
-<br />
-<h3>Activating the script</h3>
-<p>Include the input.js  to the bottom of the page to use all the benefits of the input on browsers that dont support certain states (:focus in css, placeholder attribute, etc..).</p>
-</div>
+	<h2>Input Control</h2>
+	
+	<div class="contents">
+		<h3>HTML Structure</h3>
+		<p>There is no special HTML structure. Just code the input how you would normally:</p>
+		
+		<pre><code>&lt;input type=&quot;text&quot; id=&quot;input&quot; name=&quot;input&quot; placeholder=&quot;input placeholder&quot; /&gt;</code></pre>
+		<br />
+		
+		<h3>Activating the script</h3>
+		<p>Include the input.js  to the bottom of the page to use all the benefits of the input on browsers that dont support certain states (:focus in css, placeholder attribute, etc..).</p>
+	</div>
 </div>
 <hr />
 
-<div class="usage" id="overlays">
-<h2>Overlays (Tooltips and Modals)</h2>
-<div class="contents">
-<p>There are two types of tooltips: <strong>static</strong> (HTML coded on page) and <strong>dynamic </strong>(created and inserted into DOM).</p>
-<h3>HTML Structure</h3>
-<pre><code>&lt;!-- Element that activates Tooltip (static) --&gt;
-&lt;a href=&quot;javascript:void(0);&quot; data-tooltip rel=&quot;unique-id&quot;&gt;tooltip link&lt;/a&gt;
+<div class="usage" id="overlays-tooltips">
+	<h2>Overlays (Tooltips)</h2>
 
-&lt;!-- Element that activates Tooltip (dynamic) --&gt;
-&lt;a href=&quot;javascript:void(0);&quot; data-tooltip rel=&quot;unique-id-1&quot; title=&quot;The content for this tooltip is being driven by the title attribute in the link&quot;&gt;tooltip link&lt;/a&gt;
+	<div class="contents">
+		<p>There are two types of tooltips: <strong>static</strong> (HTML coded on page) and <strong>dynamic</strong> (created and inserted into DOM).</p>
+		
+		<h3>HTML Structure</h3>
+		<pre><code>&lt;!-- Element that activates Tooltip (static) --&gt;<br />&lt;a href=&quot;javascript:void(0);&quot; data-tooltip rel=&quot;unique-id&quot;&gt;tooltip link&lt;/a&gt;<br /><br />&lt;!-- Element that activates Tooltip (dynamic) --&gt;<br />&lt;a href=&quot;javascript:void(0);&quot; data-tooltip rel=&quot;unique-id-1&quot; title=&quot;Tooltip content goes here.&quot;&gt;tooltip link&lt;/a&gt;<br /><br />&lt;!-- Tooltip Structure --&gt;<br />&lt;div class=&quot;tooltip hidden&quot; id=&quot;unique-id&quot;&gt;<br />    &lt;span class=&quot;arrow&quot;&gt;&lt;/span&gt;<br />    &lt;div class=&quot;content&quot;&gt;<br />        &lt;!-- Tooltip content --&gt;<br />    &lt;/div&gt;<br />&lt;/div&gt;</code></pre>
+		
+		<h3>Notes, Tips and Etc...</h3>
+		<p>There are 2 settings you can apply to the tooltip: width and direction. All you need to do is edit the <code>data-tooltip</code> attribute. For example: <code>data-tooltip=&quot;direction:top:width:500&quot;</code></p>
+		<p>Make sure the rel attribute is something unique, it should follow the same criteria when giving an element an id.</p>
+		<p>When creating a <strong>dynamic</strong> tooltip please be aware that the content will be placed into 1 paragraph element.</p>
+		<br />
+		
+		<h3>Activating the script</h3>
+		<p>Include the tooltip JavaScript file and all you need to do is  call <strong>ML.TooltipHandler();</strong>. Doing this just loops through any element on the page with <code>data-tooltip</code> on the page and performs the necessary functions. </p>
+		<p>You can also call a tooltip manually:</p>
+		
+		<pre><code>var tooltipArgs = {width:200, direction: 'left'},<br />    tooltip = new ML.Tooltip(ML.$('tooltipEle'), tooltipArgs);<br /><br />tooltip.show(true);</code></pre>
 
-&lt;!-- Tooltip Structure --&gt;
-&lt;div class=&quot;tooltip hidden&quot; id=&quot;unique-id&quot;&gt;<br />    &lt;span class=&quot;arrow&quot;&gt;&lt;/span&gt;<br />    &lt;div class=&quot;content&quot;&gt;<br />        &lt;!-- Tooltip content --&gt;<br />    &lt;/div&gt;<br />&lt;/div&gt;</code></pre>
-<h3>Notes, Tips and Etc...</h3>
-<p>There are 2 settings you can apply to the tooltip: width and direction. All you need to do is edit the <code>data-tooltip</code> attribute. For example: <code>data-tooltip=&quot;direction:top:width:500&quot;</code></p>
-<p>Make sure the rel attribute is something unique, it should follow the same criteria when giving an element an id.</p>
-<p>You can also access any item in an accordion by giving the ul a unique id. To link to the 2nd item in the accordion your url would be: http://yourwebsite.com/accordion.html#acc-{ID}-{1}</p>
-<br />
-<h3>Activating the script</h3>
-<p>Include the accordion JavaScript file and all you need to do is  call <strong>ML.AccordionHandler();</strong>. Doing this just loops through any accordion on the page and performs the necessary functions. </p>
-<p>You can initialize it manually by doing:</p>
-<pre><code>var accordion = new ML.Accordion(ML.$('accEle'), false); 
-accordion.init();</code></pre>
-<p>The second parameter <strong>must</strong> be include either true or false (multi-toggle). It can <strong>NOT</strong> be left blank.</p>
+		<p>Setting the width and direction are optional. Width is defaulted to 100 and direction is set defaulted to appear on the right side of the link.</p>
+	</div>
 </div>
+<hr />
+
+<div class="usage" id="overlays-modals">
+	<h2>Overlays (Modals)</h2>
+
+	<div class="contents">
+		<p>There are two types of modals: <strong>static</strong> (HTML coded on page) and <strong>dynamic</strong> (created and inserted into DOM in an IFRAME or ajaxed in).</p>
+		
+		<h3>HTML Structure</h3>
+		<pre><code>&lt;!-- Element that activates Modal (static) --&gt;<br />&lt;a href=&quot;javascript:void(0);&quot; rel=&quot;unique-id&quot;&gt;modal link&lt;/a&gt;<br /><br />&lt;!-- Element that activates Modal (dynamic - iframe) --&gt;<br />&lt;a href=&quot;http://www.amodesigns.net&quot; rel=&quot;iframe&quot;&gt;modal link&lt;/a&gt;<br /><br />&lt;!-- Element that activates Tooltip (dynamic - ajaxed in) --&gt;<br />&lt;a href=&quot;files/ajax-overlay.html&quot; rel=&quot;ajax&quot;&gt;modal link&lt;/a&gt;<br /><br />&lt;!-- Modal Structure --&gt;<br />&lt;div class=&quot;modal hidden&quot; id=&quot;unique-id&quot;&gt;<br />    &lt;div class=&quot;header&quot;&gt;<br />        &lt;!-- Place heading here &lt;h1&gt;, &lt;h2&gt;, &lt;h3&gt;, etc... (optional) --&gt;<br />        &lt;a href=&quot;javascript:void(0);&quot; class=&quot;close&quot;&gt;X&lt;/a&gt;<br />    &lt;/div&gt;<br /><br />    &lt;div class=&quot;content&quot;&gt;<br />        &lt;!-- Place modal content here --&gt;<br />    &lt;/div&gt;<br />&lt;/div&gt;</code></pre>
+		
+		<h3>Notes, Tips and Etc...</h3>
+		<p>There are 2 settings you can apply to the modal: width and height. All you need to do is edit the <code>data-modal</code> attribute. For example: <code>data-modal=&quot;width:600:height:150&quot;</code></p>
+		<p>When creating a <strong>dynamic</strong> modal where the content is in an IFRAME, make sure to put the URL you want to put in the iframe is the <code>href</code> attribute of the link. See the second example in the HTML above.</p>
+		<p>When creating a <strong>dynamic</strong> modal and the content is ajaxed, make sure to put the location of the file you want ajaxed in in the <code>href</code> of the link. Seed the third example in the HTML above.</p>
+		<p>For the <strong>dynamic</strong> modals there is one more setting you can apply and that is adding a custom header, i.e. <code>data-modal=&quot;header:Google.com&quot;</code></p>
+		<br />
+		
+		<h3>Activating the script</h3>
+		<p>Include the modal JavaScript file and all you need to do is  call <strong>ML.ModalHandler();</strong>. Doing this just loops through any element on the page with <code>data-modal</code> on the page and performs the necessary functions. </p>
+		<p>You can also call a modal manually:</p>
+		
+		<pre><code>var modalArgs = {width:200, height: 400},<br />    modal = new ML.Tooltip(ML.$('modalEle'), modalArgs);<br /><br />modal.show(true);</code></pre>
+
+		<p>Setting the width, height and header are optional. Width is defaulted to 600, height is defaulted to auto and header is defaulted to Modal Header.</p>
+	</div>
 </div>
+<hr />
 
 <div class="usage" id="toggler">
-<h2>Toggler</h2>
-<div class="contents">
-<p>There are two types of toggles: <strong>regular</strong> and <strong>slide</strong>. <em>Regular</em> is a basic hide and show of your content. <em>Slide toggle</em> slides the content up and down.</p>
-<p><strong>For Both toggles:</strong> You <strong>MUST</strong> give a unique <code>rel</code> attribute in your <code>&lt;a&gt;</code> tag. This will be to reference the element you would like to toggle. So follow the same rules when giving ids to elements. You MUST also add &quot;toggle&quot; to the class name of your <code>&lt;a&gt;</code> in order for either toggles to work.</p>
-<p>I have also created an attribute for the link called "text" which you place on the <code>&lt;a&gt;</code>. This is the text you would like displayed when your content is displayed. See the example below:</p>
-<pre><code></code></pre>
-<p class="imp">So the rel of the link must = the id you want to toggle!</p>
-<p>So this example says its a <strong>regular toggle</strong> and we are toggling an element with an<strong> id of "unique-id"</strong>. The <strong>text to open the toggle is "Open It"</strong> and when the content is displayed the <strong>link's text changes to "Close It"</strong>.</p>
-<p>For Slide Toggle: All you need to do is add "slide" to the link class name:</p>
-<pre><code></code></pre>
-<div style="height:10px;clear:both;"></div>
-<h3>Activating the script</h3>
-<p>If you view the source of this page you will notice a <code>script</code> tag at the bottom of the page that is needed for the toggler. All you need to do is call <strong>ML.Toggler.init();</strong>.</p>
+	<h2>Toggler</h2>
+
+	<div class="contents">
+		<p>There are two types of toggles: <strong>regular</strong> (typical hide and show) and <strong>slide</strong> (toggles content by sliding it up and/or down).</p>
+		
+		<h3>HTML Structure</h3>
+		<pre><code>&lt;!-- Toggle Link --&gt;<br />&lt;a href=&quot;javscript:void(0);&quot; class=&quot;toggleContent&quot;&gt;toggle link&lt;/a&gt;<br /><br />&lt;!-- Toggle Content --&gt;<br />&lt;div id=&quot;toggleContent&quot;&gt;<br />    &lt;!-- Content goes here --&gt;<br />&lt;/div&gt;</code></pre>
+		
+		<h3>Notes, Tips and Etc...</h3>
+		<p>There is no strict HTML for this, but the content that is being toggled needs to have a unique id.</p>
+		<p>The link that activates the toggle must equal the id of the element that holds the content. For example <code>&lt;a href=&quot;javascript:void(0);&quot; data-toggle=&quot;toggleContent&quot;&gt;toggle link&lt;/a&gt;</code> or it can be some sort of other attribute.</p>
+		<p>The link that activates the toggle and content are the same between the two different types of toggles.</p>
+		<p>For the <strong>slide</strong> toggle you can have a callback function which gets fired after the animation is complete.</p>
+		<br />
+		
+		<h3>Activating the script</h3>
+		<p>Include the toggle JavaScript file.</p>
+		<p>Then apply an event handler to the toggle link like below:</p>
+		
+		<pre><code>var toggleLink = ML.$('toggleLink');<br /><br />/* Regular Toggle */<br />ML.El.evt(toggleLink, 'click', function (e) {<br />    var content = ML.El.clicked(e).className<br />    ML.Toggle(ML.$(content));<br />});<br /><br />ML.El.evt(toggleLink, 'click', function (e) {<br />    var content = ML.El.clicked(e).className<br />    ML.slideToggle(ML.$(content), function(shown) {alert('Im being shown? '+shown)});<br />});	</code></pre>
+
+		<p>The callback function passes in whether the content being toggled is shown or hidden (true/false). This callback function is completely optional.</p>
+	</div>
 </div>
-</div>
-
-
-
-
-
-
 
 </body>
 </html>

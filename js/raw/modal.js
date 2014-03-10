@@ -37,7 +37,7 @@ ML.ModalHandler = function () {
 * @property {String} template - html structure for a modal.
 */
 ML.Modal = function(modLink, settings) {
-	var defaults = {width: 800, height: 'auto', header: 'Modal Header'};
+	var defaults = {width: 600, height: 'auto', header: 'Modal Header'};
 	
 	return {
 		width: parseInt(settings.width) || defaults.width,
