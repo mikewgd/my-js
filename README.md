@@ -17,7 +17,7 @@ Accordion
 There are two types of accordions: **multi-toggle** (toggle more than
 one at a time) and **single-toggle** (toggle only one at a time).
 
-##### HTML Structure
+#### HTML Structure
 
     <ul class="accordion">
         <li>
@@ -28,7 +28,7 @@ one at a time) and **single-toggle** (toggle only one at a time).
         </li>
    	</ul>
 
-##### Notes, Tips and Etc…
+#### Notes, Tips and Etc…
 
 You may also choose to have an item open when you arrive to the page.
 Add “open” to the li class name. Just a note: Only one should be opened
@@ -42,7 +42,7 @@ id. To link to the 2nd item in the accordion your url would be:
 http://yourwebsite.com/accordion.html\#acc-{ID}-{1}
 
   
-##### Activating the script
+#### Activating the script
 
 Include the accordion JavaScript file and all you need to do is call
 **ML.AccordionHandler();**. Doing this just loops through any accordion
@@ -61,7 +61,7 @@ The second parameter **must** be include either true or false
 Carousel
 --------
 
-##### HTML Structure
+#### HTML Structure
 
 The order of the HTML does not matter for this script. As long as they
 are children of the `<div class="carousel" />`. I would keep the slides
@@ -78,7 +78,7 @@ in the unordered list structure.
 		</div>
 	</div>
 
-##### Notes, Tips and Etc…
+#### Notes, Tips and Etc…
 
 If you want jump links (i.e. the dots) just include
 `<div class="jump"></div>` as a child element.
@@ -94,7 +94,7 @@ initialization of the carousel. Please look for details regarding this
 under the section **Activating the script** for the carousel.
 
   
-##### Activating the script
+#### Activating the script
 
 Include the carousel JavaScript file and all you need to do is call
 **ML.CarouselHandler();**. Doing this just loops through any carousel on
@@ -120,7 +120,7 @@ element which you can access in your callback function.
 Form Elements
 -------------
 
-##### HTML Structure
+#### HTML Structure
 
 There is no special HTML structure for doing custom radio buttons,
 checkboxes and select menus. Just code the elements how you would
@@ -140,7 +140,7 @@ normally, like so:
  	</select>
 
   
-##### Activating the script
+#### Activating the script
 
 Include the radiocheck.js or select.js file to the bottom of the page to
 use these custom form element.
@@ -150,7 +150,7 @@ use these custom form element.
 Input Control
 -------------
 
-##### HTML Structure
+#### HTML Structure
 
 There is no special HTML structure. Just code the input how you would
 normally:
@@ -158,7 +158,7 @@ normally:
     <input type="text" id="input" name="input" placeholder="input placeholder" />
 
   
-##### Activating the script
+#### Activating the script
 
 Include the input.js to the bottom of the page to use all the benefits
 of the input on browsers that dont support certain states (:focus in
@@ -172,7 +172,7 @@ Overlays (Tooltips)
 There are two types of tooltips: **static** (HTML coded on page) and
 **dynamic** (created and inserted into DOM).
 
-##### HTML Structure
+#### HTML Structure
 
     <!-- Element that activates Tooltip (static) -->
     <a href="javascript:void(0);" data-tooltip rel="unique-id">tooltip link</a>
@@ -188,7 +188,7 @@ There are two types of tooltips: **static** (HTML coded on page) and
     	</div>
     </div>
 
-##### Notes, Tips and Etc…
+#### Notes, Tips and Etc…
 
 There are 2 settings you can apply to the tooltip: width and direction.
 All you need to do is edit the `data-tooltip` attribute. For example:
@@ -201,7 +201,7 @@ When creating a **dynamic** tooltip please be aware that the content
 will be placed into 1 paragraph element.
 
   
-##### Activating the script
+#### Activating the script
 
 Include the tooltip JavaScript file and all you need to do is call
 **ML.TooltipHandler();**. Doing this just loops through any element on
@@ -226,7 +226,7 @@ Overlays (Modals)
 There are two types of modals: **static** (HTML coded on page) and
 **dynamic** (created and inserted into DOM in an IFRAME or ajaxed in).
 
-##### HTML Structure
+#### HTML Structure
 
     <!-- Element that activates Modal (static) -->
     <a href="javascript:void(0);" rel="unique-id">modal link</a>
@@ -249,7 +249,7 @@ There are two types of modals: **static** (HTML coded on page) and
     	</div>
     </div>
 
-##### Notes, Tips and Etc…
+#### Notes, Tips and Etc…
 
 There are 2 settings you can apply to the modal: width and height. All
 you need to do is edit the `data-modal` attribute. For example:
@@ -267,7 +267,7 @@ For the **dynamic** modals there is one more setting you can apply and
 that is adding a custom header, i.e. `data-modal="header:Google.com"`
 
   
-##### Activating the script
+#### Activating the script
 
 Include the modal JavaScript file and all you need to do is call
 **ML.ModalHandler();**. Doing this just loops through any element on the
@@ -292,7 +292,7 @@ Toggler
 There are two types of toggles: **regular** (typical hide and show) and
 **slide** (toggles content by sliding it up and/or down).
 
-##### HTML Structure
+#### HTML Structure
 
     <!-- Toggle Link -->
     <a href="javscript:void(0);" class="toggleContent">toggle link</a>
@@ -302,7 +302,7 @@ There are two types of toggles: **regular** (typical hide and show) and
     	<!-- Content goes here -->
    	</div>
 
-##### Notes, Tips and Etc…
+#### Notes, Tips and Etc…
 
 There is no strict HTML for this, but the content that is being toggled
 needs to have a unique id.
@@ -319,7 +319,7 @@ For the **slide** toggle you can have a callback function which gets
 fired after the animation is complete.
 
   
-##### Activating the script
+#### Activating the script
 
 Include the toggle JavaScript file.
 
