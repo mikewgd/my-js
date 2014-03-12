@@ -102,7 +102,12 @@ the page and performs the necessary functions.
 
 You can initialize it manually by doing:
 
-    var carouselArgs = {curr: 1, rotate: true},    carousel = new ML.Carousel(ML.$('carEle'), carouselArgs, function(i, el){alert('happens after each slide');});carousel.init();
+    var carouselArgs = {curr: 1, rotate: true},
+		carousel = new ML.Carousel(ML.$('carEle'), carouselArgs, function(i, el){
+			alert('happens after each slide');
+		});
+
+	carousel.init();
 
 Setting the current slide and auto-rotate are optional. Current slide
 defaults to 0 and rotate is set to false unless stated.
