@@ -37,6 +37,8 @@
 		<pre><code>var accordion = new ML.Accordion(ML.$('accEle'), false);<br />accordion.init();</code></pre>
 
 		<p>The second parameter <strong>must</strong> be include either true or false (multi-toggle). It can <strong>NOT</strong> be left blank.</p>
+
+		<a href="accordion.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 <hr />
@@ -64,6 +66,8 @@
 		
 		<p>Setting the current slide and auto-rotate are optional. Current slide defaults to 0 and rotate is set to false unless stated.</p>
 		<p>The callback function passes in the current slide and the carousel element which you can access in your callback function.</p>
+
+		<a href="carousel.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 <hr />
@@ -80,6 +84,8 @@
 		
 		<h3>Activating the script</h3>
 		<p>Include the radiocheck.js or select.js file to the bottom of the page to use these custom form element.</p>
+		
+		<a href="form-elements.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 <hr />
@@ -96,6 +102,8 @@
 		
 		<h3>Activating the script</h3>
 		<p>Include the input.js  to the bottom of the page to use all the benefits of the input on browsers that dont support certain states (:focus in css, placeholder attribute, etc..).</p>
+
+		<a href="form-input-control.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 <hr />
@@ -122,6 +130,8 @@
 		<pre><code>var tooltipArgs = {width:200, direction: 'left'},<br />    tooltip = new ML.Tooltip(ML.$('tooltipEle'), tooltipArgs);<br /><br />tooltip.show(true);</code></pre>
 
 		<p>Setting the width and direction are optional. Width is defaulted to 100 and direction is set defaulted to appear on the right side of the link.</p>
+
+		<a href="overlays.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 <hr />
@@ -149,6 +159,8 @@
 		<pre><code>var modalArgs = {width:200, height: 400},<br />    modal = new ML.Tooltip(ML.$('modalEle'), modalArgs);<br /><br />modal.show(true);</code></pre>
 
 		<p>Setting the width, height and header are optional. Width is defaulted to 600, height is defaulted to auto and header is defaulted to Modal Header.</p>
+
+		<a href="overlays.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 <hr />
@@ -176,6 +188,8 @@
 		<pre><code>var toggleLink = ML.$('toggleLink');<br /><br />/* Regular Toggle */<br />ML.El.evt(toggleLink, 'click', function (e) {<br />    var content = ML.El.clicked(e).className<br />    ML.Toggle(ML.$(content));<br />});<br /><br />ML.El.evt(toggleLink, 'click', function (e) {<br />    var content = ML.El.clicked(e).className<br />    ML.slideToggle(ML.$(content), function(shown) {alert('Im being shown? '+shown)});<br />});	</code></pre>
 
 		<p>The callback function passes in whether the content being toggled is shown or hidden (true/false). This callback function is completely optional.</p>
+
+		<a href="toggler.html" class="btn" target="_blank">View Demo</a>
 	</div>
 </div>
 

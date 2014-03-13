@@ -9,7 +9,7 @@ body {font: 12px "Arial", Helvetica, sans-serif; color:#000;margin:0;padding:0;}
 body a {color: #00C;}
 body a:hover {text-decoration:none;}
 
-.container {width:985px; margin: 0 auto;}
+.container {width:985px; margin: 0 auto; padding:20px 0 0 0;}
 .go-back {display:block;  padding:12px; background:#CCC; text-decoration:none; color:#333; border-bottom:1px solid #666; font-weight:bold;}
 
 /* General Classes */
@@ -46,6 +46,7 @@ div.notes ul li {list-style-position:inside;}
 .usage pre code {display:block;background:none;border:0;padding:5px; width:auto; overflow:auto;}
 .usage-descrip {margin:20px;}
 .usage-descrip h1 {border-bottom: 1px solid #000; padding-bottom: 10px;}
+.usage .contents .btn {font-weight:bold;display:block; color:#fff; background: #999; padding:15px; text-align:center;text-decoration: none; text-transform: uppercase; width:80px;}
 
 /* Table of Contents of Scripts */
 ul.scripts {padding:0;margin:0 auto; width:724px;overflow:auto;}

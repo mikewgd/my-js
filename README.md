@@ -56,6 +56,8 @@ You can initialize it manually by doing:
 The second parameter **must** be include either true or false
 (multi-toggle). It can **NOT** be left blank.
 
+[View Demo](http://mikewgd.com/portfolio/javascript/accordion.html)
+
 * * * * *
 
 Carousel
@@ -115,6 +117,8 @@ defaults to 0 and rotate is set to false unless stated.
 The callback function passes in the current slide and the carousel
 element which you can access in your callback function.
 
+[View Demo](http://mikewgd.com/portfolio/javascript/carousel.html)
+
 * * * * *
 
 Form Elements
@@ -145,6 +149,8 @@ normally, like so:
 Include the radiocheck.js or select.js file to the bottom of the page to
 use these custom form element.
 
+[View Demo](http://mikewgd.com/portfolio/javascript/form-elements.html)
+
 * * * * *
 
 Input Control
@@ -163,6 +169,8 @@ normally:
 Include the input.js to the bottom of the page to use all the benefits
 of the input on browsers that dont support certain states (:focus in
 css, placeholder attribute, etc..).
+
+[View Demo](http://mikewgd.com/portfolio/javascript/form-input-control.html)
 
 * * * * *
 
@@ -217,6 +225,8 @@ You can also call a tooltip manually:
 
 Setting the width and direction are optional. Width is defaulted to 100
 and direction is set defaulted to appear on the right side of the link.
+
+[View Demo](http://mikewgd.com/portfolio/javascript/overlays.html)
 
 * * * * *
 
@@ -284,6 +294,8 @@ Setting the width, height and header are optional. Width is defaulted to
 600, height is defaulted to auto and header is defaulted to Modal
 Header.
 
+[View Demo](http://mikewgd.com/portfolio/javascript/overlays.html)
+
 * * * * *
 
 Toggler
@@ -343,3 +355,5 @@ Then apply an event handler to the toggle link like below:
 The callback function passes in whether the content being toggled is
 shown or hidden (true/false). This callback function is completely
 optional.
+
+[View Demo](http://mikewgd.com/portfolio/javascript/toggler.html)
