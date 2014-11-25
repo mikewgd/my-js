@@ -65,8 +65,6 @@ ML.Carousel = function(car, settings, func) {
             var self = this,
                 carousel = self.el;
 
-                console.log(self.curr)
-
             // Finds all elements in carousel
             ML.loop(carousel.childNodes, function(item, i) {
                 if (ML.hasClass(item, 'jump')) {
@@ -85,7 +83,7 @@ ML.Carousel = function(car, settings, func) {
             var firstLi = self.lis[0],
                 slideLength = self.lis.length;
 
-            self.gutter = parseInt(ML.El.getStyl(firstLi, 'margin-right').replace('px', ''));
+            self.gutter = parseInt(ML.El.getStyl(firstLi, 'marginRight').replace('px', ''));
             self.width = self.width + self.gutter;
             self.total = self.getTotal(slideLength, firstLi.offsetWidth);
 

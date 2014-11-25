@@ -77,7 +77,7 @@ ML.Modal = function(modLink, settings) {
 			
 			ML.El.evt(self.link, 'click', function(e) {
 				self.show();
-				e.preventDefault();
+				return false;
 			});
 
 			ML.El.evt(overlay, 'click', function(e) {self.hide();});
@@ -86,7 +86,11 @@ ML.Modal = function(modLink, settings) {
 
 			ML.El.evt(document, 'click', function(e) {
 				var clicked = ML.El.clicked(e);
-				if (ML.hasClass(clicked, 'close')) {self.hide();}
+				if (ML.hasClass(clicked, 'close')) {
+					self.hide();
+					return false;
+				}
+
 			});
 		},
 		
@@ -147,31 +151,33 @@ ML.Modal = function(modLink, settings) {
 		* @param {Boolean} selfInvoke (optional) - if invoking the modal manually.
 		*/
 		show: function (selfInvoke) {
+			var self = this;
+
 			if (selfInvoke) {this.el = ML.$(modLink.rel);}
 
 			var overlay = ML.$('darkness'),
 				modal = this.el,
-				height = modal.offsetHeight,
+				height = (self.height == 'auto') ? modal.offsetHeight : self.height,
 				modalParentTag = modal.parentNode.tagName.toLowerCase(), leftPos, topPos;
 
 			ML.removeClass(modal, 'hidden');
 			modal.removeAttribute('style');
 
+			modal.style.height = (self.height == 'auto') ? 'auto' : self.height.toString()+'px';
+			modal.style.width = self.width.toString()+'px';
+
 			ML.El.styl(overlay, {display:'block', visibility:'visible', 'height': ML.docDimen().h+'px'});
-			ML.El.styl(modal, {width:this.width+'px', height:this.height+'px'});
+			//ML.El.styl(modal, {'width':self.width+'px', 'height':height});
+			ML.El.styl(modal, {'marginTop': '-'+height/2+'px', 'marginLeft': '-'+modal.offsetWidth/2+'px'});
 			
 			// Parent tag is not body get dimensions off window
 			if (modalParentTag == 'body') {
-				leftPos = topPos = '50%';
-				ML.El.styl(modal, {'marginTop': '-'+height/2+'px', 'marginLeft': '-'+this.width/2+'px'});
+				
 			} else {
 				var center = ML.El.center(modal);
 				topPos = center.y;
 				leftPos = center.x;
 			}
-
-			// Centers the modal
-			ML.El.styl(modal, {'top':topPos, 'left':leftPos});
 		},
 
 		/**
