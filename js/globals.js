@@ -371,6 +371,7 @@ ML.El = {
     * @param {HTMLElement} evt - element clicked on.
     */
     clicked: function(evt) {
+        if (!evt) evt = window.event;
         var element = evt.target || evt.srcElement;
         if (element.nodeType == 3) element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
         return element;
