@@ -1,0 +1,31 @@
+{
+  "name": "my-js",
+  "version": "1.0.0",
+  "description": "Common elements (carousel, modal, etc...) coded in vanilla javascript.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Levy",
+  "license": "ISC",
+  "dependencies": {
+    "browser-sync": "^2.18.13",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-concat-multi": "^1.0.1",
+    "gulp-data": "^1.2.1",
+    "gulp-hb": "^6.0.2",
+    "gulp-jshint": "^2.0.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^3.0.0",
+    "path": "^0.12.7",
+    "run-sequence": "^2.0.0",
+    "wrench": "^1.5.9"
+  },
+  "devDependencies": {
+    "gulp-jshint": "^2.0.4",
+    "jshint": "^2.9.5",
+    "jshint-stylish": "^2.2.1"
+  }
+}
