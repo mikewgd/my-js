@@ -16,6 +16,7 @@ body a:hover {text-decoration:none;}
 .fl {float:left;}
 .fr {float:right;}
 .hidden {position:absolute;top:-99999em;visibility:hidden; display:none;}
+.no-show {display: none;}
 form {padding:5px; border:1px solid #ccc;}
 form input[type=text] {display:block;}
 .four-cols img {width:144px;height:100px;}
@@ -73,21 +74,14 @@ ul.scripts li a span {clear:both;display:block; font-size:11px;}
 .acc-ex .hide .acc {color: #666; background:#CCC;border-bottom:0;}
 
 /* CAROUSEL */
-.animals {position:relative;}
-.animals .pag {position:absolute; color:#000; top:1.7em; z-index:1; font-size:4em; font-family:"Georgia"; text-decoration:none;}
-.animals .next {right:130px;}
-.animals .prev {left:130px;}
+.animals {position:relative;width:300px;margin: 0 auto;}
+.animals .next {float: right;}
 .animals li {margin-right:10px;}
 .animals li img {width:300px; height:237px;}
-.animals .viewer{width:610px; margin:0 auto;}
-.onlyOne .viewer {width:300px;}
-.onlyOne .next {right:280px;}
-.onlyOne .prev {left:280px;}
-.animals ul {text-align:center;}
-.carousel.animals .jump li {float:none; display:inline-block;}
-.animals .jump a {text-decoration:none; color:#ccc; font-size:40px;}
+.animals .carousel-dots a {text-decoration:none; color:#ccc; font-size:40px;}
 .animals .active a {color:#000;}
 .animals .inactive {color:#ccc;}
+.carousel-status {width: 300px; margin: 0 auto;}
 
 /* CUSTOM FORM ELEMENTS */
 .checkbox, .radio {margin:0 5px 0 0;width:15px;height:15px;}
@@ -126,12 +120,3 @@ div.modal .header {background:#ccc; padding:6px;}
 div.modal .header h1 {color:#fff;float:left;margin:0;}
 div.modal .header a {color:white;font-size:30px;}
 div.modal .content {padding:10px;}
-
-/* tabs */
-ul.tabs {margin:0;padding:5px;padding-bottom:0; border-bottom:1px solid #000;}
-ul.tabs li {list-style-type:none;display:inline;position:relative; top:1px; margin-right:10px;}
-ul.tabs li a {padding:10px 30px 10px 30px;font-size:16px;text-decoration:none;display:inline-block; text-align:center;background:#f2f2f2;color:#666;border:1px solid #ccc;border-bottom:0;}
-ul.tabs li.active a {color:#000;background:#fff;border:1px solid #000; border-bottom:1px solid #fff;}
-.tab-contents {padding:10px; border:1px solid black;border-top:0;}
-.tab-contents .tab-content {display: none;}
-.tab-contents .tab-content.active {display: block;}

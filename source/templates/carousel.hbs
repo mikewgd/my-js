@@ -1,60 +1,53 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Carousel - Raw</title>
-<link rel="stylesheet" type="text/css" href="css/main.css" />
-<link rel="stylesheet" type="text/css" href="css/scripts.css" />
-<script type="text/javascript" src="js/carousel.js"></script>
-<!--[if IE 6]>
-<link rel="stylesheet" type="text/css" href="css/scripts-ie.css" />
-<![endif]-->
-</head>
-<body>
+{{>header}}
 
-<div class="container">
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#carousel">Documentation</a>
+  </div>
+      
+  <div class="carousel animals" id="initCarousel">
+    <ul>
+    {{#items}}
+      <li class="carousel-slide"><img alt="" src="images/carousel-imgs/{{this}}.jpg" /></li>
+    {{/items}}
+    </ul>
+  </div>
+  
+  <button id="carouselNext">Next button</button>
+  <button id="carouselPrev">Prev button</button>
 
-    <div class="script-header">
-    	<h1>Carousel</h1>
-        <a href="docs.html#carousel">Documentation</a>
-	</div>
-    
-    <div class="carousel animals" data-carousel="curr:1">
-    	<a href="javascript:void(0);" class="pag prev" rel="prv">&larr;</a>
-        <a href="javascript:void(0);" class="pag next" rel="nxt">&rarr;</a>
-        <div class="viewer">
-            <ul>
-                <li><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/elephant.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/tiger.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/wolf.jpg" /></li>
-            </ul>
-        </div>
-        
-        <div class="jump"></div>       
-    </div>
-    
-    <div class="fixer" style="height:20px;"></div>
-    
-    <div class="carousel animals onlyOne" data-carousel="rotate:true">
-    	<a href="javascript:void(0);" class="pag prev" rel="prv">&larr;</a>
-        <a href="javascript:void(0);" class="pag next" rel="nxt">&rarr;</a>
-        <div class="viewer">
-            <ul>
-                <li><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/elephant.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/tiger.jpg" /></li>
-                <li><img alt="" src="images/carousel-imgs/wolf.jpg" /></li>
-            </ul>
-        </div><div class="jump"></div> 
-    </div>
-    
-</div>
+  <div class="carousel-status">
+    <p>This carousel is initialised in Javascript and has a specific callback function.</p>
+    Current Index: <span id="indexNum">0</span>
+  </div>
 
-<script type="text/javascript">ML.El.evt(window, 'load', function() {ML.CarouselHandler();});</script>
-</body>
-</html>
+  <div class="fixer" style="height:70px;"></div>
+
+  <div class="carousel animals" data-carousel="rotate:true:dots:true">
+    <ul>
+    {{#items}}
+      <li class="carousel-slide"><img alt="" src="images/carousel-imgs/{{this}}.jpg" /></li>
+    {{/items}}
+    </ul>
+  </div>
+
+{{#> footer}}
+  <script>
+    var el = ML.$('initCarousel');
+    var carousel = new ML.Carousel(el, {
+      dots: true
+    }, function(index) {
+      ML.$('indexNum').innerHTML = index;
+    })
+
+    ML.El.evt(ML.$('carouselNext'), 'click', function(e) {
+      carousel.next();
+    });
+
+    ML.El.evt(ML.$('carouselPrev'), 'click', function(e) {
+      carousel.prev();
+    });
+
+    carousel.init();
+  </script>
+{{/footer}}

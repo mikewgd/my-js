@@ -1,255 +1,285 @@
 /**
-* @class CarouselHandler
-* @namespace ML
-* Handles calling the Carousel class.
-*/
-ML.CarouselHandler = function() {
-    var car = ML.$C('.carousel');
+ * Carousel component.
+ * @constructor
+ * @param {HTMLElement} el The carousel element.
+ * @param {object} [settings] Configuration settings.
+ * @param {number} [settings.current=0] The current slide to start on. 0 based.
+ * @param {boolean} [settings.rotate=false] The carousel will rotate automatically.
+ * @param {boolean} [settings.dots=false] Dot navigation.
+ * @param {boolean} [settings.nav=true] Arrow navigation.
+ * @param {function(): (number)} func Callback function after slide has animated. The current slide index is returned.
+ * @example
+ * var carousel = new ML.Carousel(ML.$('initCarousel'), {
+ *   rotate: true
+ * }, function(index) {
+ *   console.log('slide index: ', index);
+ * })
+ */
+ML.Carousel = function(el, settings, func) {
+  /**
+   * Carousel defaults.
+   * @type {object}
+   * @property {number} CURRENT The current slide index.
+   * @property {boolean} ROTATE Automatically rotate the slides.
+   * @property {boolean} DOTS Dot navigation.
+   * @property {boolean} NAV Arrow navigation.
+   */
+  var DEFAULTS = {
+    CURRENT: 0,
+    ROTATE: false,
+    DOTS: false,
+    NAV: true
+  };
 
-    for (var i = 0; i < car.length; i++) {
-        var data = ML.El.data(car[i], 'carousel');
-        var c = new ML.Carousel(car[i], ML.ParObj({
-            elem: data
-        }));
-        c.init();
+  var current = parseInt(settings.current) || DEFAULTS.CURRENT;
+  var rotate = settings.rotate || DEFAULTS.ROTATE;
+  var dots = settings.dots || DEFAULTS.DOTS;
+  var nav = settings.nav || DEFAULTS.NAV;
+  var self = this;
+  
+  var slides = getSlides();
+  var ul = null;
+  var nextButton = null;
+  var prevButton = null;
+  var dotsUl = null;
+  var dotsLis = [];
+
+  var animating = false;
+  var rotateSpeed = 2000;
+  var animation = null;
+  var total = slides.length;
+  var width = el.offsetWidth;
+
+  /**
+   * Initializes the carousel.
+   */
+  this.init = function() {
+    var carouselHtml = el.innerHTML;
+    var gutter = parseInt(ML.El.getStyle(slides[0], 'margin-right').replace('px', ''));
+    width = width + gutter;
+    
+    el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHtml + '</div>';
+    ul = ML._$('ul', el)[0];
+    ul.style.left = -(width * current) + 'px';
+
+    if (nav) createNav();
+    if (dots) createDots();    
+
+    bindEvents();
+    callback(true);
+
+    if (rotate) {
+      setTimeout(function() {
+        cycle();
+      }, rotateSpeed);
     }
+  };
+
+  /**
+   * Show the next slide.
+   */
+  this.next = function() {
+    if ((current + 1) === total) {
+      return; 
+    }
+
+    current++;
+    slide();
+  };
+
+  /**
+   * Show the previous slide.
+   */
+  this.prev = function() {
+    if (current === 0) {
+      return;
+    }
+
+    current--;
+    slide();
+  };
+
+  /**
+   * Goes to a specific slide.
+   * @param {number} index The slide index.
+   */
+  this.goTo = function(index) {
+    current = index;
+    slide();
+  };
+
+  /**
+   * Returns the slide elements.
+   * @return {array}
+   * @private
+   */
+  function getSlides() {
+    var lis = ML._$('li', el);
+    var arr = [];
+
+    for (var i = 0, len = lis.length; i < len; i++) {
+      if (lis[i].className === 'carousel-slide') {
+        arr.push(lis[i]);
+      }
+    }
+
+    return arr;
+  }
+
+  /**
+   * Creates the arrow navigation and adds into the DOM.
+   * @private
+   */
+  function createNav() {
+    nextButton = ML.El.create('a', {'href': '#', 'class': 'carousel-nav next'});
+    prevButton = ML.El.create('a', {'href': '#', 'class': 'carousel-nav prev'});
+
+    prevButton.innerHTML = '<i>&larr;</i> <span>Previous</span>';
+    nextButton.innerHTML = '<span>Next</span> <i>&rarr;</i>';
+
+    el.appendChild(prevButton);
+    el.appendChild(nextButton);
+  }
+
+  /**
+   * Creates the dot navigation.
+   * @private
+   */
+  function createDots() {
+    var div = ML.El.create('div', {'class': 'carousel-dots'});
+    var li = null;
+    var link = null;
+    dotsUl = ML.El.create('ul');
+
+    div.appendChild(dotsUl);
+    el.appendChild(div);
+
+    for (var i = 0; i < slides.length; i++) {
+      li = ML.El.create('li');
+      link = ML.El.create('a', {'href': '#', 'rel': i});
+      link.innerHTML = '&bull;';
+      dotsLis.push(li);
+      li.appendChild(link);
+      dotsUl.appendChild(li);
+    }
+  }
+
+  /**
+   * Events bound to elements.
+   * @private
+   */
+  function bindEvents() {
+    if (dots) {
+      var dotLinks = ML._$('a', dotsUl);
+
+      ML.loop(dotLinks, function(item, i) {
+        ML.El.evt(item, 'click', function(e) {
+          e.preventDefault();
+          if (self.animating || this.rel === self.curr) return;
+          stopCycle();
+          self.goTo(parseInt(this.rel));
+        });
+      });
+    }
+
+    ML.El.evt(nextButton, 'click', function(e) {
+      e.preventDefault();
+      if (ML.hasClass(this, 'inactive') || animating) return;
+
+      stopCycle();
+      self.next();
+    });
+
+    ML.El.evt(prevButton, 'click', function(e) {
+      e.preventDefault();
+      if (ML.hasClass(this, 'inactive') || animating) return;
+
+      stopCycle();
+      self.prev();
+    });
+  }
+
+  /**
+  * Animates the carousel to slide to each desired slide.
+  * @private
+  */
+  function slide() {
+    var desired = width * current;
+    animating = true;
+  
+    ML.Animate(ul, {left: -desired}, function(){
+      animating = false;
+      callback(false);
+    });
+  }
+
+  /**
+  * Stops the auto rotation of the carousel.
+  * @private
+  */
+  function stopCycle() {
+    rotate = false;
+    clearTimeout(animation);
+  }
+
+  /**
+  * Rotates through the slides in the carousel based on a timer.
+  * @private
+  */
+  function cycle() {
+    if (!rotate) return;
+
+    if (current < total) {
+      current++;
+    } else {
+      current--;
+    }
+
+    if (current == total) current = 0;
+
+    animation = setTimeout(function() {
+      cycle();
+    }, rotateSpeed);
+
+    slide();
+  }
+
+  /**
+  * Function to be called after each slide.
+  * @param {boolean} init Intialization of the callback. Used to set elements inactive/active on load.
+  * @private
+  */
+  function callback(init) {
+    if (!init && func) func(current, el);
+
+    ML.removeClass(nextButton, 'inactive');
+    ML.removeClass(prevButton, 'inactive');
+
+    if (current === 0) {
+      ML.addClass(prevButton, 'inactive');
+    } else if (current + 1 === total) {
+      ML.addClass(nextButton, 'inactive');
+    }
+
+    if (dots) {
+      ML.loop(dotsLis, function(li, i) {
+        ML.removeClass(li, 'active');
+        if (i === current) ML.addClass(li, 'active');
+      });
+    }
+  }
 };
 
-/**
-* @class Carousel
-* @namespace ML
-*
-* @property {Number} width - number to slide each <li>.
-* @property {Number} curr - current active/shown slide.
-* @property {Number} gutter - spacing between each slide (i.e. margin-right for each <li> element).
-* @property {Number} total - total slides, needed for if more than one in viewer.
-* @property {HTMLElement} el - carousel element.
-* @property {HTMLElement} ul - ul element holding slides.
-* @property {Object} lis - an array of all the slides (i.e. <li> elements) in the carousel.
-* @property {Object} pag - the next and previous arrows.
-* @property {Boolean} jump - true/false to show the jump links (i.e. dots).
-* @property {Boolean} rotate - enable/disable auto rotate of the carousel.
-* @property {Boolean} animating - carousel animating or not.
-* @property {Number} rotateSpeed - auto rotate speed.
-* @property {Function} animation - setTimeout function for animation.
-*/
-ML.Carousel = function(car, settings, func) {
-    var defaults = {
-        curr: 0,
-        rotate: false
-    };
+(function() {
+  var carouselEl = ML._$('div');
+  var carousel = null;
+  var settings = {};
 
-    return {
-        width: 0,
-        curr: parseInt(settings.curr) || defaults.curr,
-        gutter: 0,
-        total: 0,
-
-        el: car,
-        ul: null,
-        lis: [],
-        pag: [],
-
-        jump: false,
-        rotate: Boolean(settings.rotate) || defaults.rotate,
-        animating: false,
-        rotateSpeed: 2000,
-
-        animation: null,
-
-        /**
-        * @function init
-        * Initialization of functions and sets the objects to appropriate values.
-        */
-        init: function() {
-            var self = this,
-                carousel = self.el;
-
-            // Finds all elements in carousel
-            ML.loop(carousel.childNodes, function(item, i) {
-                if (ML.hasClass(item, 'jump')) {
-                    self.jump = item;
-                } else if (ML.hasClass(item, 'viewer')) {
-                    item.style.overflow = 'hidden';
-                    self.ul = item.childNodes[0];
-                    self.width = item.offsetWidth;
-                } else if (ML.hasClass(item, 'pag')) {
-                    self.pag.push(item);
-                }
-            });
-
-            self.lis = ML._$('li', self.ul);
-
-            var firstLi = self.lis[0],
-                slideLength = self.lis.length;
-
-            self.gutter = parseInt(ML.El.getStyl(firstLi, 'marginRight').replace('px', ''));
-            self.width = self.width + self.gutter;
-            self.total = self.getTotal(slideLength, firstLi.offsetWidth);
-
-            // Sets the current slide position & set UL width
-            ML.El.styl(self.ul, {
-                'left': -self.width * self.curr + 'px',
-                'width': (firstLi.offsetWidth * slideLength) + (self.gutter * slideLength) + 'px'
-            });
-
-            if (self.jump) self.createJumpLinks();
-            self.bindEvents();
-            self.callback(true);
-            
-            if (self.rotate) setTimeout(function() {
-                self.cycle();
-            }, self.rotateSpeed);
-        },
-
-        /**
-        * @function getTotal
-        * Returns the real total number of slides. Uses the width to figure out how many <li>s are in the viewer.
-        * Then translates that into the amount of slides to assign to the carousel.
-        *
-        * @param {Number} len - total <li> elements in carousel viewer.
-        * @param {Number} wi - width of the first <li> element.
-        */
-        getTotal: function(len, wi) {
-            var t;
-            for (var i = 0; i < len; i++) {
-                var eq = (wi + this.gutter) * i;
-                if (eq == this.width) t = i;
-            }
-
-            return len / t;
-        },
-
-        /**
-        * @function createJumpLinks
-        * Creates the jump links if it is enabled.
-        */
-        createJumpLinks: function() {
-            var self = this;
-            var jumpUL = ML.El.create('ul');
-
-            self.jump.appendChild(jumpUL);
-
-            for (var i = 0; i < self.total; i++) {
-                var li = ML.El.create('li');
-                li.innerHTML = '<a href="javascript:void(0)" rel="' + i + '">&bull;</a>';
-                jumpUL.appendChild(li);
-            }
-        },
-
-        /**
-        * @function bindEvents
-        * Binds events to necessary elements.
-        */
-        bindEvents: function() {
-            var self = this,
-                jumpLinks = ML._$('a', self.jump);
-
-            // Previous & Next Arrows
-            ML.loop(self.pag, function(item, i) {
-                ML.El.evt(item, 'click', function(e) {
-                    e.preventDefault;
-                    var link = ML.El.clicked(e);
-                    if (ML.hasClass(link, 'inactive') || self.animating) return;
-                    (link.rel == 'nxt') ? self.curr++ : self.curr--;
-
-                    self.stopCycle();
-                    self.slide();
-                    return false;
-                });
-            });
-
-            ML.loop(jumpLinks, function(item, i) {
-                ML.El.evt(item, 'click', function(e) {
-                    var link = ML.El.clicked(e),
-                        num = parseInt(link.rel);
-
-                    if (self.animating || num == self.curr) return;
-
-                    self.curr = num;
-                    self.stopCycle();
-                    self.slide();
-                });
-            });
-        },
-
-        /**
-        * @function slide
-        * Animates the carousel to slide to each desired slide.
-        */
-        slide: function() {
-            var self = this;
-
-            self.animating = true;
-            var desired = self.width * self.curr;
-
-            ML.animate(self.ul, {left: -desired}, function(){
-                self.animating = false;
-                self.callback(false);
-            });
-        },
-
-        /**
-        * @function callback
-        * Function to be called after each slide.
-        *
-        * @param {Boolean} init - intialization of the callback. Used to set elements inactive/active on load.
-        */
-        callback: function(init) {
-            var self = this,
-                curr = self.curr;
-
-            if (!init && func) func(curr, self.el);
-
-            // Arrow control
-            ML.loop(self.pag, function(item, i) {
-                ML.removeClass(item, 'inactive');
-
-                if (item.rel == 'prv' && curr == 0) {
-                    ML.addClass(item, 'inactive');
-                } else if (item.rel == 'nxt' && curr + 1 == self.total) {
-                    ML.addClass(item, 'inactive');
-                }
-            });
-
-            // Jump Links
-            if (self.jump) {
-                var lis = ML._$('li', this.jump);
-
-                ML.loop(lis, function(li, i) {
-                    ML.removeClass(li, 'active');
-                    if (i == curr) ML.addClass(li, 'active');
-                });
-            }
-        },
-
-        /**
-        * @function stopCycle
-        * Stops the autorotation of the carousel.
-        */
-        stopCycle: function() {
-            this.rotate = false;
-            clearTimeout(this.animation);
-        },
-
-        /**
-        * @function cycle
-        * Rotates through the slides in the carousel based on a timer.
-        */
-        cycle: function() {
-            var self = this;
-
-            if (!self.rotate) return;
-
-            (self.curr < self.total) ? self.curr++ : self.curr--;
-
-            if (self.curr == self.total) self.curr = 0;
-
-            self.animation = setTimeout(function() {
-                self.cycle();
-            }, self.rotateSpeed);
-
-            self.slide();
-        }
+  for (var i = 0; i < carouselEl.length; i++) {
+    if (ML.El.data(carouselEl[i], 'carousel') !== null) {
+      settings = ML.ParObj(ML.El.data(carouselEl[i], 'carousel'));
+      carousel = new ML.Carousel(carouselEl[i], settings);
+      carousel.init();
     }
-};
+  }
+})();
