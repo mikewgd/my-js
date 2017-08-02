@@ -1,0 +1,41 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#form-elems">Documentation</a>
+  </div>
+
+<form id="random" method="" action="">
+<label for="month-born">Month you were born: </label>
+<select id="month-born" name="month-born">
+<option value="0">January</option>
+<option value="1">February</option>
+<option value="2">March</option>
+<option value="3">April</option>
+<option value="4">May</option>
+<option value="5">June</option>
+<option value="6">July</option>
+<option value="7">August</option>
+<option value="8">September</option>
+<option value="9">October</option>
+<option value="10">November</option>
+<option value="10">December</option>
+</select>
+
+<div style="height:10px;clear:both;"></div>    
+
+<label for="year-born">Year Range: </label>
+<select id="year-born" name="year-born">
+<option value="1900-1940">1900-1940</option>
+<option value="1950-1990">1950-1990</option>
+<option value="1990-2001">1990-2001</option>
+<option value="2001-2012">2001-2012</option>
+<option value="2013-Curr">2013-Current</option>
+</select>
+
+<div style="height:10px;clear:both;"></div> 
+
+<button type="submit">submit</button>
+</form>
+
+{{>footer}}
