@@ -7,6 +7,7 @@ var data = require('gulp-data');
 
 gulp.task('templates', function () {
   var hbStream = hb()
+    .partials('source/templates/partials/*.hbs')
     .partials('source/templates/*.hbs')
 
   return gulp.src('./source/templates/*.hbs')
