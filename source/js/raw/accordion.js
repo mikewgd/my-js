@@ -1,99 +1,95 @@
 /**
-* @class Accordion
-* @namespace ML
-*
-* @property {HTMLElement} el - accordion element.
-* @property {Boolean} multiple - toggling multiple at a time (true=yes, false=no).
-*/
-ML.Accordion = function(acc, toggle) {
-return {
-el: acc,
-multiple: toggle,
+ * Accordion component.
+ * @constructor
+ * @param {HTMLElement} el The accordion element.
+ * @param {boolean} [multiple=false] Toggling multiple at a time.
+ * @example
+ * var acc1 = new ML.Accordion(ML.$('accordion1'), true);
+ */
+ML.Accordion = function(el, multiple) {
+  var lis = ML._$('li', el);
+  var hashUrl = '';
 
-/**
-* @function setup
-* Setup for the Accordion class, performs necessary functions.
-*/
-setup: function() {
-this.hideLis();
-this.bindEvents();
+  /**
+   * Adds "hide" class to <li> elements.
+   * If an <li> has a class of "open", it stays open.
+   * @param {HTMLElement} [el] When togging one at a time.
+   * @private
+   */
+  function hideLis(el) {
+    ML.loop(lis, function(item, i) {
+      if (el) {
+        if (el.toString == item) {
+          ML.toggleClass(el, 'hide');
+        } else {
+          ML.addClass(item, 'hide');
+        }
+      } else {
+        ML.addClass(item, 'hide');
 
-if (this.el.id && window.location.hash) {
-this.windowSet();
-}
-},
+        if (ML.hasClass(item, 'open')) {
+          ML.removeClass(item, 'hide');
+          ML.removeClass(item, 'open');
+        }
+      }
+    });
+  }
 
-/**
-* @function hideLis
-* Adds class of "hide" to <li> elements.
-* If an <li> has a class of "open", it stays open. This is if you want open by default.
-*
-* @param {HTMLElement} - specifically for toggling one at a time.
-*/
-hideLis: function(el) {
-var li = ML._$('li', this.el);
+  /**
+   * Events bound to elements.
+   * @private
+   */
+  function bindEvents() {
+    ML.loop(ML._$('a', this.el), function(item, i) {
+      if (ML.hasClass(item, 'acc')) {
+        ML.El.evt(item, 'click', function(e) {
+          e.preventDefault();
+          toggle(ML.El.clicked(e).parentNode);
+        });
+      }
+    });
+  }
 
-ML.loop(li, function(item, i) {
-if (el) {
-if (el == item) {
-ML.toggleClass(el, 'hide');
-} else {
-ML.addClass(item, 'hide');
-}
-} else {
-ML.addClass(item, 'hide');
+  /**
+   * Sets the current active tab based on hash. The URL format is as follows: 
+   * "#acc-{ID}-{TAB INDEX}"
+   * @private
+   */
+  function windowSet() {
+    var activeTab = ML._$('li', ML.$(hashUrl[1]));
+    toggle(activeTab[parseInt(hashUrl[2])]);
+  }
+  
+  /**
+   * Handles toggling the <li> element.
+   * @param {HTMLElement} li Parent element to accordion toggle, i.e. <li>
+   * @private
+   */
+  function toggle(li) {
+    if (multiple) {
+      ML.toggleClass(li, 'hide');
+    } else {
+      hideLis(li);
+    }
+  }
 
-if (ML.hasClass(item, 'open')) {
-ML.removeClass(item, 'hide');
-ML.removeClass(item, 'open');
-}
-}
-});
-},
+  hideLis();
+  bindEvents();
 
-/**
-* @function bindEvents
-* Binds events to necessary elements.
-*/
-bindEvents: function() {
-var self = this;
-
-ML.loop(ML._$('a', this.el), function(item, i) {
-if (ML.hasClass(item, 'acc')) {
-
-ML.El.evt(item, 'click', function(e) {
-self.expandCollapse(ML.El.clicked(e).parentNode);
-});
-}
-});
-},
-
-/**
-* @function windowSet
-* Sets the current active tab based on hash.
-* URL Format: #acc-{ID of ACCORDION ELEMENT}-{TAB INDEX}
-*/
-windowSet: function() {
-var param = window.location.hash.split('-'),
-acc = param[1],
-tab = parseInt(param[2]),
-activeTab = ML._$('li', ML.$(acc));
-
-this.expandCollapse(activeTab[tab]);
-},
-
-/**
-* @function expandCollapse
-* Shows/Hides the accordion content based on the link you have clicked.
-*
-* @param {HTMLElement} li - parent element to the accordion toggle, i.e. <li>
-*/
-expandCollapse: function(li) {
-if (this.multiple) {
-ML.toggleClass(li, 'hide');
-} else {
-this.hideLis(li);
-}
-}
-}
+  if (el.id && window.location.hash) {
+    hashUrl = window.location.hash.split('-');
+    windowSet();
+  }
 };
+
+(function() {
+  var accordion = ML._$('*');
+  var toggle = false;
+
+  for (var i = 0; i < accordion.length; i++) {
+    if (ML.El.data(accordion[i], 'accordion') !== null) {
+      toggle = (ML.El.data(accordion[i], 'accordion') === 'multiple') ? true : false;
+      new ML.Accordion(accordion[i], toggle);
+    }
+  }
+})();
