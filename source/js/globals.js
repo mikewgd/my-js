@@ -2,6 +2,9 @@ var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
 /** @namespace */
+ML.FormElements = {};
+
+/** @namespace */
 ML = {
   /**
    * Returns HTMLElement based on id attriube.
@@ -58,7 +61,7 @@ ML = {
    */
   loop: function(arr, callback) {
     for (i = 0, len = arr.length; i < len; i++) {
-      if (typeof arr[i] == 'object') ML.El.clean(arr[i]);
+      if (typeof arr[i] === 'object') ML.El.clean(arr[i]);
       callback.call(this, arr[i], i);
     }
   },
@@ -72,7 +75,7 @@ ML = {
     var h = 0;
     var w = 0;
 
-    if (typeof(window.innerWidth) == 'number') {
+    if (typeof(window.innerWidth) === 'number') {
       w = window.innerWidth;
       h = window.innerHeight;
     } else if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
@@ -123,7 +126,7 @@ ML = {
         this.el = el;
         this.getPropertyValue = function(prop) {
           var re = /(\-([a-z]){1})/g;
-          if (prop == 'float') prop = 'styleFloat';
+          if (prop === 'float') prop = 'styleFloat';
           if (re.test(prop)) {
             prop = prop.replace(re, function() {
               return arguments[2].toUpperCase();
@@ -131,10 +134,10 @@ ML = {
           }
 
           return el.currentStyle[prop] ? el.currentStyle[prop] : null;
-        }
+        };
 
         return this;
-      }
+      };
     }
   },
 
@@ -147,10 +150,9 @@ ML = {
    */
   ParObj: function(str, base, sep) {
     var obj = {};
-    var passedData = str;
-    var stripData = (!base) ? passedData : passedData.substr(passedData.indexOf(base), passedData.length);
-    var sep = sep || ':';
-    var string = (!base) ? passedData : stripData.replace(base, '');
+    var stripData = (!base) ? str : str.substr(str.indexOf(base), str.length);
+    sep = sep || ':';
+    var string = (!base) ? str : stripData.replace(base, '');
     var arr = string.split(sep);
 
     for (i = 0, len = arr.length; i < len; i += 2) {
@@ -209,7 +211,7 @@ ML = {
    */
   addClass: function(elem, classN) {
     var currClass = this.trim(elem.className);
-    var addedClass = (currClass.length == 0) ? classN : currClass + ' ' + classN;
+    var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
 
     if (!this.hasClass(elem, classN)) elem.className = addedClass;
   },
@@ -220,9 +222,13 @@ ML = {
    * @param {string} classN The class name to toggle.
    */
   toggleClass: function(elem, classN) {
-    (ML.hasClass(elem, classN)) ? ML.removeClass(elem, classN) : ML.addClass(elem, classN);
+    if (ML.hasClass(elem, classN)) {
+      ML.removeClass(elem, classN);
+    } else {
+      ML.addClass(elem, classN);
+    }
   }
-}
+};
 
 /** @namespace */
 ML.El = {
@@ -240,7 +246,7 @@ ML.El = {
    * @param {boolean} [capture]
    */
   evt: function(el, type, func, capture) {
-    if (capture == undefined) capture = false;
+    if (capture === undefined) capture = false;
 
     if (el.addEventListener) // other browsers
       el.addEventListener(type, func, capture);
@@ -292,13 +298,18 @@ ML.El = {
 
     for (var i = 0, len = node.childNodes.length; i < len; i++) {
       child = node.childNodes[i];
-      if (child.nodeType == 3 && !/\S/.test(child.nodeValue)) {
-        node.removeChild(child);
-        i--;
+
+      if (child !== undefined) {
+        if (child.nodeType === 3 && !/\S/.test(child.nodeValue)) {
+          node.removeChild(child);
+          i--;
+        }
+        if (child.nodeType === 1) {
+          ML.El.clean(child);
+        }
       }
-      if (child.nodeType == 1) {
-        ML.El.clean(child);
-      }
+
+      
     }
 
     return node;
@@ -312,7 +323,7 @@ ML.El = {
   clicked: function(evt) {
     if (!evt) evt = window.event;
     var element = evt.target || evt.srcElement;
-    if (element.nodeType == 3) element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
+    if (element.nodeType === 3) element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
     return element;
   },
 
@@ -348,7 +359,7 @@ ML.El = {
       height: elem.style.height || elem.offsetHeight,
       x: this.position(elem).x,
       y: this.position(elem).y
-    }
+    };
   },
 
   /**
@@ -384,10 +395,14 @@ ML.El = {
   create: function(element, attrs) {
     var elem = document.createElement(element);
 
-    if (arg) {
+    if (attrs) {
       for (var attr in attrs) {
         // IE does not support support setting class name with set attribute
-        ([attr] == 'class') ? elem.className = attrs[attr] : elem.setAttribute([attr], attrs[attr]);
+        if ([attr] === 'class') {
+          elem.className = attrs[attr];
+        } else {
+          elem.setAttribute([attr], attrs[attr]);
+        }
       }
     }
 
@@ -400,10 +415,10 @@ ML.El = {
    * @param {string} styleProp Style property to get the value of.
    * @return {object}
    */
-  getStyles: function(element, styleProp) {
+  getStyle: function(element, styleProp) {
     var y;
 
-    if (element.currentStyle == undefined) {
+    if (element.currentStyle === undefined) {
       ML.compStyle();
       y = window.getComputedStyle(element, "").getPropertyValue(styleProp);
     } else {
@@ -433,9 +448,9 @@ ML.El = {
   getAttr: function(element, attr) {
     var att;
 
-    if (attr == 'class') {
+    if (attr === 'class') {
       att = element.className;
-    } else if (attr == 'style') {
+    } else if (attr === 'style') {
       att = element.style;
     } else {
       att = element.getAttribute(attr);
@@ -453,7 +468,7 @@ ML.El = {
   data: function(element, attr) {
     return element.getAttribute('data-' + attr);
   }
-}
+};
 
 /**
  * Animate elements easily with this constructor. Credit: http://learn.javascript.ru/js-animation, http://learn.javascript.ru/files/tutorial/js/animate.js But modified
@@ -466,12 +481,17 @@ ML.El = {
  * @param {string} [settings.easing=linear] Type of animation (bounce, ease, etc..), defaults to linear
  * @param {function} [callback] The function to be called after animation is complete.
  * @example
- * new ML.Animate(ML.$('el'), {width: 100, height: 100}, {delay: 15, duration: 500, easing: 'bouce'}, function() {
+ * new ML.Animate(ML.$('el'), {width: 100, height: 100}, {delay: 15, duration: 500, easing: 'bounce'}, function() {
  *   alert('animation is complete');
  * });
  */
 ML.Animate = function(el, props, settings, callback) {
-  /** @enum {string|boolean} ML.Animate default settings. */
+  /**
+   * Animate defaults.
+   * @type {object}
+   * @property {number} DURATION The default duration of the animation.
+   * @property {number} DELAY The default delay of the animation.
+   */
   var DEFAULTS = {
     DURATION: 400,
     DELAY: 13
@@ -480,11 +500,11 @@ ML.Animate = function(el, props, settings, callback) {
   var timer = null;
   var currProps = {};
   var progress = false;
-  var time = new Date;
+  var time = new Date();
   var duration = settings.duration || DEFAULTS.DURATION;
   var delay = settings.delay || DEFAULTS.DELAY;
-  var complete = (typeof settings == 'function') ? settings : callback;
-  var easing = (settings.easing == undefined) ? linear : ML.animate[settings.easing];
+  var complete = (typeof settings === 'function') ? settings : callback;
+  var easing = (settings.easing === undefined) ? linear : ML.animate[settings.easing];
 
   /**
    * Gets the current CSS values of the properties being animated.
@@ -495,10 +515,10 @@ ML.Animate = function(el, props, settings, callback) {
     currProps = {};
 
     for (var prop in props) {
-      currProp = parseFloat(ML.El.getStyl(el, prop).replace('px', ''));
+      currProp = parseFloat(ML.El.getStyle(el, prop).replace('px', ''));
       currProps[prop] = currProp;
 
-      if (prop == 'opacity') {
+      if (prop === 'opacity') {
         currProps.filter = 'alpha(opacity=' + prop * 100 + ')';
       }
     }
@@ -512,7 +532,7 @@ ML.Animate = function(el, props, settings, callback) {
     getCurrs();
 
     timer = setInterval(function() {
-      progress = (new Date - time) / duration;
+      progress = (new Date() - time) / duration;
 
       if (progress > 1) progress = 1;
 
@@ -521,7 +541,7 @@ ML.Animate = function(el, props, settings, callback) {
         el.style[prop] = value + 'px';
       }
 
-      if (progress == 1) {
+      if (progress === 1) {
         clearInterval(timer);
         if (complete) complete();
       }
@@ -613,7 +633,7 @@ ML.Ajax = function(params) {
   var method = params.method || 'GET';
   var xmlhttp;
 
-  if (window.location.host == '') {
+  if (window.location.host === '') {
     params.success('ERROR: Must be hosted on a server');
     return;
   } else {
@@ -623,10 +643,10 @@ ML.Ajax = function(params) {
       var _this = this;
       if (params.beforeRequest) params.beforeRequest();
 
-      if (_this.readyState == 4) {
+      if (_this.readyState === 4) {
         if (params.complete) params.complete();
 
-        if (_this.status == 200) {
+        if (_this.status === 200) {
           params.success(_this.responseText);
         } else {
           params.error({
@@ -646,32 +666,32 @@ ML.Ajax = function(params) {
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function(e) {
     "use strict";
-    if (this == null) {
-      throw new TypeError
+    if (this === null) {
+      throw new TypeError();
     }
     var t = Object(this);
     var n = t.length >>> 0;
     if (n === 0) {
-      return -1
+      return -1;
     }
     var r = 0;
     if (arguments.length > 1) {
       r = Number(arguments[1]);
       if (r != r) {
-        r = 0
+        r = 0;
       } else if (r != 0 && r != Infinity && r != -Infinity) {
-        r = (r > 0 || -1) * Math.floor(Math.abs(r))
+        r = (r > 0 || -1) * Math.floor(Math.abs(r));
       }
     }
     if (r >= n) {
-      return -1
+      return -1;
     }
     var i = r >= 0 ? r : Math.max(n - Math.abs(r), 0);
     for (; i < n; i++) {
       if (i in t && t[i] === e) {
-        return i
+        return i;
       }
     }
-    return -1
-  }
+    return -1;
+  };
 }
