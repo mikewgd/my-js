@@ -29,7 +29,7 @@ gulp.task('serve', function() {
     'source/data/*.json'
     ], function(event) {
       if (isOnlyChange(event)) {
-        runSequence('clean', 'templates', 'css', 'scripts', 'reloader');
+        runSequence('clean', 'templates', 'css', 'images', 'files', 'scripts', 'reloader');
       }
     });
 

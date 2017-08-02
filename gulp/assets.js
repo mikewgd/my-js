@@ -17,8 +17,7 @@ var concatSrc = {
   'modal.js': [globalJs, 'source/js/raw/modal.js'],
   'radiocheck.js': [globalJs, 'source/js/raw/radiocheck.js'],
   'select.js': [globalJs, 'source/js/raw/select.js'],
-  'tooltip.js': [globalJs, 'source/js/raw/tooltip.js'],
-  'toggler.js': [globalJs, 'source/js/raw/toggler.js']
+  'tooltip.js': [globalJs, 'source/js/raw/tooltip.js']
 };
 
 // JS Linting
@@ -31,7 +30,18 @@ gulp.task('lint', function() {
 gulp.task('css', function() {
   return gulp.src('source/css/*')
     .pipe(gulp.dest('dist/css'));
-})
+});
+
+gulp.task('images', function() {
+  return gulp.src('source/images/**/*')
+    .pipe(gulp.dest('dist/images'));
+});
+
+gulp.task('files', function() {
+  return gulp.src('source/files/*')
+    .pipe(gulp.dest('dist/files'));
+});
+
 gulp.task('uglify', function () {
   concat(concatSrc)
   .pipe(uglify())
