@@ -1,100 +1,122 @@
-(function () {	
+(function () {
   ML.FormElements.RadioCheckboxes = function() {
-  var inputs = [];
-  var customInputs = [];
-  var attachedEvents = {
-    click: [],
-    focus: [],
-    blur: []
-  };
 
-  /**
-  * @function setup
-  * Gets all the radio buttons and checkboxes on the page and stores them in an array.
-  * Creates a custom input (<span> element) for each <input> element and then its inserted into the DOM.
-  * Events placed on the <input>s themselves are added to an object to store for later.
-  *
-  * @param {HTMLElement} el (optional) - an element to look for radio buttons and checkboxes. Good for when adding to the DOM.
-  */
-  this.setup = function(el) {
-    inputs = el ? ML._$('input', el) : ML._$('input');
+    /** @type {array} All radios and checkboxes on the page are stored here. */
+    var inputs = [];
 
-    ML.loop(inputs, function(input, i) {
-    if (ML.hasClass(input, 'system') || ML.hasClass(input, 'styled')) return;
-    if (input.type == 'checkbox' || input.type == 'radio') self.inputs.push(input);
-    });
+    /** @type {array} Custom radios and checkboxes are stored here. */
+    var customInputs = [];
 
-    ML.loop(self.inputs, function (inp, i) {
-    self.customs[i] = ML.El.create('span', {'class':inp.type});
-    ML.addClass(inp, 'styled');
+    /** @type {object} Events attached to <input> elements. */
+    var attachedEvents = {
+      click: [],
+      focus: [],
+      blur: []
+    };
 
-    ML.El.clean(inp.parentNode);
+    /**
+     * Loops through all inputs on the page and creates a <span> that
+     * will be used as the custom input.
+     * Events placed on the <input> are stored in an object for later use.
+     * @param {HTMLElement} [el=document] Element to get radio buttons and checkboxes.
+     * Good to use when adding new elements in the DOM.
+     */
+    this.setup = function(el) {
+      inputs = el ? ML._$('input', el) : ML._$('input');
 
-    // adds the custom input after the input
-    inp.parentNode.insertBefore(self.customs[i], inp.nextSibling);
+      ML.loop(inputs, function(input, i) {
+        if (ML.hasClass(input, 'system') || ML.hasClass(input, 'styled')) return;
+        if (input.type == 'checkbox' || input.type == 'radio') {
+          inputs.push(input);
 
-    if(inp.checked == true) {ML.addClass(self.customs[i], 'checked');}
-    if(inp.disabled == true) {ML.addClass(self.customs[i], 'disabled');}
+          createCustom(input);
+          pushEvents(input);
+        }
+      });
 
-    self.pushEvents(inp);
-    });
+      bindEvents();
+    };
 
-    self.bindEvents();
-  };
+    /**
+     * Creates the custom input.
+     * @param {HTMLELement} input The <input> element to customize.
+     * @private
+     */
+    function createCustom(input) {
+      var span = ML.El.create('span', {'class': input.type});
 
-/**
-* @function pushEvents
-* Any events attached to the radio buttons or checkboxes are pushed into an array to be used later.
-*
-* @param {HTMLElement} input - radio button or checkbox element.
-*/
-function pushEvents(input) {
-var events = ML.El.Events;
-for (var i=0; i<events.length; i++) {
-var elem = events[i][0], type = events[i][1], func = events[i][2];
-// Only pushes the events if <input> has any events attached to it.	
-if (elem == input) this.attachedEvents[type].push([elem, func]);	
-}
-}
+      customInputs.push(input);
+      ML.addClass(input, 'styled');
 
-/**
-* @function attachOldEvt
-* Attaches the old events stored in the event object to be applied.
-*
-* @param {HTMLElement} el - the element to see if it has an event attached to it.
-* @param {String} evtType - type of event to look for.
-*/
-function attachOldEvt(el, evtType) {
-var evt = this.attachedEvents[evtType], inputEvt;
-for (i=0; i<evt.length; i++) {
-var attachedEl = evt[i][0];
-if (attachedEl == el) inputEvt = evt[i][1];
-}
+      ML.El.clean(input.parentNode);
 
-return inputEvt ? inputEvt.call() : (function(){return;});
-}
+      // adds the custom input after the input
+      input.parentNode.insertBefore(span, input.nextSibling);
 
-/**
-* @function bindEvents
-* Binds events to the custom inputs (<span>s) and <input>s.
-*/
-function bindEvents() {
-var self = this;
+      if (input.checked == true) ML.addClass(span, 'checked');
+      if (input.disabled == true) ML.addClass(span, 'disabled');
+    }
 
-ML.loop(self.inputs, function(inp, i) {
-ML.El.evt(inp, 'focus', function(e) {self.focusBlur(e);});
-ML.El.evt(inp, 'blur', function(e) {self.focusBlur(e);});
-ML.El.evt(inp, 'click', function(e) {self.ref();});
+    /**
+     * Any events attached to the <input> are pushed into an array to be used later.
+     * @param {HTMLElement} input The <input> to get attached events for.
+     * @private
+     */
+    function pushEvents(input) {
+      var events = ML.El.Events;
+      var elem = null;
+      var type = null;
+      var func = null;
 
-if (!ML.hasClass(self.customs[i], 'disabled')) {
-ML.El.evt(self.customs[i], 'mouseup', function(e) {
-var clicked = ML.El.clicked(e);
-self.check.call(clicked);
-self.attachOldEvt(inp, 'click');
-});
-}
-});
-}
+      for (var i = 0, len = events.length; i < len; i++) {
+        elem = events[i][0];
+        type = events[i][1];
+        func = events[i][2];
+
+        // Only pushes the events if <input> has any events attached to it.
+        if (elem === input) attachedEvents[type].push([elem, func]);
+      }
+    }
+
+    /**
+     * Attaches the old events stored in the event object to be applied.
+     * @param {HTMLElement} el The element to find event attached to it.
+     * @param {string} eventType The type of event to look for.
+     * @return {function}
+     * @private
+     */
+    function attachOldEvt(el, eventType) {
+      var evt = attachedEvents[eventType];
+      var inputEvent = null;
+      var attachedEl = null;
+
+      for (var i = 0, len = evt.length; i < len; i++) {
+        attachedEl = evt[i][0];
+        if (attachedEl === el) inputEvent = evt[i][1];
+      }
+
+      return inputEvent ? inputEvent.call() : (function(){return;});
+    }
+
+    /**
+     * Events bound to the <input> and custom inputs <span>.
+     * @return {[type]} [description]
+     */
+    function bindEvents() {
+      ML.loop(inputs, function(input, i) {
+        ML.El.evt(input, 'focus', function(e) {focusBlur(e);});
+        ML.El.evt(input, 'blur', function(e) {focusBlur(e);});
+        ML.El.evt(input, 'click', function(e) {ref();});
+
+        if (!ML.hasClass(customs[i], 'disabled')) {
+          ML.El.evt(customs[i], 'mouseup', function(e) {
+            var clicked = ML.El.clicked(e);
+            check.call(clicked);
+            attachOldEvt(input, 'click');
+          });
+        }
+      });
+    }
 
 /**
 * @function focusBlur
@@ -109,14 +131,14 @@ span =  inp.nextSibling;
 
 if (evt.type == 'focus') {
 ML.addClass(span, "focus");
-} else { 
+} else {
 ML.removeClass(span, "focus");
 }
 
 this.attachOldEvt(inp, evt.type);
 
 if (typeof e.preventDefault !== 'undefined') {
-e.preventDefault();    
+e.preventDefault();
 }
 return false;
 }
@@ -145,7 +167,7 @@ ML.addClass(this, 'checked');
 input.checked = true;
 } else {
 if (input.checked == true) {
-ML.removeClass(this, 'checked');	
+ML.removeClass(this, 'checked');
 input.checked = false;
 } else {
 ML.addClass(this, 'checked');
@@ -170,22 +192,5 @@ checked ? ML.addClass(custom, 'checked') : ML.removeClass(custom, 'checked');
 }
 };
 
-new ML.FormElements.RadioCheckboxes().setup();
-
-/**
-* @class RC
-* @namespace ML
-* Custom radio and checkbox buttons.
-*
-* @property {Object} inputs - all radios and checkboxes on the page are stored here.
-* @property {Object} custom - custom radios and checkboxes are stored here.
-* @property {Object} attachedEvents - events attached to <input> elements, i.e click/focus/blur event(s).
-*/
-ML.RC = {
-inputs: [],
-customs: [],
-attachedEvents: {click: [], focus: [], blur: []},
-}
-
-ML.RC.setup();	
+  new ML.FormElements.RadioCheckboxes().setup();
 }());
