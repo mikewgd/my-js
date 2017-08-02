@@ -7,7 +7,8 @@
  * @param {boolean} [settings.rotate=false] The carousel will rotate automatically.
  * @param {boolean} [settings.dots=false] Dot navigation.
  * @param {boolean} [settings.nav=true] Arrow navigation.
- * @param {function(): (number)} func Callback function after slide has animated. The current slide index is returned.
+ * @param {function(): (number)} func Callback function after slide has animated.
+ * The current slide index is returned.
  * @example
  * var carousel = new ML.Carousel(ML.$('initCarousel'), {
  *   rotate: true
@@ -36,7 +37,7 @@ ML.Carousel = function(el, settings, func) {
   var dots = settings.dots || DEFAULTS.DOTS;
   var nav = settings.nav || DEFAULTS.NAV;
   var self = this;
-  
+
   var slides = getSlides();
   var ul = null;
   var nextButton = null;
@@ -57,13 +58,13 @@ ML.Carousel = function(el, settings, func) {
     var carouselHtml = el.innerHTML;
     var gutter = parseInt(ML.El.getStyle(slides[0], 'margin-right').replace('px', ''));
     width = width + gutter;
-    
+
     el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHtml + '</div>';
     ul = ML._$('ul', el)[0];
     ul.style.left = -(width * current) + 'px';
 
     if (nav) createNav();
-    if (dots) createDots();    
+    if (dots) createDots();
 
     bindEvents();
     callback(true);
@@ -80,7 +81,7 @@ ML.Carousel = function(el, settings, func) {
    */
   this.next = function() {
     if ((current + 1) === total) {
-      return; 
+      return;
     }
 
     current++;
@@ -206,7 +207,7 @@ ML.Carousel = function(el, settings, func) {
   function slide() {
     var desired = width * current;
     animating = true;
-  
+
     ML.Animate(ul, {left: -desired}, function(){
       animating = false;
       callback(false);
@@ -246,7 +247,8 @@ ML.Carousel = function(el, settings, func) {
 
   /**
   * Function to be called after each slide.
-  * @param {boolean} init Intialization of the callback. Used to set elements inactive/active on load.
+  * @param {boolean} init Intialization of the callback.
+  * Used to set elements inactive/active on load.
   * @private
   */
   function callback(init) {
