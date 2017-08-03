@@ -24,6 +24,7 @@ ML.Carousel = function(el, settings, func) {
    * @property {boolean} ROTATE Automatically rotate the slides.
    * @property {boolean} DOTS Dot navigation.
    * @property {boolean} NAV Arrow navigation.
+   * @private
    */
   var DEFAULTS = {
     CURRENT: 0,
