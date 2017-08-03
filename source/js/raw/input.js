@@ -4,7 +4,7 @@
  * @constructor
  * @param {HTMLElement} input The input element.
  * @example
- * var input = new ML.InputControl(ML.$('newInput'));
+ * var input = new ML.InputControl(ML.$('input'));
  */
 ML.InputControl = function(input) {
   var placeholder = ML.El.getAttr(input, 'placeholder');
