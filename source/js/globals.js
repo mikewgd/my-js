@@ -2,9 +2,6 @@ var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
 /** @namespace */
-ML.FormElements = {};
-
-/** @namespace */
 ML = {
   /**
    * Returns HTMLElement based on id attriube.
@@ -148,7 +145,7 @@ ML = {
    * @param {string} sep Used to separate each property.
    * @return {object}
    */
-  ParObj: function(str, base, sep) {
+  parObj: function(str, base, sep) {
     var obj = {};
     var stripData = (!base) ? str : str.substr(str.indexOf(base), str.length);
     sep = sep || ':';
@@ -662,7 +659,10 @@ ML.Ajax = function(params) {
   }
 };
 
-// Allows indexOf to work cross browser
+/** @namespace */
+ML.FormElements = {};
+
+// Polyfill: indexOf
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function(e) {
     "use strict";

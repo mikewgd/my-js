@@ -279,7 +279,7 @@ ML.Carousel = function(el, settings, func) {
 
   for (var i = 0; i < carouselEl.length; i++) {
     if (ML.El.data(carouselEl[i], 'carousel') !== null) {
-      settings = ML.ParObj(ML.El.data(carouselEl[i], 'carousel'));
+      settings = ML.parObj(ML.El.data(carouselEl[i], 'carousel'));
       carousel = new ML.Carousel(carouselEl[i], settings);
       carousel.init();
     }
