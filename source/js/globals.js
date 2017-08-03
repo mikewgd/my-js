@@ -1,7 +1,10 @@
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
-/** @namespace */
+/** 
+ * The main namespace.
+ * @namespace
+ */
 ML = {
   /**
    * Returns HTMLElement based on id attriube.
@@ -227,7 +230,10 @@ ML = {
   }
 };
 
-/** @namespace */
+/**
+* Element based functions.
+* @namespace
+*/
 ML.El = {
   /**
    * Stores events bound to elements.
@@ -488,6 +494,7 @@ ML.Animate = function(el, props, settings, callback) {
    * @type {object}
    * @property {number} DURATION The default duration of the animation.
    * @property {number} DELAY The default delay of the animation.
+   * @private
    */
   var DEFAULTS = {
     DURATION: 400,
@@ -659,7 +666,10 @@ ML.Ajax = function(params) {
   }
 };
 
-/** @namespace */
+/** 
+ * The namespace for form elements.
+ * @namespace
+ */
 ML.FormElements = {};
 
 // Polyfill: indexOf
