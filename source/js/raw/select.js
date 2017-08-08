@@ -183,8 +183,6 @@ ML.FormElements.Select = function() {
           'text': clicked.innerHTML
         };
 
-        console.log(custom.previousSibling)
-
         if (ML.hasClass(li, 'disabled')) return;
 
         if (args.value !== ML.El.getAttr(custom, 'sel-data-value')) {
@@ -244,12 +242,13 @@ ML.FormElements.Select = function() {
     var select = ML.El.clicked(e);
     var div =  select.nextSibling;
     
+    // @TODO: Should use toggleClass conditional.
     if (evt.type == 'focus') {
       ML.addClass(div, 'focus');
     } else { 
       if (ML.hasClass(div, 'active')) ML.removeClass(div, 'active');
       ML.removeClass(div, 'focus');
-    }3
+    }
     
     attachOldEvt(select, evt.type);
     

@@ -190,6 +190,7 @@ ML.FormElements.RadioCheckboxes = function() {
       ML.addClass(this, 'checked');
       input.checked = true;
     } else {
+      // @TODO: Should use toggleClass conditional.
       if (input.checked) {
         ML.removeClass(this, 'checked');
         input.checked = false;
@@ -213,7 +214,12 @@ ML.FormElements.RadioCheckboxes = function() {
       checked = inputs[i].checked;
 
       if (custom) {
-        checked ? ML.addClass(custom, 'checked') : ML.removeClass(custom, 'checked');
+        // @TODO: Should use toggleClass conditional.
+        if (checked) {
+          ML.addClass(custom, 'checked');
+        } else {
+          ML.removeClass(custom, 'checked');
+        }
       }
     }
   }
