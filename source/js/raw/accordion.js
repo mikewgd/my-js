@@ -19,6 +19,7 @@ ML.Accordion = function(el, multiple) {
   function hideLis(el) {
     ML.loop(lis, function(item, i) {
       if (el) {
+        // @TODO: Should use toggleClass conditional.
         if (el.toString == item) {
           ML.toggleClass(el, 'hide');
         } else {
