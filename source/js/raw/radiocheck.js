@@ -69,8 +69,8 @@ ML.FormElements.RadioCheckboxes = function() {
     // adds the custom input after the input
     input.parentNode.insertBefore(span, input.nextSibling);
 
-    if (input.checked == true) ML.addClass(span, 'checked');
-    if (input.disabled == true) ML.addClass(span, 'disabled');
+    if (input.checked) ML.addClass(span, 'checked');
+    if (input.disabled) ML.addClass(span, 'disabled');
   }
 
   /**
