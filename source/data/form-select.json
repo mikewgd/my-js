@@ -1,4 +1,25 @@
 {
-  "title": "Form Elements",
-  "script": "select"
+  "title": "Custom Form Elements - Select menu",
+  "script": "select",
+  "select1": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ],
+  "select2": [
+    "1900-1940",
+    "1950-1990",
+    "1990-2001",
+    "2001-2012",
+    "2013-Current"
+  ]
 }
