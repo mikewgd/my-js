@@ -1,0 +1,34 @@
+{
+  "title": "Directory",
+  "script": false,
+  "pages": [
+    {
+      "title": "Accordion",
+      "page": "accordion"
+    },
+    {
+      "title": "Carousel",
+      "page": "carousel"
+    },
+    {
+      "title": "Modal",
+      "page": "modal"
+    },
+    {
+      "title": "Tooltip",
+      "page": "tooltop"
+    },
+    {
+      "title": "Clear Input Placeholder Text",
+      "page": "input"
+    },
+    {
+      "title": "Custom Form Elements - Radio buttons & Checkboxes",
+      "page": "radiocheck"
+    },
+    {
+      "title": "Custom Form Elements - Select menu",
+      "page": "select"
+    }
+  ]
+}

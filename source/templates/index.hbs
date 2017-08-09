@@ -1,0 +1,13 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+  </div>
+      
+  <ul class="list">
+  {{#pages}}
+    <li><a href="{{this.page}}.html">{{this.title}}</a></li>
+  {{/pages}}
+  </ul>
+
+{{> footer}}
