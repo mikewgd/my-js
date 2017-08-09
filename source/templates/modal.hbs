@@ -1,0 +1,40 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#overlays-modals">Documentation</a>
+  </div>
+
+  <h2>Examples:</h2>
+  <ul class="list">
+  {{#examples}}
+    <li>
+      <a href="#" rel="{{this.rel}}" data-modal="{{this.modal}}">{{this.title}}</a>
+      <span> &ndash; {{this.description}}</span>
+    </li>
+  {{/examples}}
+    {{!-- <li><a href="files/ajax-overlay.html" data-modal="width:600:height:150" rel="ajax">Modal (Settings Applied, aJax)</a> - Same settings as above, but the modal is created by the JS. The content is Ajax'ed in.</li> --}}
+    {{!-- <li><a id="invokeModal" rel="unique-id3" href="javascript:void(0);">Invoke Modal Manually</a> - Usage shown in the code.</li> --}}
+  </ul>
+
+{{#> footer}}
+  <div class="modal hidden" id="unique-id3">
+    <div class="header">
+      <h1>Hello! I am a modal header</h1>
+      <a href="javascript:void(0);" class="close">X</a>
+    </div>
+    <div class="content">
+      <p>I am some modal text</p>
+    </div>
+  </div>
+
+  <script>
+    ML.El.evt(window, 'load', function() {
+      ML.ModalHandler();
+
+      ML.El.evt(ML.$('invokeModal'), 'click', function (e) {
+        new ML.Modal(ML.El.clicked(e), {width:200, height:'200'}).show(true);
+      });
+    });
+  </script>
+{{/footer}}

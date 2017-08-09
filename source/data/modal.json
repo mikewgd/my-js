@@ -1,0 +1,36 @@
+{
+  "title": "Modal",
+  "script": "modal",
+  "examples": [
+    {
+      "rel": "unique-id3",
+      "modal": "",
+      "title": "Default settings",
+      "description": "Default settings (width/height)."
+    },
+    {
+      "rel": "unique-id3",
+      "modal": "width:600",
+      "title": "Set width",
+      "description": "600px width and default height."
+    },
+    {
+      "rel": "unique-id3",
+      "modal": "height:150",
+      "title": "Set height",
+      "description": "Default width and a set height of 150px."
+    },
+    {
+      "rel": "unique-id3",
+      "modal": "width:600:height:150",
+      "title": "Settings applied",
+      "description": "600px width a set height of 150px."
+    },
+    {
+      "rel": "unique-id3",
+      "modal": "width:600:height:150:header:Amodesigns",
+      "title": "Settings applied, iFrame",
+      "description": "Same settings as above, but the modal is created by the JS. It's for having an iframe inside a modal."
+    }
+  ]
+}
