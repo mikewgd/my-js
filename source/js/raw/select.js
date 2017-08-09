@@ -189,6 +189,8 @@ ML.FormElements.Select = function() {
           selectOption(custom, args);
           attachOldEvt(custom.previousSibling, 'change');
         }
+
+        e.preventDefault();
       });
 
       // Removes selected state from <li>
@@ -203,9 +205,14 @@ ML.FormElements.Select = function() {
     });
 
     ML.El.evt(document, 'click', function(e) {
-      clicked = ML.El.clicked(e);
+      var clicked = ML.El.clicked(e);
 
       if (ML.hasClass(clicked, 'disabled') || ML.hasClass(clicked.parentNode, 'disabled')) return;
+
+      if (ML.hasClass(clicked.parentNode, 'select')) {
+        e.preventDefault();
+      }
+
       toggle(clicked, clicked.parentNode);
     });
 
@@ -243,7 +250,7 @@ ML.FormElements.Select = function() {
     var div =  select.nextSibling;
     
     // @TODO: Should use toggleClass conditional.
-    if (evt.type == 'focus') {
+    if (evt.type === 'focus') {
       ML.addClass(div, 'focus');
     } else { 
       if (ML.hasClass(div, 'active')) ML.removeClass(div, 'active');
@@ -289,7 +296,7 @@ ML.FormElements.Select = function() {
    */
   function toggle(clicked, clickedParent) {
     if (ML.hasClass(clickedParent, 'select')) {
-      if (clicked.className == 'dropdown-link') {
+      if (clicked.className === 'dropdown-link') {
         var div = clickedParent;
         
         if (!ML.hasClass(div, 'focus')) ML.addClass(div, 'focus');
