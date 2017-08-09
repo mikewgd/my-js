@@ -20,15 +20,15 @@
     },
     {
       "title": "Clear Input Placeholder Text",
-      "page": "input"
+      "page": "form-input-control"
     },
     {
       "title": "Custom Form Elements - Radio buttons & Checkboxes",
-      "page": "radiocheck"
+      "page": "form-radios"
     },
     {
       "title": "Custom Form Elements - Select menu",
-      "page": "select"
+      "page": "form-select"
     }
   ]
 }
