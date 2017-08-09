@@ -10,8 +10,8 @@
 
 
 /* INPUT CONTROL */
-.placeholder {color:#999;}
-.focus {border-color:#F93;}
+.input-placeholder {color:#999;}
+.input-focus {border-color:#F93;}
 
 /* CAROUSEL */
 .carousel .carousel-viewer {overflow-y:hidden; overflow-x:scroll; position:relative; /* needed for ie */}

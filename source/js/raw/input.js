@@ -17,18 +17,18 @@ ML.InputControl = function(input) {
   function bindEvents() {
     ML.El.evt(input, 'focus', function (e){
       var inp = ML.El.clicked(e);
-      ML.addClass(inp, 'focus');
+      ML.addClass(inp, 'input-focus');
       moveCursor(inp);
       cursorTimer = setTimeout(function() {moveCursor(inp);}, 1);
     });
 
     ML.El.evt(input, 'blur', function (e){
-      ML.removeClass(ML.El.clicked(e), 'focus');
+      ML.removeClass(ML.El.clicked(e), 'input-focus');
       clearTimeout(cursorTimer);
     });
 
     ML.El.evt(input, 'click', function (e) {
-      if (ML.hasClass(ML.El.clicked(e), 'focus')) moveCursor(ML.El.clicked(e));
+      if (ML.hasClass(ML.El.clicked(e), 'input-focus')) moveCursor(ML.El.clicked(e));
     });
 
     if (placeholder !== null) {
@@ -46,7 +46,7 @@ ML.InputControl = function(input) {
    * @private
    */
   function moveCursor(input) {
-    if (!ML.hasClass(input, 'placeholder')) {
+    if (!ML.hasClass(input, 'input-placeholder')) {
       return;
     } else {
       if (typeof input.selectionStart === 'number') {
@@ -70,20 +70,20 @@ ML.InputControl = function(input) {
     var old = ML.El.getAttr(input, 'placeholder');
     var neww = input.value.replace(old, '');
 
-    if (ML.hasClass(input, 'placeholder')) input.value = neww;
-    ML.removeClass(input, 'placeholder');
+    if (ML.hasClass(input, 'input-placeholder')) input.value = neww;
+    ML.removeClass(input, 'input-placeholder');
 
     // No characters in input field
     if (input.value.length < 1) {
       input.value = old;
-      ML.addClass(input, 'placeholder');
+      ML.addClass(input, 'input-placeholder');
       moveCursor(input);
     }
   } 
 
   if (placeholder !== null) {
     input.setAttribute('value', placeholder);
-    ML.addClass(input, 'placeholder');
+    ML.addClass(input, 'input-placeholder');
     bindEvents();
   }                 
 };
