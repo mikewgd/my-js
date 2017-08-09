@@ -43,7 +43,6 @@ ML.Accordion = function(el, multiple) {
    */
   function bindEvents() {
     ML.loop(ML._$('a', el), function(item, i) {
-      console.log(item)
       if (ML.hasClass(item, 'accordion-toggle')) {
         ML.El.evt(item, 'click', function(e) {
           e.preventDefault();
