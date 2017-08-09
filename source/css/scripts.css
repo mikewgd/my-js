@@ -5,8 +5,9 @@
 */
 
 /* ACCORDION */
-ul.accordion {padding:0;margin:0;list-style-type:none; }
-ul.accordion li.hide .content {display:none;}
+.accordion {padding:0; margin:0; list-style-type:none; }
+.accordion .accordion-hide-content .accordion-content {display: none;}
+
 
 /* INPUT CONTROL */
 .placeholder {color:#999;}

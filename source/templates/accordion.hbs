@@ -10,9 +10,9 @@
 
     <ul class="accordion acc-ex" data-accordion>
     {{#items}}
-      <li{{#if @first}} class="open"{{/if}}>
-        <a class="acc" href="#">{{this.toggle}}</a>
-        <div class="content">
+      <li{{#if @first}} class="accordion-open-content"{{/if}}>
+        <a class="accordion-toggle" href="#">{{this.toggle}}</a>
+        <div class="accordion-content">
           <p>{{this.content}}</p>
         </div>
       </li>
@@ -25,9 +25,9 @@
     
     <ul class="accordion acc-ex" data-accordion="multiple">
     {{#items}}
-      <li{{#if @first}} class="open"{{/if}}>
-        <a class="acc" href="#">{{this.toggle}}</a>
-        <div class="content">
+      <li{{#if @first}} class="accordion-open-content"{{/if}}>
+        <a class="accordion-toggle" href="#">{{this.toggle}}</a>
+        <div class="accordion-content">
           <p>{{this.content}}</p>
         </div>
       </li>

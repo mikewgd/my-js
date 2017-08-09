@@ -52,11 +52,9 @@ div.notes ul li {list-style-position:inside;}
 /* Table of Contents of Scripts */
 ul.scripts {padding:0;margin:0 auto; width:724px;overflow:auto;}
 ul.scripts li {list-style-type:none;float:left;margin:0 20px 20px 0;border: 1px solid #333;}
-ul.scripts li.tight {margin-right:0;}
-ul.scripts li a {z-index:0;height:36px; line-height:36px;position:relative;display:block;padding:10px;font-size:16px;background:#CCC;width:200px;text-align:center; text-decoration:none; color:#333;border:3px solid #e2e2e2;}
+ul.scripts li a {z-index:0;position:relative;display:block;padding:10px;font-size:16px;background:#CCC;width:200px;text-align:center; text-decoration:none; color:#333;border:3px solid #e2e2e2;}
 ul.scripts li a:hover {color:#000;background:#f1f1f1; border:3px solid #fff;}
 ul.scripts li a:active {border-left:3px solid #000;border-top:3px solid #000;}
-ul.scripts li a span {clear:both;display:block; font-size:11px;}
 
 /**
 * MAIN.CSS
@@ -67,11 +65,11 @@ ul.scripts li a span {clear:both;display:block; font-size:11px;}
 /* ACCORDION */
 .acc-ex {border: 1px solid #666; border-bottom:0;}
 .acc-ex li {border-bottom: 1px solid #666;}
-.acc-ex .content {display:block;padding:6px;background:white;}
-.acc-ex a.acc {background:white; border-bottom:1px solid black;color:#000;}
-.acc-ex a.acc:hover {text-decoration:underline;}
-.acc-ex .hide .acc, ul.accordion li .acc {padding:6px; font-size:14px; font-weight:bold;display:block; text-decoration:none;outline:none;}
-.acc-ex .hide .acc {color: #666; background:#CCC;border-bottom:0;}
+.acc-ex .accordion-content {display:block;padding:6px;background:white;}
+.acc-ex .accordion-toggle {background:white; border-bottom:1px solid black;color:#000; display: block;}
+.acc-ex .accordion-toggle:hover {text-decoration:underline;}
+.acc-ex .accordion-toggle, ul.accordion li .accordion-toggle {padding:6px; font-size:14px; font-weight:bold;display:block; text-decoration:none;outline:none;}
+.acc-ex .accordion-toggle {color: #666; background:#CCC;border-bottom:0;}
 
 /* CAROUSEL */
 .animals {position:relative;width:300px;margin: 0 auto;}

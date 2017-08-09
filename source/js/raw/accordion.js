@@ -16,21 +16,22 @@ ML.Accordion = function(el, multiple) {
    * @param {HTMLElement} [el] When togging one at a time.
    * @private
    */
-  function hideLis(el) {
+  function hideLis(li) {
     ML.loop(lis, function(item, i) {
-      if (el) {
+      if (li) {
         // @TODO: Should use toggleClass conditional.
-        if (el.toString == item) {
-          ML.toggleClass(el, 'hide');
+        if (li === item) {
+          ML.addClass(item, 'accordion-hide-content');
+          ML.toggleClass(li, 'accordion-hide-content');
         } else {
-          ML.addClass(item, 'hide');
+          ML.addClass(item, 'accordion-hide-content');
         }
       } else {
-        ML.addClass(item, 'hide');
+        ML.addClass(item, 'accordion-hide-content');
 
-        if (ML.hasClass(item, 'open')) {
-          ML.removeClass(item, 'hide');
-          ML.removeClass(item, 'open');
+        if (ML.hasClass(item, 'accordion-open-content')) {
+          ML.removeClass(item, 'accordion-hide-content');
+          ML.removeClass(item, 'accordion-open-content');
         }
       }
     });
@@ -41,8 +42,9 @@ ML.Accordion = function(el, multiple) {
    * @private
    */
   function bindEvents() {
-    ML.loop(ML._$('a', this.el), function(item, i) {
-      if (ML.hasClass(item, 'acc')) {
+    ML.loop(ML._$('a', el), function(item, i) {
+      console.log(item)
+      if (ML.hasClass(item, 'accordion-toggle')) {
         ML.El.evt(item, 'click', function(e) {
           e.preventDefault();
           toggle(ML.El.clicked(e).parentNode);
@@ -68,7 +70,7 @@ ML.Accordion = function(el, multiple) {
    */
   function toggle(li) {
     if (multiple) {
-      ML.toggleClass(li, 'hide');
+      ML.toggleClass(li, 'accordion-hide-content');
     } else {
       hideLis(li);
     }
