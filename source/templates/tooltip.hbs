@@ -1,0 +1,40 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#overlays-tooltips">Documentation</a>
+  </div>
+    
+  <h2>Examples:</h2>
+  <ul class="list">
+  {{#examples}}
+    <li>
+      <a href="#" rel="{{this.rel}}" data-tooltip="{{this.tooltip}}"{{#if this.titleAttr}} title="{{this.titleAttr}}"{{/if}}>
+        {{this.title}}
+      </a>
+      <span> &ndash; {{{this.description}}}</span>
+    </li>
+  {{/examples}}
+    {{!-- <li><a id="invokeTooltip" rel="unique-id1" href="javascript:void(0);">Invoke Tooltip Manually</a> - Usage shown in the code.</li> --}}
+  </ul>
+
+{{#> footer}}
+  <div class="tooltip hidden" id="unique-id1">
+    <span class="arrow"></span>
+    <div class="content">
+      <h1 class="tight">Hello! I am a tooltip</h1>
+      <p class="tight">Im some text about the tooltip.</p>
+    </div>
+  </div>
+
+  <script>
+    ML.El.evt(window, 'load', function() {
+      ML.TooltipHandler();
+
+      /* FPO */
+      ML.El.evt(ML.$('invokeTooltip'), 'click', function (e) {
+        new ML.Tooltip(ML.El.clicked(e), {width:200, direction:'bottom'}).show(true);
+      });
+    });
+  </script>
+{{/footer}}
