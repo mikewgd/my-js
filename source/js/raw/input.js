@@ -102,7 +102,7 @@ ML.InputControl = function(input) {
     var inputs = ML._$('input');
 
     for (var i = 0, len = inputs.length; i < len; i++) {
-      if (inputs[i].type == 'text') {
+      if (inputs[i].type === 'text') {
         new ML.InputControl(inputs[i]);
       }
     }

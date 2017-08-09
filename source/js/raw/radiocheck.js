@@ -42,7 +42,7 @@ ML.FormElements.RadioCheckboxes = function() {
 
     ML.loop(allInputs, function(input, i) {
       if (ML.hasClass(input, 'system') || ML.hasClass(input, 'styled')) return;
-      if (input.type == 'checkbox' || input.type == 'radio') {
+      if (input.type === 'checkbox' || input.type === 'radio') {
         inputs.push(input);
 
         createCustom(input);
@@ -152,7 +152,7 @@ ML.FormElements.RadioCheckboxes = function() {
     var input = ML.El.clicked(e);
     var span =  input.nextSibling;
 
-    if (evt.type == 'focus') {
+    if (evt.type === 'focus') {
       ML.addClass(span, "focus");
     } else {
       ML.removeClass(span, "focus");
@@ -176,7 +176,7 @@ ML.FormElements.RadioCheckboxes = function() {
     var inputType = input.type;
     this.className = inputType;
 
-    if (inputType == 'radio') {
+    if (inputType === 'radio') {
       var group = input.name;
       var inputs = ML._$('input');
 

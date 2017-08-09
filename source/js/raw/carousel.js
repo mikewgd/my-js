@@ -237,7 +237,7 @@ ML.Carousel = function(el, settings, func) {
       current--;
     }
 
-    if (current == total) current = 0;
+    if (current === total) current = 0;
 
     animation = setTimeout(function() {
       cycle();
