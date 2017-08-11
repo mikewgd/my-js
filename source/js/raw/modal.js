@@ -1,3 +1,8 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+'use strict';
+
 ML.Modal = function(el, settings) {
 	var DEFAULTS = {
     WIDTH: 600,
@@ -16,7 +21,7 @@ ML.Modal = function(el, settings) {
 	var modal = null;
 	var width = settings.width || DEFAULTS.WIDTH;
 	var height = settings.height || DEFAULTS.HEIGHT;
-	var title = settings.title || DEFAULTS.TITLE
+	var title = settings.title || DEFAULTS.TITLE;
 
 	this.init = function() {
     modalOverlay = ML.$(el);
@@ -27,6 +32,7 @@ ML.Modal = function(el, settings) {
 	};
 
 	function bindEvents() {
+    /* jshint validthis: true */
 		var self = this;
 
     /*ML.El.evt(window, 'resize', function(e) {
@@ -36,7 +42,7 @@ ML.Modal = function(el, settings) {
     ML.El.evt(document, 'click', function(e) {
     	e.preventDefault();
       var clicked = ML.El.clicked(e);
-      if (ML.hasClass(clicked, CLASSNAMES.CLOSE) || 
+      if (ML.hasClass(clicked, CLASSNAMES.CLOSE) ||
       	ML.hasClass(clicked, CLASSNAMES.OVERLAY)) {
         self.hide();
       }
@@ -52,7 +58,7 @@ ML.Modal = function(el, settings) {
     ML.El.styl(modal, {
     	'width': width + 'px',
     	'height': (height === 'auto') ? 'auto' : height + 'px',
-    	'marginTop': '-' + (height / 2) + 'px', 
+    	'marginTop': '-' + (height / 2) + 'px',
     	'marginLeft': '-' + (modal.offsetWidth / 2) + 'px'
     });
 	};
@@ -61,5 +67,5 @@ ML.Modal = function(el, settings) {
 };
 
 (function() {
-  
+
 })();

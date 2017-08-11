@@ -1,3 +1,8 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+'use strict';
+
 /**
  * Custom select menu.
  * @constructor
@@ -48,8 +53,11 @@ ML.FormElements.Select = function() {
   this.setup = function(el) {
     var allSelects = el ? ML._$('select', el) : ML._$('select');
 
-    ML.loop(allSelects, function(select, i) {
-      if (ML.hasClass(select, 'system') || ML.hasClass(select, 'styled')) return;
+    ML.loop(allSelects, function(select) {
+      if (ML.hasClass(select, 'system') || ML.hasClass(select, 'styled')) {
+        return;
+      }
+
       selects.push(select);
       createCustom(select);
       pushEvents(select);
@@ -81,7 +89,9 @@ ML.FormElements.Select = function() {
     // adds the custom select after the <select>
     select.parentNode.insertBefore(div, select.nextSibling);
 
-    if (select.disabled) ML.addClass(div, 'disabled');
+    if (select.disabled) {
+      ML.addClass(div, 'disabled');
+    }
 
     createLIs(div, ML._$('option', select));
 
@@ -105,15 +115,17 @@ ML.FormElements.Select = function() {
     for (var i = 0, len = options.length; i < len; i++) {
       li = ML.El.create('li', {'data-value': options[i].value, 'data-index': i});
       a = ML.El.create('a', {'href': '#', tabIndex: -1});
-      txt = document.createTextNode(options[i].innerHTML); 
-          
+      txt = document.createTextNode(options[i].innerHTML);
+
       li.appendChild(a);
       a.appendChild(txt);
       ul.appendChild(li);
 
       optionLinks.push(a);
 
-      if (options[i].disabled) ML.addClass(li, 'disabled');
+      if (options[i].disabled) {
+        ML.addClass(li, 'disabled');
+      }
 
       // if there is a selected option, put it in the dropdown link
       if (options[i].selected) {
@@ -141,7 +153,9 @@ ML.FormElements.Select = function() {
       func = events[i][2];
 
       // Only pushes the events if SELECT has any events attached to it.
-      if (elem === select) attachedEvents[type].push([elem, func]);
+      if (elem === select) {
+        attachedEvents[type].push([elem, func]);
+      }
     }
   }
 
@@ -159,10 +173,12 @@ ML.FormElements.Select = function() {
 
     for (var i = 0, len = evt.length; i < len; i++) {
       attachedEl = evt[i][0];
-      if (attachedEl === el) selectEvent = evt[i][1];
+      if (attachedEl === el) {
+        selectEvent = evt[i][1];
+      }
     }
 
-    return selectEvent ? selectEvent.call() : (function(){return;});
+    return selectEvent ? selectEvent.call() : function(){return;};
   }
 
   /**
@@ -170,20 +186,22 @@ ML.FormElements.Select = function() {
    * @private
    */
   function bindEvents() {
-    ML.loop(optionLinks, function(optionLink, i) {
+    ML.loop(optionLinks, function(optionLink) {
       // Events for links in the custom select menu.
       ML.El.evt(optionLink, 'click', function(e){
-        var clicked = ML.El.clicked(e); 
+        var clicked = ML.El.clicked(e);
         var attr = ML.El.data;
         var li = clicked.parentNode;
         var custom = li.parentNode.parentNode.parentNode;
         var args = {
-          'index': attr(li, 'index'), 
-          'value': attr(li, 'value'), 
+          'index': attr(li, 'index'),
+          'value': attr(li, 'value'),
           'text': clicked.innerHTML
         };
 
-        if (ML.hasClass(li, 'disabled')) return;
+        if (ML.hasClass(li, 'disabled')) {
+          return;
+        }
 
         if (args.value !== ML.El.getAttr(custom, 'sel-data-value')) {
           selectOption(custom, args);
@@ -197,8 +215,8 @@ ML.FormElements.Select = function() {
       ML.El.evt(optionLink, 'mouseover', function(e){
         var clicked = ML.El.clicked(e);
         var ul = clicked.parentNode.parentNode;
-        
-        ML.loop(ML._$('li', ul), function(li, i){
+
+        ML.loop(ML._$('li', ul), function(li){
           ML.removeClass(li, 'selected');
         });
       });
@@ -207,7 +225,9 @@ ML.FormElements.Select = function() {
     ML.El.evt(document, 'click', function(e) {
       var clicked = ML.El.clicked(e);
 
-      if (ML.hasClass(clicked, 'disabled') || ML.hasClass(clicked.parentNode, 'disabled')) return;
+      if (ML.hasClass(clicked, 'disabled') || ML.hasClass(clicked.parentNode, 'disabled')) {
+        return;
+      }
 
       if (ML.hasClass(clicked.parentNode, 'select')) {
         e.preventDefault();
@@ -216,7 +236,7 @@ ML.FormElements.Select = function() {
       toggle(clicked, clicked.parentNode);
     });
 
-    ML.loop(selects, function(select, i) {
+    ML.loop(selects, function(select) {
       ML.El.evt(select, 'focus', function(e) {
         focusBlur(e);
       }, true);
@@ -229,11 +249,11 @@ ML.FormElements.Select = function() {
         var el = ML.El.clicked(e);
         var selected = el.selectedIndex;
         var args = {
-          'index': selected, 
-          'value': el.childNodes[selected].value, 
+          'index': selected,
+          'value': el.childNodes[selected].value,
           'text': el.childNodes[selected].innerHTML
         };
-        
+
         selectOption(el.nextSibling, args);
       });
     });
@@ -248,19 +268,22 @@ ML.FormElements.Select = function() {
     var e = evt || window.event;
     var select = ML.El.clicked(e);
     var div =  select.nextSibling;
-    
+
     // @TODO: Should use toggleClass conditional.
     if (evt.type === 'focus') {
       ML.addClass(div, 'focus');
-    } else { 
-      if (ML.hasClass(div, 'active')) ML.removeClass(div, 'active');
+    } else {
+      if (ML.hasClass(div, 'active')) {
+        ML.removeClass(div, 'active');
+      }
+
       ML.removeClass(div, 'focus');
     }
-    
+
     attachOldEvt(select, evt.type);
-    
+
     if (typeof e.preventDefault !== 'undefined') {
-      e.preventDefault();    
+      e.preventDefault();
     }
 
     return false;
@@ -298,26 +321,28 @@ ML.FormElements.Select = function() {
     if (ML.hasClass(clickedParent, 'select')) {
       if (clicked.className === 'dropdown-link') {
         var div = clickedParent;
-        
-        if (!ML.hasClass(div, 'focus')) ML.addClass(div, 'focus');
-        
+
+        if (!ML.hasClass(div, 'focus')) {
+          ML.addClass(div, 'focus');
+        }
+
         // Handles the toggling of the select menu and allowing only one to be open at a time.
-        ML.loop(customSelects, function(c, i) {
+        ML.loop(customSelects, function(c) {
           if (c !== clickedParent) {
-            ML.removeClass(c, 'active'); 
+            ML.removeClass(c, 'active');
             ML.removeClass(c, 'focus');
           }
         });
 
         ML.toggleClass(div, 'active');
-        
+
         // Adds selected to currently selected item
         ML._$('li', div)[ML.El.data(clicked, 'index')].className = 'selected';
-        attachOldEvt(div.previousSibling, 'click');    
+        attachOldEvt(div.previousSibling, 'click');
       }
     } else {
-      for (var i = 0, len = customSelects.length; i < customSelects.length; i++) {
-        ML.removeClass(customSelects[i], 'active'); 
+      for (var i = 0, len = customSelects.length; i < len; i++) {
+        ML.removeClass(customSelects[i], 'active');
         ML.removeClass(customSelects[i], 'focus');
       }
     }

@@ -1,6 +1,11 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+'use strict';
+
 /**
  * Input placeholder attribute polyfill. By default all inputs on the page will be passed
- * into this class. 
+ * into this class.
  * @constructor
  * @param {HTMLElement} input The input element.
  * @example
@@ -28,7 +33,9 @@ ML.InputControl = function(input) {
     });
 
     ML.El.evt(input, 'click', function (e) {
-      if (ML.hasClass(ML.El.clicked(e), 'input-focus')) moveCursor(ML.El.clicked(e));
+      if (ML.hasClass(ML.El.clicked(e), 'input-focus')) {
+        moveCursor(ML.El.clicked(e));
+      }
     });
 
     if (placeholder !== null) {
@@ -39,8 +46,8 @@ ML.InputControl = function(input) {
   }
 
   /**
-   * Moves the cursor to the beginning of the text in the input. 
-   * This replicates the same effect of the "placeholder" attribute in supported browsers. 
+   * Moves the cursor to the beginning of the text in the input.
+   * This replicates the same effect of the "placeholder" attribute in supported browsers.
    * Credits: http://stackoverflow.com/questions/8189384/i-want-to-put-cursor-in-beginning-of-text-box-onfocus
    * @param {HTMLElement} input The input field.
    * @private
@@ -61,7 +68,7 @@ ML.InputControl = function(input) {
   }
 
   /**
-   * Removes the current value in the input field. 
+   * Removes the current value in the input field.
    * Replicates the "placeholder" functionality in supported browsers.
    * @param {HTMLElement} input The input field.
    * @private
@@ -70,7 +77,10 @@ ML.InputControl = function(input) {
     var old = ML.El.getAttr(input, 'placeholder');
     var neww = input.value.replace(old, '');
 
-    if (ML.hasClass(input, 'input-placeholder')) input.value = neww;
+    if (ML.hasClass(input, 'input-placeholder')) {
+      input.value = neww;
+    }
+
     ML.removeClass(input, 'input-placeholder');
 
     // No characters in input field
@@ -79,13 +89,13 @@ ML.InputControl = function(input) {
       ML.addClass(input, 'input-placeholder');
       moveCursor(input);
     }
-  } 
+  }
 
   if (placeholder !== null) {
     input.setAttribute('value', placeholder);
     ML.addClass(input, 'input-placeholder');
     bindEvents();
-  }                 
+  }
 };
 
 (function () {

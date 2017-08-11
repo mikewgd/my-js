@@ -1,3 +1,8 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+'use strict';
+
 /**
  * Custom radio buttons and checkboxes.
  * @constructor
@@ -40,8 +45,11 @@ ML.FormElements.RadioCheckboxes = function() {
   this.setup = function(el) {
     var allInputs = el ? ML._$('input', el) : ML._$('input');
 
-    ML.loop(allInputs, function(input, i) {
-      if (ML.hasClass(input, 'system') || ML.hasClass(input, 'styled')) return;
+    ML.loop(allInputs, function(input) {
+      if (ML.hasClass(input, 'system') || ML.hasClass(input, 'styled')) {
+        return;
+      }
+
       if (input.type === 'checkbox' || input.type === 'radio') {
         inputs.push(input);
 
@@ -69,8 +77,13 @@ ML.FormElements.RadioCheckboxes = function() {
     // adds the custom input after the input
     input.parentNode.insertBefore(span, input.nextSibling);
 
-    if (input.checked) ML.addClass(span, 'checked');
-    if (input.disabled) ML.addClass(span, 'disabled');
+    if (input.checked) {
+      ML.addClass(span, 'checked');
+    }
+
+    if (input.disabled) {
+      ML.addClass(span, 'disabled');
+    }
   }
 
   /**
@@ -90,7 +103,9 @@ ML.FormElements.RadioCheckboxes = function() {
       func = events[i][2];
 
       // Only pushes the events if INPUT has any events attached to it.
-      if (elem === input) attachedEvents[type].push([elem, func]);
+      if (elem === input) {
+        attachedEvents[type].push([elem, func]);
+      }
     }
   }
 
@@ -108,10 +123,12 @@ ML.FormElements.RadioCheckboxes = function() {
 
     for (var i = 0, len = evt.length; i < len; i++) {
       attachedEl = evt[i][0];
-      if (attachedEl === el) inputEvent = evt[i][1];
+      if (attachedEl === el) {
+        inputEvent = evt[i][1];
+      }
     }
 
-    return inputEvent ? inputEvent.call() : (function(){return;});
+    return inputEvent ? inputEvent.call() : function(){return;};
   }
 
   /**
@@ -128,7 +145,7 @@ ML.FormElements.RadioCheckboxes = function() {
         focusBlur(e);
       });
 
-      ML.El.evt(input, 'click', function(e) {
+      ML.El.evt(input, 'click', function() {
         ref();
       });
 
@@ -153,9 +170,9 @@ ML.FormElements.RadioCheckboxes = function() {
     var span =  input.nextSibling;
 
     if (evt.type === 'focus') {
-      ML.addClass(span, "focus");
+      ML.addClass(span, 'focus');
     } else {
-      ML.removeClass(span, "focus");
+      ML.removeClass(span, 'focus');
     }
 
     attachOldEvt(input, evt.type);
@@ -172,6 +189,7 @@ ML.FormElements.RadioCheckboxes = function() {
    * @private
    */
   function check() {
+    /* jshint validthis: true */
     var input = this.previousSibling;
     var inputType = input.type;
     this.className = inputType;

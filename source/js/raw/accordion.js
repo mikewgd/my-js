@@ -1,3 +1,8 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+'use strict';
+
 /**
  * Accordion component.
  * @constructor
@@ -17,7 +22,7 @@ ML.Accordion = function(el, multiple) {
    * @private
    */
   function hideLis(li) {
-    ML.loop(lis, function(item, i) {
+    ML.loop(lis, function(item) {
       if (li) {
         // @TODO: Should use toggleClass conditional.
         if (li === item) {
@@ -42,7 +47,7 @@ ML.Accordion = function(el, multiple) {
    * @private
    */
   function bindEvents() {
-    ML.loop(ML._$('a', el), function(item, i) {
+    ML.loop(ML._$('a', el), function(item) {
       if (ML.hasClass(item, 'accordion-toggle')) {
         ML.El.evt(item, 'click', function(e) {
           e.preventDefault();
@@ -53,7 +58,7 @@ ML.Accordion = function(el, multiple) {
   }
 
   /**
-   * Sets the current active tab based on hash. The URL format is as follows: 
+   * Sets the current active tab based on hash. The URL format is as follows:
    * "#acc-{ID}-{TAB INDEX}"
    * @private
    */
@@ -61,7 +66,7 @@ ML.Accordion = function(el, multiple) {
     var activeTab = ML._$('li', ML.$(hashUrl[1]));
     toggle(activeTab[parseInt(hashUrl[2])]);
   }
-  
+
   /**
    * Handles toggling the <li> element.
    * @param {HTMLElement} li Parent element to accordion toggle, i.e. <li>

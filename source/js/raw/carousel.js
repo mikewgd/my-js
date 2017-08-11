@@ -1,3 +1,8 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+'use strict';
+
 /**
  * @callback carouselCallback
  * @param {number} index The current slide index.
@@ -70,8 +75,13 @@ ML.Carousel = function(el, settings, cb) {
     ul = ML._$('ul', el)[0];
     ul.style.left = -(width * current) + 'px';
 
-    if (nav) createNav();
-    if (dots) createDots();
+    if (nav) {
+      createNav();
+    }
+
+    if (dots) {
+      createDots();
+    }
 
     bindEvents();
     callback(true);
@@ -162,7 +172,7 @@ ML.Carousel = function(el, settings, cb) {
     div.appendChild(dotsUl);
     el.appendChild(div);
 
-    for (var i = 0; i < slides.length; i++) {
+    for (var i = 0, len = slides.length; i < len; i++) {
       li = ML.El.create('li');
       link = ML.El.create('a', {'href': '#', 'rel': i});
       link.innerHTML = '&bull;';
@@ -180,10 +190,13 @@ ML.Carousel = function(el, settings, cb) {
     if (dots) {
       var dotLinks = ML._$('a', dotsUl);
 
-      ML.loop(dotLinks, function(item, i) {
+      ML.loop(dotLinks, function(item) {
         ML.El.evt(item, 'click', function(e) {
           e.preventDefault();
-          if (self.animating || this.rel === self.curr) return;
+          if (self.animating || this.rel === self.curr) {
+            return;
+          }
+
           stopCycle();
           self.goTo(parseInt(this.rel));
         });
@@ -192,7 +205,9 @@ ML.Carousel = function(el, settings, cb) {
 
     ML.El.evt(nextButton, 'click', function(e) {
       e.preventDefault();
-      if (ML.hasClass(this, 'inactive') || animating) return;
+      if (ML.hasClass(this, 'inactive') || animating) {
+        return;
+      }
 
       stopCycle();
       self.next();
@@ -200,7 +215,9 @@ ML.Carousel = function(el, settings, cb) {
 
     ML.El.evt(prevButton, 'click', function(e) {
       e.preventDefault();
-      if (ML.hasClass(this, 'inactive') || animating) return;
+      if (ML.hasClass(this, 'inactive') || animating) {
+        return;
+      }
 
       stopCycle();
       self.prev();
@@ -235,7 +252,9 @@ ML.Carousel = function(el, settings, cb) {
   * @private
   */
   function cycle() {
-    if (!rotate) return;
+    if (!rotate) {
+      return;
+    }
 
     if (current < total) {
       current++;
@@ -243,7 +262,9 @@ ML.Carousel = function(el, settings, cb) {
       current--;
     }
 
-    if (current === total) current = 0;
+    if (current === total) {
+      current = 0;
+    }
 
     animation = setTimeout(function() {
       cycle();
@@ -259,7 +280,9 @@ ML.Carousel = function(el, settings, cb) {
   * @private
   */
   function callback(init) {
-    if (!init && cb) cb(current, el);
+    if (!init && cb) {
+      cb(current, el);
+    }
 
     ML.removeClass(nextButton, 'inactive');
     ML.removeClass(prevButton, 'inactive');
@@ -273,7 +296,9 @@ ML.Carousel = function(el, settings, cb) {
     if (dots) {
       ML.loop(dotsLis, function(li, i) {
         ML.removeClass(li, 'active');
-        if (i === current) ML.addClass(li, 'active');
+        if (i === current) {
+          ML.addClass(li, 'active');
+        }
       });
     }
   }

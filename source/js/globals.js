@@ -1,3 +1,7 @@
+/* jshint browser: true, latedef: false */
+
+'use strict';
+
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
@@ -95,7 +99,7 @@ ML = {
       return d.getElementsByClassName(classN);
     } else {
       var tags = this._$('*');
-      var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)");
+      var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
 
       for (var i = 0, len = tags.length; i < len; i++) {
         if (regex.test(tags[i].className)) {
@@ -119,8 +123,11 @@ ML = {
    * @param {loopCallback} cb Function to be called during loop.
    */
   loop: function(arr, cb) {
-    for (i = 0, len = arr.length; i < len; i++) {
-      if (typeof arr[i] === 'object') ML.El.clean(arr[i]);
+    for (var i = 0, len = arr.length; i < len; i++) {
+      if (typeof arr[i] === 'object') {
+        ML.El.clean(arr[i]);
+      }
+
       cb.call(this, arr[i], i);
     }
   },
@@ -181,11 +188,14 @@ ML = {
    */
   compStyle: function() {
     if (!window.getComputedStyle) {
-      window.getComputedStyle = function(el, pseudo) {
+      window.getComputedStyle = function(el) {
         this.el = el;
         this.getPropertyValue = function(prop) {
           var re = /(\-([a-z]){1})/g;
-          if (prop === 'float') prop = 'styleFloat';
+          if (prop === 'float') {
+            prop = 'styleFloat';
+          }
+
           if (re.test(prop)) {
             prop = prop.replace(re, function() {
               return arguments[2].toUpperCase();
@@ -214,7 +224,7 @@ ML = {
     var string = (!base) ? str : stripData.replace(base, '');
     var arr = string.split(sep);
 
-    for (i = 0, len = arr.length; i < len; i += 2) {
+    for (var i = 0, len = arr.length; i < len; i += 2) {
       obj[arr[i]] = arr[i + 1];
     }
 
@@ -239,9 +249,9 @@ ML = {
    */
   removeClass: function(elem, classN, multiple) {
     var currClass = this.trim(elem.className);
-    var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)", "g");
+    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)', 'g');
 
-    elem.className = this.trim(currClass.replace(regex, " "));
+    elem.className = this.trim(currClass.replace(regex, ' '));
 
     if (multiple) {
       var classNames = classN.split(' ');
@@ -259,7 +269,7 @@ ML = {
    * @return {boolean}
    */
   hasClass: function(elem, classN) {
-    var regex = new RegExp("(^|\\s)" + classN + "(\\s|$)");
+    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
     return regex.test(elem.className);
   },
 
@@ -272,7 +282,9 @@ ML = {
     var currClass = this.trim(elem.className);
     var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
 
-    if (!this.hasClass(elem, classN)) elem.className = addedClass;
+    if (!this.hasClass(elem, classN)) {
+      elem.className = addedClass;
+    }
   },
 
   /**
@@ -313,11 +325,13 @@ ML.El = {
    * @param {boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
-    if (capture === undefined) capture = false;
+    if (capture === undefined) {
+      capture = false;
+    }
 
-    if (el.addEventListener) // other browsers
+    if (el.addEventListener) {// other browsers
       el.addEventListener(type, cb, capture);
-    else if (el.attachEvent) { // ie 8 and below
+    } else if (el.attachEvent) { // ie 8 and below
       el.attachEvent('on' + type, cb);
     } else { // for older browsers
       el['on' + type] = cb;
@@ -388,9 +402,18 @@ ML.El = {
    * @return {HTMLElement}
    */
   clicked: function(evt) {
-    if (!evt) evt = window.event;
-    var element = evt.target || evt.srcElement;
-    if (element.nodeType === 3) element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
+    var element = null;
+
+    if (!evt) {
+      evt = window.event;
+    }
+
+    element = evt.target || evt.srcElement;
+
+    if (element.nodeType === 3) {
+      element = element.parentNode; // http://www.quirksmode.org/js/events_properties.html
+    }
+
     return element;
   },
 
@@ -403,7 +426,7 @@ ML.El = {
     var posX = 0;
     var posY = 0;
 
-    while (elem != null) {
+    while (elem !== null) {
       posX += elem.offsetLeft;
       posY += elem.offsetTop;
       elem = elem.offsetParent;
@@ -439,7 +462,7 @@ ML.El = {
     var mvX = (win.w - elem.offsetWidth) / 2 + 'px';
     var mvY = (win.h - elem.offsetHeight) / 2 + 'px';
 
-    while (elem != null) {
+    while (elem !== null) {
       elem.style.top = mvY;
       elem.style.left = mvX;
       elem = elem.offsetChild;
@@ -487,7 +510,7 @@ ML.El = {
 
     if (element.currentStyle === undefined) {
       ML.compStyle();
-      y = window.getComputedStyle(element, "").getPropertyValue(styleProp);
+      y = window.getComputedStyle(element, '').getPropertyValue(styleProp);
     } else {
       y = element.currentStyle[styleProp];
     }
@@ -570,13 +593,47 @@ ML.Animate = function(el, props, settings, cb) {
     DELAY: 13
   };
 
+  var Easing = {
+    linear: function(progress) {
+      return progress;
+    },
+
+    elastic: function(progress) {
+      return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * 1.5 / 3 * progress);
+    },
+
+    quad: function(progress) {
+      return Math.pow(progress, 2);
+    },
+
+    quint: function(progress) {
+      return Math.pow(progress, 5);
+    },
+
+    circ: function(progress) {
+      return 1 - Math.sin(Math.acos(progress));
+    },
+
+    back: function(progress) {
+      return Math.pow(progress, 2) * ((1 + 1.5) * progress - 1.5);
+    },
+
+    bounce: function(progress) {
+      for (var a = 0, b = 1; 1; a += b, b /= 2) {
+        if (progress >= (7 - 4 * a) / 11) {
+          return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
+        }
+      }
+    }
+  };
+
   var timer = null;
   var currProps = {};
   var progress = false;
   var time = new Date();
   var duration = settings.duration || DEFAULTS.DURATION;
   var delay = settings.delay || DEFAULTS.DELAY;
-  var easing = (settings.easing === undefined) ? linear : ML.animate[settings.easing];
+  var easing = (settings.easing === undefined) ? Easing.linear : Easing[settings.easing];
 
   /**
    * Gets the current CSS values of the properties being animated.
@@ -606,7 +663,9 @@ ML.Animate = function(el, props, settings, cb) {
     timer = setInterval(function() {
       progress = (new Date() - time) / duration;
 
-      if (progress > 1) progress = 1;
+      if (progress > 1) {
+        progress = 1;
+      }
 
       for (var prop in props) {
         var value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * easing(progress));
@@ -620,65 +679,6 @@ ML.Animate = function(el, props, settings, cb) {
         }
       }
     }, delay);
-  }
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function elastic(progress) {
-    return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * 1.5 / 3 * progress);
-  }
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function linear(progress) {return progress;}
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function quad(progress) {return Math.pow(progress, 2);}
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function quint(progress) {return Math.pow(progress, 5);}
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function circ(progress) {return 1 - Math.sin(Math.acos(progress));}
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function back(progress) {
-    return Math.pow(progress, 2) * ((1 + 1.5) * progress - 1.5);
-  }
-
-  /**
-   * @private
-   * @param {number} progress
-   * @return {number}
-   */
-  function bounce(progress) {
-    for (var a = 0, b = 1, result; 1; a += b, b /= 2) {
-      if (progress >= (7 - 4 * a) / 11) {
-        return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
-      }
-    }
   }
 
   move();
@@ -724,14 +724,18 @@ ML.Ajax = function(params) {
     params.success('ERROR: Must be hosted on a server');
     return;
   } else {
-    xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 
-    ML.El.evt(xmlhttp, 'readystatechange', function(e) {
+    ML.El.evt(xmlhttp, 'readystatechange', function() {
       var _this = this;
-      if (params.beforeRequest) params.beforeRequest();
+      if (params.beforeRequest) {
+        params.beforeRequest();
+      }
 
       if (_this.readyState === 4) {
-        if (params.complete) params.complete();
+        if (params.complete) {
+          params.complete();
+        }
 
         if (_this.status === 200) {
           params.success(_this.responseText);
@@ -758,7 +762,6 @@ ML.FormElements = {};
 // Polyfill: indexOf
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function(e) {
-    "use strict";
     if (this === null) {
       throw new TypeError();
     }
@@ -770,9 +773,9 @@ if (!Array.prototype.indexOf) {
     var r = 0;
     if (arguments.length > 1) {
       r = Number(arguments[1]);
-      if (r != r) {
+      if (r !== r) {
         r = 0;
-      } else if (r != 0 && r != Infinity && r != -Infinity) {
+      } else if (r !== 0 && r !== Infinity && r !== -Infinity) {
         r = (r > 0 || -1) * Math.floor(Math.abs(r));
       }
     }
