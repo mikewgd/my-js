@@ -232,7 +232,7 @@ ML.Carousel = function(el, settings, cb) {
     var desired = width * current;
     animating = true;
 
-    ML.Animate(ul, {left: -desired}, function(){
+    ML.Animate(ul, {left: -desired}, {}, function() {
       animating = false;
       callback(false);
     });
@@ -280,7 +280,7 @@ ML.Carousel = function(el, settings, cb) {
   * @private
   */
   function callback(init) {
-    if (!init && cb) {
+    if (!init && typeof cb === 'function') {
       cb(current, el);
     }
 
