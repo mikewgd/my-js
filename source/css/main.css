@@ -50,9 +50,9 @@ div.notes ul li {list-style-position:inside;}
 .usage .contents .btn {font-weight:bold;display:block; color:#fff; background: #999; padding:15px; text-align:center;text-decoration: none; text-transform: uppercase; width:80px;}
 
 /* Table of Contents of Scripts */
-ul.scripts {padding:0;margin:0 auto; width:724px;overflow:auto;}
+ul.scripts {padding:0;margin:0 auto; width:300px;overflow:auto;}
 ul.scripts li {list-style-type:none;float:left;margin:0 20px 20px 0;border: 1px solid #333;}
-ul.scripts li a {z-index:0;position:relative;display:block;padding:10px;font-size:16px;background:#CCC;width:200px;text-align:center; text-decoration:none; color:#333;border:3px solid #e2e2e2;}
+ul.scripts li a {z-index:0;position:relative;display:block;padding:10px;font-size:14px;background:#CCC;width:200px;text-align:center; text-decoration:none; color:#333;border:3px solid #e2e2e2;}
 ul.scripts li a:hover {color:#000;background:#f1f1f1; border:3px solid #fff;}
 ul.scripts li a:active {border-left:3px solid #000;border-top:3px solid #000;}
 

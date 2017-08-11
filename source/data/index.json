@@ -19,15 +19,15 @@
       "page": "tooltop"
     },
     {
-      "title": "Clear Input Placeholder Text",
+      "title": "Placeholder Polyfill",
       "page": "form-input-control"
     },
     {
-      "title": "Custom Form Elements - Radio buttons & Checkboxes",
+      "title": "Form Elements - Radios & Checkboxes",
       "page": "form-radios"
     },
     {
-      "title": "Custom Form Elements - Select menu",
+      "title": "Form Elements - Select menu",
       "page": "form-select"
     }
   ]
