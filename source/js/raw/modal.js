@@ -14,19 +14,19 @@ ML.Modal = function(el, settings) {
   	TITLE: 'modal-header-title',
   	CLOSE: 'modal-close',
   	EL: 'modal',
-  	OVERLAY: 'modal-overlay'
+  	BODY: 'modal-body'
   };
 
-	var modalOverlay = null;
 	var modal = null;
+	var modalBody = null;
 	var width = settings.width || DEFAULTS.WIDTH;
 	var height = settings.height || DEFAULTS.HEIGHT;
 	var title = settings.title || DEFAULTS.TITLE;
 
 	this.init = function() {
-    modalOverlay = ML.$(el);
+    modal = ML.$(el);
 		ML.El.clean(modalOverlay);
-		modal = modalOverlay.childNodes[0];
+		modalBody = modal.childNodes[0];
 
 		bindEvents();
 	};
@@ -50,16 +50,16 @@ ML.Modal = function(el, settings) {
 	}
 
 	this.show = function() {
-		height = (height === 'auto') ? modal.offsetHeight : height;
+		height = (height === 'auto') ? modalBody.offsetHeight : height;
 
-    ML.removeClass(modalOverlay, 'hidden');
-    modal.removeAttribute('style');
+    ML.removeClass(modal, 'hidden');
+    modalBody.removeAttribute('style');
 
-    ML.El.styl(modal, {
+    ML.El.setStyles(modalBody, {
     	'width': width + 'px',
     	'height': (height === 'auto') ? 'auto' : height + 'px',
     	'marginTop': '-' + (height / 2) + 'px',
-    	'marginLeft': '-' + (modal.offsetWidth / 2) + 'px'
+    	'marginLeft': '-' + (+.offsetWidth / 2) + 'px'
     });
 	};
 
@@ -67,5 +67,15 @@ ML.Modal = function(el, settings) {
 };
 
 (function() {
+  var modalLink = ML._$('*');
+  var modal = null;
+  var settings = {};
 
+  for (var i = 0; i < modalLink.length; i++) {
+    if (ML.El.data(modalLink[i], 'modal') !== null) {
+      settings = ML.parObj(ML.El.data(modalLink[i], 'modal'));
+      modal = new ML.Modal(modalLink[i], settings);
+      modal.init();
+    }
+  }
 })();

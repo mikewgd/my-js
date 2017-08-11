@@ -42,11 +42,11 @@ input.styled, select.styled {width:1px; height:1px; position:absolute; overflow:
 .tooltip .content {display:block;}
 
 /* MODAL */
-.modal-overlay .modal {display:block; position:absolute; top:50%;left:50%; }
-.modal-overlay .modal .modal-header {overflow:auto;clear:both;zoom:1;}
-.modal-overlay .modal .modal-header .modal-close {float:right; text-decoration:none; }
-.modal-overlay .modal .modal-content {clear:both; display:block;overflow:auto;}
-.modal-overlay {
+.modal .modal-body {display:block; position:absolute; top:50%;left:50%; }
+.modal .modal-body .modal-header {overflow:auto;clear:both;zoom:1;}
+.modal .modal-body .modal-header .modal-close {float:right; text-decoration:none; }
+.modal .modal-body .modal-content {clear:both; display:block;overflow:auto;}
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -55,7 +55,7 @@ input.styled, select.styled {width:1px; height:1px; position:absolute; overflow:
   background: rgb(0, 0, 0) transparent; /* default fallback */
   background: rgba(0, 0, 0, 0.5); /* nice browsers */
   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000, endColorstr=#7F000000); /* IE 6/7 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000, endColorstr=#7F000000)"; /* IE8 */  
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000, endColorstr=#7F000000)"; /* IE8 */
   z-index:1;
 }
 /* ajax */
