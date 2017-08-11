@@ -1,0 +1,38 @@
+/* CAROUSEL */
+
+.carousel {
+  &--viewer {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    position: relative;
+  }
+
+  &--dots {
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      text-align: center;
+
+      li {
+        display: inline-block;
+      }
+    }
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    width: 99999em;
+    position: relative;
+
+    li {
+      float: left;
+    }
+  }
+
+  .inactive {
+    cursor: default;
+  }
+}

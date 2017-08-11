@@ -1,0 +1,39 @@
+/* CAROUSEL */
+
+.animals {
+  position: relative;
+  width: 300px;
+  margin: 0 auto;
+
+  .next {
+    float: right;
+  }
+
+  li {
+    margin-right: 10px;
+
+    img {
+      width: 300px;
+      height: 237px;
+    }
+  }
+
+  .carousel-dots a {
+    text-decoration: none;
+    color: #ccc;
+    font-size: 40px;
+  }
+
+  .active a {
+    color: #000;
+  }
+
+  .inactive {
+    color: #ccc;
+  }
+}
+
+.carousel-status {
+  width: 300px;
+  margin: 0 auto;
+}

@@ -1,0 +1,13 @@
+/* ACCORDION */
+
+.accordion {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+
+  .accordion-hide-content {
+    .accordion-content {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,86 @@
+/* FORM ELEMENTS */
+
+/* input control */
+.input-placeholder {
+  color: #999;
+}
+
+.input-focus {
+  border-color: #F93;
+}
+
+/* custom radio and checkboxes */
+input.styled,
+select.styled {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  overflow: hidden;
+  left: -9000em;
+  margin: 0;
+}
+
+.checkbox,
+.radio {
+  float: left;
+  zoom: 1;
+}
+
+.disabled {
+  opacity: 0.5;
+  filter: alpha(opacity = 50);
+}
+
+.focus {
+  outline: 1px solid #F60;
+}
+
+/* select menu */
+.select {
+  display: inline-block;
+
+  &.focus {
+    outline: none;
+    border: 0;
+
+    .dropdown-link {
+      border-color: #f60;
+    }
+  }
+
+  &.active ul {
+    left: 0 !important;
+  }
+
+  .dropdown-link {
+    cursor: default;
+    outline: none;
+    display: block;
+    text-decoration: none;
+  }
+
+  div {
+    position: relative;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    cursor: pointer;
+    z-index: 10000;
+    left: -99999em;
+    zoom: 1;
+  }
+
+  li {
+    list-style-type: none;
+
+    a {
+      cursor: default;
+      outline: none;
+      display: block;
+      text-decoration: none;
+    }
+  }
+}

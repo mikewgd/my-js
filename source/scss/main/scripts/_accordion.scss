@@ -1,0 +1,36 @@
+/* ACCORDION */
+
+.acc-ex {
+  border: 1px solid #666;
+  border-bottom: 0;
+
+  li {
+    border-bottom: 1px solid #666;
+  }
+
+  .accordion-content {
+    display: block;
+    padding: 6px;
+    background: white;
+  }
+
+  .accordion-toggle {
+    // background: white;
+    // border-bottom: 1px solid black;
+    // color: #000;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    text-decoration: none;
+    outline: none;
+
+    color: #666;
+    background: #CCC;
+    border-bottom: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

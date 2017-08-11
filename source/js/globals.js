@@ -1,11 +1,64 @@
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
-/** 
+/**
  * The main namespace.
  * @namespace
  */
 ML = {
+  /**
+   * Pass in a string and it will be returned as a boolean.
+   * If the string is not "true" or "false", the string passed will be returned.
+   * @param {string} str The string convert into a boolean.
+   * @return {boolean}
+   */
+  bool: function(str) {
+    if (typeof str.toLowerCase() === 'string') {
+      if (str === 'true') {
+        return true;
+      } else if (str === 'false') {
+        return false;
+      } else {
+        return str;
+      }
+    }
+  },
+
+  /**
+   * Returns if a value is undefined or not.
+   * @param {*} val The value to test if undefined.
+   * @param {boolean} [empty]j Checks if the value is empty, i.e. "". Parameter is
+   * optional. If a value is empty and paramter is not set, false is returned.
+   * @return {boolean}
+   */
+  isUndef: function(val, empty) {
+    var undef = (val === null || val === false || val === undefined);
+
+    if (empty) {
+      undef = undef || val === '';
+    }
+
+    return undef;
+  },
+
+  /**
+   * Returns whether the value is a boolean.
+   * @param {*} val The value to test if a boolean.
+   * @return {boolean}
+   */
+  isBool: function(val) {
+    return ((typeof this.bool(val)).toLowerCase() === 'boolean');
+  },
+
+  /**
+   * Returns whether the value is a number.
+   * @param {*} val The value to test if a number.
+   * @return {boolean}
+   */
+  isNum: function(val) {
+    return !isNaN(val);
+  },
+
   /**
    * Returns HTMLElement based on id attriube.
    * @param {string} id The id of the element to return.
@@ -55,14 +108,20 @@ ML = {
   },
 
   /**
+   * @callback loopCallback
+   * @param {*} element The value of the array element.
+   * @param {number} index The index of the array element.
+   */
+
+  /**
    * Loop through an array with callback.
    * @param {array} arr The array to loop though.
-   * @param {function} callback Function to be called during loop.
+   * @param {loopCallback} cb Function to be called during loop.
    */
-  loop: function(arr, callback) {
+  loop: function(arr, cb) {
     for (i = 0, len = arr.length; i < len; i++) {
       if (typeof arr[i] === 'object') ML.El.clean(arr[i]);
-      callback.call(this, arr[i], i);
+      cb.call(this, arr[i], i);
     }
   },
 
@@ -242,24 +301,29 @@ ML.El = {
   Events: [],
 
   /**
+   * @callback eventCallback
+   * @param {Event} e The Event Object.
+   */
+
+  /**
    * Event listener bound to elements.
    * @param {HTMLElement} el The element to bind an event to.
    * @param {string} type The type of event.
-   * @param {function} func Callback function.
+   * @param {eventCallback} cb Callback function.
    * @param {boolean} [capture]
    */
-  evt: function(el, type, func, capture) {
+  evt: function(el, type, cb, capture) {
     if (capture === undefined) capture = false;
 
     if (el.addEventListener) // other browsers
-      el.addEventListener(type, func, capture);
+      el.addEventListener(type, cb, capture);
     else if (el.attachEvent) { // ie 8 and below
-      el.attachEvent('on' + type, func);
+      el.attachEvent('on' + type, cb);
     } else { // for older browsers
-      el['on' + type] = func;
+      el['on' + type] = cb;
     }
 
-    this.Events.push([el, type, func]);
+    this.Events.push([el, type, cb]);
   },
 
   /**
@@ -312,7 +376,7 @@ ML.El = {
         }
       }
 
-      
+
     }
 
     return node;
@@ -338,7 +402,7 @@ ML.El = {
   position: function(elem) {
     var posX = 0;
     var posY = 0;
-    
+
     while (elem != null) {
       posX += elem.offsetLeft;
       posY += elem.offsetTop;
@@ -386,7 +450,7 @@ ML.El = {
       y: mvX
     };
   },
-  
+
   /**
    * Returns an element to be created in the DOM with attributes passed.
    * @param {HTMLElement} element The tag to create, i.e. 'div'
@@ -474,6 +538,11 @@ ML.El = {
 };
 
 /**
+ * @callback animateCallback
+ * Function called when animation is complete.
+ */
+
+/**
  * Animate elements easily with this constructor. Credit: http://learn.javascript.ru/js-animation, http://learn.javascript.ru/files/tutorial/js/animate.js But modified
  * @constructor
  * @param {HTMLElement} el The element to apply an animation to.
@@ -482,13 +551,13 @@ ML.El = {
  * @param {number} [settings.duration=400] The duration of the animation, defaults to 400ms.
  * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
  * @param {string} [settings.easing=linear] Type of animation (bounce, ease, etc..), defaults to linear
- * @param {function} [callback] The function to be called after animation is complete.
+ * @param {animateCallback} [cb] Callback function.
  * @example
  * new ML.Animate(ML.$('el'), {width: 100, height: 100}, {delay: 15, duration: 500, easing: 'bounce'}, function() {
  *   alert('animation is complete');
  * });
  */
-ML.Animate = function(el, props, settings, callback) {
+ML.Animate = function(el, props, settings, cb) {
   /**
    * Animate defaults.
    * @type {object}
@@ -507,7 +576,6 @@ ML.Animate = function(el, props, settings, callback) {
   var time = new Date();
   var duration = settings.duration || DEFAULTS.DURATION;
   var delay = settings.delay || DEFAULTS.DELAY;
-  var complete = (typeof settings === 'function') ? settings : callback;
   var easing = (settings.easing === undefined) ? linear : ML.animate[settings.easing];
 
   /**
@@ -547,7 +615,9 @@ ML.Animate = function(el, props, settings, callback) {
 
       if (progress === 1) {
         clearInterval(timer);
-        if (complete) complete();
+        if (typeof cb === 'function') {
+          cb();
+        }
       }
     }, delay);
   }
@@ -615,6 +685,19 @@ ML.Animate = function(el, props, settings, callback) {
 };
 
 /**
+ * @callback ajaxSuccessCallback
+ * @param {*} response The response from the ajax call.
+ */
+
+/**
+ * @callback ajaxErrorCallback
+ * @param {object} response
+ * @param {number} response.status The status code of the request.
+ * @param {number} response.state The readyState of the request. For details on
+ * the state: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+ */
+
+/**
  * Easily AJAX content with this constructor.
  * @constructor
  * @param {object} params Configuration settings.
@@ -622,13 +705,13 @@ ML.Animate = function(el, props, settings, callback) {
  * @param {string} [params.method=GET] The type of request.
  * @param {function} [params.beforeRequest] Gets called before request is made.
  * @param {function} [params.complete] Gets called when request is completed.
- * @param {function(): (number|boolean|string|object)} params.success When a request is successful with data returned.
- * @param {function(): (object)} params.error When there is an error with the request.
+ * @param {ajaxSuccessCallback} params.success When a request is successful with data returned.
+ * @param {ajaxErrorCallback} params.error When there is an error with the request.
  * @example
  * new ML.Ajax({url: 'file/test.html', method: 'GET',
  *   beforeRequest: function () {alert('I happen before request');},
  *   complete: function () {alert('I completed my request');},
- *   success: function (data) {alert('I successfully completed my request. And here is the data returned: '+data);},
+ *   success: function (response) {alert('I successfully completed my request. And here is the data returned: '+response);},
  *   error: function () {alert ('I failed at some point during the request');}
  * });
  */
@@ -666,7 +749,7 @@ ML.Ajax = function(params) {
   }
 };
 
-/** 
+/**
  * The namespace for form elements.
  * @namespace
  */

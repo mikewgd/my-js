@@ -1,4 +1,10 @@
 /**
+ * @callback carouselCallback
+ * @param {number} index The current slide index.
+ * @param {HTMLElement} el The carousel element.
+ */
+
+/**
  * Carousel component.
  * @constructor
  * @param {HTMLElement} el The carousel element.
@@ -7,16 +13,16 @@
  * @param {boolean} [settings.rotate=false] The carousel will rotate automatically.
  * @param {boolean} [settings.dots=false] Dot navigation.
  * @param {boolean} [settings.nav=true] Arrow navigation.
- * @param {function(): (number)} func Callback function after slide has animated.
+ * @param {carouselCallback} cb Callback function after slide has animated.
  * The current slide index is returned.
  * @example
  * var carousel = new ML.Carousel(ML.$('initCarousel'), {
  *   rotate: true
- * }, function(index) {
+ * }, function(index, el) {
  *   console.log('slide index: ', index);
  * })
  */
-ML.Carousel = function(el, settings, func) {
+ML.Carousel = function(el, settings, cb) {
   /**
    * Carousel defaults.
    * @type {object}
@@ -253,7 +259,7 @@ ML.Carousel = function(el, settings, func) {
   * @private
   */
   function callback(init) {
-    if (!init && func) func(current, el);
+    if (!init && cb) cb(current, el);
 
     ML.removeClass(nextButton, 'inactive');
     ML.removeClass(prevButton, 'inactive');
