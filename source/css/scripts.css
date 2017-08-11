@@ -43,11 +43,10 @@ input.styled, select.styled {width:1px; height:1px; position:absolute; overflow:
 
 /* MODAL */
 .overlay {position:absolute; background:#000; opacity:0.5; filter:alpha(opacity=50); top:0; visibility:hidden; overflow:hidden; display:none;left:0;width:100%; height:100%;}
-div.modal {display:block; position:fixed; z-index:1; top:50%;left:50%; }
-div.modal .header {overflow:auto;clear:both;zoom:1;}
-div.modal .header a {float:right; text-decoration:none; }
-div.modal .content {clear:both; display:block;overflow:auto;}
-div.modal .content iframe {border:0;}
+.modal {display:block; position:fixed; z-index:1; top:50%;left:50%; }
+.modal .modal-header {overflow:auto;clear:both;zoom:1;}
+.modal .modal-header .modal-close {float:right; text-decoration:none; }
+.modal .modal-content {clear:both; display:block;overflow:auto;}
 
 /* ajax */
 .loader {text-align:center;}

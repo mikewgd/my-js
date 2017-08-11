@@ -27,7 +27,7 @@
       "description": "600px width a set height of 150px."
     },
     {
-      "rel": "unique-id3",
+      "rel": "iframe",
       "modal": "width:600:height:150:header:Amodesigns",
       "title": "Settings applied, iFrame",
       "description": "Same settings as above, but the modal is created by the JS. It's for having an iframe inside a modal."
