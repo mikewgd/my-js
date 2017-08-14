@@ -1,8 +1,6 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
-'use strict';
-
 /**
  * Custom select menu.
  * @constructor
@@ -10,6 +8,8 @@
  * new ML.FormElements.Select().setup();
  */
 ML.FormElements.Select = function() {
+  'use strict';
+
   /**
    * All select menus on the page are stored here.
    * @type {array}

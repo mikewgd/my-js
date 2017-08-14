@@ -1,8 +1,6 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
-'use strict';
-
 /**
  * @callback carouselCallback
  * @param {number} index The current slide index.
@@ -28,6 +26,8 @@
  * })
  */
 ML.Carousel = function(el, settings, cb) {
+  'use strict';
+
   /**
    * Carousel defaults.
    * @type {object}

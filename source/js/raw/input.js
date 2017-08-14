@@ -1,8 +1,6 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
-'use strict';
-
 /**
  * Input placeholder attribute polyfill. By default all inputs on the page will be passed
  * into this class.
@@ -12,6 +10,8 @@
  * var input = new ML.InputControl(ML.$('input'));
  */
 ML.InputControl = function(input) {
+  'use strict';
+
   var placeholder = ML.El.getAttr(input, 'placeholder');
   var cursorTimer = null;
 

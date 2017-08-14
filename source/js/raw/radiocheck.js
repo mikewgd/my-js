@@ -1,8 +1,6 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
-'use strict';
-
 /**
  * Custom radio buttons and checkboxes.
  * @constructor
@@ -10,6 +8,8 @@
  * new ML.FormElements.RadioCheckboxes().setup();
  */
 ML.FormElements.RadioCheckboxes = function() {
+  'use strict';
+
   /**
    * All radios and checkboxes on the page are stored here.
    * @type {array}

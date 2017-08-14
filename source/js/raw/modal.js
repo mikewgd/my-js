@@ -1,13 +1,14 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
-'use strict';
 
 // use this https://scotch.io/tutorials/building-your-own-javascript-modal-plugin
 // for inspiration. define a template and have content injected inside.
 // to transfer events need to keep track of them using ML.evtHandler.
 
 ML.Modal = function(settings) {
+	'use strict';
+
 	var DEFAULTS = {
     maxWidth: 600,
     minWidth: 280,
@@ -35,7 +36,15 @@ ML.Modal = function(settings) {
 	};
 
   function create() {
-
+  	var modalBody = ML.El.create('div', {'class': 'modal-body'});
+  	var modalHeader = ML.El.create('div', {'class': 'modal-header'});
+  	var modalContent = ML.El.create('div', {'class': 'modal-content'});
+  	var modalCloseButton = null;
+  	var modalHeaderTitle = null;
+  	modal = ML.El.create('div', {
+  		'class': 'modal hidden', 
+  		'id': 'ml-modal-' + (new Date().getTime())
+  	});
   }
 
 	function bindEvents() {
@@ -45,7 +54,7 @@ ML.Modal = function(settings) {
     ML.El.evt(document, 'click', function(e) {
     	e.preventDefault();
       var clicked = ML.El.clicked(e);
-      if (ML.hasClass(clicked, ) ||
+      if (ML.hasClass(clicked) ||
       	ML.hasClass(clicked, CLASSNAMES.EL)) {
         self.hide();
       }
@@ -70,7 +79,3 @@ ML.Modal = function(settings) {
 
   };
 };
-
-(function() {
-
-})();
