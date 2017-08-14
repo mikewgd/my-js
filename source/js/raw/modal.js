@@ -26,16 +26,14 @@ ML.Modal = function(settings) {
 	var width = settings.width || DEFAULTS.WIDTH;
 	var height = settings.height || DEFAULTS.HEIGHT;
 	var title = settings.title || DEFAULTS.TITLE;
+  var modalCloseButton = null;
 
-	this.init = function() {
-    modal = ML.$(el);
-		modalBody = modal.childNodes[0];
-
+  function init() {
     create();
-		// bindEvents();
-	};
+    bindEvents();
+  }
 
-  function create() {
+	function create() {
   	var modalBody = ML.El.create('div', {'class': 'modal-body'});
   	var modalHeader = ML.El.create('div', {'class': 'modal-header'});
   	var modalContent = ML.El.create('div', {'class': 'modal-content'});
@@ -45,6 +43,10 @@ ML.Modal = function(settings) {
   		'class': 'modal hidden', 
   		'id': 'ml-modal-' + (new Date().getTime())
   	});
+
+    modalBody.appendChild(modalContent);
+    modalBody.appendChild(modalHeader);
+    modal.appendChild(modalBody);
   }
 
 	function bindEvents() {
@@ -78,4 +80,6 @@ ML.Modal = function(settings) {
 	this.hide = function() {
 
   };
+
+  init();
 };
