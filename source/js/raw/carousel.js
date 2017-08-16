@@ -2,12 +2,6 @@
 /* global ML */
 
 /**
- * @callback carouselCallback
- * @param {number} index The current slide index.
- * @param {HTMLElement} el The carousel element.
- */
-
-/**
  * Carousel component.
  * @constructor
  * @param {HTMLElement} el The carousel element.
@@ -16,7 +10,9 @@
  * @param {boolean} [settings.rotate=false] The carousel will rotate automatically.
  * @param {boolean} [settings.dots=false] Dot navigation.
  * @param {boolean} [settings.nav=true] Arrow navigation.
- * @param {carouselCallback} cb Callback function after slide has animated.
+ * @param {function} cb Callback function after slide has animated.
+ * @param {number} cb.index The current slide index.
+ * @param {HTMLElement} cb.el The carousel element.
  * The current slide index is returned.
  * @example
  * var carousel = new ML.Carousel(ML.$('initCarousel'), {
@@ -26,8 +22,6 @@
  * })
  */
 ML.Carousel = function(el, settings, cb) {
-  'use strict';
-
   /**
    * Carousel defaults.
    * @type {object}
