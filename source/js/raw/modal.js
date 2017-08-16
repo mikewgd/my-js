@@ -1,7 +1,25 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
+/**
+ * Modal dialogue windows
+ * @constructor
+ * @param {object} [settings] Configuration settings.
+ * @param {string} [settings.selectorToggle=data-modal] The selector when clicked launches a modal.
+ * @param {string} [settings.selectorModal=modal] The selector for modal window.
+ * @param {string} [settings.selectorClose=modal-close] The selector that closes modals.
+ * @param {string} [settings.activeclass=active] The class to show the modal.
+ * @param {number} [settings.width=600] The width of the modal.
+ * @example
+ * var modals = new ML.Modal();
+ * modals.init();
+ */
 ML.Modal = function(settings) {
+  /**
+   * Modal defaults.
+   * @type {object}
+   * @private
+   */
 	var DEFAULTS = {
     selectorToggle: 'data-modal',     // attribute
     selectorModal: 'modal',           // class name, can change to attr
@@ -17,8 +35,7 @@ ML.Modal = function(settings) {
   var self = this;
 
   /**
-   * [init description]
-   * @return {[type]} [description]
+   * Initializes the modal class.
    */
   this.init = function() {
     var tags = ML._$('*');
@@ -40,8 +57,8 @@ ML.Modal = function(settings) {
   };
 
   /**
-   * [bindEvents description]
-   * @return {[type]} [description]
+   * Events bound to elements.
+   * @private
    */
   function bindEvents() {
     ML.loop(toggles, function(element) {
@@ -52,9 +69,9 @@ ML.Modal = function(settings) {
   }
 
   /**
-   * [closeClick description]
-   * @param  {[type]} e [description]
-   * @return {[type]}   [description]
+   * Handler bound to closing a modal.
+   * @param {Event} e The Event object.
+   * @private
    */
   function closeClick(e) {
     e.preventDefault();
@@ -65,19 +82,18 @@ ML.Modal = function(settings) {
     }
   }
 
-  *
-   * [toggleClick description]
-   * @param  {[type]} e [description]
-   * @return {[type]}   [description]
-   
+  /**
+   * Handler bound to opening a modal.
+   * @param {Event} e The Event object.
+   * @private
+   */
   function toggleClick(e) {
     e.preventDefault();
     self.show(ML.El.clicked(e).rel, ML.parObj(ML.El.data(ML.El.clicked(e), 'modal')));
   }
 
   /**
-   * [destroy description]
-   * @return {[type]} [description]
+   * Destroys an instance of the modal class.
    */
   this.destroy = function() {
     ML.loop(toggles, function(element) {
@@ -98,10 +114,9 @@ ML.Modal = function(settings) {
   };
 
   /**
-   * [show description]
-   * @param  {[type]} id           [description]
-   * @param  {[type]} modalOptions [description]
-   * @return {[type]}              [description]
+   * Shows a modal.
+   * @param {string} id The id of the modal you want to display.
+   * @param {object} modalOptions Configuration settings to overwrite defaults.
    */
 	this.show = function(id, modalOptions) {
     var modal = ML.$(id);
@@ -118,8 +133,7 @@ ML.Modal = function(settings) {
 	};
 
   /**
-   * [hide description]
-   * @return {[type]} [description]
+   * Hides all the modals.
    */
 	this.hide = function() {
     ML.loop(modals, function(element) {
