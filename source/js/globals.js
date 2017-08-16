@@ -64,6 +64,31 @@ ML = {
   },
 
   /**
+   * Merge defaults with user options
+   * @param {object} defaults Default settings
+   * @param {object} options User options
+   * @return {object} Merged values of defaults and options
+   */
+  extend: function(defaults, options) {
+    var extended = {};
+    var prop;
+    
+    for (prop in defaults) {
+      if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+        extended[prop] = defaults[prop];
+      }
+    }
+
+    for (prop in options) {
+      if (Object.prototype.hasOwnProperty.call(options, prop)) {
+        extended[prop] = options[prop];
+      }
+    }
+
+    return extended;
+  },
+
+  /**
    * Returns HTMLElement based on id attriube.
    * @param {string} id The id of the element to return.
    * @return {HTMLElement}
@@ -112,15 +137,11 @@ ML = {
   },
 
   /**
-   * @callback loopCallback
-   * @param {*} element The value of the array element.
-   * @param {number} index The index of the array element.
-   */
-
-  /**
    * Loop through an array with callback.
    * @param {array} arr The array to loop though.
-   * @param {loopCallback} cb Function to be called during loop.
+   * @param {function} cb Function to be called during loop.
+   * @param {*} cb.element The value of the array element.
+   * @param {number} cb.index The index of the array element.
    */
   loop: function(arr, cb) {
     for (var i = 0, len = arr.length; i < len; i++) {
@@ -313,15 +334,11 @@ ML.El = {
   Events: [],
 
   /**
-   * @callback eventCallback
-   * @param {Event} e The Event Object.
-   */
-
-  /**
    * Event listener bound to elements.
    * @param {HTMLElement} el The element to bind an event to.
    * @param {string} type The type of event.
-   * @param {eventCallback} cb Callback function.
+   * @param {function} cb Callback function.
+   * @param {Event} cb.e The Event Object.
    * @param {boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
@@ -561,11 +578,6 @@ ML.El = {
 };
 
 /**
- * @callback animateCallback
- * Function called when animation is complete.
- */
-
-/**
  * Animate elements easily with this constructor. Credit: http://learn.javascript.ru/js-animation, http://learn.javascript.ru/files/tutorial/js/animate.js But modified
  * @constructor
  * @param {HTMLElement} el The element to apply an animation to.
@@ -574,7 +586,7 @@ ML.El = {
  * @param {number} [settings.duration=400] The duration of the animation, defaults to 400ms.
  * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
  * @param {string} [settings.easing=linear] Type of animation (bounce, ease, etc..), defaults to linear
- * @param {animateCallback} [cb] Callback function.
+ * @param {function} [cb] Callback function.
  * @example
  * new ML.Animate(ML.$('el'), {width: 100, height: 100}, {delay: 15, duration: 500, easing: 'bounce'}, function() {
  *   alert('animation is complete');
@@ -685,19 +697,6 @@ ML.Animate = function(el, props, settings, cb) {
 };
 
 /**
- * @callback ajaxSuccessCallback
- * @param {*} response The response from the ajax call.
- */
-
-/**
- * @callback ajaxErrorCallback
- * @param {object} response
- * @param {number} response.status The status code of the request.
- * @param {number} response.state The readyState of the request. For details on
- * the state: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
- */
-
-/**
  * Easily AJAX content with this constructor.
  * @constructor
  * @param {object} params Configuration settings.
@@ -705,8 +704,13 @@ ML.Animate = function(el, props, settings, cb) {
  * @param {string} [params.method=GET] The type of request.
  * @param {function} [params.beforeRequest] Gets called before request is made.
  * @param {function} [params.complete] Gets called when request is completed.
- * @param {ajaxSuccessCallback} params.success When a request is successful with data returned.
- * @param {ajaxErrorCallback} params.error When there is an error with the request.
+ * @param {function} params.success When a request is successful with data returned.
+ * @param {*} params.success.response The response from the ajax call.
+ * @param {function} params.error When there is an error with the request.
+ * @param {object} params.error.response
+ * @param {number} params.error.response.status The status code of the request.
+ * @param {number} params.error.response.state The readyState of the request. For details on
+ * the state: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
  * @example
  * new ML.Ajax({url: 'file/test.html', method: 'GET',
  *   beforeRequest: function () {alert('I happen before request');},

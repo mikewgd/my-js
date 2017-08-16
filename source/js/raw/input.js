@@ -10,8 +10,6 @@
  * var input = new ML.InputControl(ML.$('input'));
  */
 ML.InputControl = function(input) {
-  'use strict';
-
   var placeholder = ML.El.getAttr(input, 'placeholder');
   var cursorTimer = null;
 

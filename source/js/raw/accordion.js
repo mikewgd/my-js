@@ -10,8 +10,6 @@
  * var acc1 = new ML.Accordion(ML.$('accordion1'), true);
  */
 ML.Accordion = function(el, multiple) {
-  'use strict';
-
   var lis = ML._$('li', el);
   var hashUrl = '';
 

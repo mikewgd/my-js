@@ -8,8 +8,6 @@
  * new ML.FormElements.RadioCheckboxes().setup();
  */
 ML.FormElements.RadioCheckboxes = function() {
-  'use strict';
-
   /**
    * All radios and checkboxes on the page are stored here.
    * @type {array}
