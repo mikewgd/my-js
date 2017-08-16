@@ -6,31 +6,25 @@
       "rel": "unique-id3",
       "modal": "",
       "title": "Default settings",
-      "description": "Default settings (width/height)."
+      "description": "Using all defaults."
     },
     {
       "rel": "unique-id3",
-      "modal": "width:600",
+      "modal": "width:700",
       "title": "Set width",
-      "description": "600px width and default height."
+      "description": "Sets the modal with a max width of 700px"
     },
     {
       "rel": "unique-id3",
-      "modal": "height:150",
-      "title": "Set height",
-      "description": "Default width and a set height of 150px."
+      "modal": "activeClass:show-me",
+      "title": "Different active class",
+      "description": "Sets a different class to the modal when opened."
     },
     {
       "rel": "unique-id3",
-      "modal": "width:600:height:150",
-      "title": "Settings applied",
-      "description": "600px width a set height of 150px."
-    },
-    {
-      "rel": "iframe",
-      "modal": "width:600:height:150:header:Amodesigns",
-      "title": "Settings applied, iFrame",
-      "description": "Same settings as above, but the modal is created by the JS. It's for having an iframe inside a modal."
+      "modal": "width:800:activeClass:show-me",
+      "title": "Multiple settings applied",
+      "description": "Sets the modal with a max width of 800px and the active class is show-me."
     }
   ]
 }
