@@ -42,21 +42,18 @@ input.styled, select.styled {width:1px; height:1px; position:absolute; overflow:
 .tooltip .content {display:block;}
 
 /* MODAL */
-.modal .modal-body {display:block; position:absolute; top:50%;left:50%; }
-.modal .modal-body .modal-header {overflow:auto;clear:both;zoom:1;}
-.modal .modal-body .modal-header .modal-close {float:right; text-decoration:none; }
-.modal .modal-body .modal-content {clear:both; display:block;overflow:auto;}
-.modal {
-  position: fixed;
+.modal-overlay {
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgb(0, 0, 0) transparent; /* default fallback */
-  background: rgba(0, 0, 0, 0.5); /* nice browsers */
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000, endColorstr=#7F000000); /* IE 6/7 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F000000, endColorstr=#7F000000)"; /* IE8 */
-  z-index:1;
+  background: #000;
+  opacity: .5;
+  z-index: 1;
+  position: absolute;
 }
-/* ajax */
-.loader {text-align:center;}
+.modal.active {display: block;}
+.modal {position:fixed; top:50%;left:50%;width:100%;display:none; z-index: 2;}
+.modal .modal-header {overflow:auto;clear:both;zoom:1;}
+.modal .modal-header .modal-close {float:right; text-decoration:none;}
+.modal-bg .modal .modal-content {clear:both; display:block;overflow:auto;}

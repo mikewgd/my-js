@@ -1,85 +1,131 @@
 /* jshint browser: true, latedef: false */
 /* global ML */
 
-
-// use this https://scotch.io/tutorials/building-your-own-javascript-modal-plugin
-// for inspiration. define a template and have content injected inside.
-// to transfer events need to keep track of them using ML.evtHandler.
-
 ML.Modal = function(settings) {
-	'use strict';
-
 	var DEFAULTS = {
-    maxWidth: 600,
-    minWidth: 280,
-    closeButton: true,
-    autoOpen: false
+    selectorToggle: 'data-modal',     // attribute
+    selectorModal: 'modal',           // class name, can change to attr
+    selectorClose: 'modal-close',     // class name, can change to attr
+    activeClass: 'active',
+    width: 600
   };
 
-  var CLASSNAMES = {
-  	el: 'modal',
-  	body: 'modal-body',
-    close: 'modal-close'
-  };
+  var options = {};
+  var modals = [];
+  var toggles = [];
+  var overlay = null;
+  var self = this;
 
-	var modal = null;
-	var width = settings.width || DEFAULTS.WIDTH;
-	var height = settings.height || DEFAULTS.HEIGHT;
-	var title = settings.title || DEFAULTS.TITLE;
-  var modalCloseButton = null;
+  /**
+   * [init description]
+   * @return {[type]} [description]
+   */
+  this.init = function() {
+    var tags = ML._$('*');
 
-  function init() {
-    create();
-    bindEvents();
-  }
+    self.destroy();
 
-	function create() {
-  	var modalBody = ML.El.create('div', {'class': 'modal-body'});
-  	var modalHeader = ML.El.create('div', {'class': 'modal-header'});
-  	var modalContent = ML.El.create('div', {'class': 'modal-content'});
-  	var modalCloseButton = null;
-  	var modalHeaderTitle = null;
-  	modal = ML.El.create('div', {
-  		'class': 'modal hidden', 
-  		'id': 'ml-modal-' + (new Date().getTime())
-  	});
+    options = ML.extend(DEFAULTS, settings);
+    overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
+    modals = ML.$C(options.selectorModal);
 
-    modalBody.appendChild(modalContent);
-    modalBody.appendChild(modalHeader);
-    modal.appendChild(modalBody);
-  }
-
-	function bindEvents() {
-    /* jshint validthis: true */
-		var self = this;
-
-    ML.El.evt(document, 'click', function(e) {
-    	e.preventDefault();
-      var clicked = ML.El.clicked(e);
-      if (ML.hasClass(clicked) ||
-      	ML.hasClass(clicked, CLASSNAMES.EL)) {
-        self.hide();
+    ML.loop(tags, function(element) {
+      if (element.getAttribute(options.selectorToggle) !== null) {
+        toggles.push(element);
       }
     });
-	}
 
-	this.show = function() {
-		height = (height === 'auto') ? modalBody.offsetHeight : height;
+    document.body.appendChild(overlay);
+    bindEvents();
+  };
 
-    ML.removeClass(modal, 'hidden');
-    modalBody.removeAttribute('style');
+  /**
+   * [bindEvents description]
+   * @return {[type]} [description]
+   */
+  function bindEvents() {
+    ML.loop(toggles, function(element) {
+      ML.El.evt(element, 'click', toggleClick);
+    });
 
-    ML.El.setStyles(modalBody, {
-    	'width': width + 'px',
-    	'height': (height === 'auto') ? 'auto' : height + 'px',
-    	'marginTop': '-' + (height / 2) + 'px',
-    	'marginLeft': '-' + (modalBody.offsetWidth / 2) + 'px'
+    ML.El.evt(document, 'click', closeClick);
+  }
+
+  /**
+   * [closeClick description]
+   * @param  {[type]} e [description]
+   * @return {[type]}   [description]
+   */
+  function closeClick(e) {
+    e.preventDefault();
+    var clicked = ML.El.clicked(e);
+    if (ML.hasClass(clicked, options.selectorClose) ||
+      ML.hasClass(clicked, 'modal-overlay')) {
+      self.hide();
+    }
+  }
+
+  *
+   * [toggleClick description]
+   * @param  {[type]} e [description]
+   * @return {[type]}   [description]
+   
+  function toggleClick(e) {
+    e.preventDefault();
+    self.show(ML.El.clicked(e).rel, ML.parObj(ML.El.data(ML.El.clicked(e), 'modal')));
+  }
+
+  /**
+   * [destroy description]
+   * @return {[type]} [description]
+   */
+  this.destroy = function() {
+    ML.loop(toggles, function(element) {
+      ML.El.evt(element, 'click', toggleClick);
+      element.removeEventListener('click', toggleClick, false);
+    });
+
+    document.removeEventListener('click', closeClick, false);
+
+    if (ML.$C('overlay').length > 0) {
+      document.body.removeChild(overlay);
+    }
+
+    options = null;
+    overlay = null;
+    modals = [];
+    toggles = [];
+  };
+
+  /**
+   * [show description]
+   * @param  {[type]} id           [description]
+   * @param  {[type]} modalOptions [description]
+   * @return {[type]}              [description]
+   */
+	this.show = function(id, modalOptions) {
+    var modal = ML.$(id);
+    options = ML.extend(options, modalOptions);
+
+    ML.addClass(modal, options.activeClass);
+    ML.removeClass(overlay, 'hidden');
+
+    ML.El.setStyles(modal, {
+    	'maxWidth': options.width + 'px',
+    	'marginTop': '-' + (modal.offsetHeight / 2) + 'px',
+    	'marginLeft': '-' + (options.width / 2) + 'px'
     });
 	};
 
+  /**
+   * [hide description]
+   * @return {[type]} [description]
+   */
 	this.hide = function() {
+    ML.loop(modals, function(element) {
+      ML.removeClass(element, options.activeClass);
+    });
 
+    ML.addClass(overlay, 'hidden');
   };
-
-  init();
 };

@@ -18,22 +18,21 @@
   </ul>
 
 {{#> footer}}
-  <div class="modal hidden" id="unique-id3">
-    <div class="modal-body">
-      <div class="modal-header">
-        <h2 class="modal-header-title">Hello! I am a modal header</h2>
-        <a href="javascript:void(0);" class="modal-close">X</a>
-      </div>
-      <div class="modal-content">
-        <p>I am some modal text</p>
-      </div>
+  <script>
+    var modals = new ML.Modal();
+    modals.init();
+  </script>
+
+  <div class="modal" id="unique-id3">
+    <div class="modal-header">
+      <h2 class="modal-header-title">Modal header</h2>
+      <a href="#" class="modal-close">&times;</a>
+    </div>
+
+    <div class="modal-content">
+      <h3>Test header</h3>
+      <p>Some test content. asdfasd fasdf asdfasdf asdfa sdfasd fasdfasdfasdf</p>
+      <a href="#" id="testLink">link</a>
     </div>
   </div>
-
-
-  <script>
-    // ML.El.evt(ML.$('invokeModal'), 'click', function (e) {
-    //   new ML.Modal(ML.El.clicked(e), {width:200, height:'200'}).show(true);
-    // });
-  </script>
 {{/footer}}
