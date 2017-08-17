@@ -172,6 +172,11 @@ ML = {
       obj[arr[i]] = arr[i + 1];
     }
 
+    // empty
+    if (arr[0] === '') {
+      obj = {};
+    }
+    
     return obj;
   },
 
