@@ -1,3 +1,62 @@
+/* jshint browser: true, latedef: false */
+/* global ML */
+
+(function () {
+  'use strict';
+
+  ML.Tooltip = function(settings) {
+    /**
+     * Tooltip defaults.
+     * @type {object}
+     * @private
+     */
+    var DEFAULTS = {
+      selectorTip: 'data-tooltip',     // attribute
+      selectorTooltip: 'tooltip',      // class name, can change to attr
+      activeClass: 'active',
+      width: 100
+    };
+
+    var options = {};
+    var tooltips = [];
+    var tips = [];
+    var self = this;
+
+    this.init = function() {
+      var tags = ML.El._$('*');
+
+      // self.destroy();
+
+      options = ML.extend(DEFAULTS, settings);
+      modals = ML.El.$C(options.selectorTooltip);
+
+      ML.loop(tags, function(element) {
+        if (element.getAttribute(options.selectorTip) !== null) {
+          tips.push(element);
+        }
+      });
+
+      // bindEvents();
+    };
+
+    function bindEvents() {}
+
+    this.destroy = function() {
+      // remove event listeners.
+      // @TODO
+
+      options = null;
+      overlay = null;
+      modals = [];
+      toggles = [];
+    };
+
+    this.show = function(id, tooltipOptions) {};
+
+    this.hide = function() {};
+  };
+})();
+
 // /**
 // * @class TooltipHandler
 // * @namespace ML
