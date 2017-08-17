@@ -99,6 +99,7 @@
      * Destroys an instance of the modal class.
      */
     this.destroy = function() {
+      // remove event listeners.
       ML.loop(toggles, function(element) {
         ML.El.evt(element, 'click', toggleClick);
         element.removeEventListener('click', toggleClick, false);
@@ -122,28 +123,54 @@
      * @param {object} modalOptions Configuration settings to overwrite defaults.
      */
   	this.show = function(id, modalOptions) {
-      var modal = ML.El.$(id);
-      options = ML.extend(options, modalOptions);
-
-      ML.El.addClass(modal, options.activeClass);
+      var modal = updateModals(ML.El.$(id), ML.extend(options, modalOptions));
+      
+      ML.El.addClass(modal, modal._options.activeClass);
       ML.El.removeClass(overlay, 'hidden');
 
       ML.El.setStyles(modal, {
-      	'maxWidth': options.width + 'px',
+      	'maxWidth': modal._options.width + 'px',
       	'marginTop': '-' + (modal.offsetHeight / 2) + 'px',
-      	'marginLeft': '-' + (options.width / 2) + 'px'
+      	'marginLeft': '-' + (modal._options.width / 2) + 'px'
       });
   	};
+
+    /**
+     * Updates the modals array.
+     * @param {HTMLElement} el The modal to search for in array.
+     * @return {HTMLElement} The modal found in the array of modals.
+     * @private
+     */
+    function updateModals(el, options) {
+      var modal = {};
+
+      for (var i = 0, len = modals.length; i < len; i++) {
+        if (el.id === modals[i].id) {
+          modal = modals[i];
+          modals[i]._options = options;
+        }
+      }
+
+      return modal;
+    }
 
     /**
      * Hides all the modals.
      */
   	this.hide = function() {
-      ML.loop(modals, function(element) {
-        ML.El.removeClass(element, options.activeClass);
+      ML.loop(modals, function(modal) {
+        ML.El.removeClass(modal, modal._options.activeClass);
       });
 
       ML.El.addClass(overlay, 'hidden');
     };
+
+    /**
+     * Returns all registered modals.
+     * @return {array} All the registered modals with custom options, "_options".
+     */
+    this.getAll = function() {
+      return modals;
+    }
   };
 })();
