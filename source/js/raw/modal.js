@@ -171,6 +171,6 @@
      */
     this.getAll = function() {
       return modals;
-    }
+    };
   };
 })();
