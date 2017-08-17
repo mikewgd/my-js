@@ -89,54 +89,6 @@ ML = {
   },
 
   /**
-   * Returns HTMLElement based on id attriube.
-   * @param {string} id The id of the element to return.
-   * @return {HTMLElement}
-   */
-  $: function(id) {
-    return document.getElementById(id);
-  },
-
-  /**
-   * Returns an element based on its tag name.
-   * If you provide a parent you can limit the amount of elements that get returned.
-   * @param {string} tag The tag name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is document.
-   * @return {HTMLElement}
-   */
-  _$: function(tag, parent) {
-    var p = parent || document;
-    return p.getElementsByTagName(tag);
-  },
-
-  /**
-   * Returns an element based on class name.
-   * @param {string} cn The class name of the element.
-   * @return {HTMLElement}
-   */
-  $C: function(cn) {
-    var d = document;
-    var elms = [];
-    var cnSplit = cn.split('.');
-    var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
-
-    if (d.getElementsByClassName) { // for browsers that support getElementsByClassName
-      return d.getElementsByClassName(classN);
-    } else {
-      var tags = this._$('*');
-      var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
-
-      for (var i = 0, len = tags.length; i < len; i++) {
-        if (regex.test(tags[i].className)) {
-          elms.push(tags[i]);
-        }
-      }
-
-      return elms;
-    }
-  },
-
-  /**
    * Loop through an array with callback.
    * @param {array} arr The array to loop though.
    * @param {function} cb Function to be called during loop.
@@ -203,35 +155,6 @@ ML = {
   },
 
   /**
-   * Returns the computed style.
-   * Credits: http://snipplr.com/view/13523/getcomputedstyle-for-ie/
-   * @return {string}
-   */
-  compStyle: function() {
-    if (!window.getComputedStyle) {
-      window.getComputedStyle = function(el) {
-        this.el = el;
-        this.getPropertyValue = function(prop) {
-          var re = /(\-([a-z]){1})/g;
-          if (prop === 'float') {
-            prop = 'styleFloat';
-          }
-
-          if (re.test(prop)) {
-            prop = prop.replace(re, function() {
-              return arguments[2].toUpperCase();
-            });
-          }
-
-          return el.currentStyle[prop] ? el.currentStyle[prop] : null;
-        };
-
-        return this;
-      };
-    }
-  },
-
-  /**
    * Parses a string into an object.
    * @param {string} str String to be parse.
    * @param {string} base Base of the string to be removed.
@@ -259,66 +182,6 @@ ML = {
    */
   trim: function(str) {
     return str.replace(/(^\s+|\s+$)/g, '');
-  },
-
-  /**
-   * Removes a class name from an element.
-   * Credits: http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
-   * @param {HTMLElement} elem The element of the class name to be removed.
-   * @param {string} classN Class names to be removed.
-   * @param {boolean} [multiple] If there are multiple class names to be removed.
-   */
-  removeClass: function(elem, classN, multiple) {
-    var currClass = this.trim(elem.className);
-    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)', 'g');
-
-    elem.className = this.trim(currClass.replace(regex, ' '));
-
-    if (multiple) {
-      var classNames = classN.split(' ');
-
-      for (var i = 0, len = classNames.length; i < len; i++) {
-        this.removeClass(elem, classNames[i]);
-      }
-    }
-  },
-
-  /**
-   * Returns true/flase if an element has a specific class name.
-   * @param {HTMLElement} elem Element to check if it has a specific class name.
-   * @param {string} classN The class name to check for.
-   * @return {boolean}
-   */
-  hasClass: function(elem, classN) {
-    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
-    return regex.test(elem.className);
-  },
-
-  /**
-   * Adds a class name to the element passed.
-   * @param {HTMLElement} elem The element to add a class name to.
-   * @param {string} classN The class name to add to the element passed.
-   */
-  addClass: function(elem, classN) {
-    var currClass = this.trim(elem.className);
-    var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
-
-    if (!this.hasClass(elem, classN)) {
-      elem.className = addedClass;
-    }
-  },
-
-  /**
-   * Toggles the class name of an element.
-   * @param {HTMLElement} elem The element to toggle class name
-   * @param {string} classN The class name to toggle.
-   */
-  toggleClass: function(elem, classN) {
-    if (ML.hasClass(elem, classN)) {
-      ML.removeClass(elem, classN);
-    } else {
-      ML.addClass(elem, classN);
-    }
   }
 };
 
@@ -435,6 +298,114 @@ ML.El = {
   },
 
   /**
+   * Returns HTMLElement based on id attriube.
+   * @param {string} id The id of the element to return.
+   * @return {HTMLElement}
+   */
+  $: function(id) {
+    return document.getElementById(id);
+  },
+
+  /**
+   * Returns an element based on its tag name.
+   * If you provide a parent you can limit the amount of elements that get returned.
+   * @param {string} tag The tag name of the element.
+   * @param {HTMLElement} [parent=document] The parent element, default is document.
+   * @return {HTMLElement}
+   */
+  _$: function(tag, parent) {
+    var p = parent || document;
+    return p.getElementsByTagName(tag);
+  },
+
+  /**
+   * Returns an element based on class name.
+   * @param {string} cn The class name of the element.
+   * @return {HTMLElement}
+   */
+  $C: function(cn) {
+    var d = document;
+    var elms = [];
+    var cnSplit = cn.split('.');
+    var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
+
+    if (d.getElementsByClassName) { // for browsers that support getElementsByClassName
+      return d.getElementsByClassName(classN);
+    } else {
+      var tags = this._$('*');
+      var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
+
+      for (var i = 0, len = tags.length; i < len; i++) {
+        if (regex.test(tags[i].className)) {
+          elms.push(tags[i]);
+        }
+      }
+
+      return elms;
+    }
+  },
+
+  /**
+   * Removes a class name from an element.
+   * Credits: http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+   * @param {HTMLElement} elem The element of the class name to be removed.
+   * @param {string} classN Class names to be removed.
+   * @param {boolean} [multiple] If there are multiple class names to be removed.
+   */
+  removeClass: function(elem, classN, multiple) {
+    var currClass = this.trim(elem.className);
+    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)', 'g');
+
+    elem.className = this.trim(currClass.replace(regex, ' '));
+
+    if (multiple) {
+      var classNames = classN.split(' ');
+
+      for (var i = 0, len = classNames.length; i < len; i++) {
+        this.removeClass(elem, classNames[i]);
+      }
+    }
+  },
+
+  /**
+   * Returns true/flase if an element has a specific class name.
+   * @param {HTMLElement} elem Element to check if it has a specific class name.
+   * @param {string} classN The class name to check for.
+   * @return {boolean}
+   */
+  hasClass: function(elem, classN) {
+    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
+    return regex.test(elem.className);
+  },
+
+  /**
+   * Adds a class name to the element passed.
+   * @param {HTMLElement} elem The element to add a class name to.
+   * @param {string} classN The class name to add to the element passed.
+   */
+  addClass: function(elem, classN) {
+    var currClass = this.trim(elem.className);
+    var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
+
+    if (!this.hasClass(elem, classN)) {
+      elem.className = addedClass;
+    }
+  },
+
+  /**
+   * Toggles the class name of an element.
+   * @param {HTMLElement} elem The element to toggle class name
+   * @param {string} classN The class name to toggle.
+   */
+  toggleClass: function(elem, classN) {
+    if (ML.hasClass(elem, classN)) {
+      ML.removeClass(elem, classN);
+    } else {
+      ML.addClass(elem, classN);
+    }
+  },
+
+  /**
    * Returns the x and y position of an element.
    * @param {HTMLElement} elem The element to get x and y positions for.
    * @return {object}
@@ -517,6 +488,35 @@ ML.El = {
   },
 
   /**
+   * Returns the computed style.
+   * Credits: http://snipplr.com/view/13523/getcomputedstyle-for-ie/
+   * @return {string}
+   */
+  compStyle: function() {
+    if (!window.getComputedStyle) {
+      window.getComputedStyle = function(el) {
+        this.el = el;
+        this.getPropertyValue = function(prop) {
+          var re = /(\-([a-z]){1})/g;
+          if (prop === 'float') {
+            prop = 'styleFloat';
+          }
+
+          if (re.test(prop)) {
+            prop = prop.replace(re, function() {
+              return arguments[2].toUpperCase();
+            });
+          }
+
+          return el.currentStyle[prop] ? el.currentStyle[prop] : null;
+        };
+
+        return this;
+      };
+    }
+  },
+
+  /**
    * Returns a style for a specific element.
    * @param {HTMLElement} element The element to get styles for.
    * @param {string} styleProp Style property to get the value of.
@@ -526,7 +526,7 @@ ML.El = {
     var y;
 
     if (element.currentStyle === undefined) {
-      ML.compStyle();
+      ML.El.compStyle();
       y = window.getComputedStyle(element, '').getPropertyValue(styleProp);
     } else {
       y = element.currentStyle[styleProp];

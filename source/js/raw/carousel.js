@@ -18,7 +18,7 @@
    * @param {HTMLElement} cb.el The carousel element.
    * The current slide index is returned.
    * @example
-   * var carousel = new ML.Carousel(ML.$('initCarousel'), {
+   * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
    *   rotate: true
    * }, function(index, el) {
    *   console.log('slide index: ', index);
@@ -65,7 +65,7 @@
       width = width + gutter;
 
       el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHtml + '</div>';
-      ul = ML._$('ul', el)[0];
+      ul = ML.El._$('ul', el)[0];
       ul.style.left = -(width * current) + 'px';
 
       if (nav) {
@@ -125,7 +125,7 @@
      * @private
      */
     function getSlides() {
-      var lis = ML._$('li', el);
+      var lis = ML.El._$('li', el);
       var arr = [];
 
       for (var i = 0, len = lis.length; i < len; i++) {
@@ -181,7 +181,7 @@
      */
     function bindEvents() {
       if (dots) {
-        var dotLinks = ML._$('a', dotsUl);
+        var dotLinks = ML.El._$('a', dotsUl);
 
         ML.loop(dotLinks, function(item) {
           ML.El.evt(item, 'click', function(e) {
@@ -198,7 +198,7 @@
 
       ML.El.evt(nextButton, 'click', function(e) {
         e.preventDefault();
-        if (ML.hasClass(this, 'inactive') || animating) {
+        if (ML.El.hasClass(this, 'inactive') || animating) {
           return;
         }
 
@@ -208,7 +208,7 @@
 
       ML.El.evt(prevButton, 'click', function(e) {
         e.preventDefault();
-        if (ML.hasClass(this, 'inactive') || animating) {
+        if (ML.El.hasClass(this, 'inactive') || animating) {
           return;
         }
 
@@ -277,20 +277,20 @@
         cb(current, el);
       }
 
-      ML.removeClass(nextButton, 'inactive');
-      ML.removeClass(prevButton, 'inactive');
+      ML.El.removeClass(nextButton, 'inactive');
+      ML.El.removeClass(prevButton, 'inactive');
 
       if (current === 0) {
-        ML.addClass(prevButton, 'inactive');
+        ML.El.addClass(prevButton, 'inactive');
       } else if (current + 1 === total) {
-        ML.addClass(nextButton, 'inactive');
+        ML.El.addClass(nextButton, 'inactive');
       }
 
       if (dots) {
         ML.loop(dotsLis, function(li, i) {
-          ML.removeClass(li, 'active');
+          ML.El.removeClass(li, 'active');
           if (i === current) {
-            ML.addClass(li, 'active');
+            ML.El.addClass(li, 'active');
           }
         });
       }
@@ -299,7 +299,7 @@
 })();
 
 (function() {
-  var carouselEl = ML._$('div');
+  var carouselEl = ML.El._$('div');
   var carousel = null;
   var settings = {};
 

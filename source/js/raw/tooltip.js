@@ -4,7 +4,7 @@
 // * Handles calling the Tooltip class.
 // */
 // ML.TooltipHandler = function () {
-// 	var tags = ML._$('*', document.body);
+// 	var tags = ML.El._$('*', document.body);
 
 // 	for (var i=0; i<tags.length; i++) {
 // 		var attr = ML.El.data;

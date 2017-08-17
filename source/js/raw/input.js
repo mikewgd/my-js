@@ -15,7 +15,7 @@
   };
 
   if (!placeholderSupport()) {
-    var inputs = ML._$('input');
+    var inputs = ML.El._$('input');
 
     for (var i = 0, len = inputs.length; i < len; i++) {
       if (inputs[i].type === 'text') {
@@ -30,7 +30,7 @@
    * @constructor
    * @param {HTMLElement} input The input element.
    * @example
-   * var input = new ML.InputControl(ML.$('input'));
+   * var input = new ML.InputControl(ML.El.$('input'));
    */
   ML.InputControl = function(input) {
     var placeholder = ML.El.getAttr(input, 'placeholder');
@@ -43,18 +43,18 @@
     function bindEvents() {
       ML.El.evt(input, 'focus', function (e){
         var inp = ML.El.clicked(e);
-        ML.addClass(inp, 'input-focus');
+        ML.El.addClass(inp, 'input-focus');
         moveCursor(inp);
         cursorTimer = setTimeout(function() {moveCursor(inp);}, 1);
       });
 
       ML.El.evt(input, 'blur', function (e){
-        ML.removeClass(ML.El.clicked(e), 'input-focus');
+        ML.El.removeClass(ML.El.clicked(e), 'input-focus');
         clearTimeout(cursorTimer);
       });
 
       ML.El.evt(input, 'click', function (e) {
-        if (ML.hasClass(ML.El.clicked(e), 'input-focus')) {
+        if (ML.El.hasClass(ML.El.clicked(e), 'input-focus')) {
           moveCursor(ML.El.clicked(e));
         }
       });
@@ -74,7 +74,7 @@
      * @private
      */
     function moveCursor(input) {
-      if (!ML.hasClass(input, 'input-placeholder')) {
+      if (!ML.El.hasClass(input, 'input-placeholder')) {
         return;
       } else {
         if (typeof input.selectionStart === 'number') {
@@ -98,23 +98,23 @@
       var old = ML.El.getAttr(input, 'placeholder');
       var neww = input.value.replace(old, '');
 
-      if (ML.hasClass(input, 'input-placeholder')) {
+      if (ML.El.hasClass(input, 'input-placeholder')) {
         input.value = neww;
       }
 
-      ML.removeClass(input, 'input-placeholder');
+      ML.El.removeClass(input, 'input-placeholder');
 
       // No characters in input field
       if (input.value.length < 1) {
         input.value = old;
-        ML.addClass(input, 'input-placeholder');
+        ML.El.addClass(input, 'input-placeholder');
         moveCursor(input);
       }
     }
 
     if (placeholder !== null) {
       input.setAttribute('value', placeholder);
-      ML.addClass(input, 'input-placeholder');
+      ML.El.addClass(input, 'input-placeholder');
       bindEvents();
     }
   };

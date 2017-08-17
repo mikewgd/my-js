@@ -44,10 +44,10 @@
      * Good to use when adding new elements in the DOM.
      */
     this.setup = function(el) {
-      var allInputs = el ? ML._$('input', el) : ML._$('input');
+      var allInputs = el ? ML.El._$('input', el) : ML.El._$('input');
 
       ML.loop(allInputs, function(input) {
-        if (ML.hasClass(input, 'system') || ML.hasClass(input, 'styled')) {
+        if (ML.El.hasClass(input, 'system') || ML.El.hasClass(input, 'styled')) {
           return;
         }
 
@@ -71,7 +71,7 @@
       var span = ML.El.create('span', {'class': input.type});
 
       customInputs.push(span);
-      ML.addClass(input, 'styled');
+      ML.El.addClass(input, 'styled');
 
       ML.El.clean(input.parentNode);
 
@@ -79,11 +79,11 @@
       input.parentNode.insertBefore(span, input.nextSibling);
 
       if (input.checked) {
-        ML.addClass(span, 'checked');
+        ML.El.addClass(span, 'checked');
       }
 
       if (input.disabled) {
-        ML.addClass(span, 'disabled');
+        ML.El.addClass(span, 'disabled');
       }
     }
 
@@ -150,7 +150,7 @@
           ref();
         });
 
-        if (!ML.hasClass(customInputs[i], 'disabled')) {
+        if (!ML.El.hasClass(customInputs[i], 'disabled')) {
           ML.El.evt(customInputs[i], 'mouseup', function(e) {
             var clicked = ML.El.clicked(e);
             check.call(clicked);
@@ -171,9 +171,9 @@
       var span =  input.nextSibling;
 
       if (evt.type === 'focus') {
-        ML.addClass(span, 'focus');
+        ML.El.addClass(span, 'focus');
       } else {
-        ML.removeClass(span, 'focus');
+        ML.El.removeClass(span, 'focus');
       }
 
       attachOldEvt(input, evt.type);
@@ -197,24 +197,24 @@
 
       if (inputType === 'radio') {
         var group = input.name;
-        var inputs = ML._$('input');
+        var inputs = ML.El._$('input');
 
         for (var i = 0, len = inputs.length; i < len; i++) {
           if (inputs[i].name === group) {
             inputs[i].checked = false;
-            ML.removeClass(inputs[i].nextSibling, 'checked');
+            ML.El.removeClass(inputs[i].nextSibling, 'checked');
           }
         }
 
-        ML.addClass(this, 'checked');
+        ML.El.addClass(this, 'checked');
         input.checked = true;
       } else {
         // @TODO: Should use toggleClass conditional.
         if (input.checked) {
-          ML.removeClass(this, 'checked');
+          ML.El.removeClass(this, 'checked');
           input.checked = false;
         } else {
-          ML.addClass(this, 'checked');
+          ML.El.addClass(this, 'checked');
           input.checked = true;
         }
       }
@@ -235,9 +235,9 @@
         if (custom) {
           // @TODO: Should use toggleClass conditional.
           if (checked) {
-            ML.addClass(custom, 'checked');
+            ML.El.addClass(custom, 'checked');
           } else {
-            ML.removeClass(custom, 'checked');
+            ML.El.removeClass(custom, 'checked');
           }
         }
       }

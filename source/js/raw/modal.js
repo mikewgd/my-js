@@ -41,13 +41,13 @@
      * Initializes the modal class.
      */
     this.init = function() {
-      var tags = ML._$('*');
+      var tags = ML.El._$('*');
 
       self.destroy();
 
       options = ML.extend(DEFAULTS, settings);
       overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
-      modals = ML.$C(options.selectorModal);
+      modals = ML.El.$C(options.selectorModal);
 
       ML.loop(tags, function(element) {
         if (element.getAttribute(options.selectorToggle) !== null) {
@@ -79,8 +79,8 @@
     function closeClick(e) {
       e.preventDefault();
       var clicked = ML.El.clicked(e);
-      if (ML.hasClass(clicked, options.selectorClose) ||
-        ML.hasClass(clicked, 'modal-overlay')) {
+      if (ML.El.hasClass(clicked, options.selectorClose) ||
+        ML.El.hasClass(clicked, 'modal-overlay')) {
         self.hide();
       }
     }
@@ -106,7 +106,7 @@
 
       document.removeEventListener('click', closeClick, false);
 
-      if (ML.$C('overlay').length > 0) {
+      if (ML.El.$C('overlay').length > 0) {
         document.body.removeChild(overlay);
       }
 
@@ -122,11 +122,11 @@
      * @param {object} modalOptions Configuration settings to overwrite defaults.
      */
   	this.show = function(id, modalOptions) {
-      var modal = ML.$(id);
+      var modal = ML.El.$(id);
       options = ML.extend(options, modalOptions);
 
-      ML.addClass(modal, options.activeClass);
-      ML.removeClass(overlay, 'hidden');
+      ML.El.addClass(modal, options.activeClass);
+      ML.El.removeClass(overlay, 'hidden');
 
       ML.El.setStyles(modal, {
       	'maxWidth': options.width + 'px',
@@ -140,10 +140,10 @@
      */
   	this.hide = function() {
       ML.loop(modals, function(element) {
-        ML.removeClass(element, options.activeClass);
+        ML.El.removeClass(element, options.activeClass);
       });
 
-      ML.addClass(overlay, 'hidden');
+      ML.El.addClass(overlay, 'hidden');
     };
   };
 })();

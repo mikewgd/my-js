@@ -10,10 +10,10 @@
    * @param {HTMLElement} el The accordion element.
    * @param {boolean} [multiple=false] Toggling multiple at a time.
    * @example
-   * var acc1 = new ML.Accordion(ML.$('accordion1'), true);
+   * var acc1 = new ML.Accordion(ML.El.$('accordion1'), true);
    */
   ML.Accordion = function(el, multiple) {
-    var lis = ML._$('li', el);
+    var lis = ML.El._$('li', el);
     var hashUrl = '';
 
     /**
@@ -27,17 +27,17 @@
         if (li) {
           // @TODO: Should use toggleClass conditional.
           if (li === item) {
-            ML.addClass(item, 'accordion-hide-content');
-            ML.toggleClass(li, 'accordion-hide-content');
+            ML.El.addClass(item, 'accordion-hide-content');
+            ML.El.toggleClass(li, 'accordion-hide-content');
           } else {
-            ML.addClass(item, 'accordion-hide-content');
+            ML.El.addClass(item, 'accordion-hide-content');
           }
         } else {
-          ML.addClass(item, 'accordion-hide-content');
+          ML.El.addClass(item, 'accordion-hide-content');
 
-          if (ML.hasClass(item, 'accordion-open-content')) {
-            ML.removeClass(item, 'accordion-hide-content');
-            ML.removeClass(item, 'accordion-open-content');
+          if (ML.El.hasClass(item, 'accordion-open-content')) {
+            ML.El.removeClass(item, 'accordion-hide-content');
+            ML.El.removeClass(item, 'accordion-open-content');
           }
         }
       });
@@ -48,8 +48,8 @@
      * @private
      */
     function bindEvents() {
-      ML.loop(ML._$('a', el), function(item) {
-        if (ML.hasClass(item, 'accordion-toggle')) {
+      ML.loop(ML.El._$('a', el), function(item) {
+        if (ML.El.hasClass(item, 'accordion-toggle')) {
           ML.El.evt(item, 'click', function(e) {
             e.preventDefault();
             toggle(ML.El.clicked(e).parentNode);
@@ -64,7 +64,7 @@
      * @private
      */
     function windowSet() {
-      var activeTab = ML._$('li', ML.$(hashUrl[1]));
+      var activeTab = ML.El._$('li', ML.El.$(hashUrl[1]));
       toggle(activeTab[parseInt(hashUrl[2])]);
     }
 
@@ -75,7 +75,7 @@
      */
     function toggle(li) {
       if (multiple) {
-        ML.toggleClass(li, 'accordion-hide-content');
+        ML.El.toggleClass(li, 'accordion-hide-content');
       } else {
         hideLis(li);
       }
@@ -92,7 +92,7 @@
 })();
 
 (function() {
-  var accordion = ML._$('*');
+  var accordion = ML.El._$('*');
   var toggle = false;
 
   for (var i = 0; i < accordion.length; i++) {
