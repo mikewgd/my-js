@@ -353,10 +353,10 @@ ML.El = {
    * @param {boolean} [multiple] If there are multiple class names to be removed.
    */
   removeClass: function(elem, classN, multiple) {
-    var currClass = this.trim(elem.className);
+    var currClass = ML.trim(elem.className);
     var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)', 'g');
 
-    elem.className = this.trim(currClass.replace(regex, ' '));
+    elem.className = ML.trim(currClass.replace(regex, ' '));
 
     if (multiple) {
       var classNames = classN.split(' ');
@@ -384,7 +384,7 @@ ML.El = {
    * @param {string} classN The class name to add to the element passed.
    */
   addClass: function(elem, classN) {
-    var currClass = this.trim(elem.className);
+    var currClass = ML.trim(elem.className);
     var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
 
     if (!this.hasClass(elem, classN)) {
