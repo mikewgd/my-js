@@ -99,18 +99,18 @@ div.select .selected a {background:#00C; color:#fff;}
 
 /* tooltips */
 .tooltip p.content {margin:0;}
-.tooltip.right .content {margin-left:7px;zoom:1;}
-.tooltip.left .content {margin-right:6px; zoom:1;}
-.tooltip.top .content {margin-bottom:6px; zoom:1;}
-.tooltip.bottom .content {margin-top:6px; zoom:1;}
+.tooltip.tooltip-right-align .tooltip-content {margin-left:7px;zoom:1;}
+.tooltip.tooltip-left-align .tooltip-content {margin-right:6px; zoom:1;}
+.tooltip.tooltip-top-align .tooltip-content {margin-bottom:6px; zoom:1;}
+.tooltip.tooltip-bottom-align .tooltip-content {margin-top:6px; zoom:1;}
 /* Carat Styles */
-.tooltip span.arrow {background-image:url(../images/carats.png); position:absolute;}
-.tooltip.left span.arrow {width:8px;height:14px; background-position:-5px -39px;}
-.tooltip.right span.arrow {width:8px;height:14px; background-position:0 -22px;}
-.tooltip.bottom span.arrow {width:14px; height:7px; background-position:0 0;left:48%;top:0;}
-.tooltip.top span.arrow {width:14px; height:7px;background-position:0 -11px;}
-.tooltip .content {padding:8px; background:#fff; border: 1px solid #ccc;}
-.tooltip .content h1 {font-size:18px;}
+.tooltip .tooltip-arrow {background-image:url(../images/carats.png); position:absolute;}
+.tooltip.tooltip-left-align .tooltip-arrow {width:8px;height:14px; background-position:-5px -39px; margin-top: -13px;}
+.tooltip.tooltip-right-align .tooltip-arrow {width:8px;height:14px; background-position:0 -22px; margin-top: -13px;}
+.tooltip.tooltip-bottom-align .tooltip-arrow {width:14px; height:7px; background-position:0 0; margin-left: -7px;}
+.tooltip.tooltip-top-align .tooltip-arrow {width:14px; height:7px;background-position:0 -11px; margin-left: -7px;}
+.tooltip .tooltip-content {padding:8px; background:#fff; border: 1px solid #ccc;}
+.tooltip .tooltip-content h1 {font-size:18px;}
 
 /* modal */
 .modal {background:#fff; border:4px solid #ccc;}

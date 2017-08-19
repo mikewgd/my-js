@@ -7,35 +7,28 @@
       "tooltip": "",
       "titleAttr": false,
       "title": "Default settings",
-      "description": "Default settings (width/direction)."
+      "description": "Default settings (width/align)."
     },
     {
       "rel": "unique-id1",
-      "tooltip": "direction:bottom",
+      "tooltip": "align:bottom",
       "titleAttr": false,
-      "title": "Set direction",
-      "description": "Default width and a set direction (bottom)."
+      "title": "Set align",
+      "description": "Default width and a set align (bottom)."
     },
     {
       "rel": "unique-id1",
       "tooltip": "width:100",
       "titleAttr": false,
       "title": "Set width",
-      "description": "100px width and default direction."
+      "description": "100px width and default align."
     },
     {
       "rel": "unique-id1",
-      "tooltip": "direction:top:width:100",
+      "tooltip": "align:top:width:100",
       "titleAttr": false,
       "title": "Settings applied",
-      "description": "100px width and a set direction (top)."
-    },
-    {
-      "rel": "unique-id1",
-      "tooltip": "direction:top:width:100",
-      "titleAttr": "The content for this tooltip is being driven by the title attribute in the link",
-      "title": "Dynamically created",
-      "description": "Same settings as above, but the content of the tooltip is taken from title attribute. The HTML structure is being created.<br><em>This should be used if you want a tooltip with minimal text and formatting (i.e. using headers, bold text, etc...).</em>"
+      "description": "100px width and a set align (top)."
     }
   ]
 }

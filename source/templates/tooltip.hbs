@@ -19,22 +19,15 @@
   </ul>
 
 {{#> footer}}
-  <div class="tooltip hidden" id="unique-id1">
-    <span class="arrow"></span>
-    <div class="content">
+  <script>
+    var tooltips = new ML.Tooltip();
+    tooltips.init();
+  </script>
+
+  <div class="tooltip" id="unique-id1">
+    <div class="tooltip-content">
       <h1 class="tight">Hello! I am a tooltip</h1>
       <p class="tight">Im some text about the tooltip.</p>
     </div>
   </div>
-
-  <script>
-    ML.El.evt(window, 'load', function() {
-      ML.TooltipHandler();
-
-      /* FPO */
-      ML.El.evt(ML.$('invokeTooltip'), 'click', function (e) {
-        new ML.Tooltip(ML.El.clicked(e), {width:200, direction:'bottom'}).show(true);
-      });
-    });
-  </script>
 {{/footer}}

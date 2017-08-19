@@ -38,8 +38,15 @@ input.styled, select.styled {width:1px; height:1px; position:absolute; overflow:
 .select li a {cursor:default; outline:none;display:block;text-decoration:none;}
 
 /* TOOLTIPS */
-.tooltip {position:absolute; z-index:10000; zoom:1; display:block;top:-99999em;}
-.tooltip .content {display:block;}
+.tooltip {position:absolute; z-index:10000; zoom:1; display:none;}
+.tooltip.active {display:block;}
+.tooltip .tooltip-content {display:block;}
+/* Carat Styles */
+.tooltip .tooltip-arrow {position:absolute;}
+.tooltip.tooltip-left-align .tooltip-arrow {right: 0; top: 50%;}
+.tooltip.tooltip-right-align .tooltip-arrow {left: 0; top: 50%;}
+.tooltip.tooltip-bottom-align .tooltip-arrow {top: 0; left: 50%;}
+.tooltip.tooltip-top-align .tooltip-arrow {bottom: 0; left: 50%;}
 
 /* MODAL */
 .modal-overlay {
