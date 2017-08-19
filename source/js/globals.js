@@ -326,10 +326,11 @@ ML.El = {
   /**
    * Returns an element based on class name.
    * @param {string} cn The class name of the element.
+   * @param {HTMLElement} [parent=document] The parent element, default is document.
    * @return {HTMLElement}
    */
-  $C: function(cn) {
-    var d = document;
+  $C: function(cn, parent) {
+    var d = parent || document;
     var elms = [];
     var cnSplit = cn.split('.');
     var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
@@ -337,7 +338,7 @@ ML.El = {
     if (d.getElementsByClassName) { // for browsers that support getElementsByClassName
       return d.getElementsByClassName(classN);
     } else {
-      var tags = this._$('*');
+      var tags = this._$('*', d);
       var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
 
       for (var i = 0, len = tags.length; i < len; i++) {
