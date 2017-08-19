@@ -101,15 +101,19 @@
     this.destroy = function() {
       // remove event listeners.
       ML.loop(toggles, function(element) {
-        ML.El.evt(element, 'click', toggleClick);
         element.removeEventListener('click', toggleClick, false);
       });
 
       document.removeEventListener('click', closeClick, false);
 
-      if (ML.El.$C('overlay').length > 0) {
+      if (ML.El.$C('modal-overlay').length > 0) {
         document.body.removeChild(overlay);
       }
+
+      ML.loop(modals, function(element) {
+        element.removeAttribute('style');
+        ML.El.removeClass(element, element._options.activeClass);
+      });
 
       options = null;
       overlay = null;
@@ -138,6 +142,7 @@
     /**
      * Updates the modals array.
      * @param {HTMLElement} el The modal to search for in array.
+     * @param {object} options The options for the modal.
      * @return {HTMLElement} The modal found in the array of modals.
      * @private
      */
