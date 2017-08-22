@@ -7,11 +7,13 @@ var stripDebug = require('gulp-strip-debug');
 var concat = require('gulp-concat-multi');
 var plumber = require('gulp-plumber');
 var sass = require('gulp-sass');
-var source = [
-  'source/js/**/*.js'
-];
-var globalJs = 'source/js/globals.js';
+var jsdoc = require('gulp-jsdoc3');
 var rename = require('gulp-rename');
+var runSequence = require('run-sequence');
+var jsdocConfig = require('../jsdocConfig.json');
+
+var source = ['source/js/**/*.js'];
+var globalJs = 'source/js/globals.js';
 var concatSrc = {
   'accordion.js': [globalJs, 'source/js/raw/accordion.js'],
   'carousel.js': [globalJs, 'source/js/raw/carousel.js'],
@@ -63,6 +65,19 @@ gulp.task('scripts', ['lint', 'uglify'], function() {
   .pipe(gulp.dest('dist/js'));
 });
 
+gulp.task('doc', ['build-all'], function (cb) {
+  gulp.src('dist/js/scripts.js')
+    .pipe(jsdoc(jsdocConfig, cb));
+});
+
+gulp.task('build-all', function() {
+  concat({'scripts.js': [globalJs, 'source/js/raw/*.js']})
+  .pipe(gulp.dest('dist/js'))
+  .pipe(uglify())
+  .pipe(rename({ suffix: '.min' }))
+  .pipe(gulp.dest('dist/js'));
+});
+
 gulp.task('custom-build', ['clean-js'], function() {
   var arg = process.argv.slice(3)[1];
   var scripts = arg.split(',');
@@ -82,5 +97,3 @@ gulp.task('custom-build', ['clean-js'], function() {
   .pipe(rename({ suffix: '.min' }))
   .pipe(gulp.dest('dist/js'));
 });
-
-
