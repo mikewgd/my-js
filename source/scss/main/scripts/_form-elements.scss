@@ -1,6 +1,6 @@
 /* CUSTOM FORM ELEMENTS */
 
-.checkbox,
+.checkbox, 
 .radio {
   margin: 0 5px 0 0;
   width: 15px;
@@ -16,6 +16,7 @@
 }
 
 .checked {
+  background-position: 0 15px;
   background-position: 0 15px;
 }
 
@@ -55,6 +56,15 @@
     color: #fff;
   }
 
+  .dropdown-link {
+    border: 1px solid #ccc;
+    color: #000;
+    line-height: 19px;
+    padding: 0 26px 0 9px;
+    background: #fff url(../images/arrow_dwn.gif) 93% center no-repeat;
+    font-size: inherit;
+  }
+
   &.active-drop {
     .options {
       border-color: #000;
@@ -63,14 +73,5 @@
     .dropdown-link {
       border-color: #000;
     }
-  }
-
-  .dropdown-link {
-    border: 1px solid #ccc;
-    color: #000;
-    line-height: 19px;
-    padding: 0 26px 0 9px;
-    background: #fff url(../images/arrow_dwn.gif) 93% center no-repeat;
-    font-size: inherit;
   }
 }

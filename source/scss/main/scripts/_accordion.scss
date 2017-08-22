@@ -15,16 +15,14 @@
   }
 
   .accordion-toggle {
-    // background: white;
-    // border-bottom: 1px solid black;
-    // color: #000;
+    border-bottom: 1px solid black;
+    display: block;
     padding: 6px;
     font-size: 14px;
     font-weight: bold;
     display: block;
     text-decoration: none;
     outline: none;
-
     color: #666;
     background: #CCC;
     border-bottom: 0;

@@ -1,0 +1,26 @@
+/* MODAL */
+
+.modal {
+  background: #fff;
+  border: 4px solid #ccc;
+
+  &-header {
+    background: #ccc;
+    padding: 6px;
+  }
+
+  &-header-title {
+    color: #fff;
+      float: left;
+      margin: 0;
+  }
+
+  &-close {
+    color: white;
+    font-size: 30px;
+  }
+
+  &-content {
+    padding: 10px;
+  }
+}

@@ -17,5 +17,5 @@ gulp.task('clean-css', function() {
 });
 
 gulp.task('build', function() {
-  runSequence('clean', 'templates', 'scripts', 'css', 'images', 'files');
+  runSequence('clean', 'templates', 'scripts', 'sass', 'images', 'files');
 });

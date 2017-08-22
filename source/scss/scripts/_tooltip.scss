@@ -1,0 +1,55 @@
+/* TOOLTIPS */
+
+.tooltip {
+  position: absolute;
+  z-index: 10000;
+  zoom: 1;
+  display: none;
+
+  &.active, 
+  .tooltip-content {
+    display: block;
+  }
+
+  .tooltip-arrow {
+    position: absolute;
+  }
+
+  &.tooltip-left-align,
+  &.tooltip-right-align {
+    .tooltip-arrow {
+      top: 50%;
+    }
+  }
+
+  &.tooltip-bottom-align,
+  &.tooltip-top-align {
+    .tooltip-arrow {
+      left: 50%;
+    }
+  }
+
+  &.tooltip-left-align {
+    .tooltip-arrow {
+      right: 0;
+    }
+  }
+
+  &.tooltip-right-align {
+    .tooltip-arrow {
+      left: 0;
+    }
+  }
+
+  &.tooltip-bottom-align {
+    .tooltip-arrow {
+      top: 0;
+    }
+  }
+
+  &.tooltip-top-align {
+    .tooltip-arrow {
+      bottom: 0;
+    }
+  }
+}

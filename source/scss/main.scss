@@ -1,1 +1,98 @@
+@import "main/utils";
+
 /* MAIN */
+
+body {
+  font: 12px "Arial", Helvetica, sans-serif;
+  color: #000;
+  margin: 0;
+  padding: 0;
+
+  a {
+    color: #00C;
+  
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.container {
+  max-width: 985px;
+  margin: 0 auto;
+  padding: 20px 0 0 0;
+}
+
+.go-back {
+  display: block;
+  padding: 12px;
+  background: #CCC;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #666;
+  font-weight: bold;
+}
+
+/* General Classes */
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.hidden {
+  position: absolute;
+  top: -99999em;
+  visibility: hidden;
+  display: none;
+}
+
+.no-show {
+  display: none;
+}
+
+form {
+  padding: 5px;
+  border: 1px solid #ccc;
+
+  input[type=text] {
+    display: block;
+  }
+}
+
+.tight {
+  padding: 0;
+  margin: 0;
+}
+
+ul.list li {
+  margin-bottom: 5px;
+}
+
+/* Script Header */
+.script-header {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  overflow: auto;
+
+  h1 {
+    float: left;
+    margin: 0;
+  }
+
+  a {
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+  }
+}
+
+/* Script specific styles */
+@import "main/scripts/accordion";
+@import "main/scripts/carousel";
+@import "main/scripts/form-elements";
+@import "main/scripts/modal";
+@import "main/scripts/tooltip";

@@ -5,6 +5,8 @@ var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
 var stripDebug = require('gulp-strip-debug');
 var concat = require('gulp-concat-multi');
+var plumber = require('gulp-plumber');
+var sass = require('gulp-sass');
 var source = [
   'source/js/**/*.js'
 ];
@@ -27,8 +29,15 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('css', function() {
-  return gulp.src('source/css/*')
+gulp.task('sass', function () {
+  return gulp.src('source/scss/**/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      outputStyle: 'compressed',
+      errLogToConsole: true
+    }))
+    // .pipe(autoprefixer(['last 2 versions', 'ie >= 9', 'and_chr >= 2.3']))
+    .pipe(plumber.stop())
     .pipe(gulp.dest('dist/css'));
 });
 

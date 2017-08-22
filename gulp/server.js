@@ -17,10 +17,10 @@ gulp.task('serve', function() {
   });
 
   gulp.watch([
-    'source/css/*'
+    'source/scss/**/*'
     ], function(event) {
       if (isOnlyChange(event)) {
-        runSequence('clean-css', 'css', 'reloader');
+        runSequence('clean-css', 'sass', 'reloader');
       }
     });
 
@@ -29,7 +29,7 @@ gulp.task('serve', function() {
     'source/data/*.json'
     ], function(event) {
       if (isOnlyChange(event)) {
-        runSequence('clean', 'templates', 'css', 'images', 'files', 'scripts', 'reloader');
+        runSequence('clean', 'templates', 'sass', 'images', 'files', 'scripts', 'reloader');
       }
     });
 
