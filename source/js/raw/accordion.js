@@ -13,8 +13,20 @@
    * var acc1 = new ML.Accordion(ML.El.$('accordion1'), true);
    */
   ML.Accordion = function(el, multiple) {
-    var lis = ML.El._$('li', el);
-    var hashUrl = '';
+    var lis = [];
+    /**
+     * Initialization of accordion component.
+     * @private
+     */
+    function init() {
+      try {
+        lis = ML.El._$('li', el);
+        hideLis();
+        bindEvents();
+      } catch(e) {
+        throw new Error(e)
+      }
+    }
 
     /**
      * Adds "hide" class to <li> elements.
@@ -59,16 +71,6 @@
     }
 
     /**
-     * Sets the current active tab based on hash. The URL format is as follows:
-     * "#acc-{ID}-{TAB INDEX}"
-     * @private
-     */
-    function windowSet() {
-      var activeTab = ML.El._$('li', ML.El.$(hashUrl[1]));
-      toggle(activeTab[parseInt(hashUrl[2])]);
-    }
-
-    /**
      * Handles toggling the <li> element.
      * @param {HTMLElement} li Parent element to accordion toggle, i.e. <li>
      * @private
@@ -81,13 +83,7 @@
       }
     }
 
-    hideLis();
-    bindEvents();
-
-    if (el.id && window.location.hash) {
-      hashUrl = window.location.hash.split('-');
-      windowSet();
-    }
+    init();
   };
 })();
 
@@ -98,7 +94,7 @@
   for (var i = 0; i < accordion.length; i++) {
     if (ML.El.data(accordion[i], 'accordion') !== null) {
       toggle = (ML.El.data(accordion[i], 'accordion') === 'multiple') ? true : false;
-      new ML.Accordion(accordion[i], toggle);
+      new ML.Accordion('accordion[i]', toggle);
     }
   }
 })();
