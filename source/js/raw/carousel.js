@@ -10,7 +10,7 @@
    * @param {HTMLElement} el The carousel element.
    * @param {object} [settings] Configuration settings.
    * @param {number} [settings.current=0] The current slide to start on. 0 based.
-   * @param {boolean} [settings.rotate=false] The carousel will rotate automatically.
+   * @param {boolean} [settings.autoplay=false] The carousel will autoplay automatically.
    * @param {boolean} [settings.dots=false] Dot navigation.
    * @param {boolean} [settings.nav=true] Arrow navigation.
    * @param {function} cb Callback function after slide has animated.
@@ -19,7 +19,7 @@
    * The current slide index is returned.
    * @example
    * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
-   *   rotate: true
+   *   autoplay: true
    * }, function(index, el) {
    *   console.log('slide index: ', index);
    * })
@@ -32,7 +32,7 @@
      */
     var DEFAULTS = {
       current: 0,
-      rotate: false,
+      autoplay: false,
       dots: false,
       nav: true
     };
@@ -49,7 +49,7 @@
     var dotsLis = [];
 
     var animating = false;
-    var rotateSpeed = 2000;
+    var autoplaySpeed = 2000;
     var animation = null;
     var total = 0;
     var width = el.offsetWidth;
@@ -70,8 +70,8 @@
           current = DEFAULTS.current;
         }
 
-        if (!ML.isBool(options.rotate)) {
-          options.rotate = DEFAULTS.rotate;
+        if (!ML.isBool(options.autoplay)) {
+          options.autoplay = DEFAULTS.autoplay;
         }
 
         if (!ML.isBool(options.dots)) {
@@ -99,10 +99,10 @@
       bindEvents();
       callback(true);
 
-      if (options.rotate) {
+      if (options.autoplay) {
         setTimeout(function() {
           cycle();
-        }, rotateSpeed);
+        }, autoplaySpeed);
       }
     };
 
@@ -256,16 +256,16 @@
     * @private
     */
     function stopCycle() {
-      options.rotate = false;
+      options.autoplay = false;
       clearTimeout(animation);
     }
 
     /**
-    * Rotates through the slides in the carousel based on a timer.
+    * autoplays through the slides in the carousel based on a timer.
     * @private
     */
     function cycle() {
-      if (!options.rotate) {
+      if (!options.autoplay) {
         return;
       }
 
@@ -281,7 +281,7 @@
 
       animation = setTimeout(function() {
         cycle();
-      }, rotateSpeed);
+      }, autoplaySpeed);
 
       slide();
     }
