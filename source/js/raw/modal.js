@@ -45,9 +45,14 @@
 
       self.destroy();
 
-      options = ML.extend(DEFAULTS, settings);
-      overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
-      modals = ML.El.$C(options.selectorModal);
+      options = ML.extend(DEFAULTS, (ML.isUndef(settings)) ? {} : settings);
+     
+      if (ML.El.$C(options.selectorModal).length < 1) {
+        throw new Error('There are no <div class="' + options.selectorModal + '" /> on the page.');
+      } else {
+        modals = ML.El.$C(options.selectorModal);
+        overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
+      }
 
       ML.loop(tags, function(element) {
         if (element.getAttribute(options.selectorToggle) !== null) {

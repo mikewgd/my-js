@@ -17,12 +17,6 @@
     {{!-- <li><a id="invokeModal" rel="unique-id3" href="javascript:void(0);">Invoke Modal Manually</a> - Usage shown in the code.</li> --}}
   </ul>
 
-{{#> footer}}
-  <script>
-    var modals = new ML.Modal();
-    modals.init();
-  </script>
-
   <div class="modal" id="unique-id3">
     <div class="modal-header">
       <h2 class="modal-header-title">Modal header</h2>
@@ -35,4 +29,10 @@
       <a href="#" id="testLink">link</a>
     </div>
   </div>
+
+{{#> footer}}
+  <script>
+    var modals = new ML.Modal();
+    modals.init();
+  </script>
 {{/footer}}
