@@ -37,7 +37,7 @@
       nav: true
     };
 
-    var options = ML.extend(DEFAULTS, (ML.isUndef(settings)) ? {} : settings);
+    var options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
     var current = parseInt(options.current);
     var self = this;
 

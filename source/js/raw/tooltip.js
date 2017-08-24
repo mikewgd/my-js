@@ -58,7 +58,7 @@
 
       self.destroy();
 
-      options = ML.extend(DEFAULTS, (ML.isUndef(settings)) ? {} : settings);
+      options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
 
       if (ML.El.$C(options.selectorTooltip).length < 1) {
         throw new Error('There are no <div class="' + options.selectorTooltip + '" /> on the page.');
