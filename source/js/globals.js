@@ -736,10 +736,7 @@ ML.Animate = function(el, props, settings, cb) {
  * @param {function} params.success When a request is successful with data returned.
  * @param {*} params.success.response The response from the ajax call.
  * @param {function} params.error When there is an error with the request.
- * @param {object} params.error.response
- * @param {number} params.error.response.status The status code of the request.
- * @param {number} params.error.response.state The readyState of the request. For details on
- * the state: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+ * @param {object} params.error.response The response from the ajax call.
  * @example
  * new ML.Ajax({url: 'file/test.html', method: 'GET',
  *   beforeRequest: function () {alert('I happen before request');},
@@ -749,41 +746,80 @@ ML.Animate = function(el, props, settings, cb) {
  * });
  */
 ML.Ajax = function(params) {
-  var url = params.url;
-  var method = params.method || 'GET';
-  var xmlhttp;
+  /**
+   * Ajax defaults.
+   * @type {object}
+   * @private
+   */
+  var DEFAULTS = {
+    method: 'GET'
+  };
 
-  if (window.location.host === '') {
-    params.success('ERROR: Must be hosted on a server');
-    return;
-  } else {
-    xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  var xmlhttp = null;
+  var options = ML.extend(DEFAULTS, (ML.isUndef(params, true)) ? {} : params);
 
-    ML.El.evt(xmlhttp, 'readystatechange', function() {
-      var _this = this;
-      if (params.beforeRequest) {
-        params.beforeRequest();
+  /**
+   * Initialization of ajax.
+   * @private
+   */
+  function init() {
+    if (window.location.host === '') {
+      throw new Error('Must be hosted on a server.');
+    } else {
+      xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+      ML.El.evt(xmlhttp, 'readystatechange', readyState);
+
+      if (!/[^/]+$/.test(params.url)) {
+        throw new Error('Not a valid URL.');
       }
 
-      if (_this.readyState === 4) {
-        if (params.complete) {
-          params.complete();
-        }
+      if (!/^GET$|^POST$/.test(params.method.toUpperCase())) {
+        options.method = DEFAULTS.method;
+      }
+      
+      xmlhttp.open(options.method.toUpperCase(), options.url, true);
+      xmlhttp.send();
+    }
+  }
 
-        if (_this.status === 200) {
-          params.success(_this.responseText);
-        } else {
-          params.error({
-            status: _this.status,
-            state: _this.readyState
+  /**
+   * The callback function of readystatechange
+   * @private
+   */
+  function readyState() {
+    if (options.beforeRequest && typeof options.beforeRequest === 'function') {
+      options.beforeRequest();
+    }
+
+    if (this.readyState === 4) {
+      if (options.complete && typeof options.complete === 'function') {
+        options.complete();
+      }
+
+      if (this.status === 200) {
+        if (options.success && typeof options.success === 'function') {
+            options.success({
+            status: this.status, 
+            statusText: this.statusText, 
+            xml: this.responseXML,
+            data: this.responseText
+          });
+        }
+      } else {
+        if (options.error && typeof options.error === 'function') {
+          options.error({
+            status: this.status, 
+            statusText: this.statusText, 
+            readyState: this.readyState,
+            xml: this.responseXML,
+            data: this.responseText
           });
         }
       }
-    });
-
-    xmlhttp.open(method, url, true);
-    xmlhttp.send();
+    }
   }
+  
+  init();
 };
 
 /**
