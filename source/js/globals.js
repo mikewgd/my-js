@@ -602,13 +602,12 @@ ML.Animate = function(el, props, settings, cb) {
   /**
    * Animate defaults.
    * @type {object}
-   * @property {number} DURATION The default duration of the animation.
-   * @property {number} DELAY The default delay of the animation.
    * @private
    */
   var DEFAULTS = {
-    DURATION: 400,
-    DELAY: 13
+    duration: 400,
+    delay: 13,
+    easing: 'linear'
   };
 
   var Easing = {
@@ -645,13 +644,37 @@ ML.Animate = function(el, props, settings, cb) {
     }
   };
 
+  var options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
   var timer = null;
   var currProps = {};
   var progress = false;
   var time = new Date();
-  var duration = settings.duration || DEFAULTS.DURATION;
-  var delay = settings.delay || DEFAULTS.DELAY;
-  var easing = (settings.easing === undefined) ? Easing.linear : Easing[settings.easing];
+
+  /**
+   * Initialization of animating elements.
+   * @private
+   */
+  function init() {
+    if (ML.isUndef(el.tagName)) {
+      throw new Error('You can only animate a valid element on the page.')
+    } else {
+      if (!ML.isNum(options.duration)) {
+        options.duration = DEFAULTS.duration;
+      }
+
+      if (!ML.isNum(options.delay)) {
+        options.delay = DEFAULTS.delay;
+      }
+
+      if (ML.isUndef(Easing[options.easing])) {
+        options.easing = Easing[DEFAULTS.easing];
+      } else {
+        options.easing = Easing[options.easing];
+      }
+    }
+
+    move();
+  }
 
   /**
    * Gets the current CSS values of the properties being animated.
@@ -679,14 +702,14 @@ ML.Animate = function(el, props, settings, cb) {
     getCurrs();
 
     timer = setInterval(function() {
-      progress = (new Date() - time) / duration;
+      progress = (new Date() - time) / options.duration;
 
       if (progress > 1) {
         progress = 1;
       }
 
       for (var prop in props) {
-        var value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * easing(progress));
+        var value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
         el.style[prop] = value + 'px';
       }
 
@@ -696,10 +719,10 @@ ML.Animate = function(el, props, settings, cb) {
           cb();
         }
       }
-    }, delay);
+    }, options.delay);
   }
 
-  move();
+  init();
 };
 
 /**
