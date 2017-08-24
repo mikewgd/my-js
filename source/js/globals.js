@@ -17,7 +17,7 @@ ML = {
    * @return {boolean}
    */
   bool: function(str) {
-    if (typeof str.toLowerCase() === 'string') {
+    if ((typeof str).toLowerCase() === 'string') {
       if (str === 'true') {
         return true;
       } else if (str === 'false') {
@@ -25,6 +25,8 @@ ML = {
       } else {
         return str;
       }
+    } else {
+      return str;
     }
   },
 
@@ -72,6 +74,10 @@ ML = {
   extend: function(defaults, options) {
     var extended = {};
     var prop;
+
+    if ((typeof defaults).toLowerCase() !== 'object' || (typeof options).toLowerCase() !== 'object') {
+      throw new Error('Parameters must be objects.');
+    }
     
     for (prop in defaults) {
       if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
@@ -210,7 +216,7 @@ ML.El = {
    * @param {boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
-    if (capture === undefined) {
+    if (ML.isUndef(capture)) {
       capture = false;
     }
 
@@ -274,8 +280,6 @@ ML.El = {
           ML.El.clean(child);
         }
       }
-
-
     }
 
     return node;
@@ -308,7 +312,11 @@ ML.El = {
    * @return {HTMLElement}
    */
   $: function(id) {
-    return document.getElementById(id);
+    if (ML.isUndef(document.getElementById(id))) {
+      throw new Error('Element can\'t be found.');
+    } else {
+      return document.getElementById(id);
+    }
   },
 
   /**
@@ -319,8 +327,17 @@ ML.El = {
    * @return {HTMLElement}
    */
   _$: function(tag, parent) {
-    var p = parent || document;
-    return p.getElementsByTagName(tag);
+    var returned = document.getElementsByTagName(tag);
+
+    if (returned.length < 1) {
+      throw new Error('The first parameter needs to be a valid tag.')
+    }
+
+    if ((typeof parent).toLowerCase() === 'object') {
+      returned = parent.getElementsByTagName(tag);
+    }
+
+    return returned;
   },
 
   /**
@@ -335,20 +352,25 @@ ML.El = {
     var cnSplit = cn.split('.');
     var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
 
-    if (d.getElementsByClassName) { // for browsers that support getElementsByClassName
-      return d.getElementsByClassName(classN);
+    if (document.getElementsByClassName) { // for browsers that support getElementsByClassName
+      if ((typeof parent).toLowerCase() === 'object') {
+        elms = parent.getElementsByClassName(classN);
+      } else {
+        elms = document.getElementsByClassName(classN);
+      }
     } else {
-      var tags = this._$('*', d);
+      var tags = ((typeof parent).toLowerCase() === 'object') ?
+        this._$('*', parent) : this._$('*', document);
       var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
 
       for (var i = 0, len = tags.length; i < len; i++) {
         if (regex.test(tags[i].className)) {
           elms.push(tags[i]);
         }
-      }
-
-      return elms;
+      }      
     }
+
+    return elms;
   },
 
   /**
@@ -404,10 +426,10 @@ ML.El = {
    * @param {string} classN The class name to toggle.
    */
   toggleClass: function(elem, classN) {
-    if (ML.hasClass(elem, classN)) {
-      ML.removeClass(elem, classN);
+    if (this.hasClass(elem, classN)) {
+      this.removeClass(elem, classN);
     } else {
-      ML.addClass(elem, classN);
+      this.addClass(elem, classN);
     }
   },
 
@@ -447,28 +469,6 @@ ML.El = {
   },
 
   /**
-   * Returns the x and y position of an element to make it centered.
-   * @param {HTMLElement} elem The element to get center coordinates for.
-   * @return {object}
-   */
-  center: function(elem) {
-    var win = ML.windowDimen();
-    var mvX = (win.w - elem.offsetWidth) / 2 + 'px';
-    var mvY = (win.h - elem.offsetHeight) / 2 + 'px';
-
-    while (elem !== null) {
-      elem.style.top = mvY;
-      elem.style.left = mvX;
-      elem = elem.offsetChild;
-    }
-
-    return {
-      x: mvY,
-      y: mvX
-    };
-  },
-
-  /**
    * Returns an element to be created in the DOM with attributes passed.
    * @param {HTMLElement} element The tag to create, i.e. 'div'
    * @param {object} [attrs] Attributes to add to tag.
@@ -479,7 +479,7 @@ ML.El = {
   create: function(element, attrs) {
     var elem = document.createElement(element);
 
-    if (attrs) {
+    if (attrs && (typeof attrs).toLowerCase() === 'object') {
       for (var attr in attrs) {
         // IE does not support support setting class name with set attribute
         if ([attr] === 'class') {
@@ -569,7 +569,7 @@ ML.El = {
       att = element.getAttribute(attr);
     }
 
-    return att;
+    return att;  
   },
 
   /**
@@ -579,7 +579,7 @@ ML.El = {
    * @return {string|number}
    */
   data: function(element, attr) {
-    return element.getAttribute('data-' + attr);
+    return this.getAttr(element, 'data-' + attr);
   }
 };
 
