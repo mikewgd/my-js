@@ -37,13 +37,11 @@
       nav: true
     };
 
-    var current = parseInt(settings.current) || DEFAULTS.current;
-    var rotate = settings.rotate || DEFAULTS.rotate;
-    var dots = settings.dots || DEFAULTS.dots;
-    var nav = settings.nav || DEFAULTS.nav;
+    var options = ML.extend(DEFAULTS, settings);
+    var current = parseInt(options.current);
     var self = this;
 
-    var slides = getSlides();
+    var slides = [];
     var ul = null;
     var nextButton = null;
     var prevButton = null;
@@ -53,33 +51,55 @@
     var animating = false;
     var rotateSpeed = 2000;
     var animation = null;
-    var total = slides.length;
+    var total = 0;
     var width = el.offsetWidth;
 
     /**
      * Initializes the carousel.
      */
     this.init = function() {
-      var carouselHtml = el.innerHTML;
-      var gutter = parseInt(ML.El.getStyle(slides[0], 'margin-right').replace('px', ''));
+      var carouselHtml = null;
+      var gutter = 0;
+
+      if ((typeof el).toLowerCase() !== 'object' && ML.isUndef(el.tagName)) {
+        throw new Error('The carousel element must be an HTMLElement.');
+      } else {
+        carouselHtml = el.innerHTML;
+
+        if (!ML.isNum(current)) {
+          current = DEFAULTS.current;
+        }
+
+        if (!ML.isBool(options.rotate)) {
+          options.rotate = DEFAULTS.rotate;
+        }
+
+        if (!ML.isBool(options.dots)) {
+          options.dots = DEFAULTS.dots;
+        }
+      }
+
+      slides = getSlides();
+      total = slides.length;
+      gutter = parseInt(ML.El.getStyle(slides[0], 'margin-right').replace('px', ''));
       width = width + gutter;
 
       el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHtml + '</div>';
       ul = ML.El._$('ul', el)[0];
       ul.style.left = -(width * current) + 'px';
 
-      if (nav) {
+      if (options.nav) {
         createNav();
       }
 
-      if (dots) {
+      if (options.dots) {
         createDots();
       }
 
       bindEvents();
       callback(true);
 
-      if (rotate) {
+      if (options.rotate) {
         setTimeout(function() {
           cycle();
         }, rotateSpeed);
@@ -180,7 +200,7 @@
      * @private
      */
     function bindEvents() {
-      if (dots) {
+      if (options.dots) {
         var dotLinks = ML.El._$('a', dotsUl);
 
         ML.loop(dotLinks, function(item) {
@@ -236,7 +256,7 @@
     * @private
     */
     function stopCycle() {
-      rotate = false;
+      options.rotate = false;
       clearTimeout(animation);
     }
 
@@ -245,7 +265,7 @@
     * @private
     */
     function cycle() {
-      if (!rotate) {
+      if (!options.rotate) {
         return;
       }
 
@@ -286,7 +306,7 @@
         ML.El.addClass(nextButton, 'inactive');
       }
 
-      if (dots) {
+      if (options.dots) {
         ML.loop(dotsLis, function(li, i) {
           ML.El.removeClass(li, 'active');
           if (i === current) {

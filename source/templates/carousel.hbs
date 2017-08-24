@@ -33,18 +33,17 @@
 
 {{#> footer}}
   <script>
-    var el = ML.$('initCarousel');
-    var carousel = new ML.Carousel(el, {
+    var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
       dots: true
     }, function(index) {
-      ML.$('indexNum').innerHTML = index;
+      ML.El.$('indexNum').innerHTML = index;
     })
 
-    ML.El.evt(ML.$('carouselNext'), 'click', function(e) {
+    ML.El.evt(ML.El.$('carouselNext'), 'click', function(e) {
       carousel.next();
     });
 
-    ML.El.evt(ML.$('carouselPrev'), 'click', function(e) {
+    ML.El.evt(ML.El.$('carouselPrev'), 'click', function(e) {
       carousel.prev();
     });
 
