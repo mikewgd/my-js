@@ -58,8 +58,13 @@
 
       self.destroy();
 
-      options = ML.extend(DEFAULTS, settings);
-      tooltips = ML.El.$C(options.selectorTooltip);
+      options = ML.extend(DEFAULTS, (ML.isUndef(settings)) ? {} : settings);
+
+      if (ML.El.$C(options.selectorTooltip).length < 1) {
+        throw new Error('There are no <div class="' + options.selectorTooltip + '" /> on the page.');
+      } else {
+        tooltips = ML.El.$C(options.selectorTooltip);
+      }
 
       ML.loop(tags, function(element) {
         if (element.getAttribute(options.selectorTip) !== null) {
@@ -160,6 +165,19 @@
       for (var i = 0, len = tooltips.length; i < len; i++) {
         if (el.id === tooltips[i].id) {
           tooltip = tooltips[i];
+
+          if (!ML.isNum(options.width)) {
+            options.width = DEFAULTS.width;
+          }
+
+          if (!ML.isBool(options.arrow)) {
+            options.arrow = DEFAULTS.arrow;
+          }
+
+          if (!/^left$|^right$|^top$|^bottom$/.test(options.align)) {
+            options.align = DEFAULTS.align;
+          }
+
           tooltips[i]._options = options;
         }
       }
