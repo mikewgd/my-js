@@ -33,7 +33,7 @@ ML = {
   /**
    * Returns if a value is undefined or not.
    * @param {*} val The value to test if undefined.
-   * @param {boolean} [empty]j Checks if the value is empty, i.e. "". Parameter is
+   * @param {boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
    * optional. If a value is empty and paramter is not set, false is returned.
    * @return {boolean}
    */
@@ -216,7 +216,7 @@ ML.El = {
    * @param {boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
-    if (ML.isUndef(capture)) {
+    if (ML.isUndef(capture, true)) {
       capture = false;
     }
 
@@ -312,7 +312,7 @@ ML.El = {
    * @return {HTMLElement}
    */
   $: function(id) {
-    if (ML.isUndef(document.getElementById(id))) {
+    if (ML.isUndef(document.getElementById(id), true)) {
       throw new Error('Element can\'t be found.');
     } else {
       return document.getElementById(id);
