@@ -157,6 +157,11 @@
       for (var i = 0, len = modals.length; i < len; i++) {
         if (el.id === modals[i].id) {
           modal = modals[i];
+
+          if (!ML.isNum(options.width)) {
+            options.width = DEFAULTS.width;
+          }
+          
           modals[i]._options = options;
         }
       }
