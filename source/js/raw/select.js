@@ -335,7 +335,7 @@
             }
           });
 
-          ML.toggleClass(div, 'active');
+          ML.El.toggleClass(div, 'active');
 
           // Adds selected to currently selected item
           ML.El._$('li', div)[ML.El.data(clicked, 'index')].className = 'selected';
