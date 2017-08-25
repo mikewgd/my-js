@@ -235,13 +235,5 @@
         ML.El.removeClass(tooltip, tooltip._options.activeClass);
       });
     };
-
-    /**
-     * Returns all registered tooltips.
-     * @return {array} All the registered modals with custom options, "_options".
-     */
-    this.getAll = function() {
-      return tooltips;
-    };
   };
 })();

@@ -179,13 +179,5 @@
 
       ML.El.addClass(overlay, 'hidden');
     };
-
-    /**
-     * Returns all registered modals.
-     * @return {array} All the registered modals with custom options, "_options".
-     */
-    this.getAll = function() {
-      return modals;
-    };
   };
 })();
