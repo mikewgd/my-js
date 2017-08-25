@@ -18,17 +18,17 @@
     },
     {
       "rel": "unique-id1",
-      "tooltip": "width:100",
+      "tooltip": "width:300",
       "titleAttr": false,
       "title": "Set width",
-      "description": "100px width and default align."
+      "description": "300px width and default align."
     },
     {
       "rel": "unique-id1",
-      "tooltip": "align:top:width:100",
+      "tooltip": "align:top:width:400",
       "titleAttr": false,
       "title": "Settings applied",
-      "description": "100px width and a set align (top)."
+      "description": "400px width and a set align (top)."
     }
   ]
 }

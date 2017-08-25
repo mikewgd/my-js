@@ -18,16 +18,16 @@
     {{!-- <li><a id="invokeTooltip" rel="unique-id1" href="javascript:void(0);">Invoke Tooltip Manually</a> - Usage shown in the code.</li> --}}
   </ul>
 
-{{#> footer}}
-  <script>
-    var tooltips = new ML.Tooltip();
-    tooltips.init();
-  </script>
-
   <div class="tooltip" id="unique-id1">
     <div class="tooltip-content">
       <h1 class="tight">Hello! I am a tooltip</h1>
       <p class="tight">Im some text about the tooltip.</p>
     </div>
   </div>
+
+{{#> footer}}
+  <script>
+    var tooltips = new ML.Tooltip();
+    tooltips.init();
+  </script>
 {{/footer}}
