@@ -94,7 +94,7 @@
   for (var i = 0; i < accordion.length; i++) {
     if (ML.El.data(accordion[i], 'accordion') !== null) {
       toggle = (ML.El.data(accordion[i], 'accordion') === 'multiple') ? true : false;
-      new ML.Accordion('accordion[i]', toggle);
+      new ML.Accordion(accordion[i], toggle);
     }
   }
 })();
