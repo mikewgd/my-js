@@ -53,7 +53,7 @@ ML = {
    * @return {boolean}
    */
   isBool: function(val) {
-    return ((typeof this.bool(val)).toLowerCase() === 'boolean');
+    return ((typeof ML.bool(val)).toLowerCase() === 'boolean');
   },
 
   /**
@@ -228,7 +228,7 @@ ML.El = {
       el['on' + type] = cb;
     }
 
-    this.Events.push([el, type, cb]);
+    ML.El.Events.push([el, type, cb]);
   },
 
   /**
@@ -330,7 +330,7 @@ ML.El = {
     var returned = document.getElementsByTagName(tag);
 
     if (returned.length < 1) {
-      throw new Error('The first parameter needs to be a valid tag.')
+      throw new Error('The first parameter needs to be a valid tag.');
     }
 
     if ((typeof parent).toLowerCase() === 'object') {
@@ -360,7 +360,7 @@ ML.El = {
       }
     } else {
       var tags = ((typeof parent).toLowerCase() === 'object') ?
-        this._$('*', parent) : this._$('*', document);
+        ML.El._$('*', parent) : ML.El._$('*', document);
       var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
 
       for (var i = 0, len = tags.length; i < len; i++) {
@@ -390,7 +390,7 @@ ML.El = {
       var classNames = classN.split(' ');
 
       for (var i = 0, len = classNames.length; i < len; i++) {
-        this.removeClass(elem, classNames[i]);
+        ML.El.removeClass(elem, classNames[i]);
       }
     }
   },
@@ -415,7 +415,7 @@ ML.El = {
     var currClass = ML.trim(elem.className);
     var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
 
-    if (!this.hasClass(elem, classN)) {
+    if (!ML.El.hasClass(elem, classN)) {
       elem.className = addedClass;
     }
   },
@@ -426,10 +426,10 @@ ML.El = {
    * @param {string} classN The class name to toggle.
    */
   toggleClass: function(elem, classN) {
-    if (this.hasClass(elem, classN)) {
-      this.removeClass(elem, classN);
+    if (ML.El.hasClass(elem, classN)) {
+      ML.El.removeClass(elem, classN);
     } else {
-      this.addClass(elem, classN);
+      ML.El.addClass(elem, classN);
     }
   },
 
@@ -463,8 +463,8 @@ ML.El = {
     return {
       width: elem.style.width || elem.offsetWidth,
       height: elem.style.height || elem.offsetHeight,
-      x: this.position(elem).x,
-      y: this.position(elem).y
+      x: ML.El.position(elem).x,
+      y: ML.El.position(elem).y
     };
   },
 
@@ -579,7 +579,7 @@ ML.El = {
    * @return {string|number}
    */
   data: function(element, attr) {
-    return this.getAttr(element, 'data-' + attr);
+    return ML.El.getAttr(element, 'data-' + attr);
   }
 };
 
@@ -656,7 +656,7 @@ ML.Animate = function(el, props, settings, cb) {
    */
   function init() {
     if (ML.isUndef(el.tagName)) {
-      throw new Error('You can only animate a valid element on the page.')
+      throw new Error('You can only animate a valid element on the page.');
     } else {
       if (!ML.isNum(options.duration)) {
         options.duration = DEFAULTS.duration;
@@ -742,7 +742,7 @@ ML.Animate = function(el, props, settings, cb) {
  *   beforeRequest: function () {alert('I happen before request');},
  *   complete: function () {alert('I completed my request');},
  *   success: function (response) {alert('I successfully completed my request. And here is the data returned: '+response);},
- *   error: function () {alert ('I failed at some point during the request');}
+ *   error: function (response) {alert ('I failed at some point during the request');}
  * });
  */
 ML.Ajax = function(params) {
@@ -791,28 +791,28 @@ ML.Ajax = function(params) {
       options.beforeRequest();
     }
 
-    if (this.readyState === 4) {
+    if (xmlhttp.readyState === 4) {
       if (options.complete && typeof options.complete === 'function') {
         options.complete();
       }
 
-      if (this.status === 200) {
+      if (xmlhttp.status === 200) {
         if (options.success && typeof options.success === 'function') {
             options.success({
-            status: this.status, 
-            statusText: this.statusText, 
-            xml: this.responseXML,
-            data: this.responseText
+            status: xmlhttp.status, 
+            statusText: xmlhttp.statusText, 
+            xml: xmlhttp.responseXML,
+            data: xmlhttp.responseText
           });
         }
       } else {
         if (options.error && typeof options.error === 'function') {
           options.error({
-            status: this.status, 
-            statusText: this.statusText, 
-            readyState: this.readyState,
-            xml: this.responseXML,
-            data: this.responseText
+            status: xmlhttp.status, 
+            statusText: xmlhttp.statusText, 
+            readyState: xmlhttp.readyState,
+            xml: xmlhttp.responseXML,
+            data: xmlhttp.responseText
           });
         }
       }
