@@ -5,22 +5,25 @@
     <a href="docs.html#accordion">Documentation</a>
   </div>
 
-  <div class="fl">
+  <div>
     <h2>Toggle 1 at a time</h2>
 
-    <ul class="accordion acc-ex" data-accordion>
+    <ul id="acc" class="accordion acc-ex">
     {{#items}}
-      <li{{#if @first}} class="accordion-open-content"{{/if}}>
+      <li id="acc-{{@index}}" {{#if @first}} class="accordion-open-content"{{/if}} >
         <a class="accordion-toggle" href="#">{{this.toggle}}</a>
         <div class="accordion-content">
           <p>{{this.content}}</p>
+          {{#if @first}}<p><a rel="accordion" href="#acc-1">second tab</a></p>{{/if}}
         </div>
       </li>
     {{/items}}
     </ul>
+
+    <button class="destroy-button" id="destroyAcc">Destory</button>
   </div>
 
-  <div class="fl" style="margin-left:20px">    
+  <div style="margin-top:20px">    
     <h2>Toogle multiple at a time</h2>
     
     <ul class="accordion acc-ex" data-accordion="multiple">
@@ -35,4 +38,15 @@
     </ul> 
   </div>
 
-{{>footer}}
+  <div style="margin-top:50em"></div>
+
+{{#> footer}}
+  <script>
+    var accordion = new ML.Accordion(ML.El.$('acc'), false);
+    accordion.init();
+
+    ML.El.evt(ML.El.$('destroyAcc'), 'click', function(e) {
+      accordion.destroy();
+    });
+  </script>
+{{/footer}}
