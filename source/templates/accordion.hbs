@@ -8,13 +8,19 @@
   <div>
     <h2>Toggle 1 at a time</h2>
 
-    <ul id="acc" class="accordion acc-ex">
+    <ul id="acc1" class="accordion acc-ex">
     {{#items}}
-      <li id="acc-{{@index}}" {{#if @first}} class="accordion-open-content"{{/if}} >
+      <li id="acc1-{{@index}}" {{#if @first}} class="accordion-open-content"{{/if}} >
         <a class="accordion-toggle" href="#">{{this.toggle}}</a>
         <div class="accordion-content">
           <p>{{this.content}}</p>
-          {{#if @first}}<p><a rel="accordion" href="#acc-1">second tab</a></p>{{/if}}
+          {{#if @first}}
+            <p>
+              <a href="#acc1-1">second tab</a> | 
+              {{!-- <a href="#acc2-1">accordion 2 second tab</a> --}}
+            </p>
+          {{/if}}
+          {{#if @last}}<p><a href="#acc1-0">first tab</a></p>{{/if}}
         </div>
       </li>
     {{/items}}
@@ -28,7 +34,7 @@
     
     <ul class="accordion acc-ex" data-accordion="multiple">
     {{#items}}
-      <li{{#if @first}} class="accordion-open-content"{{/if}}>
+      <li id="acc2-{{@index}}"{{#if @last}} class="accordion-open-content"{{/if}}>
         <a class="accordion-toggle" href="#">{{this.toggle}}</a>
         <div class="accordion-content">
           <p>{{this.content}}</p>
@@ -42,7 +48,7 @@
 
 {{#> footer}}
   <script>
-    var accordion = new ML.Accordion(ML.El.$('acc'), false);
+    var accordion = new ML.Accordion(ML.El.$('acc1'), false);
     accordion.init();
 
     ML.El.evt(ML.El.$('destroyAcc'), 'click', function(e) {

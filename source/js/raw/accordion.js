@@ -15,8 +15,9 @@
   ML.Accordion = function(el, multiple) {
     var lis = [];
     var self = this;
-    var storedHash = window.location.hash;
+    var hash = window.location.hash;
     var interval = null;
+    var timer = null;
 
     /**
      * Initialization of accordion component.
@@ -28,11 +29,18 @@
         lis = ML.El._$('li', el);
         hideLis();
         bindEvents();
+
+        if (hash) {
+          openTab(hash);
+        }
       } catch(e) {
         throw new Error(e);
       }
     };
 
+    /**
+     * Destroys an instance of the accordion class.
+     */
     this.destroy = function() {
       if (lis.length > 0) {
         ML.loop(lis, function(item, index) {
@@ -45,6 +53,12 @@
             item.removeEventListener('click', toggle, false);
           }
         });
+
+        if ('onhashchange' in window) {
+          window.removeEventListener('hashchange', openTab, false);
+        } else {
+          clearInterval(interval);
+        }
 
         lis = [];
       }
@@ -82,18 +96,16 @@
      * @private
      */
     function bindEvents() {
-      /*if ('onhashchange' in window) { // event supported?
-        window.onhashchange = function () {
-          console.log(window.location.hash);
-        }
-      } else { // event not supported:
+      if ('onhashchange' in window) {
+        ML.El.evt(window, 'hashchange', openTab)
+      } else {
         interval = setInterval(function () {
-          console.log('set interval')
-          if (window.location.hash !== storedHash) {
-            storedHash = window.location.hash;
+          if (window.location.hash !== hash) {
+            hash = window.location.hash;
+            openTab(hash);
           }
         }, 100);
-      }*/
+      }
 
       ML.loop(ML.El._$('a', el), function(item) {
         if (ML.El.hasClass(item, 'accordion-toggle')) {
@@ -102,8 +114,25 @@
       });
     }
 
-    function openTab(hash) {
-      
+    /**
+     * Opens an accordion tab. Used for anchor tag.
+     * @param {object|string} arg The Event object from hashchange event or the window hash
+     * from the timer.
+     * @private
+     */
+    function openTab(arg) {
+      var _hash = (ML.isUndef(arg.type)) ? arg : window.location.hash;
+      var li = ML.El.$(_hash.replace('#', ''));
+      var link = null;
+
+      if (li && lis.length > 0) {
+        link = ML.El.$C('accordion-toggle', li)[0];
+        timer = setTimeout(function() {
+          link.click();
+          window.scrollTo(0, li.offsetTop);
+          clearTimeout(timer);
+        }, 100);
+      }
     }
 
     /**
@@ -114,8 +143,6 @@
     function toggle(e) {
       var li = ML.El.clicked(e).parentNode;
       e.preventDefault();
-
-      console.log(li, 'toggle')
 
       if (multiple) {
         ML.El.toggleClass(li, 'accordion-hide-content');
