@@ -100,6 +100,12 @@ ML = {
    * @param {function} cb Function to be called during loop.
    * @param {*} cb.element The value of the array element.
    * @param {number} cb.index The index of the array element.
+   * @example
+   * var arr = ['apple', 'orange', 'blueberry', 'strawberry'];
+   * ML.loop(arr, function(element, index) {
+   *   console.log(element); // Will console out: apple, orange, etc...
+   *   console.log(index); // Will console out the array item's index: 0, 1, etc...
+   * })
    */
   loop: function(arr, cb) {
     for (var i = 0, len = arr.length; i < len; i++) {
@@ -112,8 +118,7 @@ ML = {
   },
 
   /**
-   * Returns the width and height of the window.
-   * Credits: http://www.howtocreate.co.uk/tutorials/javascript/browserwindow (revised)
+   * Returns the width and height of the window. [credit](http://www.howtocreate.co.uk/tutorials/javascript/browserwindow)
    * @return {object}
    */
   windowDimen: function() {
@@ -374,8 +379,7 @@ ML.El = {
   },
 
   /**
-   * Removes a class name from an element.
-   * Credits: http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass/
+   * Removes a class name from an element. [credit](http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass)
    * @param {HTMLElement} elem The element of the class name to be removed.
    * @param {string} classN Class names to be removed.
    * @param {boolean} [multiple] If there are multiple class names to be removed.
@@ -494,8 +498,7 @@ ML.El = {
   },
 
   /**
-   * Returns the computed style.
-   * Credits: http://snipplr.com/view/13523/getcomputedstyle-for-ie/
+   * Returns the computed style. [credit](http://snipplr.com/view/13523/getcomputedstyle-for-ie)
    * @return {string}
    */
   compStyle: function() {
@@ -821,12 +824,6 @@ ML.Ajax = function(params) {
   
   init();
 };
-
-/**
- * The namespace for form elements.
- * @namespace
- */
-ML.FormElements = {};
 
 // Polyfill: indexOf
 if (!Array.prototype.indexOf) {
