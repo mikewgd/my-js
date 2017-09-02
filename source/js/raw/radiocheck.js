@@ -6,71 +6,70 @@
 
   /**
    * Custom radio buttons and checkboxes.
-   * @constructor
+   * If you do not want custom radio buttons or checkboxes add `system` class name to
+   * the input.
+   * 
+   * You can apply this to new radio buttons or checkboxes on the page as well:
+   * @namespace
    * @example
-   * new ML.FormElements.RadioCheckboxes().setup();
+   * ML.CustomRadios.init();
    */
-  ML.FormElements.RadioCheckboxes = function() {
+  ML.CustomRadios = {
     /**
      * All radios and checkboxes on the page are stored here.
      * @type {array}
-     * @private
      */
-    var inputs = [];
+    inputs: [],
 
     /**
      * Custom radios and checkboxes are stored here.
      * @type {array}
-     * @private
      */
-    var customInputs = [];
+    customInputs: [],
 
     /**
      * Click/Focus/Blur Events attached to INPUT elements.
      * @type {object}
-     * @private
      */
-    var attachedEvents = {
+    attachedEvents: {
       click: [],
       focus: [],
       blur: []
-    };
+    },
 
     /**
      * Loops through all inputs on the page and creates a SPAN that
      * will be used as the custom input.
      * Events placed on the INPUT are stored in an object for later use.
-     * @param {HTMLElement} [el=document] Element to get radio buttons and checkboxes.
-     * Good to use when adding new elements in the DOM.
      */
-    this.setup = function(el) {
-      var allInputs = el ? ML.El._$('input', el) : ML.El._$('input');
+    init: function() {
+      var inputs = ML.El._$('input');
+      var self = this;
 
-      ML.loop(allInputs, function(input) {
+      ML.loop(inputs, function(input) {
         if (ML.El.hasClass(input, 'system') || ML.El.hasClass(input, 'styled')) {
           return;
         }
 
         if (input.type === 'checkbox' || input.type === 'radio') {
-          inputs.push(input);
+          self.inputs.push(input);
 
-          createCustom(input);
-          pushEvents(input);
+          self.createCustom(input);
+          self.pushEvents(input);
         }
       });
 
-      bindEvents();
-    };
+      this.bindEvents();
+    },
 
     /**
      * Creates the custom input.
      * @param {HTMLELement} input The INPUT element to customize.
-     * @private
      */
-    function createCustom(input) {
+    createCustom: function(input) {
       var span = ML.El.create('span', {'class': input.type});
 
-      customInputs.push(span);
+      this.customInputs.push(span);
       ML.El.addClass(input, 'styled');
 
       ML.El.clean(input.parentNode);
@@ -85,14 +84,13 @@
       if (input.disabled) {
         ML.El.addClass(span, 'disabled');
       }
-    }
+    },
 
     /**
      * Any events attached to the INPUT are pushed into an array to be used later.
      * @param {HTMLElement} input The INPUT to get attached events for.
-     * @private
      */
-    function pushEvents(input) {
+    pushEvents: function(input) {
       var events = ML.El.Events;
       var elem = null;
       var type = null;
@@ -105,20 +103,19 @@
 
         // Only pushes the events if INPUT has any events attached to it.
         if (elem === input) {
-          attachedEvents[type].push([elem, func]);
+          this.attachedEvents[type].push([elem, func]);
         }
       }
-    }
+    },
 
     /**
      * Attaches the old events stored in the event object to be applied.
      * @param {HTMLElement} el The element to find event attached to it.
      * @param {string} eventType The type of event to look for.
      * @return {function}
-     * @private
      */
-    function attachOldEvt(el, eventType) {
-      var evt = attachedEvents[eventType];
+    attachOldEvt: function(el, eventType) {
+      var evt = this.attachedEvents[eventType];
       var inputEvent = null;
       var attachedEl = null;
 
@@ -130,42 +127,36 @@
       }
 
       return inputEvent ? inputEvent.call() : function(){return;};
-    }
+    },
 
     /**
      * Events bound to the INPUT and custom inputs SPAN.
-     * @private
      */
-    function bindEvents() {
-      ML.loop(inputs, function(input, i) {
-        ML.El.evt(input, 'focus', function(e) {
-          focusBlur(e);
-        });
+    bindEvents: function() {
+      var self = this;
 
-        ML.El.evt(input, 'blur', function(e) {
-          focusBlur(e);
-        });
+      ML.loop(this.inputs, function(input, i) {
+        ML.El.evt(input, 'focus', self.focusBlur);
 
-        ML.El.evt(input, 'click', function() {
-          ref();
-        });
+        ML.El.evt(input, 'blur', self.focusBlur);
 
-        if (!ML.El.hasClass(customInputs[i], 'disabled')) {
-          ML.El.evt(customInputs[i], 'mouseup', function(e) {
+        ML.El.evt(input, 'click', self.ref);
+
+        if (!ML.El.hasClass(self.customInputs[i], 'disabled')) {
+          ML.El.evt(self.customInputs[i], 'mouseup', function(e) {
             var clicked = ML.El.clicked(e);
-            check.call(clicked);
-            attachOldEvt(input, 'click');
+            self.check.call(clicked);
+            self.attachOldEvt(input, 'click');
           });
         }
       });
-    }
+    },
 
     /**
      * Focus and blur event attached to INPUT corresponding to the custom input.
      * @param {Event} evt The Event object.
-     * @private
      */
-    function focusBlur(evt) {
+    focusBlur: function(evt) {
       var e = evt || window.event;
       var input = ML.El.clicked(e);
       var span =  input.nextSibling;
@@ -176,20 +167,19 @@
         ML.El.removeClass(span, 'focus');
       }
 
-      attachOldEvt(input, evt.type);
+      ML.CustomRadios.attachOldEvt(input, evt.type);
 
       if (typeof e.preventDefault !== 'undefined') {
         e.preventDefault();
       }
 
       return false;
-    }
+    },
 
     /**
      * Checks/unchecks the custom radio buttons/checkboxes.
-     * @private
      */
-    function check() {
+    check: function() {
       /* jshint validthis: true */
       var input = this.previousSibling;
       var inputType = input.type;
@@ -218,19 +208,18 @@
           input.checked = true;
         }
       }
-    }
+    },
 
     /**
      * Checks if INPUT is checked or not.
-     * @private
      */
-    function ref() {
+    ref: function() {
       var custom = null;
       var checked = null;
 
-      for (var i = 0, len = inputs.length; i < len; i++) {
-        custom = customInputs[i];
-        checked = inputs[i].checked;
+      for (var i = 0, len = ML.CustomRadios.inputs.length; i < len; i++) {
+        custom = ML.CustomRadios.customInputs[i];
+        checked = ML.CustomRadios.inputs[i].checked;
 
         if (custom) {
           // @TODO: Should use toggleClass conditional.
@@ -244,5 +233,5 @@
     }
   };
 
-  new ML.FormElements.RadioCheckboxes().setup();
+  ML.CustomRadios.init();
 }());
