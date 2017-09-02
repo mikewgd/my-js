@@ -15,7 +15,6 @@ var jsdocConfig = require('../jsdocConfig.json');
 var source = ['source/js/**/*.js'];
 var globalJs = 'source/js/globals.js';
 var concatSrc = {
-  'accordion.js': [globalJs, 'source/js/raw/accordion.js'],
   'carousel.js': [globalJs, 'source/js/raw/carousel.js'],
   'input.js': [globalJs, 'source/js/raw/input.js'],
   'modal.js': [globalJs, 'source/js/raw/modal.js'],

@@ -3,10 +3,6 @@
   "script": false,
   "pages": [
     {
-      "title": "Accordion",
-      "page": "accordion"
-    },
-    {
       "title": "Carousel",
       "page": "carousel"
     },
