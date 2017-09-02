@@ -5,117 +5,161 @@
   'use strict';
 
   /**
-   * Returns true/false if placeholder attribute is supported.
-   * @return {boolean}
-   * @private
-   */
-  var placeholderSupport = function () {
-    var createInput = ML.El.create('input');
-    return ('placeholder' in createInput) ? true : false;
-  };
-
-  if (!placeholderSupport()) {
-    var inputs = ML.El._$('input');
-
-    for (var i = 0, len = inputs.length; i < len; i++) {
-      if (inputs[i].type === 'text') {
-        new ML.InputControl(inputs[i]);
-      }
-    }
-  }
-
-  /**
-   * Input placeholder attribute polyfill. By default all inputs on the page will be passed
-   * into this class.
-   * @constructor
-   * @param {HTMLElement} input The input element.
+   * Input polyfill.
+   * The polyfill will add unique classes to an input field when it is focused 
+   * `js-input-focus`. Also allows the placeholder attribute to work on browsers that 
+   * do not support the attribute.
+   * 
+   * You can apply this to new inputs on the page as well:
+   * @namespace
    * @example
-   * var input = new ML.InputControl(ML.El.$('input'));
+   * ML.InputControl.init();
    */
-  ML.InputControl = function(input) {
-    var placeholder = ML.El.getAttr(input, 'placeholder');
-    var cursorTimer = null;
+  ML.InputControl = {
+    /**
+     * Stores all the inputs that the polyfill gets applied to.
+     * @type {array}
+     */
+    inputs: [],
+
+    /**
+     * The timer object for moving the cursor.
+     * @type {object}
+     */
+    cursorTimer: null,
+
+    /**
+     * Returns true/false if the placeholder attribute is supported.
+     * @return {boolean}
+     */
+    isSupported: function() {
+      return ('placeholder' in ML.El.create('input')) ? true : false;
+    },
+
+    /**
+     * Initialization of the polyfill.
+     */
+    init: function() {
+      if (!this.isSupported()) {
+        var inputs = ML.El._$('input');
+
+        for (var i = 0, len = inputs.length; i < len; i++) {
+          if (inputs[i].type === 'text' && !ML.El.hasClass(inputs[i], 'js-input-polyfill')) {
+            ML.El.addClass(inputs[i], 'js-input-polyfill');
+
+            if (ML.El.getAttr(inputs[i], 'placeholder') !== null) {
+              inputs[i].setAttribute('value', ML.El.getAttr(inputs[i], 'placeholder'));
+              ML.El.addClass(inputs[i], 'js-input-placeholder');
+            }
+
+            this.inputs.push(inputs[i]);
+          }
+        }
+
+        this.bindEvents();
+      }      
+    },
 
     /**
      * Events bound to the input.
-     * @private
      */
-    function bindEvents() {
-      ML.El.evt(input, 'focus', function (e){
-        var inp = ML.El.clicked(e);
-        ML.El.addClass(inp, 'input-focus');
-        moveCursor(inp);
-        cursorTimer = setTimeout(function() {moveCursor(inp);}, 1);
-      });
+    bindEvents: function() {
+      var self = this;
 
-      ML.El.evt(input, 'blur', function (e){
-        ML.El.removeClass(ML.El.clicked(e), 'input-focus');
-        clearTimeout(cursorTimer);
-      });
+      ML.loop(this.inputs, function(input) {
+        ML.El.evt(input, 'focus', self.focusEvent);
+        ML.El.evt(input, 'blur', self.blurEvent);
+        ML.El.evt(input, 'click', self.clickEvent);
 
-      ML.El.evt(input, 'click', function (e) {
-        if (ML.El.hasClass(ML.El.clicked(e), 'input-focus')) {
-          moveCursor(ML.El.clicked(e));
+        if (ML.El.getAttr(input, 'placeholder') !== null) {
+          ML.El.evt(input, 'keyup', self.clearUnclear);
         }
       });
+    },
 
-      if (placeholder !== null) {
-        ML.El.evt(input, 'keyup', function (e) {
-          clearUnclear(ML.El.clicked(e));
-        });
+    /**
+     * Focus event handler attached to the input.
+     * @param {Event} e The Event Object.
+     */
+    focusEvent: function(e) {
+      var self = this;
+      var inp = ML.El.clicked(e);
+
+      ML.El.addClass(inp, 'js-input-focus');
+      ML.InputControl.moveCursor(inp);
+      self.cursorTimer = setTimeout(function() {
+        ML.InputControl.moveCursor(inp);
+      }, 1);
+    },
+
+    /**
+     * Blur event handler attached to the input.
+     * @param {Event} e The Event Object.
+     */
+    blurEvent: function(e) {
+      ML.El.removeClass(ML.El.clicked(e), 'js-input-focus');
+      clearTimeout(this.cursorTimer);
+    },
+
+    /**
+     * Click event handler attached to the input.
+     * @param {Event} e The Event Object.
+     */
+    clickEvent: function(e) {
+      if (ML.El.hasClass(ML.El.clicked(e), 'js-input-focus')) {
+        ML.InputControl.moveCursor(ML.El.clicked(e));
       }
-    }
+    },
 
     /**
      * Moves the cursor to the beginning of the text in the input.
      * This replicates the same effect of the "placeholder" attribute in supported browsers.
-     * Credits: http://stackoverflow.com/questions/8189384/i-want-to-put-cursor-in-beginning-of-text-box-onfocus
+     * [credit](http://stackoverflow.com/questions/8189384/i-want-to-put-cursor-in-beginning-of-text-box-onfocus)
      * @param {HTMLElement} input The input field.
-     * @private
      */
-    function moveCursor(input) {
-      if (!ML.El.hasClass(input, 'input-placeholder')) {
+    moveCursor: function(input) {
+      if (!ML.El.hasClass(input, 'js-input-placeholder')) {
         return;
       } else {
         if (typeof input.selectionStart === 'number') {
           input.selectionStart = input.selectionEnd = 0;
-        } else if (typeof input.createTextRange !== 'undefined') {
+        } else if (typeof !ML.isUndef(input.createTextRange)) {
           input.focus();
           var range = input.createTextRange();
           range.collapse(true);
           range.select();
         }
       }
-    }
+    },
 
     /**
+     * When there is a placeholder attribute, on keyup it clears/unclears the text.
      * Removes the current value in the input field.
      * Replicates the "placeholder" functionality in supported browsers.
-     * @param {HTMLElement} input The input field.
-     * @private
+     * @param {Event} e The Event Object.
      */
-    function clearUnclear(input) {
+    clearUnclear: function(e) {
+      var input = ML.El.clicked(e);
       var old = ML.El.getAttr(input, 'placeholder');
       var neww = input.value.replace(old, '');
 
-      if (ML.El.hasClass(input, 'input-placeholder')) {
+      if (ML.El.hasClass(input, 'js-input-placeholder')) {
         input.value = neww;
       }
 
-      ML.El.removeClass(input, 'input-placeholder');
+      ML.El.removeClass(input, 'js-input-placeholder');
 
       // No characters in input field
       if (input.value.length < 1) {
         input.value = old;
-        ML.El.addClass(input, 'input-placeholder');
-        moveCursor(input);
+        ML.El.addClass(input, 'js-input-placeholder');
+        ML.InputControl.moveCursor(input);
       }
     }
-
-    if (placeholder !== null) {
-      input.setAttribute('value', placeholder);
-      ML.El.addClass(input, 'input-placeholder');
-      bindEvents();
-    }
   };
+
+  /**
+   * Initializes the input polyfill.
+   */
+  ML.InputControl.init();
 }());
