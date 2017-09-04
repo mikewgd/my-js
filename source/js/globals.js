@@ -96,10 +96,12 @@ ML = {
 
   /**
    * Loop through an array with callback.
+   * 
    * @param {array} arr The array to loop though.
    * @param {function} cb Function to be called during loop.
    * @param {*} cb.element The value of the array element.
    * @param {number} cb.index The index of the array element.
+   * 
    * @example
    * var arr = ['apple', 'orange', 'blueberry', 'strawberry'];
    * ML.loop(arr, function(element, index) {
@@ -476,9 +478,10 @@ ML.El = {
    * Returns an element to be created in the DOM with attributes passed.
    * @param {HTMLElement} element The tag to create, i.e. 'div'
    * @param {object} [attrs] Attributes to add to tag.
+   * @return {HTMLElement}
+   * 
    * @example
    * var div = ML.El.create('div', {'id': 'test-elem'});
-   * @return {HTMLElement}
    */
   create: function(element, attrs) {
     var elem = document.createElement(element);
@@ -596,6 +599,7 @@ ML.El = {
  * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
  * @param {string} [settings.easing=linear] Type of animation (bounce, ease, etc..), defaults to linear
  * @param {function} [cb] Callback function.
+ * 
  * @example
  * new ML.Animate(ML.$('el'), {width: 100, height: 100}, {delay: 15, duration: 500, easing: 'bounce'}, function() {
  *   alert('animation is complete');
@@ -740,6 +744,7 @@ ML.Animate = function(el, props, settings, cb) {
  * @param {*} params.success.response The response from the ajax call.
  * @param {function} params.error When there is an error with the request.
  * @param {object} params.error.response The response from the ajax call.
+ * 
  * @example
  * new ML.Ajax({url: 'file/test.html', method: 'GET',
  *   beforeRequest: function () {alert('I happen before request');},
