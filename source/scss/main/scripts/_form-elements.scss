@@ -21,10 +21,10 @@
 }
 
 /* Select Menu */
-.select {
+.dropdown {
   font-size: 13px;
 
-  ul {
+  .dropdown-menu {
     border: 1px solid #ccc;
   }
 
@@ -65,7 +65,7 @@
     font-size: inherit;
   }
 
-  &.active-drop {
+  &.active {
     .options {
       border-color: #000;
     }

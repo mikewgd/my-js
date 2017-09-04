@@ -4,6 +4,38 @@
 (function () {
   'use strict';
 
+  function Dropdown() {
+    ML.Dropdown.gg = 'ff';
+  }
+
+  /**
+   * Custom select menu/dropdown.
+   * This script changes all select menus and creates an HTML menu.
+   * If you do not want custom radio buttons or checkboxes add `system` class name to
+   * the input.
+   * @namespace
+   *
+   * @example {@lang xml}
+   * <select id="fruits" name="fruits">
+   *   <option value="apple">Apple</option>
+   *   <option value="orange">Orange</option>
+   *   <option value="strawberry">Strawberry</option>
+   * </select>
+   *
+   * @example <caption>The script is initialized on page load, but if new <code>&lt;select&gt;</code>
+   * added to the page dynamically. Use the line below:</caption>
+   * ML.Dropdown.init();
+   *
+   * @example <caption>The markup the plugin creates:</caption> {@lang xml}
+   * <div class="dropdown" data-value="apple" style="width: 114px;">
+   *   <a href="#" class="dropdown-link" tabindex="-1" data-index="0">apple</a>
+   *   <ul class="dropdown-menu">
+   *     <li data-value="apple" data-index="0"><a href="#" tabindex="-1">Apple</a></li>
+   *     <li data-value="orange" data-index="1"><a href="#" tabindex="-1">Orange</a></li>
+   *     <li data-value="strawberry" data-index="2"><a href="#" tabindex="-1">Strawberry</a></li>
+   *   </ul>
+   * </div>
+   */
   ML.Dropdown = {
     /**
      * All select menus on the page are stored here.
@@ -62,14 +94,12 @@
      * @param {HTMLELement} select The SELECT element to customize.
      */
     createCustom: function(select) {
-      var div = ML.El.create('div', {'class': 'select'});
-      var menuHolder = ML.El.create('div');
-      var ul = ML.El.create('ul');
+      var div = ML.El.create('div', {'class': 'dropdown'});
+      var ul = ML.El.create('ul', {'class': 'dropdown-menu'});
       var dropdownLink = ML.El.create('a', {href: '#', 'class': 'dropdown-link', tabIndex: -1});
 
       div.appendChild(dropdownLink);
-      div.appendChild(menuHolder);
-      menuHolder.appendChild(ul);
+      div.appendChild(ul);
 
       this.customSelects.push(div);
       ML.El.addClass(select, 'styled');
@@ -83,7 +113,7 @@
         ML.El.addClass(div, 'disabled');
       }
 
-      this.createLIs(div, ML.El._$('option', select));
+      this.createLis(div, ML.El._$('option', select));
 
       // sets the width of the new select div to the width of the <ul>
       div.style.width = ul.offsetWidth + 'px';
@@ -94,7 +124,7 @@
      * @param {HTMLElement} div The dropdown.
      * @param {array} options An array of all the OPTION tags from the select menu.
      */
-    createLIs: function(div, options) {
+    createLis: function(div, options) {
       var li = null;
       var ul = ML.El._$('ul', div)[0];
       var a = null;
@@ -120,7 +150,7 @@
         if (options[i].selected) {
           dropdownLink.innerHTML = options[i].innerHTML;
           dropdownLink.setAttribute('data-index', i);
-          div.setAttribute('sel-data-value', options[i].value);
+          div.setAttribute('data-value', options[i].value);
         }
       }
     },
@@ -200,7 +230,7 @@
       var clicked = ML.El.clicked(e);
       var attr = ML.El.data;
       var li = clicked.parentNode;
-      var custom = li.parentNode.parentNode.parentNode;
+      var custom = li.parentNode.parentNode;
       var args = {
         'index': attr(li, 'index'),
         'value': attr(li, 'value'),
@@ -211,7 +241,7 @@
         return;
       }
 
-      if (args.value !== ML.El.getAttr(custom, 'sel-data-value')) {
+      if (args.value !== ML.El.getAttr(custom, 'data-value')) {
         ML.Dropdown.selectOption(custom, args);
         ML.Dropdown.attachOldEvt(custom.previousSibling, 'change');
       }
@@ -245,7 +275,7 @@
         return;
       }
 
-      if (ML.El.hasClass(clicked.parentNode, 'select')) {
+      if (ML.El.hasClass(clicked.parentNode, 'dropdown')) {
         e.preventDefault();
       }
 
@@ -326,7 +356,7 @@
 
       dropdownLink.innerHTML = option.text;
       dropdownLink.setAttribute('data-index', option.index);
-      el.setAttribute('sel-data-value', option.value);
+      el.setAttribute('data-value', option.value);
       select.selectedIndex = option.index;
       select.childNodes[option.index].selected = '1';
     },
@@ -339,7 +369,7 @@
      * @param {HTMLElement} clickedParent Parent element to clicked element being clicked on.
      */
     toggle: function(clicked, clickedParent) {
-      if (ML.El.hasClass(clickedParent, 'select')) {
+      if (ML.El.hasClass(clickedParent, 'dropdown')) {
         if (clicked.className === 'dropdown-link') {
           var div = clickedParent;
 

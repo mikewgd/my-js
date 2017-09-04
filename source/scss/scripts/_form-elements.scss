@@ -1,12 +1,16 @@
 /* FORM ELEMENTS */
 
-/* input control */
-.js-input-placeholder {
+.placeholder {
   color: #999;
 }
 
-.js-input-focus {
-  border-color: #F93;
+.disabled {
+  opacity: 0.5;
+  filter: alpha(opacity = 50);
+}
+
+.focus {
+  outline: 1px solid #F60;
 }
 
 /* custom radio and checkboxes */
@@ -26,18 +30,10 @@ select.styled {
   zoom: 1;
 }
 
-.disabled {
-  opacity: 0.5;
-  filter: alpha(opacity = 50);
-}
-
-.focus {
-  outline: 1px solid #F60;
-}
-
 /* select menu */
-.select {
+.dropdown {
   display: inline-block;
+  position: relative;
 
   &.focus {
     outline: none;
@@ -48,8 +44,10 @@ select.styled {
     }
   }
 
-  &.active ul {
-    left: 0 !important;
+  &.active {
+    .dropdown-menu {
+      left: 0;
+    }
   }
 
   .dropdown-link {
@@ -59,11 +57,7 @@ select.styled {
     text-decoration: none;
   }
 
-  div {
-    position: relative;
-  }
-
-  ul {
+  .dropdown-menu {
     margin: 0;
     padding: 0;
     position: absolute;
