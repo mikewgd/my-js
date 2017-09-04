@@ -10,7 +10,7 @@ var sass = require('gulp-sass');
 var jsdoc = require('gulp-jsdoc3');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
-var jsdocConfig = require('../jsdocConfig.json');
+var jsdocConfig = require('../jsdoc/config.json');
 
 var source = ['source/js/**/*.js'];
 var globalJs = 'source/js/globals.js';

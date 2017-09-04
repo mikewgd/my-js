@@ -11,11 +11,7 @@
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false,
-    "default": {
-      "outputSourceFiles": true
-    },
-    "path": "ink-docstrap",
-    "theme": "cerulean",
+    "theme": "lumen",
     "navType": "vertical",
     "linenums": true,
     "dateFormat": "MMMM Do YYYY, h:mm:ss a"
