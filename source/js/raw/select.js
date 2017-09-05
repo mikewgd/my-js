@@ -4,42 +4,16 @@
 (function () {
   'use strict';
 
-  function Dropdown() {
-    ML.Dropdown.gg = 'ff';
-  }
-
   /**
    * Custom select menu/dropdown.
    * This script changes all select menus and creates an HTML menu.
-   * If you do not want custom radio buttons or checkboxes add `system` class name to
-   * the input.
-   * @namespace
-   *
-   * @example {@lang xml}
-   * <select id="fruits" name="fruits">
-   *   <option value="apple">Apple</option>
-   *   <option value="orange">Orange</option>
-   *   <option value="strawberry">Strawberry</option>
-   * </select>
-   *
-   * @example <caption>The script is initialized on page load, but if new <code>&lt;select&gt;</code>
-   * added to the page dynamically. Use the line below:</caption>
-   * ML.Dropdown.init();
-   *
-   * @example <caption>The markup the plugin creates:</caption> {@lang xml}
-   * <div class="dropdown" data-value="apple" style="width: 114px;">
-   *   <a href="#" class="dropdown-link" tabindex="-1" data-index="0">apple</a>
-   *   <ul class="dropdown-menu">
-   *     <li data-value="apple" data-index="0"><a href="#" tabindex="-1">Apple</a></li>
-   *     <li data-value="orange" data-index="1"><a href="#" tabindex="-1">Orange</a></li>
-   *     <li data-value="strawberry" data-index="2"><a href="#" tabindex="-1">Strawberry</a></li>
-   *   </ul>
-   * </div>
+   * @private
    */
-  ML.Dropdown = {
+  var Dropdown = {
     /**
      * All select menus on the page are stored here.
      * @type {array}
+     * @private
      */
     selects: [],
 
@@ -63,7 +37,6 @@
     /**
      * Links found inside the dropdown.
      * @type {array}
-     * @private
      */
     optionLinks: [],
 
@@ -399,6 +372,38 @@
       }
     }
   };
+  
+  /**
+   * Custom select menu/dropdown.
+   * This script changes all select menus and creates an HTML menu.
+   * If you do not want custom radio buttons or checkboxes add `system` class name to
+   * the input.
+   * @namespace
+   *
+   * @example {@lang xml}
+   * <select id="fruits" name="fruits">
+   *   <option value="apple">Apple</option>
+   *   <option value="orange">Orange</option>
+   *   <option value="strawberry">Strawberry</option>
+   * </select>
+   *
+   * @example <caption>The script is initialized on page load, but if new <code>&lt;select&gt;</code>
+   * added to the page dynamically. Use the line below:</caption>
+   * ML.Dropdown();
+   *
+   * @example <caption>The markup the plugin creates:</caption> {@lang xml}
+   * <div class="dropdown" data-value="apple" style="width: 114px;">
+   *   <a href="#" class="dropdown-link" tabindex="-1" data-index="0">apple</a>
+   *   <ul class="dropdown-menu">
+   *     <li data-value="apple" data-index="0"><a href="#" tabindex="-1">Apple</a></li>
+   *     <li data-value="orange" data-index="1"><a href="#" tabindex="-1">Orange</a></li>
+   *     <li data-value="strawberry" data-index="2"><a href="#" tabindex="-1">Strawberry</a></li>
+   *   </ul>
+   * </div>
+   */
+  ML.Dropdown = function() {
+    Dropdown.init();
+  };
 
-  ML.Dropdown.init();
+  ML.Dropdown();
 })();
