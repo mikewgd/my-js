@@ -215,8 +215,8 @@
       }
 
       if (args.value !== ML.El.getAttr(custom, 'data-value')) {
-        ML.Dropdown.selectOption(custom, args);
-        ML.Dropdown.attachOldEvt(custom.previousSibling, 'change');
+        Dropdown.selectOption(custom, args);
+        Dropdown.attachOldEvt(custom.previousSibling, 'change');
       }
 
       e.preventDefault();
@@ -252,7 +252,7 @@
         e.preventDefault();
       }
 
-      ML.Dropdown.toggle(clicked, clicked.parentNode);
+      Dropdown.toggle(clicked, clicked.parentNode);
     },
 
     /**
@@ -266,7 +266,7 @@
 
       ML.El.addClass(div, 'focus');
 
-      ML.Dropdown.attachOldEvt(select, 'focus');
+      Dropdown.attachOldEvt(select, 'focus');
 
       if (typeof e.preventDefault !== 'undefined') {
         e.preventDefault();
@@ -290,7 +290,7 @@
 
       ML.El.removeClass(div, 'focus');
 
-      ML.Dropdown.attachOldEvt(select, 'blur');
+      Dropdown.attachOldEvt(select, 'blur');
 
       if (typeof e.preventDefault !== 'undefined') {
         e.preventDefault();
@@ -312,7 +312,7 @@
         'text': el.childNodes[selected].innerHTML
       };
 
-      ML.Dropdown.selectOption(el.nextSibling, args);
+      Dropdown.selectOption(el.nextSibling, args);
     },
 
     /**
@@ -351,7 +351,7 @@
           }
 
           // Handles the toggling of the select menu and allowing only one to be open at a time.
-          ML.loop(ML.Dropdown.customSelects, function(c) {
+          ML.loop(Dropdown.customSelects, function(c) {
             if (c !== clickedParent) {
               ML.El.removeClass(c, 'active');
               ML.El.removeClass(c, 'focus');
@@ -362,12 +362,12 @@
 
           // Adds selected to currently selected item
           ML.El._$('li', div)[ML.El.data(clicked, 'index')].className = 'selected';
-          ML.Dropdown.attachOldEvt(div.previousSibling, 'click');
+          Dropdown.attachOldEvt(div.previousSibling, 'click');
         }
       } else {
-        for (var i = 0, len = ML.Dropdown.customSelects.length; i < len; i++) {
-          ML.El.removeClass(ML.Dropdown.customSelects[i], 'active');
-          ML.El.removeClass(ML.Dropdown.customSelects[i], 'focus');
+        for (var i = 0, len = Dropdown.customSelects.length; i < len; i++) {
+          ML.El.removeClass(Dropdown.customSelects[i], 'active');
+          ML.El.removeClass(Dropdown.customSelects[i], 'focus');
         }
       }
     }
