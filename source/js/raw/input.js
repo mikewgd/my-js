@@ -65,7 +65,7 @@
         ML.El.evt(input, 'click', self.inputClick);
 
         if (ML.El.getAttr(input, 'placeholder') !== null) {
-          ML.El.evt(input, 'keyup', self.clearUnclear);
+          ML.El.evt(input, 'keyup', self.inputKeyup);
         }
       });
     },
@@ -131,7 +131,7 @@
      * Replicates the "placeholder" functionality in supported browsers.
      * @param {Event} e The Event Object.
      */
-    clearUnclear: function(e) {
+    inputKeyup: function(e) {
       var input = ML.El.clicked(e);
       var old = ML.El.getAttr(input, 'placeholder');
       var neww = input.value.replace(old, '');
