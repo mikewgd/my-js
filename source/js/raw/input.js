@@ -7,15 +7,11 @@
   /**
    * Input polyfill.
    * The polyfill will add unique classes to an input field when it is focused 
-   * `js-input-focus`. Also allows the placeholder attribute to work on browsers that 
+   * `focus`. Also allows the placeholder attribute to work on browsers that 
    * do not support the attribute.
-   * 
-   * You can apply this to new inputs on the page as well:
-   * @namespace
-   * @example
-   * ML.InputControl.init();
+   * @private
    */
-  ML.InputControl = {
+  var InputControl = {
     /**
      * Stores all the inputs that the polyfill gets applied to.
      * @type {array}
@@ -85,10 +81,10 @@
       var self = this;
       var inp = ML.El.clicked(e);
 
-      ML.El.addClass(inp, 'js-input-focus');
-      ML.InputControl.moveCursor(inp);
+      ML.El.addClass(inp, 'focus');
+      InputControl.moveCursor(inp);
       self.cursorTimer = setTimeout(function() {
-        ML.InputControl.moveCursor(inp);
+        InputControl.moveCursor(inp);
       }, 1);
     },
 
@@ -97,7 +93,7 @@
      * @param {Event} e The Event Object.
      */
     blurEvent: function(e) {
-      ML.El.removeClass(ML.El.clicked(e), 'js-input-focus');
+      ML.El.removeClass(ML.El.clicked(e), 'focus');
       clearTimeout(this.cursorTimer);
     },
 
@@ -106,8 +102,8 @@
      * @param {Event} e The Event Object.
      */
     clickEvent: function(e) {
-      if (ML.El.hasClass(ML.El.clicked(e), 'js-input-focus')) {
-        ML.InputControl.moveCursor(ML.El.clicked(e));
+      if (ML.El.hasClass(ML.El.clicked(e), 'focus')) {
+        InputControl.moveCursor(ML.El.clicked(e));
       }
     },
 
@@ -153,13 +149,24 @@
       if (input.value.length < 1) {
         input.value = old;
         ML.El.addClass(input, 'js-input-placeholder');
-        ML.InputControl.moveCursor(input);
+        InputControl.moveCursor(input);
       }
     }
   };
 
   /**
-   * Initializes the input polyfill.
+   * Input polyfill.
+   * The polyfill will add unique classes to an input field when it is focused 
+   * `focus`. Also allows the placeholder attribute to work on browsers that 
+   * do not support the attribute.
+   * @namespace
+   * 
+   * @example <caption>You can apply this to new inputs on the page as well:</caption>
+   * ML.InputControl();
    */
-  ML.InputControl.init();
+  ML.InputControl = function() {
+    InputControl.init();
+  };
+
+  ML.InputControl();
 }());
