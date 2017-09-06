@@ -40,7 +40,7 @@
     /**
      * Loops through all inputs on the page and creates a SPAN that
      * will be used as the custom input.
-     * Events placed on the INPUT are stored in an object for later use.
+     * Events placed on the input are stored in an object for later use.
      */
     init: function() {
       var inputs = ML.El._$('input');
@@ -64,7 +64,7 @@
 
     /**
      * Creates the custom input.
-     * @param {HTMLELement} input The INPUT element to customize.
+     * @param {HTMLELement} input The input element to customize.
      */
     createCustom: function(input) {
       var span = ML.El.create('span', {'class': input.type});
@@ -87,8 +87,8 @@
     },
 
     /**
-     * Any events attached to the INPUT are pushed into an array to be used later.
-     * @param {HTMLElement} input The INPUT to get attached events for.
+     * Any events attached to the input are pushed into an array to be used later.
+     * @param {HTMLElement} input The input to get attached events for.
      */
     pushEvents: function(input) {
       var events = ML.El.Events;
@@ -130,43 +130,66 @@
     },
 
     /**
-     * Events bound to the INPUT and custom inputs SPAN.
+     * Events bound to the input and custom inputs SPAN.
      */
     bindEvents: function() {
       var self = this;
 
       ML.loop(this.inputs, function(input, i) {
-        ML.El.evt(input, 'focus', self.focusBlur);
+        ML.El.evt(input, 'focus', self.inputFocus);
 
-        ML.El.evt(input, 'blur', self.focusBlur);
+        ML.El.evt(input, 'blur', self.inputBlur);
 
-        ML.El.evt(input, 'click', self.ref);
+        ML.El.evt(input, 'click', self.inputClick);
 
         if (!ML.El.hasClass(self.customInputs[i], 'disabled')) {
-          ML.El.evt(self.customInputs[i], 'mouseup', function(e) {
-            var clicked = ML.El.clicked(e);
-            self.check.call(clicked);
-            self.attachOldEvt(input, 'click');
-          });
+          ML.El.evt(self.customInputs[i], 'mouseup', self.customMouseUp);
         }
       });
     },
 
     /**
-     * Focus and blur event attached to INPUT corresponding to the custom input.
-     * @param {Event} evt The Event object.
+     * Mouseup event on custom input. Attaches event on input.
+     * @param {Event} e The Event object.
      */
-    focusBlur: function(evt) {
-      var e = evt || window.event;
-      var input = ML.El.clicked(e);
+    customMouseUp: function(e) {
+      var clicked = ML.El.clicked(e);
+      ML.CustomRadios.check.call(clicked);
+      ML.CustomRadios.attachOldEvt(input, 'click');
+    },
+
+    /**
+     * Focus event attached to input.
+     * @param {Event} e The Event object.
+     */
+    inputFocus: function(e) {
+      var evt = e || window.event;
+      var input = ML.El.clicked(evt);
       var span =  input.nextSibling;
 
       if (evt.type === 'focus') {
         ML.El.addClass(span, 'focus');
-      } else {
-        ML.El.removeClass(span, 'focus');
       }
 
+      ML.CustomRadios.attachOldEvt(input, evt.type);
+
+      if (typeof e.preventDefault !== 'undefined') {
+        e.preventDefault();
+      }
+
+      return false;
+    },
+
+    /**
+     * Blur event handler attached to the input.
+     * @param {Event} e The Event Object.
+     */
+    inputBlur: function(e) {
+      var evt = e || window.event;
+      var input = ML.El.clicked(evt);
+      var span =  input.nextSibling;
+
+      ML.El.removeClass(span, 'focus');
       ML.CustomRadios.attachOldEvt(input, evt.type);
 
       if (typeof e.preventDefault !== 'undefined') {
@@ -211,9 +234,9 @@
     },
 
     /**
-     * Checks if INPUT is checked or not.
+     * Checks if input is checked or not.
      */
-    ref: function() {
+    inputClick: function() {
       var custom = null;
       var checked = null;
 
