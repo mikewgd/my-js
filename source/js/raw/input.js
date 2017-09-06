@@ -6,9 +6,6 @@
 
   /**
    * Input polyfill.
-   * The polyfill will add unique classes to an input field when it is focused 
-   * `focus`. Also allows the placeholder attribute to work on browsers that 
-   * do not support the attribute.
    * @private
    */
   var InputControl = {
@@ -158,7 +155,8 @@
    * Input polyfill.
    * The polyfill will add unique classes to an input field when it is focused 
    * `focus`. Also allows the placeholder attribute to work on browsers that 
-   * do not support the attribute.
+   * do not support the attribute. Adds `js-input-placeholder` so styling can be done to
+   * the placeholder attribute.
    * @namespace
    * 
    * @example <caption>You can apply this to new inputs on the page as well:</caption>

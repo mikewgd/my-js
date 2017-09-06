@@ -6,7 +6,6 @@
 
   /**
    * Custom select menu/dropdown.
-   * This script changes all select menus and creates an HTML menu.
    * @private
    */
   var Dropdown = {
