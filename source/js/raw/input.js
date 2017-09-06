@@ -60,9 +60,9 @@
       var self = this;
 
       ML.loop(this.inputs, function(input) {
-        ML.El.evt(input, 'focus', self.focusEvent);
-        ML.El.evt(input, 'blur', self.blurEvent);
-        ML.El.evt(input, 'click', self.clickEvent);
+        ML.El.evt(input, 'focus', self.inputFocus);
+        ML.El.evt(input, 'blur', self.inputBlur);
+        ML.El.evt(input, 'click', self.inputClick);
 
         if (ML.El.getAttr(input, 'placeholder') !== null) {
           ML.El.evt(input, 'keyup', self.clearUnclear);
@@ -74,7 +74,7 @@
      * Focus event handler attached to the input.
      * @param {Event} e The Event Object.
      */
-    focusEvent: function(e) {
+    inputFocus: function(e) {
       var self = this;
       var inp = ML.El.clicked(e);
 
@@ -89,7 +89,7 @@
      * Blur event handler attached to the input.
      * @param {Event} e The Event Object.
      */
-    blurEvent: function(e) {
+    inputBlur: function(e) {
       ML.El.removeClass(ML.El.clicked(e), 'focus');
       clearTimeout(this.cursorTimer);
     },
@@ -98,7 +98,7 @@
      * Click event handler attached to the input.
      * @param {Event} e The Event Object.
      */
-    clickEvent: function(e) {
+    inputClick: function(e) {
       if (ML.El.hasClass(ML.El.clicked(e), 'focus')) {
         InputControl.moveCursor(ML.El.clicked(e));
       }
