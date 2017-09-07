@@ -159,7 +159,8 @@
    * the placeholder attribute.
    * @namespace
    * 
-   * @example <caption>You can apply this to new inputs on the page as well:</caption>
+   * @example <caption>The script is initialized on page load, but if new <code>&lt;input type="text" /&gt;</code>
+   * added to the page dynamically. Use the line below:</caption>
    * ML.InputControl();
    */
   ML.InputControl = function() {
