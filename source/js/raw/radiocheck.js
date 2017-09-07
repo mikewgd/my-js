@@ -277,7 +277,7 @@
    */
   ML.CustomRadios = function() {
     CustomRadios.init();
-  }
+  };
 
   ML.CustomRadios();
 }());
