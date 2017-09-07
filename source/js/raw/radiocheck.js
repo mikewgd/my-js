@@ -6,15 +6,9 @@
 
   /**
    * Custom radio buttons and checkboxes.
-   * If you do not want custom radio buttons or checkboxes add `system` class name to
-   * the input.
-   * 
-   * You can apply this to new radio buttons or checkboxes on the page as well:
-   * @namespace
-   * @example
-   * ML.CustomRadios.init();
+   * @private
    */
-  ML.CustomRadios = {
+  var CustomRadios = {
     /**
      * All radios and checkboxes on the page are stored here.
      * @type {array}
@@ -154,8 +148,8 @@
      */
     customMouseUp: function(e) {
       var clicked = ML.El.clicked(e);
-      ML.CustomRadios.check.call(clicked);
-      ML.CustomRadios.attachOldEvt(input, 'click');
+      CustomRadios.check.call(clicked);
+      CustomRadios.attachOldEvt(input, 'click');
     },
 
     /**
@@ -171,7 +165,7 @@
         ML.El.addClass(span, 'focus');
       }
 
-      ML.CustomRadios.attachOldEvt(input, evt.type);
+      CustomRadios.attachOldEvt(input, evt.type);
 
       if (typeof e.preventDefault !== 'undefined') {
         e.preventDefault();
@@ -190,7 +184,7 @@
       var span =  input.nextSibling;
 
       ML.El.removeClass(span, 'focus');
-      ML.CustomRadios.attachOldEvt(input, evt.type);
+      CustomRadios.attachOldEvt(input, evt.type);
 
       if (typeof e.preventDefault !== 'undefined') {
         e.preventDefault();
@@ -240,9 +234,9 @@
       var custom = null;
       var checked = null;
 
-      for (var i = 0, len = ML.CustomRadios.inputs.length; i < len; i++) {
-        custom = ML.CustomRadios.customInputs[i];
-        checked = ML.CustomRadios.inputs[i].checked;
+      for (var i = 0, len = CustomRadios.inputs.length; i < len; i++) {
+        custom = CustomRadios.customInputs[i];
+        checked = CustomRadios.inputs[i].checked;
 
         if (custom) {
           // @TODO: Should use toggleClass conditional.
@@ -256,5 +250,34 @@
     }
   };
 
-  ML.CustomRadios.init();
+  /**
+   * Custom radio buttons and checkboxes.
+   * Creates `<span>` elements after the radio and checkbox inputs.
+   * When an input is checked it adds a `checked` class to the `<span>` element.
+   * @namespace
+   *
+   * @example {@lang xml}
+   * <input type="radio" id="green" name="green" value="green">
+   * <label for="green">green</label>
+   * <input type="checkbox" name="age" id="ages10-20" value="ages10-20">
+   * <label for="ages10-20">Age(s) 10 - 20</label>
+   * 
+   * @example <caption>The script is initialized on page load, but if new
+   * <code>&lt;input type="radio" /&gt;</code> or <code>&lt;input type="checkbox" /&gt;</code>
+   * are added to the page dynamically. Use the line below:</caption>
+   * ML.Dropdown();
+   * 
+   * @example <caption>The markup the plugin creates:</caption> {@lang xml}
+   * <input type="radio" id="green" name="green" value="green" class="styled">
+   * <span class="radio"></span>
+   * <label for="green">green</label>
+   * <input type="checkbox" name="age" id="ages10-20" value="ages10-20" class="styled">
+   * <span class="checkbox"></span>
+   * <label for="ages10-20">Age(s) 10 - 20</label>
+   */
+  ML.CustomRadios = function() {
+    CustomRadios.init();
+  }
+
+  ML.CustomRadios();
 }());
