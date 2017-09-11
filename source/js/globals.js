@@ -215,6 +215,34 @@ ML.El = {
   Events: [],
 
   /**
+   * Returns true/false if an element collides with another one.
+   * @param {HTMLElement|object} arg1 Element to detect collision or object with coordinates.
+   * @param {HTMLElement|object} arg2 Element to detect collision or object with coordinates.
+   * @return {boolean}
+   */
+  collides: function(arg1, arg2) {
+    var dimens1 = arg1;
+    var dimens2 = arg2;
+
+    if (!ML.isUndef(arg1) && !ML.isUndef(arg2)) {
+      if (arg1.nodeType === 1) {
+        dimens1 = ML.El.dimens(arg1);
+      }
+
+      if (arg2.nodeType === 1) {
+        dimens2 = ML.El.dimens(arg2);
+      }
+
+      return !(
+        ((dimens1.y + dimens1.height) < (dimens2.y)) ||
+        (dimens1.y > (dimens2.y + dimens2.height)) ||
+        ((dimens1.x + dimens1.width) < dimens2.x) ||
+        (dimens1.x > (dimens2.x + dimens2.width))
+      );
+    }
+  },
+
+  /**
    * Event listener bound to elements.
    * @param {HTMLElement} el The element to bind an event to.
    * @param {string} type The type of event.
@@ -223,8 +251,31 @@ ML.El = {
    * @param {boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
+    var resize = {
+      delay: 100,
+      timeout: null,
+      throttled: false
+    };
+
     if (ML.isUndef(capture, true)) {
       capture = false;
+    }
+
+    // TODO: Separate out into separate event + function.
+    // Make into custom event.
+    if (type === 'resize.throttle') {
+      ML.El.evt(window, 'resize', function() {
+        
+        if (!resize.throttled) {
+          cb();
+          resize.throttled = true;
+          resize.timeout = setTimeout(function() {
+            resize.throttled = false;
+            clearTimeout(resize.timeout)
+          }, resize.delay);
+        } 
+      }, capture);
+      return;
     }
 
     if (el.addEventListener) {// other browsers
