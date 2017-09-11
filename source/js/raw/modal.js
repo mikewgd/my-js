@@ -36,6 +36,12 @@
     var toggles = [];
     var overlay = null;
     var self = this;
+    var openedModal = null;
+
+    var resizeAdjust = 1.25;
+    var currResize = ML.windowDimen().w;
+    var resizeDirection = (currResize < lastResize) ? 'down' : 'up';
+    var lastResize = ML.windowDimen().w;
 
     /**
      * Initializes the modal class.
@@ -74,6 +80,41 @@
       });
 
       ML.El.evt(document, 'click', closeClick);
+
+      ML.El.evt(window, 'resize.throttle', windowResize)
+    }
+
+    /**
+     * Event attached to window resize.
+     * @private
+     */
+    function windowResize() {
+      currResize = ML.windowDimen().w;
+      resizeDirection = (currResize < lastResize) ? 'down' : 'up';
+      lastResize = ML.windowDimen().w;
+
+      if (openedModal) {
+        adjustModal();
+      }
+    }
+
+    /**
+     * Adjusts the width of the modal according to the window dimensions.
+     * @private
+     */
+    function adjustModal() {
+      var collideRight = ML.El.collides({
+        width: ML.windowDimen().w,
+        height: ML.windowDimen().h,
+        x: -ML.windowDimen().w,
+        y: 0
+      }, openedModal);
+
+      if (collideRight) {
+        centerModal(openedModal, Math.round(openedModal.offsetWidth / resizeAdjust));
+      } else if (resizeDirection === 'up' && openedModal.offsetWidth <= openedModal._options.width) {
+        centerModal(openedModal, Math.round(openedModal.offsetWidth * resizeAdjust));
+      }
     }
 
     /**
@@ -122,6 +163,7 @@
 
       options = null;
       overlay = null;
+      openedModal = null;
       modals = [];
       toggles = [];
     };
@@ -136,13 +178,56 @@
       
       ML.El.addClass(modal, modal._options.activeClass);
       ML.El.removeClass(overlay, 'hidden');
+      ML.El.addClass(document.body, 'modal-opened');
+
+      modal._options.width = parseInt(modal._options.width); 
+      openedModal = modal;
+
+      centerModal(modal, modal._options.width);
+  	};
+
+    /**
+     * Handles setting the width based on certain parameters.
+     * Centers the modal within the window.
+     * @param {HTMLElement} modal The modal DOM element.
+     * @param {number} [width] The width to set the modal.
+     * @private
+     */
+    function centerModal(modal, width) {
+      var height = modal.offsetHeight;
+
+      if (ML.isUndef(width)) {
+        width = modal.offsetWidth;
+      } 
+
+      if (width > ML.windowDimen().w) {
+        width = ML.windowDimen().w - 10;
+      } 
+
+      // Prevents the modal's width from going over the options set.
+      if (ML.windowDimen().w > modal._options.width) {
+        width = modal._options.width;
+      } 
+
+      // On mobile, make size of the window.
+      if (ML.windowDimen().w <= 400) {
+        width = ML.windowDimen().w;
+      }
+
+      if (modal.offsetHeight >= ML.windowDimen().h) {
+        height = ML.windowDimen().h;
+        modal.style.maxHeight = height + 'px';
+      } else {
+        modal.style.maxHeight = 'none';
+      }
 
       ML.El.setStyles(modal, {
-      	'maxWidth': modal._options.width + 'px',
-      	'marginTop': '-' + (modal.offsetHeight / 2) + 'px',
-      	'marginLeft': '-' + (modal._options.width / 2) + 'px'
+        'width': width + 'px',
+        'overflow': 'auto',
+        'marginTop': '-' + (height / 2) + 'px',
+        'marginLeft': '-' + (width / 2) + 'px'
       });
-  	};
+    }
 
     /**
      * Updates the modals array.
@@ -161,6 +246,10 @@
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
           }
+
+          if (ML.isUndef(options.activeClass, true)) {
+            options.activeClass = DEFAULTS.activeClass;
+          }
           
           modals[i]._options = options;
         }
@@ -178,6 +267,8 @@
       });
 
       ML.El.addClass(overlay, 'hidden');
+      ML.El.removeClass(document.body, 'modal-opened');
+      openedModal = null;
     };
   };
 })();

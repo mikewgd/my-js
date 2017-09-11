@@ -2,7 +2,7 @@
 
 .modal {
   background: #fff;
-  border: 4px solid #ccc;
+  
 
   &-header {
     background: #ccc;
@@ -22,5 +22,6 @@
 
   &-content {
     padding: 10px;
+    border: 4px solid #ccc;
   }
 }
