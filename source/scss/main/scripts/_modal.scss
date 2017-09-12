@@ -2,6 +2,10 @@
 
 .modal {
   background: #fff;
+
+  &.show-me {
+    display: block;
+  }
   
 
   &-header {

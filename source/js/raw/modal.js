@@ -5,17 +5,57 @@
   'use strict';
   
   /**
-   * Modal dialogue windows
-   * @constructor
+   * * Allows you to add dialogs to your site for lightboxes, user notifications,
+   * custom content and etc...
+   * * Clicking on the overlay or dark background behind the modal, will close the modal.
+   * * Nested modals aren’t supported. Avoid nesting modals in fixed elements. The modals
+   * use `position: fixed`, which can sometimes be a bit particular about its rendering. 
+   * * When possible, place your modal HTML in a top-level position to avoid interference
+   * from other elements.
+   * * When a modal is opened the class name `modal-opened` is appended to the `<body>`.
+   * * You can show modals via `data-modal` or JavaScript.
+   *
+   * @example <caption>Sample markup of modal HTML.</caption> {@lang xml}
+   * <div class="modal" id="unique-id3">
+   *   <div class="modal-header">
+   *     <h2 class="modal-header-title">Modal header</h2>
+   *     <a href="#" class="modal-close">Close me</a>
+   *   </div>
+   *   
+   *   <div class="modal-content">
+   *     <p>Modal content.</p>
+   *   </div>
+   * </div>
+   *
+   * @example <caption>You can show modals via data attribute, <code>data-modal="width:700"</code>.
+   * The only lines of JavaScript would be two lines. The <code>rel</code> attribute needs to equal
+   * the ID of the modal HTML element.</caption> {@lang xml}
+   * <a href="#" rel="unique-id3" data-modal="width:700">open modal</a>
+   *
+   * // Only JavaScript needed:
+   * <script>
+   *   var modals = new ML.Modal({
+   *     width: 800 // Global configuration.
+   *   });
+   *   
+   *   modals.init();
+   * </script>
+   *
+   * // Other javascript files go here.
+   *
+   * @example <caption>The modal can be triggered via JavaScript instead of or in addition
+   * to <code>data-modal</code></caption>
+   * // Will show the modal HTML with id of unique-id3 with a width of 750 pixels and will
+   * add the class name 'show me' to the modal element.
+   * modals.show('unique-id3', {width: 750, activeClass: 'show-me'});
+   * 
    * @param {object} [settings] Configuration settings.
    * @param {string} [settings.selectorToggle=data-modal] The selector when clicked launches a modal.
    * @param {string} [settings.selectorModal=modal] The selector for modal window.
    * @param {string} [settings.selectorClose=modal-close] The selector that closes modals.
    * @param {string} [settings.activeclass=active] The class to show the modal.
    * @param {number} [settings.width=600] The width of the modal.
-   * @example
-   * var modals = new ML.Modal();
-   * modals.init();
+   * @constructor
    */
   ML.Modal = function(settings) {
     /**
@@ -45,6 +85,9 @@
 
     /**
      * Initializes the modal class.
+     *
+     * @example
+     * modals.init();
      */
     this.init = function() {
       var tags = ML.El._$('*');
@@ -142,7 +185,10 @@
     }
 
     /**
-     * Destroys an instance of the modal class.
+     * Destroys the modal init.
+     *
+     * @example
+     * modals.destroy();
      */
     this.destroy = function() {
       // remove event listeners.
@@ -170,11 +216,19 @@
 
     /**
      * Shows a modal.
+     * Used when showing modal without `data-modal`
      * @param {string} id The id of the modal you want to display.
-     * @param {object} modalOptions Configuration settings to overwrite defaults.
+     * @param {object} modalOptions Configuration settings to overwrite defaults. Only
+     * `activeClass` and `width` will be overriden. Other settings are ignored.
+     *
+     * @example
+     * // Shows modal element with id of unique-id3 with a width of 300 pixels.
+     * modals.show('unique-id3', {width: 400});
      */
   	this.show = function(id, modalOptions) {
       var modal = updateModals(ML.El.$(id), ML.extend(options, modalOptions));
+
+      self.hide();
       
       ML.El.addClass(modal, modal._options.activeClass);
       ML.El.removeClass(overlay, 'hidden');
@@ -260,11 +314,14 @@
 
     /**
      * Hides all the modals.
+     *
+     * @example
+     * modals.hide();
      */
   	this.hide = function() {
-      ML.loop(modals, function(modal) {
-        ML.El.removeClass(modal, modal._options.activeClass);
-      });
+      if (openedModal) {
+        ML.El.removeClass(openedModal, openedModal._options.activeClass);
+      }
 
       ML.El.addClass(overlay, 'hidden');
       ML.El.removeClass(document.body, 'modal-opened');

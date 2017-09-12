@@ -13,8 +13,6 @@
       <span> &ndash; {{this.description}}</span>
     </li>
   {{/examples}}
-    {{!-- <li><a href="files/ajax-overlay.html" data-modal="width:600:height:150" rel="ajax">Modal (Settings Applied, aJax)</a> - Same settings as above, but the modal is created by the JS. The content is Ajax'ed in.</li> --}}
-    {{!-- <li><a id="invokeModal" rel="unique-id3" href="javascript:void(0);">Invoke Modal Manually</a> - Usage shown in the code.</li> --}}
   </ul>
 
   <div class="modal" id="unique-id3">
@@ -27,6 +25,32 @@
       <h3>Test header</h3>
       <p>Some test content. asdfasd fasdf asdfasdf asdfa sdfasd fasdfasdfasdf</p>
       <a href="#" id="testLink">link</a>
+    </div>
+  </div>
+
+  <div class="modal" id="unique-id4">
+    <div class="modal-header">
+      <h2 class="modal-header-title">I am a Modal header</h2>
+      <a href="#" class="modal-close">CLOSE</a>
+    </div>
+
+    <div class="modal-content">
+      <p>Im a modal.</p>
+      <ul>
+        <li>list item</li>
+        <li>list item 2</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="modal" id="unique-id2">
+    <div class="modal-header">
+      <h2 class="modal-header-title">Hello! Im a header :)</h2>
+      <a href="#" class="modal-close">CLOSE &times;</a>
+    </div>
+
+    <div class="modal-content">
+      <img style="max-width:200px;" src="images/carousel-imgs/eagle.jpg" alt="">
     </div>
   </div>
 

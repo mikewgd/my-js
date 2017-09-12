@@ -9,7 +9,7 @@
       "description": "Using all defaults."
     },
     {
-      "rel": "unique-id3",
+      "rel": "unique-id2",
       "modal": "width:700",
       "title": "Set width",
       "description": "Sets the modal with a max width of 700px"
@@ -21,7 +21,7 @@
       "description": "Sets a different class to the modal when opened."
     },
     {
-      "rel": "unique-id3",
+      "rel": "unique-id4",
       "modal": "width:800:activeClass:show-me",
       "title": "Multiple settings applied",
       "description": "Sets the modal with a max width of 800px and the active class is show-me."
