@@ -145,29 +145,6 @@ ML = {
   },
 
   /**
-   * Returns the width and height of the document.
-   * @return {object}
-   */
-  docDimen: function() {
-    var w = Math.max(
-      Math.max(document.body.scrollWidth, document.documentElement.scrollWidth),
-      Math.max(document.body.offsetWidth, document.documentElement.offsetWidth),
-      Math.max(document.body.clientWidth, document.documentElement.clientWidth)
-    );
-
-    var h = Math.max(
-      Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
-      Math.max(document.body.offsetHeight, document.documentElement.offsetHeight),
-      Math.max(document.body.clientHeight, document.documentElement.clientHeight)
-    );
-
-    return {
-      w: w,
-      h: h
-    };
-  },
-
-  /**
    * Parses a string into an object.
    * @param {string} str String to be parse.
    * @param {string} base Base of the string to be removed.
@@ -271,7 +248,7 @@ ML.El = {
           resize.throttled = true;
           resize.timeout = setTimeout(function() {
             resize.throttled = false;
-            clearTimeout(resize.timeout)
+            clearTimeout(resize.timeout);
           }, resize.delay);
         } 
       }, capture);

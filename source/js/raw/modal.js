@@ -124,7 +124,7 @@
 
       ML.El.evt(document, 'click', closeClick);
 
-      ML.El.evt(window, 'resize.throttle', windowResize)
+      ML.El.evt(window, 'resize.throttle', windowResize);
     }
 
     /**
