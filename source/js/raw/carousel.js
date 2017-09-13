@@ -65,6 +65,9 @@
         throw new Error('The carousel element must be an HTMLElement.');
       } else {
         carouselHtml = el.innerHTML;
+        options.autoplay = ML.bool(options.autoplay);
+        options.dots = ML.bool(options.dots);
+        options.nav = ML.bool(options.nav);
 
         if (!ML.isNum(current)) {
           current = DEFAULTS.current;
@@ -72,6 +75,10 @@
 
         if (!ML.isBool(options.autoplay)) {
           options.autoplay = DEFAULTS.autoplay;
+        }
+
+        if (!ML.isBool(options.nav)) {
+          options.nav = DEFAULTS.nav;
         }
 
         if (!ML.isBool(options.dots)) {
