@@ -25,7 +25,6 @@
      * @private
      */
     var DEFAULTS = {
-      selectorTip: 'data-tooltip',     // attribute
       selectorTooltip: 'tooltip',      // class name, can change to attr
       activeClass: 'active',
       width: 100,
@@ -44,6 +43,8 @@
       'tooltip-top-align',
       'tooltip-bottom-align'
     ];
+
+    var selectorTip = 'data-tooltip';
 
     var options = {};
     var tooltips = [];
@@ -67,12 +68,14 @@
       }
 
       ML.loop(tags, function(element) {
-        if (element.getAttribute(options.selectorTip) !== null) {
+        if (element.getAttribute(selectorTip) !== null) {
           tips.push(element);
         }
       });
 
-      bindEvents();
+      if (tips.length > 0) {
+        bindEvents();
+      }
     };
 
     /**
@@ -166,6 +169,7 @@
         if (el.id === tooltips[i].id) {
           tooltip = tooltips[i];
 
+          // TODO: Separate out into separate function.
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
           }
