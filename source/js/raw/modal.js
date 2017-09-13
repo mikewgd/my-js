@@ -50,7 +50,6 @@
    * modals.show('unique-id3', {width: 750, activeClass: 'show-me'});
    * 
    * @param {object} [settings] Configuration settings.
-   * @param {string} [settings.selectorToggle=data-modal] The selector when clicked launches a modal.
    * @param {string} [settings.selectorModal=modal] The selector for modal window.
    * @param {string} [settings.selectorClose=modal-close] The selector that closes modals.
    * @param {string} [settings.activeclass=active] The class to show the modal.
@@ -64,13 +63,13 @@
      * @private
      */
   	var DEFAULTS = {
-      selectorToggle: 'data-modal',     // attribute
       selectorModal: 'modal',           // class name, can change to attr
       selectorClose: 'modal-close',     // class name, can change to attr
       activeClass: 'active',
       width: 600
     };
 
+    var selectorToggle = 'data-modal';
     var options = {};
     var modals = [];
     var toggles = [];
@@ -95,6 +94,13 @@
       self.destroy();
 
       options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
+      options.selectorModal = options.selectorModal.toString();
+      options.selectorClose = options.selectorClose.toString();
+      options.width = parseInt(options.width);
+
+      if (!ML.isUndef(options.activeClass, true) && (typeof options.activeClass) === 'string') {
+        options.activeClass = options.activeClass.toString();
+      }
      
       if (ML.El.$C(options.selectorModal).length < 1) {
         throw new Error('There are no <div class="' + options.selectorModal + '" /> on the page.');
@@ -103,8 +109,16 @@
         overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
       }
 
+      if (!ML.isNum(options.width)) {
+        options.width = DEFAULTS.width;
+      }
+
+      if (ML.isUndef(options.activeClass, true)) {
+        options.activeClass = DEFAULTS.activeClass;
+      }
+
       ML.loop(tags, function(element) {
-        if (element.getAttribute(options.selectorToggle) !== null) {
+        if (element.getAttribute(selectorToggle) !== null) {
           toggles.push(element);
         }
       });
@@ -118,9 +132,11 @@
      * @private
      */
     function bindEvents() {
-      ML.loop(toggles, function(element) {
-        ML.El.evt(element, 'click', toggleClick);
-      });
+      if (toggles.length > 0) {
+        ML.loop(toggles, function(element) {
+          ML.El.evt(element, 'click', toggleClick);
+        });
+      }
 
       ML.El.evt(document, 'click', closeClick);
 
@@ -297,6 +313,7 @@
         if (el.id === modals[i].id) {
           modal = modals[i];
 
+          // TODO: Separate out into separate function.
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
           }
