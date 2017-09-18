@@ -1,5 +1,38 @@
 /* jshint browser: true, latedef: false */
 
+// Polyfill: Array.indexOf
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function(e) {
+    if (this === null) {
+      throw new TypeError();
+    }
+    var t = Object(this);
+    var n = t.length >>> 0;
+    if (n === 0) {
+      return -1;
+    }
+    var r = 0;
+    if (arguments.length > 1) {
+      r = Number(arguments[1]);
+      if (r !== r) {
+        r = 0;
+      } else if (r !== 0 && r !== Infinity && r !== -Infinity) {
+        r = (r > 0 || -1) * Math.floor(Math.abs(r));
+      }
+    }
+    if (r >= n) {
+      return -1;
+    }
+    var i = r >= 0 ? r : Math.max(n - Math.abs(r), 0);
+    for (; i < n; i++) {
+      if (i in t && t[i] === e) {
+        return i;
+      }
+    }
+    return -1;
+  };
+}
+
 'use strict';
 
 var ML = {} || function() {};
@@ -10,6 +43,22 @@ window.ML = window.ML || function() {};
  * @namespace
  */
 ML = {
+  urlParams: function(arg) {
+    var returned = [];
+
+    if (typeof (arg) === 'string') {
+      return arg;
+    } else {
+      for (var prop in arg) {
+        if (arg.hasOwnProperty(prop)) {
+          returned.push(encodeURIComponent(prop) + '=' + encodeURIComponent(arg[prop]));
+        }
+      }
+
+      return returned.join('&');
+    }
+  },
+
   /**
    * Pass in a string and it will be returned as a boolean.
    * If the string is not "true" or "false", the string passed will be returned.
@@ -761,25 +810,33 @@ ML.Animate = function(el, props, settings, cb) {
 };
 
 /**
- * Easily AJAX content with this constructor.
- * @constructor
- * @param {object} params Configuration settings.
- * @param {string} params.url The URL to make a request to.
- * @param {string} [params.method=GET] The type of request.
- * @param {function} [params.beforeRequest] Gets called before request is made.
- * @param {function} [params.complete] Gets called when request is completed.
- * @param {function} params.success When a request is successful with data returned.
- * @param {*} params.success.response The response from the ajax call.
- * @param {function} params.error When there is an error with the request.
- * @param {object} params.error.response The response from the ajax call.
+ * * Vanilla ajax requests
+ * * Supports `GET`, `POST`, `PUT`, `DELETE`, `JSONP` methods.
+ * * When using `JSONP` request, you need to setup a global callback function and
+ * pass in the function name as a string in `jsonpCallback`.
+ *
+ * @example <caption>GET Request</caption>
  * 
- * @example
- * new ML.Ajax({url: 'file/test.html', method: 'GET',
- *   beforeRequest: function () {alert('I happen before request');},
- *   complete: function () {alert('I completed my request');},
- *   success: function (response) {alert('I successfully completed my request. And here is the data returned: '+response);},
- *   error: function (response) {alert ('I failed at some point during the request');}
- * });
+ *
+ * @example <caption>POST Request</caption>
+ * 
+ *
+ * @example <caption>JSONP Request</caption>
+ * 
+ * 
+ * @param {object} params Configuration settings.
+ * @param {string} [params.method=GET] The type of request.
+ * @param {string} params.url The URL to make a request to.
+ * @param {object} [params.headers={'Content-type': 'application/x-www-form-urlencoded'}] Adds headers to your request: request.setRequestHeader(key, value)
+ * @param {string} [params.responseType=text] Format of the response. [info](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType)
+ * @param {boolean} [params.cors=false] Cross domain request. 
+ * @param {object|string} [params.data=null] Data to send with the request.
+ * @param {string} params.jsonpCallback The name of the function for JSONP callback. Since 
+ * JSONP requests do not accept callback functions. Create a global callback function and
+ * pass in the function name a string to the callback option.
+ * @param {function} params.success If the request is successful. XHR is returned.
+ * @param {function} params.error If the request errors out. XHR is returned.
+ * @constructor
  */
 ML.Ajax = function(params) {
   /**
@@ -788,11 +845,22 @@ ML.Ajax = function(params) {
    * @private
    */
   var DEFAULTS = {
-    method: 'GET'
+    method: 'GET',
+    url: null,
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded'
+    },
+    responseType: 'text',
+    cors: false, 
+    data: null,
+    jsonpCallback: '',
+    success: function() {},
+    error: function() {}
   };
 
-  var xmlhttp = null;
+  var xhr = null;
   var options = ML.extend(DEFAULTS, (ML.isUndef(params, true)) ? {} : params);
+  var withCredsSupp = true;
 
   /**
    * Initialization of ajax.
@@ -802,91 +870,94 @@ ML.Ajax = function(params) {
     if (window.location.host === '') {
       throw new Error('Must be hosted on a server.');
     } else {
-      xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-      ML.El.evt(xmlhttp, 'readystatechange', readyState);
-
-      if (!/[^/]+$/.test(params.url)) {
+      xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+      options.method = options.method.toString().toUpperCase();
+      options.cors = ML.bool(options.cors);
+      withCredsSupp = ('withCredentials' in xhr);
+      
+      if (!/[^/]+$/.test(options.url)) {
         throw new Error('Not a valid URL.');
       }
 
-      if (!/^GET$|^POST$/.test(params.method.toUpperCase())) {
+      if (!/^GET$|^POST$|^JSONP$|^PUT$|^DELETE$/.test(options.method)) {
         options.method = DEFAULTS.method;
       }
-      
-      xmlhttp.open(options.method.toUpperCase(), options.url, true);
-      xmlhttp.send();
+
+      if (!ML.isBool(options.cors)) {
+        options.cors = DEFAULTS.cors;
+      }
+
+      if ((typeof options.data) !== 'object') {
+        options.data = DEFAULTS.data;
+      } else {
+        options.data = ML.urlParams(options.data);
+      }
+
+      if (options.method === 'JSONP') {
+        jsonpRequest();
+      } else {
+        xhrRequest();
+      }
     }
   }
 
   /**
-   * The callback function of readystatechange
+   * JSONP Request.
    * @private
    */
-  function readyState() {
-    if (options.beforeRequest && typeof options.beforeRequest === 'function') {
-      options.beforeRequest();
-    }
+  function jsonpRequest() {
+    var script = ML.El.create('script');
+    options.url += (options.url.indexOf('?') + 1 ? '&' : '?') + ML.urlParams(options.data);
+    options.url += (options.url.indexOf('?') + 1 ? '&' : '?') + 'callback=' + options.jsonpCallback;
+    script.src = options.url;
 
-    if (xmlhttp.readyState === 4) {
-      if (options.complete && typeof options.complete === 'function') {
-        options.complete();
-      }
-
-      if (xmlhttp.status === 200) {
-        if (options.success && typeof options.success === 'function') {
-            options.success({
-            status: xmlhttp.status, 
-            statusText: xmlhttp.statusText, 
-            xml: xmlhttp.responseXML,
-            data: xmlhttp.responseText
-          });
-        }
-      } else {
-        if (options.error && typeof options.error === 'function') {
-          options.error({
-            status: xmlhttp.status, 
-            statusText: xmlhttp.statusText, 
-            readyState: xmlhttp.readyState,
-            xml: xmlhttp.responseXML,
-            data: xmlhttp.responseText
-          });
-        }
-      }
-    }
+    document.body.appendChild(script);
   }
+
+  /**
+   * XHR Request: GET, POST, PUT, JSONP, DELETE
+   * @private
+   */
+  function xhrRequest() {
+    var readyState = function() {
+      // Only run if the request is complete
+      if (xhr.readyState !== 4) {
+        return;
+      }
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        options.success(xhr);
+      } else {
+        options.error(xhr);
+      }
+    };
+
+    if (!withCredsSupp && options.cors) {
+      xhr = new XDomainRequest(); // fix IE8/9
+    }
+
+    ML.El.evt(xhr, 'readystatechange', readyState);
+    xhr.open(options.method, options.url, true);
+    xhr.responseType = options.responseType;
+
+    if (withCredsSupp && options.cors) {
+      xhr.withCredentials = options.cors;
+    }
+
+    for (var header in options.headers) {
+      if (options.headers.hasOwnProperty(header)) {
+        xhr.setRequestHeader(header, options.headers[header]);
+      }
+    }
+
+    xhr.send(options.data);
+  }
+
+  /**
+   * Returns the XHR.
+   * @return {object|string}
+   */
+  this.xhr = xhr;
   
   init();
 };
-
-// Polyfill: indexOf
-if (!Array.prototype.indexOf) {
-  Array.prototype.indexOf = function(e) {
-    if (this === null) {
-      throw new TypeError();
-    }
-    var t = Object(this);
-    var n = t.length >>> 0;
-    if (n === 0) {
-      return -1;
-    }
-    var r = 0;
-    if (arguments.length > 1) {
-      r = Number(arguments[1]);
-      if (r !== r) {
-        r = 0;
-      } else if (r !== 0 && r !== Infinity && r !== -Infinity) {
-        r = (r > 0 || -1) * Math.floor(Math.abs(r));
-      }
-    }
-    if (r >= n) {
-      return -1;
-    }
-    var i = r >= 0 ? r : Math.max(n - Math.abs(r), 0);
-    for (; i < n; i++) {
-      if (i in t && t[i] === e) {
-        return i;
-      }
-    }
-    return -1;
-  };
-}
