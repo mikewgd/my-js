@@ -1,5 +1,7 @@
 /* jshint browser: true, latedef: false */
 
+'use strict';
+
 // Polyfill: Array.indexOf
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function(e) {
@@ -33,8 +35,6 @@ if (!Array.prototype.indexOf) {
   };
 }
 
-'use strict';
-
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
@@ -43,6 +43,15 @@ window.ML = window.ML || function() {};
  * @namespace
  */
 ML = {
+  /**
+   * Returns query paramaters.
+   * @param {string|object} arg Query parameter.
+   * @return {string}
+   *
+   * @example
+   * var str = 'animal=cat&fruit=apple'; // 'animal=cat&fruit=apple' is returned.
+   * var obj = {animal: 'cat', fruit: 'apple'}; // 'animal=cat&fruit=apple' is returned.
+   */
   urlParams: function(arg) {
     var returned = [];
 
@@ -816,13 +825,48 @@ ML.Animate = function(el, props, settings, cb) {
  * pass in the function name as a string in `jsonpCallback`.
  *
  * @example <caption>GET Request</caption>
- * 
+ * new ML.Ajax({
+ *   responseType: 'json',
+ *   url: 'https://reqres.in/api/users/2',
+ *   success: function(xhr) {
+ *     console.log(xhr.response.data);
+ *   },
+ *   error: function(xhr) {
+ *     console.log('ERROR', xhr);
+ *   }
+ * });
  *
  * @example <caption>POST Request</caption>
- * 
+ * new ML.Ajax({
+ *   url: 'https://reqres.in/api/users',
+ *   method: 'POST',
+ *   responseType: 'json',
+ *   data: {
+ *     name: 'john smith',
+ *     age: 22
+ *   },
+ *   success: function(xhr) {
+ *     console.log(xhr.response);
+ *   },
+ *   error: function(xhr) {
+ *     console.log('ERROR', xhr);
+ *   }
+ * });
  *
  * @example <caption>JSONP Request</caption>
+ * var callbackFunction = function(response) {
+ *   console.log(response);
+ * };
  * 
+ * new ML.Ajax({
+ *   url: 'https://jsfiddle.net/echo/jsonp',
+ *   method: 'JSONP',
+ *   data: {
+ *     name: 'john smith',
+ *     age: 22
+ *   },
+ *   jsonpCallback: 'callbackFunction'
+ * });
  * 
  * @param {object} params Configuration settings.
  * @param {string} [params.method=GET] The type of request.
@@ -860,7 +904,6 @@ ML.Ajax = function(params) {
 
   var xhr = null;
   var options = ML.extend(DEFAULTS, (ML.isUndef(params, true)) ? {} : params);
-  var withCredsSupp = true;
 
   /**
    * Initialization of ajax.
@@ -873,14 +916,17 @@ ML.Ajax = function(params) {
       xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
       options.method = options.method.toString().toUpperCase();
       options.cors = ML.bool(options.cors);
-      withCredsSupp = ('withCredentials' in xhr);
-      
+
       if (!/[^/]+$/.test(options.url)) {
         throw new Error('Not a valid URL.');
       }
 
       if (!/^GET$|^POST$|^JSONP$|^PUT$|^DELETE$/.test(options.method)) {
         options.method = DEFAULTS.method;
+      }
+
+      if (ML.isUndef(options.responseType, true)) {
+        options.responseType = DEFAULTS.responseType;
       }
 
       if (!ML.isBool(options.cors)) {
@@ -932,17 +978,20 @@ ML.Ajax = function(params) {
       }
     };
 
-    if (!withCredsSupp && options.cors) {
-      xhr = new XDomainRequest(); // fix IE8/9
-    }
-
     ML.El.evt(xhr, 'readystatechange', readyState);
-    xhr.open(options.method, options.url, true);
-    xhr.responseType = options.responseType;
 
-    if (withCredsSupp && options.cors) {
-      xhr.withCredentials = options.cors;
+    if (options.cors) {
+      if ('withCredentials' in xhr) {
+        xhr.withCredentials = true;
+      } else if (typeof XDomainRequest !== 'undefined') {
+        xhr = new XDomainRequest();
+      } else {
+        throw new Error('CORS is not supported.');
+      } 
     }
+
+    xhr.open(options.method, options.url);
+    xhr.responseType = options.responseType;
 
     for (var header in options.headers) {
       if (options.headers.hasOwnProperty(header)) {

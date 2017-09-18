@@ -12,7 +12,7 @@
     <button>make request</button>
 
     <div id="ajaxContent1">
-      <pre><code>new ML.Ajax({<br>  responseType: 'json',<br>  url: 'https://reqres.in/api/users/2',<br>  success: function(xhr) {<br>    console.log(xhr.response.data);<br>  },<br>  error: function(xhr) {<br>    console.log('ERROR', xhr)<br>  }<br>});</code></pre>
+      <pre><code>new ML.Ajax({<br>  responseType: 'json',<br>  url: 'https://reqres.in/api/users/2',<br>  success: function(xhr) {<br>    console.log(xhr.response.data);<br>  },<br>  error: function(xhr) {<br>    console.log('ERROR', xhr);<br>  }<br>});</code></pre>
     </div>
   </div>
 
@@ -21,7 +21,7 @@
     <button>make request</button>
 
     <div id="ajaxContent2">
-      <pre><code>new ML.Ajax({<br>  url: 'https://reqres.in/api/users',<br>  method: 'POST',<br>  data: {<br>    name: 'john smith',<br>    age: 22<br>  }<br>});</code></pre>
+      <pre><code>new ML.Ajax({<br>  url: 'https://reqres.in/api/users',<br>  method: 'POST',<br>  responseType: 'json',<br>  data: {<br>    name: 'john smith',<br>    age: 22<br>  }<br>  success: function(xhr) {<br>    console.log(xhr.response);<br>  },<br>  error: function(xhr) {<br>    console.log('ERROR', xhr);<br>  }<br>});</code></pre>
     </div>
   </div>
 
@@ -53,15 +53,14 @@
               console.log(xhr.response.data);
             },
             error: function(xhr) {
-              console.log('ERROR', xhr)
+              console.log('ERROR', xhr);
             }
           });
           break;
         case 'ajax-content-2':
           new ML.Ajax({
-            url: 'https://google.com',
+            url: 'https://reqres.in/api/users',
             method: 'POST',
-            cors: true,
             responseType: 'json',
             data: {
               name: 'john smith',
@@ -71,7 +70,7 @@
               console.log(xhr.response);
             },
             error: function(xhr) {
-              console.log('ERROR', xhr)
+              console.log('ERROR', xhr);
             }
           });
           break;
