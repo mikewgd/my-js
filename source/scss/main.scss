@@ -95,7 +95,9 @@ ul.list li {
 }
 
 /* Script specific styles */
-@import "main/scripts/carousel";
-@import "main/scripts/form-elements";
-@import "main/scripts/modal";
-@import "main/scripts/tooltip";
+@import 
+  "main/scripts/carousel",
+  "main/scripts/form-elements",
+  "main/scripts/modal",
+  "main/scripts/tooltip",
+  "main/scripts/ajax";

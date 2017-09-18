@@ -46,7 +46,7 @@
    * @example <caption>The modal can be triggered via JavaScript instead of or in addition
    * to <code>data-modal</code></caption>
    * // Will show the modal HTML with id of unique-id3 with a width of 750 pixels and will
-   * add the class name 'show me' to the modal element.
+   * // add the class name 'show me' to the modal element.
    * modals.show('unique-id3', {width: 750, activeClass: 'show-me'});
    * 
    * @param {object} [settings] Configuration settings.
