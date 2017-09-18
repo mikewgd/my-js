@@ -1,0 +1,32 @@
+/* AJAX */
+
+.ajax-content-1,
+.ajax-content-2,
+.ajax-content-3 {
+  border: 1px solid $gray;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+
+  pre {
+    margin: 0;
+    padding: 0;
+  }
+
+  button {
+    display: inline-block;
+    float: right;
+    margin: 10px;
+  }
+
+  h2 {
+    display: inline-block;
+    margin: 0;
+    padding: 10px;
+  }
+
+  div {
+    padding: 10px;
+    border-top: 1px solid $gray;
+  }
+}

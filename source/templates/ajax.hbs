@@ -1,0 +1,93 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#carousel">Documentation</a>
+  </div>
+
+  <p>Click on "make request" and check the console for the response.</p>
+
+  <div class="ajax-content-1">
+    <h2>GET</h2>
+    <button>make request</button>
+
+    <div id="ajaxContent1">
+      <pre><code>new ML.Ajax({<br>  responseType: 'json',<br>  url: 'https://reqres.in/api/users/2',<br>  success: function(xhr) {<br>    console.log(xhr.response.data);<br>  },<br>  error: function(xhr) {<br>    console.log('ERROR', xhr)<br>  }<br>});</code></pre>
+    </div>
+  </div>
+
+  <div class="ajax-content-2">
+    <h2>POST</h2>
+    <button>make request</button>
+
+    <div id="ajaxContent2">
+      <pre><code>new ML.Ajax({<br>  url: 'https://reqres.in/api/users',<br>  method: 'POST',<br>  data: {<br>    name: 'john smith',<br>    age: 22<br>  }<br>});</code></pre>
+    </div>
+  </div>
+
+  <div class="ajax-content-3">
+    <h2>JSONP</h2>
+    <button>make request</button>
+
+    <div id="ajaxContent3">
+      <pre><code>var callbackFunction = function(response) {<br>  console.log(response);<br>};<br><br>new ML.Ajax({<br>  url: 'https://jsfiddle.net/echo/jsonp',<br>  method: 'JSONP',<br>  data: {<br>    name: 'john smith',<br>    age: 22<br>  },<br>  jsonpCallback: 'callbackFunction'<br>});</code></pre>
+    </div>
+  </div>
+
+{{#> footer}}
+  <script>
+   var buttons = ML.El._$('button');
+
+   var callbackFunction = function(response) {
+    console.log(response);
+   };
+
+   for (var i = 0, len = buttons.length; i < len; i++) {
+    ML.El.evt(buttons[i], 'click', function(e) {
+      switch (this.parentNode.className) {
+        case 'ajax-content-1':
+          new ML.Ajax({
+            responseType: 'json',
+            url: 'https://reqres.in/api/users/2',
+            success: function(xhr) {
+              console.log(xhr.response.data);
+            },
+            error: function(xhr) {
+              console.log('ERROR', xhr)
+            }
+          });
+          break;
+        case 'ajax-content-2':
+          new ML.Ajax({
+            url: 'https://google.com',
+            method: 'POST',
+            cors: true,
+            responseType: 'json',
+            data: {
+              name: 'john smith',
+              age: 22
+            },
+            success: function(xhr) {
+              console.log(xhr.response);
+            },
+            error: function(xhr) {
+              console.log('ERROR', xhr)
+            }
+          });
+          break;
+        case 'ajax-content-3':
+          new ML.Ajax({
+            url: 'https://jsfiddle.net/echo/jsonp',
+            method: 'JSONP',
+            data: {
+              name: 'john smith',
+              age: 22
+            },
+            jsonpCallback: 'callbackFunction'
+          });
+          break;
+      }
+    });
+   }
+  </script>
+{{/footer}}
