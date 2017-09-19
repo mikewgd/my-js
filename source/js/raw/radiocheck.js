@@ -149,7 +149,7 @@
     customMouseUp: function(e) {
       var clicked = ML.El.clicked(e);
       CustomRadios.check.call(clicked);
-      CustomRadios.attachOldEvt(input, 'click');
+      CustomRadios.attachOldEvt(clicked, 'click');
     },
 
     /**
@@ -216,14 +216,8 @@
         ML.El.addClass(this, 'checked');
         input.checked = true;
       } else {
-        // @TODO: Should use toggleClass conditional.
-        if (input.checked) {
-          ML.El.removeClass(this, 'checked');
-          input.checked = false;
-        } else {
-          ML.El.addClass(this, 'checked');
-          input.checked = true;
-        }
+        ML.El.toggleClass(this, 'checked', input.checked);
+        input.checked = !input.checked;
       }
     },
 
@@ -239,12 +233,7 @@
         checked = CustomRadios.inputs[i].checked;
 
         if (custom) {
-          // @TODO: Should use toggleClass conditional.
-          if (checked) {
-            ML.El.addClass(custom, 'checked');
-          } else {
-            ML.El.removeClass(custom, 'checked');
-          }
+          ML.El.toggleClass(custom, 'checked', !checked);
         }
       }
     }

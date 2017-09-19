@@ -517,8 +517,11 @@ ML.El = {
    * @param {HTMLElement} elem The element to toggle class name
    * @param {string} classN The class name to toggle.
    */
-  toggleClass: function(elem, classN) {
-    if (ML.El.hasClass(elem, classN)) {
+  toggleClass: function(elem, classN, cond) {
+    var _cond = ML.bool(cond);
+    var someCond = ML.isBool(_cond) ? _cond : ML.El.hasClass(elem, classN);
+
+    if (someCond) {
       ML.El.removeClass(elem, classN);
     } else {
       ML.El.addClass(elem, classN);
