@@ -142,7 +142,7 @@
 
       ML.El.removeClass(input, 'js-input-placeholder');
 
-      // No characters in input field
+      // No characters in input field.
       if (input.value.length < 1) {
         input.value = old;
         ML.El.addClass(input, 'js-input-placeholder');

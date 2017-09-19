@@ -70,8 +70,8 @@ ML = {
 
   /**
    * Pass in a string and it will be returned as a boolean.
-   * If the string is not "true" or "false", the string passed will be returned.
-   * @param {string} str The string convert into a boolean.
+   * If the string is not `true` or `false`, the string passed will be returned.
+   * @param {string} str The string to convert into a boolean.
    * @return {boolean}
    */
   bool: function(str) {
@@ -92,7 +92,7 @@ ML = {
    * Returns if a value is undefined or not.
    * @param {*} val The value to test if undefined.
    * @param {boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
-   * optional. If a value is empty and paramter is not set, false is returned.
+   * optional. If a value is empty and paramter is not set, `false` is returned.
    * @return {boolean}
    */
   isUndef: function(val, empty) {
@@ -124,10 +124,10 @@ ML = {
   },
 
   /**
-   * Merge defaults with user options
-   * @param {object} defaults Default settings
-   * @param {object} options User options
-   * @return {object} Merged values of defaults and options
+   * Merge defaults with user options.
+   * @param {object} defaults Default settings.
+   * @param {object} options User options.
+   * @return {object} Merged values of defaults and options.
    */
   extend: function(defaults, options) {
     var extended = {};
@@ -230,7 +230,7 @@ ML = {
 
   /**
    * Returns a string with whitespace removed.
-   * @param {string} str String that will have whitespace removed.
+   * @param {string} str String to remove whitespace.
    * @return {string}
    */
   trim: function(str) {
@@ -252,8 +252,19 @@ ML.El = {
   /**
    * Returns true/false if an element collides with another one.
    * @param {HTMLElement|object} arg1 Element to detect collision or object with coordinates.
-   * @param {HTMLElement|object} arg2 Element to detect collision or object with coordinates.
+   * @param {HTMLElement|object} arg2 Second element to detect collision or object with coordinates.
    * @return {boolean}
+   *
+   * @example
+   * var elem1 = ML.El.$('test-elem-1');
+   * var elem2 = {width: 100, height: 300, x: 0, y: 200}; // You can also pass in an 
+   * var collides = ML.El.collides(elem1, elem2);         // object of coordinates.
+   *                                                      // i.e. width, height, x and y.
+   * if (collides) {
+   *   console.log('Elements are colliding.');
+   * } else {
+   *   console.log('No collision detected.')
+   * }
    */
   collides: function(arg1, arg2) {
     var dimens1 = arg1;
@@ -413,10 +424,10 @@ ML.El = {
   },
 
   /**
-   * Returns an element based on its tag name.
+   * Returns an element based on tag.
    * If you provide a parent you can limit the amount of elements that get returned.
    * @param {string} tag The tag name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is document.
+   * @param {HTMLElement} [parent=document] The parent element, default is `document`.
    * @return {HTMLElement}
    */
   _$: function(tag, parent) {
@@ -436,7 +447,7 @@ ML.El = {
   /**
    * Returns an element based on class name.
    * @param {string} cn The class name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is document.
+   * @param {HTMLElement} [parent=document] The parent element, default is `document`.
    * @return {HTMLElement}
    */
   $C: function(cn, parent) {
@@ -501,7 +512,7 @@ ML.El = {
   /**
    * Adds a class name to the element passed.
    * @param {HTMLElement} elem The element to add a class name to.
-   * @param {string} classN The class name to add to the element passed.
+   * @param {string} classN The class name to add.
    */
   addClass: function(elem, classN) {
     var currClass = ML.trim(elem.className);
@@ -514,8 +525,9 @@ ML.El = {
 
   /**
    * Toggles the class name of an element.
-   * @param {HTMLElement} elem The element to toggle class name
+   * @param {HTMLElement} elem The element to toggle class name.
    * @param {string} classN The class name to toggle.
+   * @param {boolean} [cond] Boolean value to determine whether class name should be added or removed.
    */
   toggleClass: function(elem, classN, cond) {
     var _cond = ML.bool(cond);
@@ -530,7 +542,7 @@ ML.El = {
 
   /**
    * Returns the x and y position of an element.
-   * @param {HTMLElement} elem The element to get x and y positions for.
+   * @param {HTMLElement} elem The element's x and y position.
    * @return {object}
    */
   position: function(elem) {
@@ -551,7 +563,7 @@ ML.El = {
 
   /**
    * Returns the width, height, x and y position of an element.
-   * @param {HTMLElement} elem The element to get dimensions for.
+   * @param {HTMLElement} elem The element's dimensions.
    * @return {object}
    */
   dimens: function(elem) {
@@ -565,7 +577,7 @@ ML.El = {
 
   /**
    * Returns an element to be created in the DOM with attributes passed.
-   * @param {HTMLElement} element The tag to create, i.e. 'div'
+   * @param {HTMLElement} element The tag to create, i.e. `div`.
    * @param {object} [attrs] Attributes to add to tag.
    * @return {HTMLElement}
    * 
@@ -577,7 +589,7 @@ ML.El = {
 
     if (attrs && (typeof attrs).toLowerCase() === 'object') {
       for (var attr in attrs) {
-        // IE does not support support setting class name with set attribute
+        // IE does not support support setting class name with set attribute.
         if ([attr] === 'class') {
           elem.className = attrs[attr];
         } else {
@@ -638,8 +650,8 @@ ML.El = {
 
   /**
    * Styles an element.
-   * @param {HTMLElement} element
-   * @param {object} props
+   * @param {HTMLElement} element The element to set styles to.
+   * @param {object} props Style properties and values.
    */
   setStyles: function(element, props) {
     for (var prop in props) {
@@ -670,7 +682,7 @@ ML.El = {
   /**
    * Returns a data attribute.
    * @param {HTMLElement} element The element to get the data attribute value for.
-   * @param {string} attr The data attribute, excluding "data-".
+   * @param {string} attr The data attribute, excluding `data-`.
    * @return {string|number}
    */
   data: function(element, attr) {
@@ -681,12 +693,12 @@ ML.El = {
 /**
  * Animate elements easily with this constructor. Credit: http://learn.javascript.ru/js-animation, http://learn.javascript.ru/files/tutorial/js/animate.js But modified
  * @constructor
- * @param {HTMLElement} el The element to apply an animation to.
- * @param {object} props The CSS properties to be animated.
+ * @param {HTMLElement} el Element to animate.
+ * @param {object} props CSS properties to animate.
  * @param {object} [settings] Configuration settings.
  * @param {number} [settings.duration=400] The duration of the animation, defaults to 400ms.
  * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
- * @param {string} [settings.easing=linear] Type of animation (bounce, ease, etc..), defaults to linear
+ * @param {string} [settings.easing=linear] Type of animation (`bounce`, `ease`, etc..), defaults to `linear`
  * @param {function} [cb] Callback function.
  * 
  * @example
@@ -874,13 +886,11 @@ ML.Animate = function(el, props, settings, cb) {
  * @param {object} params Configuration settings.
  * @param {string} [params.method=GET] The type of request.
  * @param {string} params.url The URL to make a request to.
- * @param {object} [params.headers={'Content-type': 'application/x-www-form-urlencoded'}] Adds headers to your request: request.setRequestHeader(key, value)
+ * @param {object} [params.headers={'Content-type': 'application/x-www-form-urlencoded'}] Adds headers to your request: `request.setRequestHeader(key, value)`
  * @param {string} [params.responseType=text] Format of the response. [info](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType)
  * @param {boolean} [params.cors=false] Cross domain request. 
  * @param {object|string} [params.data=null] Data to send with the request.
- * @param {string} params.jsonpCallback The name of the function for JSONP callback. Since 
- * JSONP requests do not accept callback functions. Create a global callback function and
- * pass in the function name a string to the callback option.
+ * @param {string} params.jsonpCallback The name of the function for JSONP callback.
  * @param {function} params.success If the request is successful. XHR is returned.
  * @param {function} params.error If the request errors out. XHR is returned.
  * @constructor

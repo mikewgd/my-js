@@ -63,8 +63,8 @@
      * @private
      */
   	var DEFAULTS = {
-      selectorModal: 'modal',           // class name, can change to attr
-      selectorClose: 'modal-close',     // class name, can change to attr
+      selectorModal: 'modal',           // TODO: class name, can change to attr
+      selectorClose: 'modal-close',     // TODO: class name, can change to attr
       activeClass: 'active',
       width: 600
     };
@@ -232,7 +232,7 @@
 
     /**
      * Shows a modal.
-     * Used when showing modal without `data-modal`
+     * Used when showing modal without `data-modal`.
      * @param {string} id The id of the modal you want to display.
      * @param {object} modalOptions Configuration settings to overwrite defaults. Only
      * `activeClass` and `width` will be overriden. Other settings are ignored.
@@ -313,7 +313,6 @@
         if (el.id === modals[i].id) {
           modal = modals[i];
 
-          // TODO: Separate out into separate function.
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
           }
