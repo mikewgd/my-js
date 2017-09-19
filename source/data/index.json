@@ -25,6 +25,10 @@
     {
       "title": "Form Elements - Select menu",
       "page": "form-select"
+    },
+    {
+      "title": "AJAX",
+      "page": "ajax"
     }
   ]
 }
