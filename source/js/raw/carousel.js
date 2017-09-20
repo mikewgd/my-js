@@ -17,6 +17,7 @@
    * @param {number} cb.index The current slide index.
    * @param {HTMLElement} cb.el The carousel element.
    * The current slide index is returned.
+   * 
    * @example
    * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
    *   autoplay: true
@@ -47,6 +48,7 @@
     var prevButton = null;
     var dotsUl = null;
     var dotsLis = [];
+    var initialized = false;
 
     var animating = false;
     var autoplaySpeed = 2000;
@@ -103,13 +105,13 @@
         createDots();
       }
 
+      initialized = true;
+
       bindEvents();
       callback(true);
 
       if (options.autoplay) {
-        setTimeout(function() {
-          cycle();
-        }, autoplaySpeed);
+        this.autoplay(true)
       }
     };
 
@@ -117,7 +119,7 @@
      * Show the next slide.
      */
     this.next = function() {
-      if ((current + 1) === total) {
+      if ((current + 1) === total || !initialized) {
         return;
       }
 
@@ -129,7 +131,7 @@
      * Show the previous slide.
      */
     this.prev = function() {
-      if (current === 0) {
+      if (current === 0 || !initialized) {
         return;
       }
 
@@ -142,8 +144,27 @@
      * @param {number} index The slide index.
      */
     this.goTo = function(index) {
-      current = index;
-      slide();
+      if (initialized) {
+        current = index;
+        slide();
+      }
+    };
+
+    /**
+     * Toggle autoplay.
+     * @param {boolean} start Starts or stops autoplay.
+     */
+    this.autoplay = function(start) {
+      var timer = null;
+
+      if (start) {
+        timer = setTimeout(function() {
+          cycle();
+          clearTimeout(timer);
+        }, autoplaySpeed);
+      } else {
+        stopCycle();
+      }
     };
 
     /**
@@ -263,7 +284,6 @@
     * @private
     */
     function stopCycle() {
-      options.autoplay = false;
       clearTimeout(animation);
     }
 
@@ -272,10 +292,6 @@
     * @private
     */
     function cycle() {
-      if (!options.autoplay) {
-        return;
-      }
-
       if (current < total) {
         current++;
       } else {
