@@ -10,7 +10,8 @@
    * @param {HTMLElement} el The carousel element.
    * @param {object} [settings] Configuration settings.
    * @param {number} [settings.current=0] The current slide to start on. 0 based.
-   * @param {boolean} [settings.autoplay=false] The carousel will autoplay automatically.
+   * @param {boolean} [settings.autoplay=false] The carousel will start automatically.
+   * @param {number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
    * @param {boolean} [settings.dots=false] Dot navigation.
    * @param {boolean} [settings.nav=true] Arrow navigation.
    * @param {function} cb Callback function after slide has animated.
@@ -34,6 +35,7 @@
     var DEFAULTS = {
       current: 0,
       autoplay: false,
+      autoplaySpeed: 2000,
       dots: false,
       nav: true
     };
@@ -51,7 +53,6 @@
     var initialized = false;
 
     var animating = false;
-    var autoplaySpeed = 2000;
     var animation = null;
     var total = 0;
     var width = el.offsetWidth;
@@ -73,6 +74,10 @@
 
         if (!ML.isNum(current)) {
           current = DEFAULTS.current;
+        }
+
+        if (!ML.isNum(options.autoplaySpeed)) {
+          options.autoplaySpeed = DEFAULTS.autoplaySpeed;
         }
 
         if (!ML.isBool(options.autoplay)) {
@@ -161,7 +166,7 @@
         timer = setTimeout(function() {
           cycle();
           clearTimeout(timer);
-        }, autoplaySpeed);
+        }, options.autoplaySpeed);
       } else {
         stopCycle();
       }
@@ -304,7 +309,7 @@
 
       animation = setTimeout(function() {
         cycle();
-      }, autoplaySpeed);
+      }, options.autoplaySpeed);
 
       slide();
     }
