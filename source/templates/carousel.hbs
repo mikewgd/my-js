@@ -36,7 +36,8 @@
 {{#> footer}}
   <script>
     var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
-      dots: true
+      dots: true,
+      arrowKeys: true
     }, function(index) {
       ML.El.$('indexNum').innerHTML = index;
     })

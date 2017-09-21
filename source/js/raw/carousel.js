@@ -22,6 +22,7 @@
    * @param {number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
    * @param {boolean} [settings.dots=false] Dot navigation.
    * @param {boolean} [settings.nav=true] Arrow navigation.
+   * @param {boolean} [settings.arrowKeys=false] Arrow keyboard navigation.
    * @param {function} cb Callback function after slide has animated.
    * @param {number} cb.index The current slide index.
    * @param {HTMLElement} cb.el The carousel element.
@@ -38,7 +39,8 @@
       autoplay: false,
       autoplaySpeed: 2000,
       dots: false,
-      nav: true
+      nav: true,
+      arrowKeys: false
     };
 
     var options = {};
@@ -119,6 +121,8 @@
       el._MLCarousel = ML.extend(options, this);
       el._MLCarousel.init = true;
       el._MLCarousel.current = current;
+      ML.El.addClass(el, 'js-carousel-initialized');
+      el.setAttribute('tabindex', 0)
 
       bindEvents();
       callback(true);
@@ -126,8 +130,6 @@
       if (options.autoplay) {
         this.autoplay(true);
       }
-
-      ML.El.addClass(el, 'js-carousel-initialized');
     };
 
     /**
@@ -201,14 +203,21 @@
         ML.loop(dotLinks, function(item) {
           item.removeEventListener('click', dotClick, false);
         });
+
+        dotsUl.parentNode.removeChild(dotsUl);
       }
 
-      nextButton.removeEventListener('click', paginationClick, false);
-      prevButton.removeEventListener('click', paginationClick, false);
+      if (options.nav) {
+        nextButton.removeEventListener('click', paginationClick, false);
+        prevButton.removeEventListener('click', paginationClick, false);
 
-      nextButton.parentNode.removeChild(nextButton);
-      prevButton.parentNode.removeChild(prevButton);
-      dotsUl.parentNode.removeChild(dotsUl);
+        nextButton.parentNode.removeChild(nextButton);
+        prevButton.parentNode.removeChild(prevButton);
+      }
+
+      if (options.arrowKeys) {
+
+      }      
 
       el.innerHTML = carouselHTML;
 
@@ -297,6 +306,22 @@
       ML.El.evt(nextButton, 'click', paginationClick);
 
       ML.El.evt(prevButton, 'click', paginationClick);
+
+      if (options.arrowKeys) {
+        ML.El.evt(document, 'keydown', paginationKeydown)
+      }
+    }
+
+    function paginationKeydown(e) {
+      var currElement = document.activeElement;
+
+      if (!ML.isUndef(currElement._MLCarousel)) {
+        if (e.keyCode === 39) {
+          currElement._MLCarousel.next();
+        } else if (e.keyCode === 37) {
+          currElement._MLCarousel.prev();
+        }
+      }
     }
 
     /**
