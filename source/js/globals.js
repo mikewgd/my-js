@@ -53,18 +53,18 @@ ML = {
    * var obj = {animal: 'cat', fruit: 'apple'}; // 'animal=cat&fruit=apple' is returned.
    */
   urlParams: function(arg) {
-    var returned = [];
+    var result = [];
 
     if (typeof (arg) === 'string') {
       return arg;
     } else {
       for (var prop in arg) {
         if (arg.hasOwnProperty(prop)) {
-          returned.push(encodeURIComponent(prop) + '=' + encodeURIComponent(arg[prop]));
+          result.push(encodeURIComponent(prop) + '=' + encodeURIComponent(arg[prop]));
         }
       }
 
-      return returned.join('&');
+      return result.join('&');
     }
   },
 
@@ -250,6 +250,23 @@ ML.El = {
   Events: [],
 
   /**
+   * [isBound description]
+   * @param  {[type]}  node [description]
+   * @param  {[type]}  type [description]
+   * @param  {[type]}  func [description]
+   * @return {Boolean}      [description]
+   */
+  isBound: function(node, type, funcName) {
+    // TODO: validate node
+    var result = false;
+
+
+    return result;
+
+
+  },
+
+  /**
    * Returns true/false if an element collides with another one.
    * @param {HTMLElement|object} arg1 Element to detect collision or object with coordinates.
    * @param {HTMLElement|object} arg2 Second element to detect collision or object with coordinates.
@@ -431,17 +448,17 @@ ML.El = {
    * @return {HTMLElement}
    */
   _$: function(tag, parent) {
-    var returned = document.getElementsByTagName(tag);
+    var result = document.getElementsByTagName(tag);
 
-    if (returned.length < 1) {
+    if (result.length < 1) {
       throw new Error('The first parameter needs to be a valid tag.');
     }
 
     if ((typeof parent).toLowerCase() === 'object') {
-      returned = parent.getElementsByTagName(tag);
+      result = parent.getElementsByTagName(tag);
     }
 
-    return returned;
+    return result;
   },
 
   /**
