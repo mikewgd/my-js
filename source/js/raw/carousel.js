@@ -5,8 +5,16 @@
   'use strict';
 
   /**
-   * Carousel component.
-   * @constructor
+   * * blah
+   * * blah, _MLCarousel added - options and methods.
+   *
+   * @example
+   * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
+   *   autoplay: true
+   * }, function(index, el) {
+   *   console.log('slide index: ', index);
+   * })
+   * 
    * @param {HTMLElement} el The carousel element.
    * @param {object} [settings] Configuration settings.
    * @param {number} [settings.current=0] The current slide to start on. 0 based.
@@ -17,14 +25,7 @@
    * @param {function} cb Callback function after slide has animated.
    * @param {number} cb.index The current slide index.
    * @param {HTMLElement} cb.el The carousel element.
-   * The current slide index is returned.
-   * 
-   * @example
-   * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
-   *   autoplay: true
-   * }, function(index, el) {
-   *   console.log('slide index: ', index);
-   * })
+   * @constructor
    */
   ML.Carousel = function(el, settings, cb) {
     /**
@@ -40,8 +41,8 @@
       nav: true
     };
 
-    var options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
-    var current = parseInt(options.current);
+    var options = {};
+    var current = 0;
     var self = this;
 
     var slides = [];
@@ -53,21 +54,25 @@
     var initialized = false;
 
     var animating = false;
-    var animation = null;
+    var autoplayTimer = null;
     var total = 0;
-    var width = el.offsetWidth;
+    var width = 0;
+    var carouselHTML = null;
 
     /**
      * Initializes the carousel.
      */
     this.init = function() {
-      var carouselHtml = null;
+      carouselHTML = null;
       var gutter = 0;
 
       if ((typeof el).toLowerCase() !== 'object' && ML.isUndef(el.tagName)) {
         throw new Error('The carousel element must be an HTMLElement.');
       } else {
-        carouselHtml = el.innerHTML;
+        options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
+        current = parseInt(options.current);
+        width = el.offsetWidth;
+        carouselHTML = el.innerHTML;
         options.autoplay = ML.bool(options.autoplay);
         options.dots = ML.bool(options.dots);
         options.nav = ML.bool(options.nav);
@@ -98,7 +103,7 @@
       gutter = parseInt(ML.El.getStyle(slides[0], 'margin-right').replace('px', ''));
       width = width + gutter;
 
-      el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHtml + '</div>';
+      el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHTML + '</div>';
       ul = ML.El._$('ul', el)[0];
       ul.style.left = -(width * current) + 'px';
 
@@ -111,13 +116,18 @@
       }
 
       initialized = true;
+      el._MLCarousel = ML.extend(options, this);
+      el._MLCarousel.init = true;
+      el._MLCarousel.current = current;
 
       bindEvents();
       callback(true);
 
       if (options.autoplay) {
-        this.autoplay(true)
+        this.autoplay(true);
       }
+
+      ML.El.addClass(el, 'js-carousel-initialized');
     };
 
     /**
@@ -129,6 +139,7 @@
       }
 
       current++;
+      el._MLCarousel.current = current;
       slide();
     };
 
@@ -141,6 +152,7 @@
       }
 
       current--;
+      el._MLCarousel.current = current;
       slide();
     };
 
@@ -151,6 +163,7 @@
     this.goTo = function(index) {
       if (initialized) {
         current = index;
+        el._MLCarousel.current = current;
         slide();
       }
     };
@@ -168,8 +181,48 @@
           clearTimeout(timer);
         }, options.autoplaySpeed);
       } else {
-        stopCycle();
+        if (autoplayTimer !== null) {
+          clearTimeout(autoplayTimer);
+          autoplayTimer = null;
+        }
       }
+    };
+
+    /**
+     * Destroys instance of the carousel.
+     */
+    this.destroy = function() {
+      initialized = false;
+      this.autoplay(false);
+
+      if (options.dots) {
+        var dotLinks = ML.El._$('a', dotsUl);
+
+        ML.loop(dotLinks, function(item) {
+          item.removeEventListener('click', dotClick, false);
+        });
+      }
+
+      nextButton.removeEventListener('click', paginationClick, false);
+      prevButton.removeEventListener('click', paginationClick, false);
+
+      nextButton.parentNode.removeChild(nextButton);
+      prevButton.parentNode.removeChild(prevButton);
+      dotsUl.parentNode.removeChild(dotsUl);
+
+      el.innerHTML = carouselHTML;
+
+      ML.El.removeClass(el, 'js-carousel-initialized');
+
+      current = 0;
+      dotsUl = null;
+      dotsLis = [];
+
+      animating = false;
+      autoplayTimer = null;
+      total = 0;
+      width = 0;
+      carouselHTML = null;
     };
 
     /**
@@ -237,37 +290,49 @@
         var dotLinks = ML.El._$('a', dotsUl);
 
         ML.loop(dotLinks, function(item) {
-          ML.El.evt(item, 'click', function(e) {
-            e.preventDefault();
-            if (self.animating || this.rel === self.curr) {
-              return;
-            }
-
-            stopCycle();
-            self.goTo(parseInt(this.rel));
-          });
+          ML.El.evt(item, 'click', dotClick);
         });
       }
 
-      ML.El.evt(nextButton, 'click', function(e) {
-        e.preventDefault();
-        if (ML.El.hasClass(this, 'inactive') || animating) {
-          return;
-        }
+      ML.El.evt(nextButton, 'click', paginationClick);
 
-        stopCycle();
-        self.next();
-      });
+      ML.El.evt(prevButton, 'click', paginationClick);
+    }
 
-      ML.El.evt(prevButton, 'click', function(e) {
-        e.preventDefault();
-        if (ML.El.hasClass(this, 'inactive') || animating) {
-          return;
-        }
+    /**
+     * Click event bound to dot navigation.
+     * @param {Event} e The Event object.\
+     * @private
+     */
+    function dotClick(e) {
+      e.preventDefault();
+      if (self.animating || e.currentTarget.rel === self.curr) {
+        return;
+      }
 
-        stopCycle();
+      self.autoplay(false);
+      self.goTo(parseInt(e.currentTarget.rel));
+    }
+
+    /**
+     * Click event bound to next and previous buttons.
+     * @param {Event} e The Event object.
+     * @private
+     */
+    function paginationClick(e) {
+      e.preventDefault();
+
+      if (ML.El.hasClass(e.currentTarget, 'inactive') || animating) {
+        return;
+      }
+
+      self.autoplay(false);
+
+      if (ML.El.hasClass(e.currentTarget, 'prev')) {
         self.prev();
-      });
+      } else {
+        self.next();
+      }
     }
 
     /**
@@ -285,14 +350,6 @@
     }
 
     /**
-    * Stops the auto rotation of the carousel.
-    * @private
-    */
-    function stopCycle() {
-      clearTimeout(animation);
-    }
-
-    /**
     * autoplays through the slides in the carousel based on a timer.
     * @private
     */
@@ -307,7 +364,9 @@
         current = 0;
       }
 
-      animation = setTimeout(function() {
+      el._MLCarousel.current = current;
+
+      autoplayTimer = setTimeout(function() {
         cycle();
       }, options.autoplaySpeed);
 
