@@ -98,7 +98,7 @@
       options.selectorClose = options.selectorClose.toString();
       options.width = parseInt(options.width);
 
-      if (!ML.isUndef(options.activeClass, true) && (typeof options.activeClass) === 'string') {
+      if (!ML.isUndef(options.activeClass, true) && ML.isString(options.activeClass)) {
         options.activeClass = options.activeClass.toString();
       }
      
