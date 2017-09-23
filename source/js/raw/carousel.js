@@ -7,6 +7,7 @@
   /**
    * * blah
    * * blah, _MLCarousel added - options and methods.
+   * * Using arrowKeys: true -- make note you need to focus on the carousel or element in the carousel for it to work.
    *
    * @example
    * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
@@ -120,9 +121,9 @@
       initialized = true;
       el._MLCarousel = ML.extend(options, this);
       el._MLCarousel.init = true;
-      el._MLCarousel.current = current;
+      el._MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
-      el.setAttribute('tabindex', 0)
+      el.setAttribute('tabindex', 0);
 
       bindEvents();
       callback(true);
@@ -140,8 +141,10 @@
         return;
       }
 
+      self.autoplay(false);
+
       current++;
-      el._MLCarousel.current = current;
+      el._MLCarousel.currentSlideIndex = current;
       slide();
     };
 
@@ -153,8 +156,10 @@
         return;
       }
 
+      self.autoplay(false);
+
       current--;
-      el._MLCarousel.current = current;
+      el._MLCarousel.currentSlideIndex = current;
       slide();
     };
 
@@ -164,8 +169,10 @@
      */
     this.goTo = function(index) {
       if (initialized) {
+        self.autoplay(false);
+
         current = index;
-        el._MLCarousel.current = current;
+        el._MLCarousel.currentSlideIndex = current;
         slide();
       }
     };
@@ -216,9 +223,10 @@
       }
 
       if (options.arrowKeys) {
-
+        document.removeEventListener('keydown', paginationKeydown, false);
       }      
 
+      delete el._MLCarousel;
       el.innerHTML = carouselHTML;
 
       ML.El.removeClass(el, 'js-carousel-initialized');
@@ -308,25 +316,44 @@
       ML.El.evt(prevButton, 'click', paginationClick);
 
       if (options.arrowKeys) {
-        ML.El.evt(document, 'keydown', paginationKeydown)
+        // To prevent being bound more than once.
+        if (!ML.El.isBound(document, 'keydown', 'paginationKeydown')) {
+          ML.El.evt(document, 'keydown', paginationKeydown);
+        }
       }
     }
 
+    /**
+     * Keydown event bound to document to change current slide.
+     * @param {Event} e The Event object.
+     * @return {boolean}
+     * @private
+     */
     function paginationKeydown(e) {
-      var currElement = document.activeElement;
+      var target = document.activeElement;
+      var targetParent = ML.El.findParent(target, 'DIV', 'js-carousel-initialized');
+      var carouselEl = null;
 
-      if (!ML.isUndef(currElement._MLCarousel)) {
+      if (!ML.isUndef(target._MLCarousel)) {
+        carouselEl = target._MLCarousel;
+      } else if (targetParent !== false) {
+        carouselEl = targetParent._MLCarousel;
+      } else {
+        return;
+      }
+
+      if (carouselEl.arrowKeys) {
         if (e.keyCode === 39) {
-          currElement._MLCarousel.next();
+          carouselEl.next();
         } else if (e.keyCode === 37) {
-          currElement._MLCarousel.prev();
+          carouselEl.prev();
         }
       }
     }
 
     /**
      * Click event bound to dot navigation.
-     * @param {Event} e The Event object.\
+     * @param {Event} e The Event object.
      * @private
      */
     function dotClick(e) {
@@ -335,7 +362,6 @@
         return;
       }
 
-      self.autoplay(false);
       self.goTo(parseInt(e.currentTarget.rel));
     }
 
@@ -350,8 +376,6 @@
       if (ML.El.hasClass(e.currentTarget, 'inactive') || animating) {
         return;
       }
-
-      self.autoplay(false);
 
       if (ML.El.hasClass(e.currentTarget, 'prev')) {
         self.prev();
@@ -389,7 +413,7 @@
         current = 0;
       }
 
-      el._MLCarousel.current = current;
+      el._MLCarousel.currentSlideIndex = current;
 
       autoplayTimer = setTimeout(function() {
         cycle();
