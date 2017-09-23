@@ -239,6 +239,9 @@
     }
   };
 
+  // TODO: In comments mention events bound to inputs, are still bound show example.
+  // TODO: Search for elements in container instead of all inputs on page. (browser support)
+
   /**
    * Custom radio buttons and checkboxes.
    * Creates `<span>` elements after the radio and checkbox inputs.
@@ -254,7 +257,7 @@
    * @example <caption>The script is initialized on page load, but if new
    * <code>&lt;input type="radio" /&gt;</code> or <code>&lt;input type="checkbox" /&gt;</code>
    * are added to the page dynamically. Use the line below:</caption>
-   * ML.Dropdown();
+   * ML.CustomRadios();
    * 
    * @example <caption>The markup the plugin creates:</caption> {@lang xml}
    * <input type="radio" id="green" name="green" value="green" class="styled">

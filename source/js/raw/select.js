@@ -371,6 +371,9 @@
       }
     }
   };
+
+  // TODO: In comments mention events bound to selects, are still bound show example.
+  // TODO: Search for elements in container instead of all selects on page. (browser support)
   
   /**
    * Custom select menu/dropdown.

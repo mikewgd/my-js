@@ -151,6 +151,8 @@
     }
   };
 
+  // TODO: Search for elements in container instead of all inputs on page. (browser support)
+
   /**
    * Input polyfill.
    * The polyfill will add unique classes to an input field when it is focused 
