@@ -124,6 +124,15 @@ ML = {
   },
 
   /**
+   * Returns whether the value is a string.
+   * @param {*} val The value to test if a string.
+   * @return {boolean}
+   */
+  isString: function(val) {
+    return (typeof val).toLowerCase() === 'string';  
+  },
+
+  /**
    * Merge defaults with user options.
    * @param {object} defaults Default settings.
    * @param {object} options User options.
@@ -249,21 +258,41 @@ ML.El = {
    */
   Events: [],
 
-  /**
-   * [isBound description]
-   * @param  {[type]}  node [description]
-   * @param  {[type]}  type [description]
-   * @param  {[type]}  func [description]
-   * @return {Boolean}      [description]
-   */
-  isBound: function(node, type, funcName) {
-    // TODO: validate node
-    var result = false;
+  // TODO: comment
+  findParent: function (el, tag, classN) {
+    // TODO: validate args
+    while (el.parentNode) {
+      el = el.parentNode;
+      if (el.tagName === tag && ML.El.hasClass(el, classN)) {
+        return el;
+      }
+    }
 
+    return false;
+  },
+  
+  // TODO: comment
+  isBound: function(node, type, funcName) {
+    var result = false;
+    var boundEvt = null;
+
+    if (!ML.isString(type) || !ML.isString(funcName)) {
+      throw new Error('The type of event i.e. "click" must be a string and the name' +
+        ' of the function must be a string.');
+    }
+
+    // TODO: validate node
+
+    for (var i = 0, len = this.Events.length; i < len; i++) {
+      boundEvt = this.Events[i];
+
+      if (node === boundEvt[0] && type === boundEvt[1] && funcName === boundEvt[2].name) {
+        result = true;
+        break;
+      }
+    }
 
     return result;
-
-
   },
 
   /**
