@@ -8,6 +8,7 @@
    * * blah
    * * blah, _MLCarousel added - options and methods.
    * * Using arrowKeys: true -- make note you need to focus on the carousel or element in the carousel for it to work.
+   * * Adds a js-carousel-initialized class
    *
    * @example
    * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
@@ -24,6 +25,7 @@
    * @param {boolean} [settings.dots=false] Dot navigation.
    * @param {boolean} [settings.nav=true] Arrow navigation.
    * @param {boolean} [settings.arrowKeys=false] Arrow keyboard navigation.
+   * @param {boolean} [settings.infinite=false] Infinte amount of slides.
    * @param {function} cb Callback function after slide has animated.
    * @param {number} cb.index The current slide index.
    * @param {HTMLElement} cb.el The carousel element.
@@ -41,7 +43,8 @@
       autoplaySpeed: 2000,
       dots: false,
       nav: true,
-      arrowKeys: false
+      arrowKeys: false,
+      infinite: false
     };
 
     var options = {};
@@ -61,6 +64,9 @@
     var total = 0;
     var width = 0;
     var carouselHTML = null;
+    var firstSlide = null;
+    var lastSlide = null;
+    var slideDirection = 'next';
 
     /**
      * Initializes the carousel.
@@ -96,6 +102,10 @@
           options.nav = DEFAULTS.nav;
         }
 
+        if (!ML.isBool(options.infinite)) {
+          options.infinite = DEFAULTS.infinite;
+        }
+
         if (!ML.isBool(options.dots)) {
           options.dots = DEFAULTS.dots;
         }
@@ -106,9 +116,21 @@
       gutter = parseInt(ML.El.getStyle(slides[0], 'margin-right').replace('px', ''));
       width = width + gutter;
 
-      el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHTML + '</div>';
-      ul = ML.El._$('ul', el)[0];
-      ul.style.left = -(width * current) + 'px';
+      if (!options.infinite) {
+        el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHTML + '</div>';
+        ul = ML.El._$('ul', el)[0];
+        ul.style.left = -(width * current) + 'px';
+      } else {
+        firstSlide = slides[0];
+        lastSlide = slides[total - 1];
+
+        firstSlide.parentNode.insertBefore(lastSlide.cloneNode(true), firstSlide);
+        lastSlide.parentNode.insertBefore(firstSlide.cloneNode(true), lastSlide.nextSibling);
+
+        el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + el.innerHTML + '</div>';
+        ul = ML.El._$('ul', el)[0];
+        ul.style.left = -(width * (current + 1)) + 'px';
+      }
 
       if (options.nav) {
         createNav();
@@ -137,8 +159,16 @@
      * Show the next slide.
      */
     this.next = function() {
-      if ((current + 1) === total || !initialized) {
+      if (!initialized || animating) {
         return;
+      }
+
+      if ((current + 1) === total) {
+        if (options.infinite) {
+          current = -1;
+        } else {
+          return;
+        }
       }
 
       self.autoplay(false);
@@ -152,8 +182,16 @@
      * Show the previous slide.
      */
     this.prev = function() {
-      if (current === 0 || !initialized) {
+      if (!initialized || animating) {
         return;
+      }
+
+      if (current === 0) {
+        if (options.infinite) {
+          current = total;
+        } else {
+          return;
+        }
       }
 
       self.autoplay(false);
@@ -170,10 +208,16 @@
     this.goTo = function(index) {
       if (initialized) {
         self.autoplay(false);
+        slideDirection = (current < index) ? 'next' : 'prev';
 
         current = index;
         el._MLCarousel.currentSlideIndex = current;
-        slide();
+
+        if (options.infinite) {
+          goToSlideInfinite();
+        } else {
+          slide();
+        }
       }
     };
 
@@ -377,6 +421,8 @@
         return;
       }
 
+      slideDirection = (ML.El.hasClass(e.currentTarget, 'prev')) ? 'prev' : 'next';
+
       if (ML.El.hasClass(e.currentTarget, 'prev')) {
         self.prev();
       } else {
@@ -389,10 +435,38 @@
     * @private
     */
     function slide() {
-      var desired = width * current;
+      var desired = -(width * current);
       animating = true;
 
-      ML.Animate(ul, {left: -desired}, {}, function() {
+      if (options.infinite) {
+        var delta = (slideDirection === 'prev') ? -1 : 1;
+        desired = parseInt(getComputedStyle(ul).left) + (-width * delta);
+      }
+
+      ML.Animate(ul, {left: desired}, {}, function() {
+        animating = false;
+        callback(false);
+
+        if (options.infinite) {
+          if (current === 0 && slideDirection === 'next') {
+            ul.style.left = -width + 'px';
+          } else if (current === (total - 1) && slideDirection === 'prev') {
+            ul.style.left = -(width * total) + 'px';
+          }
+        }
+      });
+    }
+
+    /**
+     * Animates the carousel to slide to each desired slide.
+     * Spearate function when navigating via dots and when `infinite: true`
+     * @private
+     */
+    function goToSlideInfinite() {
+      var desired = -(width * (current + 1));
+      animating = false;
+
+      ML.Animate(ul, {left: desired}, {}, function() {
         animating = false;
         callback(false);
       });
@@ -436,12 +510,14 @@
       ML.El.removeClass(nextButton, 'inactive');
       ML.El.removeClass(prevButton, 'inactive');
 
-      if (current === 0) {
-        ML.El.addClass(prevButton, 'inactive');
-      } else if (current + 1 === total) {
-        ML.El.addClass(nextButton, 'inactive');
+      if (!options.infinite) {
+        if (current === 0) {
+          ML.El.addClass(prevButton, 'inactive');
+        } else if (current + 1 === total) {
+          ML.El.addClass(nextButton, 'inactive');
+        }
       }
-
+      
       if (options.dots) {
         ML.loop(dotsLis, function(li, i) {
           ML.El.removeClass(li, 'active');
