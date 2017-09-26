@@ -737,7 +737,7 @@ ML.El = {
 };
 
 /**
- * Animate elements easily with this constructor. Credit: http://learn.javascript.ru/js-animation, http://learn.javascript.ru/files/tutorial/js/animate.js But modified
+ * Animate elements easily with this constructor. Credit: https://javascript.info/js-animation
  * @constructor
  * @param {HTMLElement} el Element to animate.
  * @param {object} props CSS properties to animate.
