@@ -36,57 +36,57 @@
 
 {{#> footer}}
   <script>
-   var buttons = ML.El._$('button');
+    var buttons = ML.El._$('button');
 
-   var callbackFunction = function(response) {
-    console.log(response);
-   };
+    var callbackFunction = function(response) {
+      console.log(response);
+    };
 
-   for (var i = 0, len = buttons.length; i < len; i++) {
-    ML.El.evt(buttons[i], 'click', function(e) {
-      switch (this.parentNode.className) {
-        case 'ajax-content-1':
-          new ML.Ajax({
-            responseType: 'json',
-            url: 'https://reqres.in/api/users/2',
-            success: function(xhr) {
-              console.log(xhr.response.data);
-            },
-            error: function(xhr) {
-              console.log('ERROR', xhr);
-            }
-          });
-          break;
-        case 'ajax-content-2':
-          new ML.Ajax({
-            url: 'https://reqres.in/api/users',
-            method: 'POST',
-            responseType: 'json',
-            data: {
-              name: 'john smith',
-              age: 22
-            },
-            success: function(xhr) {
-              console.log(xhr.response);
-            },
-            error: function(xhr) {
-              console.log('ERROR', xhr);
-            }
-          });
-          break;
-        case 'ajax-content-3':
-          new ML.Ajax({
-            url: 'https://jsfiddle.net/echo/jsonp',
-            method: 'JSONP',
-            data: {
-              name: 'john smith',
-              age: 22
-            },
-            jsonpCallback: 'callbackFunction'
-          });
-          break;
-      }
-    });
-   }
+    for (var i = 0, len = buttons.length; i < len; i++) {
+      ML.El.evt(buttons[i], 'click', function(e) {
+        switch (this.parentNode.className) {
+          case 'ajax-content-1':
+            new ML.Ajax({
+              responseType: 'json',
+              url: 'https://reqres.in/api/users/2',
+              success: function(xhr) {
+                console.log(xhr.response.data);
+              },
+              error: function(xhr) {
+                console.log('ERROR', xhr);
+              }
+            });
+            break;
+          case 'ajax-content-2':
+            new ML.Ajax({
+              url: 'https://reqres.in/api/users',
+              method: 'POST',
+              responseType: 'json',
+              data: {
+                name: 'john smith',
+                age: 22
+              },
+              success: function(xhr) {
+                console.log(xhr.response);
+              },
+              error: function(xhr) {
+                console.log('ERROR', xhr);
+              }
+            });
+            break;
+          case 'ajax-content-3':
+            new ML.Ajax({
+              url: 'https://jsfiddle.net/echo/jsonp',
+              method: 'JSONP',
+              data: {
+                name: 'john smith',
+                age: 22
+              },
+              jsonpCallback: 'callbackFunction'
+            });
+            break;
+        }
+      });
+    }
   </script>
 {{/footer}}
