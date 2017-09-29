@@ -5,17 +5,82 @@
   'use strict';
 
   /**
-   * * blah
-   * * blah, _MLCarousel added - options and methods.
-   * * Using arrowKeys: true -- make note you need to focus on the carousel or element in the carousel for it to work.
-   * * Adds a js-carousel-initialized class
+   * * A component for cycling through images, text and other elements, like a carousel.
+   * * Nested carousels are not supported, and generally not compliant with accessibility standards.
+   * * Each carousel should have a unique `id` attribute.
+   * * Every initialized carousel gets `_MLCarousel` added to the element. For an example see example below.
+   * * When setting `arrowKeys: true`, please note you need to focus on the carousel or an 
+   * element within the carousel for the arrow keys to work correctly.
+   * * Adds a `js-carousel-initialized` class to the carousel element.
+   * * You can initialize carousels via `data-carousel` or JavaScript.
+   * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
+   * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
    *
-   * @example
+   * @example <caption>Sample carousel HTML (initialized via <code>data-</code> with default settings.):</caption> {@lang xml}
+   * <div class="carousel" id="customCarousel" data-carousel>
+   *   <ul>
+   *     <li class="carousel-slide"><span>0</span><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
+   *     <li class="carousel-slide"><span>1</span><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
+   *     <li class="carousel-slide"><span>2</span><img alt="" src="images/carousel-imgs/elephant.jpg" /></li>
+   *     <li class="carousel-slide"><span>3</span><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
+   *   </ul>
+   * </div>
+   *
+   * @example <caption>Rendered HTML with all settings.</caption> {@lang xml}
+   * <div class="carousel animals js-carousel-initialized" data-carousel="autoplay:true:dots:true:arrowKeys:true:autoplay:true:infinite:true:current:1" tabindex="0">
+   *   <div class="carousel-viewer" style="overflow: hidden;">
+   *     <ul style="left: -620px;">
+   *       <li class="carousel-slide"><span>3</span><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
+   *       <li class="carousel-slide"><span>0</span><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
+   *       <li class="carousel-slide"><span>1</span><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
+   *       <li class="carousel-slide"><span>2</span><img alt="" src="images/carousel-imgs/elephant.jpg" /></li>
+   *       <li class="carousel-slide"><span>3</span><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
+   *       <li class="carousel-slide"><span>0</span><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
+   *     </ul>
+   *   </div>
+   *   
+   *   <a href="#" class="carousel-nav prev"><i>←</i> <span>Previous</span></a>
+   *   <a href="#" class="carousel-nav next"><span>Next</span> <i>→</i></a>
+   * 
+   *   <div class="carousel-dots">
+   *     <ul>
+   *       <li class=""><a href="#" rel="0">•</a></li>
+   *       <li class="active"><a href="#" rel="1">•</a></li>
+   *       <li class=""><a href="#" rel="2">•</a></li>
+   *       <li class=""><a href="#" rel="3">•</a></li>
+   *     </ul>
+   *   </div>
+   * </div>
+   *
+   * @example <caption>Initializing carousel via JavaScript</caption>
    * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
-   *   autoplay: true
+   *   dots: true,
+   *   arrowKeys: true,
+   *   infinite: true
    * }, function(index, el) {
-   *   console.log('slide index: ', index);
-   * })
+   *   // Slide complete function. 
+   *   // index = current slide index. el = carousel element.
+   *   console.log(index, el);
+   * });
+   *
+   * @example <caption>Referencing carousel object in JavaScript.</caption> {@lang xml}
+   * <div class="carousel" id="customCarousel" data-carousel>
+   *   ...
+   * </div>
+   *
+   * <button id="carouselNext">Next button</button>
+   *
+   * <script>
+   *   var carousel = ML.El.$('customCarousel')._MLCarousel;
+   *   
+   *   carousel.complete(function(index, el) {
+   *     console.log(index, el);
+   *   });
+   *   
+   *   ML.El.evt(ML.El.$('carouselNext'), 'click', function(e) {
+   *     carousel.next();
+   *   });
+   * </script>
    * 
    * @param {HTMLElement} el The carousel element.
    * @param {object} [settings] Configuration settings.
@@ -67,6 +132,10 @@
     var firstSlide = null;
     var lastSlide = null;
     var slideDirection = 'next';
+
+    var methods = {
+      complete: function() {}
+    };
 
     /**
      * Initializes the carousel.
@@ -143,6 +212,10 @@
       initialized = true;
       el._MLCarousel = ML.extend(options, this);
       el._MLCarousel.init = true;
+      el._MLCarousel.complete = function(cb2) {
+        methods.complete = cb2;
+        // return el._MLCarousel;
+      };
       el._MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
       el.setAttribute('tabindex', 0);
@@ -268,6 +341,7 @@
 
       if (options.arrowKeys) {
         document.removeEventListener('keydown', paginationKeydown, false);
+        el.removeAttribute('tabindex');
       }      
 
       delete el._MLCarousel;
@@ -503,8 +577,12 @@
     * @private
     */
     function callback(init) {
-      if (!init && typeof cb === 'function') {
-        cb(current, el);
+      if (!init) {
+        methods.complete(current, el);
+
+        if (typeof cb === 'function') {
+          cb(current, el);
+        }
       }
 
       ML.El.removeClass(nextButton, 'inactive');
