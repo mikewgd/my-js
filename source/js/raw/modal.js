@@ -12,8 +12,11 @@
    * use `position: fixed`, which can sometimes be a bit particular about its rendering. 
    * * When possible, place your modal HTML in a top-level position to avoid interference
    * from other elements.
+   * * Each modal should have a unique `id` attribute.
    * * When a modal is opened the class name `modal-opened` is appended to the `<body>`.
    * * You can show modals via `data-modal` or JavaScript.
+   *
+   * // TODO: comment for showing modal via link.
    *
    * @example <caption>Sample markup of modal HTML.</caption> {@lang xml}
    * <div class="modal" id="unique-id3">
