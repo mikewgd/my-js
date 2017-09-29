@@ -78,7 +78,7 @@ gulp.task('build-all', function() {
   .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('custom-build', ['clean-js'], function() {
+gulp.task('custom-build', ['clean'], function() {
   var arg = process.argv.slice(3)[1];
   var scripts = arg.split(',');
   var buildScripts = [globalJs];
