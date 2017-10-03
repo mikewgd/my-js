@@ -737,8 +737,16 @@ ML.El = {
 };
 
 /**
- * Animate elements easily with this constructor. Credit: https://javascript.info/js-animation
- * @constructor
+ * Animate CSS values of HTML elements. [credit](https://javascript.info/js-animation)
+ * 
+ * @example
+ * var props = {width: 100, height: 100};
+ * var settings = {delay: 15, duration: 500, easing: 'bounce'};
+ * 
+ * new ML.Animate(ML.$('el'), props, settings, function() {
+ *   alert('animation is complete');
+ * });
+ * 
  * @param {HTMLElement} el Element to animate.
  * @param {object} props CSS properties to animate.
  * @param {object} [settings] Configuration settings.
@@ -746,11 +754,7 @@ ML.El = {
  * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
  * @param {string} [settings.easing=linear] Type of animation (`bounce`, `ease`, etc..), defaults to `linear`
  * @param {function} [cb] Callback function.
- * 
- * @example
- * new ML.Animate(ML.$('el'), {width: 100, height: 100}, {delay: 15, duration: 500, easing: 'bounce'}, function() {
- *   alert('animation is complete');
- * });
+ * @constructor
  */
 ML.Animate = function(el, props, settings, cb) {
   /**
@@ -841,10 +845,6 @@ ML.Animate = function(el, props, settings, cb) {
     for (var prop in props) {
       currProp = parseFloat(ML.El.getStyle(el, prop).replace('px', ''));
       currProps[prop] = currProp;
-
-      if (prop === 'opacity') {
-        currProps.filter = 'alpha(opacity=' + prop * 100 + ')';
-      }
     }
   }
 
@@ -864,7 +864,18 @@ ML.Animate = function(el, props, settings, cb) {
 
       for (var prop in props) {
         var value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
-        el.style[prop] = value + 'px';
+
+        if (prop === 'opacity') {
+          if (props[prop] < 1) {
+            value = currProps[prop] - (progress * options.easing(progress));
+          } else {
+            value = currProps[prop] + (progress * options.easing(progress));
+          }
+        } else {
+          value += 'px';
+        }
+
+        el.style[prop] = value;
       }
 
       if (progress === 1) {

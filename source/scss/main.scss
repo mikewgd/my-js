@@ -90,14 +90,11 @@ ul.list li {
   }
 }
 
-.destroy-button {
-  margin: 10px 0 0 0;
-}
-
 /* Script specific styles */
 @import 
   "main/scripts/carousel",
   "main/scripts/form-elements",
   "main/scripts/modal",
   "main/scripts/tooltip",
-  "main/scripts/ajax";
+  "main/scripts/ajax",
+  "main/scripts/animate";

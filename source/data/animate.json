@@ -1,0 +1,30 @@
+{
+  "title": "Animate",
+  "script": "global",
+  "actions": [
+    {
+      "id": "animRight",
+      "text": "move to the right"
+    },
+    {
+      "id": "animWidth",
+      "text": "increase width"
+    },
+    {
+      "id": "animHeight",
+      "text": "increase height"
+    },
+    {
+      "id": "animBtm",
+      "text": "move to the bottom"
+    },
+    {
+      "id": "animOpac",
+      "text": "fade out"
+    },
+    {
+      "id": "animWidthHeight",
+      "text": "increase width & height"
+    }
+  ]
+}

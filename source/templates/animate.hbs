@@ -1,0 +1,74 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#carousel">Documentation</a>
+  </div>
+  
+  <div class="animate-header">
+    <div class="actions fl">
+    {{#actions}}
+      <button id="{{this.id}}">{{this.text}}</button>
+    {{/actions}}
+    </div>
+
+    <div class="fr">
+      <label for="">easing</label>
+      <select id="animateEasing">
+        <option selected value="linear">linear</option>
+        <option value="elastic">elastic</option>
+        <option value="quad">quad</option>
+        <option value="bounce">bounce</option>
+        <option value="back">back</option>
+        <option value="quint">quint</option>
+        <option value="circ">circ</option>
+      </select>
+    </div>  
+  </div>
+  
+  <div class="animate-playground">
+    <div class="animate-box" id="animateBox"></div>
+  </div>
+
+{{#> footer}}
+  <script>
+    var box = ML.El.$('animateBox');
+    var easing = ML.El.$('animateEasing');
+    var inc = 50;
+    
+    var animRight = ML.El.$('animRight');
+    var animBtm = ML.El.$('animBtm');    
+    var animWidth = ML.El.$('animWidth');
+    var animHeight = ML.El.$('animHeight');
+    var animWidthHeight = ML.El.$('animWidthHeight');
+    var animOpac = ML.El.$('animOpac');
+
+    var curr = function(prop) {
+      return parseInt(getComputedStyle(box)[prop]);
+    }
+
+    ML.El.evt(animWidth, 'click', function() {
+      new ML.Animate(box, {width: 50}, {easing: easing.value});
+    });
+
+    ML.El.evt(animHeight, 'click', function() {
+      new ML.Animate(box, {height: curr('height') + inc}, {easing: easing.value});
+    });
+
+    ML.El.evt(animWidthHeight, 'click', function() {
+      new ML.Animate(box, {height: curr('height') + inc, width: curr('width') + inc}, {easing: easing.value});
+    });
+
+    ML.El.evt(animRight, 'click', function() {
+      new ML.Animate(box, {left: curr('left') + inc}, {duration: 500, easing: easing.value});
+    });
+
+    ML.El.evt(animBtm, 'click', function() {
+      new ML.Animate(box, {top: curr('top') + inc}, {duration: 500, easing: easing.value});
+    });
+
+    ML.El.evt(animOpac, 'click', function() {
+      new ML.Animate(box, {opacity: 0}, {duration: 500, easing: easing.value});
+    });
+  </script>
+{{/footer}}
