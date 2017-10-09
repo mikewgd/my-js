@@ -7,6 +7,10 @@
       "text": "move to the right"
     },
     {
+      "id": "animLeft",
+      "text": "move to the left"
+    },
+    {
       "id": "animWidth",
       "text": "increase width"
     },

@@ -736,6 +736,8 @@ ML.El = {
   }
 };
 
+// TODO: Bulleted comments
+// TODO: Cant animate all values, only pixels not em, rem, % etc...
 /**
  * Animate CSS values of HTML elements. [credit](https://javascript.info/js-animation)
  * 
@@ -856,6 +858,7 @@ ML.Animate = function(el, props, settings, cb) {
     getCurrs();
 
     timer = setInterval(function() {
+      var value = 0;
       progress = (new Date() - time) / options.duration;
 
       if (progress > 1) {
@@ -863,14 +866,24 @@ ML.Animate = function(el, props, settings, cb) {
       }
 
       for (var prop in props) {
-        var value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
+        if (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop])) {
+          if (/^\+/g.test(props[prop])) {
+            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
+          } else {
+            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
+          }
+        } else {
+          value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
+        }
+
+        
 
         if (prop === 'opacity') {
-          if (props[prop] < 1) {
+          /*if (props[prop] < 1) {
             value = currProps[prop] - (progress * options.easing(progress));
           } else {
             value = currProps[prop] + (progress * options.easing(progress));
-          }
+          }*/
         } else {
           value += 'px';
         }

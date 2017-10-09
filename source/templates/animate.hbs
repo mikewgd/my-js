@@ -37,38 +37,43 @@
     var inc = 50;
     
     var animRight = ML.El.$('animRight');
+    var animLeft = ML.El.$('animLeft');
     var animBtm = ML.El.$('animBtm');    
     var animWidth = ML.El.$('animWidth');
     var animHeight = ML.El.$('animHeight');
     var animWidthHeight = ML.El.$('animWidthHeight');
     var animOpac = ML.El.$('animOpac');
 
-    var curr = function(prop) {
-      return parseInt(getComputedStyle(box)[prop]);
-    }
+    var animateEl = function(props) {
+      new ML.Animate(box, props, {easing: easing.value});
+    };
 
     ML.El.evt(animWidth, 'click', function() {
-      new ML.Animate(box, {width: 50}, {easing: easing.value});
+      animateEl({width: inc});
     });
 
     ML.El.evt(animHeight, 'click', function() {
-      new ML.Animate(box, {height: curr('height') + inc}, {easing: easing.value});
+      animateEl({height: inc + 20});
     });
 
     ML.El.evt(animWidthHeight, 'click', function() {
-      new ML.Animate(box, {height: curr('height') + inc, width: curr('width') + inc}, {easing: easing.value});
+      animateEl({height: '+' + inc, width: '+' + inc});
     });
 
     ML.El.evt(animRight, 'click', function() {
-      new ML.Animate(box, {left: curr('left') + inc}, {duration: 500, easing: easing.value});
+      animateEl({left: '+' + inc});
+    });
+
+    ML.El.evt(animLeft, 'click', function() {
+      animateEl({left: '-' + inc});
     });
 
     ML.El.evt(animBtm, 'click', function() {
-      new ML.Animate(box, {top: curr('top') + inc}, {duration: 500, easing: easing.value});
+      animateEl({top: curr('top') + inc});
     });
 
-    ML.El.evt(animOpac, 'click', function() {
-      new ML.Animate(box, {opacity: 0}, {duration: 500, easing: easing.value});
-    });
+    /*ML.El.evt(animOpac, 'click', function() {
+      animateEl({opacity: 0});
+    });*/
   </script>
 {{/footer}}
