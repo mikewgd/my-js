@@ -12,11 +12,11 @@
     },
     {
       "id": "animWidth",
-      "text": "increase width"
+      "text": "width 50px"
     },
     {
       "id": "animHeight",
-      "text": "increase height"
+      "text": "height 70px"
     },
     {
       "id": "animBtm",
