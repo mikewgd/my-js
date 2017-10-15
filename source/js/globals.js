@@ -736,11 +736,14 @@ ML.El = {
   }
 };
 
-// TODO: Bulleted comments
-// TODO: Can't animate all values, only pixels not em, rem, % etc...
-// TODO: Can't `-` or `+` with opacity.
 /**
- * Animate CSS values of HTML elements. [credit](https://javascript.info/js-animation)
+ * * Easily animate CSS values. [credit](https://javascript.info/js-animation)
+ * * Only `px` values can be animated at this time.
+ * * Animated properties can be relative. If the value leads with  `+` or `-`, then 
+ * the target value is computed by adding or subtracting the given number from the current value of the property.
+ * * For now `opacity` can not be animated with a relative value. 
+ * * The following easing options are available: `linear` (default), `elastic`, `quad`,
+ * `quint`, `circ`, `back` or `bounce`.
  * 
  * @example
  * var props = {width: 100, height: 100};
@@ -755,7 +758,7 @@ ML.El = {
  * @param {object} [settings] Configuration settings.
  * @param {number} [settings.duration=400] The duration of the animation, defaults to 400ms.
  * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
- * @param {string} [settings.easing=linear] Type of animation (`bounce`, `ease`, etc..), defaults to `linear`
+ * @param {string} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
  * @param {function} [cb] Callback function.
  * @constructor
  */
