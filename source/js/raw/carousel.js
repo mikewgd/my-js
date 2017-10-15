@@ -8,7 +8,7 @@
    * * A component for cycling through images, text and other elements, like a carousel.
    * * Nested carousels are not supported, and generally not compliant with accessibility standards.
    * * Each carousel should have a unique `id` attribute.
-   * * Every initialized carousel gets `_MLCarousel` added to the element. For an example see example below.
+   * * Every initialized carousel gets `MLCarousel` added to the element. For an example see example below.
    * * When setting `arrowKeys: true`, please note you need to focus on the carousel or an 
    * element within the carousel for the arrow keys to work correctly.
    * * Adds a `js-carousel-initialized` class to the carousel element.
@@ -71,7 +71,7 @@
    * <button id="carouselNext">Next button</button>
    *
    * <script>
-   *   var carousel = ML.El.$('customCarousel')._MLCarousel;
+   *   var carousel = ML.El.$('customCarousel').MLCarousel;
    *   
    *   carousel.complete(function(index, el) {
    *     console.log(index, el);
@@ -210,13 +210,13 @@
       }
 
       initialized = true;
-      el._MLCarousel = ML.extend(options, this);
-      el._MLCarousel.init = true;
-      el._MLCarousel.complete = function(cb2) {
+      el.MLCarousel = ML.extend(options, this);
+      el.MLCarousel.init = true;
+      el.MLCarousel.complete = function(cb2) {
         methods.complete = cb2;
-        // return el._MLCarousel;
+        // return el.MLCarousel;
       };
-      el._MLCarousel.currentSlideIndex = current;
+      el.MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
       el.setAttribute('tabindex', 0);
 
@@ -247,7 +247,7 @@
       self.autoplay(false);
 
       current++;
-      el._MLCarousel.currentSlideIndex = current;
+      el.MLCarousel.currentSlideIndex = current;
       slide();
     };
 
@@ -270,7 +270,7 @@
       self.autoplay(false);
 
       current--;
-      el._MLCarousel.currentSlideIndex = current;
+      el.MLCarousel.currentSlideIndex = current;
       slide();
     };
 
@@ -284,7 +284,7 @@
         slideDirection = (current < index) ? 'next' : 'prev';
 
         current = index;
-        el._MLCarousel.currentSlideIndex = current;
+        el.MLCarousel.currentSlideIndex = current;
 
         if (options.infinite) {
           goToSlideInfinite();
@@ -344,7 +344,7 @@
         el.removeAttribute('tabindex');
       }      
 
-      delete el._MLCarousel;
+      delete el.MLCarousel;
       el.innerHTML = carouselHTML;
 
       ML.El.removeClass(el, 'js-carousel-initialized');
@@ -452,10 +452,10 @@
       var targetParent = ML.El.findParent(target, 'DIV', 'js-carousel-initialized');
       var carouselEl = null;
 
-      if (!ML.isUndef(target._MLCarousel)) {
-        carouselEl = target._MLCarousel;
+      if (!ML.isUndef(target.MLCarousel)) {
+        carouselEl = target.MLCarousel;
       } else if (targetParent !== false) {
-        carouselEl = targetParent._MLCarousel;
+        carouselEl = targetParent.MLCarousel;
       } else {
         return;
       }
@@ -561,7 +561,7 @@
         current = 0;
       }
 
-      el._MLCarousel.currentSlideIndex = current;
+      el.MLCarousel.currentSlideIndex = current;
 
       autoplayTimer = setTimeout(function() {
         cycle();

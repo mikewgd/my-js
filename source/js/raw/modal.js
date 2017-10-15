@@ -174,7 +174,7 @@
 
       if (collideRight) {
         centerModal(openedModal, Math.round(openedModal.offsetWidth / resizeAdjust));
-      } else if (resizeDirection === 'up' && openedModal.offsetWidth <= openedModal._options.width) {
+      } else if (resizeDirection === 'up' && openedModal.offsetWidth <= openedModal.MLModal.width) {
         centerModal(openedModal, Math.round(openedModal.offsetWidth * resizeAdjust));
       }
     }
@@ -223,7 +223,7 @@
 
       ML.loop(modals, function(element) {
         element.removeAttribute('style');
-        ML.El.removeClass(element, element._options.activeClass);
+        ML.El.removeClass(element, element.MLModal.activeClass);
       });
 
       options = null;
@@ -249,14 +249,14 @@
 
       self.hide();
       
-      ML.El.addClass(modal, modal._options.activeClass);
+      ML.El.addClass(modal, modal.MLModal.activeClass);
       ML.El.removeClass(overlay, 'hidden');
       ML.El.addClass(document.body, 'modal-opened');
 
-      modal._options.width = parseInt(modal._options.width); 
+      modal.MLModal.width = parseInt(modal.MLModal.width); 
       openedModal = modal;
 
-      centerModal(modal, modal._options.width);
+      centerModal(modal, modal.MLModal.width);
   	};
 
     /**
@@ -278,8 +278,8 @@
       } 
 
       // Prevents the modal's width from going over the options set.
-      if (ML.windowDimen().w > modal._options.width) {
-        width = modal._options.width;
+      if (ML.windowDimen().w > modal.MLModal.width) {
+        width = modal.MLModal.width;
       } 
 
       // On mobile, make size of the window.
@@ -324,7 +324,7 @@
             options.activeClass = DEFAULTS.activeClass;
           }
           
-          modals[i]._options = options;
+          modals[i].MLModal = options;
         }
       }
 
@@ -339,7 +339,7 @@
      */
   	this.hide = function() {
       if (openedModal) {
-        ML.El.removeClass(openedModal, openedModal._options.activeClass);
+        ML.El.removeClass(openedModal, openedModal.MLModal.activeClass);
       }
 
       ML.El.addClass(overlay, 'hidden');
