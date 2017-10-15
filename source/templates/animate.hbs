@@ -42,7 +42,8 @@
     var animWidth = ML.El.$('animWidth');
     var animHeight = ML.El.$('animHeight');
     var animWidthHeight = ML.El.$('animWidthHeight');
-    var animOpac = ML.El.$('animOpac');
+    var animOpacOut = ML.El.$('animOpacOut');
+    var animOpacIn = ML.El.$('animOpacIn');
 
     var animateEl = function(props) {
       new ML.Animate(box, props, {easing: easing.value});
@@ -72,8 +73,12 @@
       animateEl({top: '+' + inc});
     });
 
-    /*ML.El.evt(animOpac, 'click', function() {
+    ML.El.evt(animOpacOut, 'click', function() {
       animateEl({opacity: 0});
-    });*/
+    });
+
+    ML.El.evt(animOpacIn, 'click', function() {
+      animateEl({opacity: 1});
+    });
   </script>
 {{/footer}}

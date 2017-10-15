@@ -737,7 +737,8 @@ ML.El = {
 };
 
 // TODO: Bulleted comments
-// TODO: Cant animate all values, only pixels not em, rem, % etc...
+// TODO: Can't animate all values, only pixels not em, rem, % etc...
+// TODO: Can't `-` or `+` with opacity.
 /**
  * Animate CSS values of HTML elements. [credit](https://javascript.info/js-animation)
  * 
@@ -850,6 +851,16 @@ ML.Animate = function(el, props, settings, cb) {
     }
   }
 
+  function fadeEl() {
+    var curr = (currProps.opacity * 100);
+    var desr = (props.opacity * 100);
+    var whole = Math.round(curr + (desr - curr) * options.easing(progress));
+
+    el.style.opacity = whole / 100;
+
+    console.log();
+  }
+
   /**
    * Animates the element with the new CSS values provided.
    * @private
@@ -866,29 +877,17 @@ ML.Animate = function(el, props, settings, cb) {
       }
 
       for (var prop in props) {
-        if (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop])) {
-          if (/^\+/g.test(props[prop])) {
-            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
-          } else {
-            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
-          }
-        } else {
-          value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
-        }
-
-        
-
         if (prop === 'opacity') {
-          /*if (props[prop] < 1) {
-            value = currProps[prop] - (progress * options.easing(progress));
-          } else {
-            value = currProps[prop] + (progress * options.easing(progress));
-          }*/
+          fadeEl();
         } else {
-          value += 'px';
+          if (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop])) {
+            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
+          } else {
+            value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
+          }
+          
+          el.style[prop] = value + 'px';
         }
-
-        el.style[prop] = value;
       }
 
       if (progress === 1) {

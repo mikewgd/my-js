@@ -23,8 +23,12 @@
       "text": "move to the bottom"
     },
     {
-      "id": "animOpac",
+      "id": "animOpacOut",
       "text": "fade out"
+    },
+    {
+      "id": "animOpacIn",
+      "text": "fade in"
     },
     {
       "id": "animWidthHeight",
