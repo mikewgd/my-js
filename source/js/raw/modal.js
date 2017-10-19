@@ -72,7 +72,7 @@
       width: 600
     };
 
-    var selectorToggle = 'data-modal';
+    var selectorToggle = 'data-modal';  // TODO: class name, can change to attr
     var options = {};
     var modals = [];
     var toggles = [];
@@ -241,7 +241,7 @@
      * `activeClass` and `width` will be overriden. Other settings are ignored.
      *
      * @example
-     * // Shows modal element with id of unique-id3 with a width of 300 pixels.
+     * // Shows modal element with id of unique-id3 with a width of 400 pixels.
      * modals.show('unique-id3', {width: 400});
      */
   	this.show = function(id, modalOptions) {
