@@ -4,20 +4,6 @@
 (function () {
   'use strict';
 
-   /**
-   * Tooltip
-   * @constructor
-   * @param {object} [settings] Configuration settings.
-   * @param {string} [settings.selectorToggle=data-tooltip] The selector when mouseover shows the tooltip.
-   * @param {string} [settings.selectorModal=tooltip] The selector for the tooltip.
-   * @param {string} [settings.activeclass=active] The class to show the tooltip.
-   * @param {number} [settings.width=600] The width of the tooltip.
-   * @param {boolean} [settings.arrow=true] Shows an arrow.
-   * @param {string} [settings.align=right] Where the tooltip should be positioned according to the link.
-   * @example
-   * var tooltips = new ML.Tooltip();
-   * tooltips.init();
-   */
   ML.Tooltip = function(settings) {
     /**
      * Tooltip defaults.
@@ -53,6 +39,9 @@
 
     /**
      * Initializes the tooltip class.
+     *
+     * @example
+     * tooltips.init();
      */
     this.init = function() {
       var tags = ML.El._$('*');
@@ -60,11 +49,33 @@
       self.destroy();
 
       options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
+      options.selectorTooltip = options.selectorTooltip.toString();
+      options.width = parseInt(options.width);
+
+      if (!ML.isUndef(options.activeClass, true) && ML.isString(options.activeClass)) {
+        options.activeClass = options.activeClass.toString();
+      }
 
       if (ML.El.$C(options.selectorTooltip).length < 1) {
         throw new Error('There are no <div class="' + options.selectorTooltip + '" /> on the page.');
       } else {
         tooltips = ML.El.$C(options.selectorTooltip);
+      }
+
+      if (!ML.isNum(options.width)) {
+        options.width = DEFAULTS.width;
+      }
+
+      if (ML.isUndef(options.activeClass, true)) {
+        options.activeClass = DEFAULTS.activeClass;
+      }
+
+      if (!ML.isBool(options.arrow)) {
+        options.arrow = DEFAULTS.arrow;
+      }
+
+      if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
+        options.align = DEFAULTS.align;
       }
 
       ML.loop(tags, function(element) {
@@ -73,9 +84,7 @@
         }
       });
 
-      if (tips.length > 0) {
-        bindEvents();
-      }
+      bindEvents();
     };
 
     /**
@@ -83,10 +92,12 @@
      * @private
      */
     function bindEvents() {
-      ML.loop(tips, function(element) {
-        ML.El.evt(element, 'mouseover', mouseOver);
-        ML.El.evt(element, 'mouseout', mouseOut);
-      });
+      if (tips.length > 0) {
+        ML.loop(tips, function(element) {
+          ML.El.evt(element, 'mouseover', mouseOver);
+          ML.El.evt(element, 'mouseout', mouseOut);
+        });
+      }
     }
 
     /**
@@ -95,8 +106,7 @@
      * @private
      */
     function mouseOver(e) {
-      var clicked = ML.El.clicked(e);
-      self.show(clicked, ML.parObj(ML.El.data(clicked, 'tooltip')));
+      self.show(ML.El.clicked(e).rel, ML.parObj(ML.El.data(clicked, 'tooltip')));
     }
 
     /**
@@ -109,10 +119,12 @@
     }
 
     /**
-     * Destroys an instance of the tooltip class.
+     * Destroys the tooltip init.
+     *
+     * @example
+     * tooltips.destroy();
      */
     this.destroy = function() {
-      // remove event listeners.
       ML.loop(tips, function(element) {
         element.removeEventListener('mouseover', mouseOver, false);
         element.removeEventListener('mouseout', mouseOut, false);
@@ -121,7 +133,7 @@
       ML.loop(tooltips, function(element) {
         element.removeAttribute('style');
         ML.El.removeClass(element, ALIGNMENT_CLASSES.join(' '), true);
-        ML.El.removeClass(element, element._options.activeClass);
+        ML.El.removeClass(element, element.MLTooltip.activeClass);
       });
 
       options = null;
@@ -131,14 +143,20 @@
 
     /**
      * Shows a tooltip.
-     * @param {HTMLElement} tip The link when moused over to show tooltip.
-     * @param {object} tooltipOptions Configuration settings to overwrite defaults.
+     * Used when showing a tooltip without `data-tooltip`.
+     * @param {string} id The id of the tooltip you want to display.
+     * @param {object} tooltipOptions Configuration settings to overwrite defaults. Only
+     * `activeClass`, `width`, `arrow` and `align` will be overriden. Other settings are ignored.
+     *
+     * @example
+     * // Shows modal element with id of unique-id1 with a width of 300 pixels.
+     * tooltips.show('unique-id1', {width: 400});
      */
     this.show = function(tip, tooltipOptions) {
       var tooltip = updateTooltips(ML.El.$(tip.rel), ML.extend(options, tooltipOptions));
       var arrow = null;
 
-      if (tooltip._options.arrow) {
+      if (tooltip.MLTooltip.arrow) {
         if (ML.El.$C('tooltip-arrow', tooltip).length > 0) {
           arrow = ML.El.$C('tooltip-arrow', tooltip);
         } else {
@@ -147,19 +165,19 @@
         }
       }
 
-      ML.El.addClass(tooltip, tooltip._options.activeClass);
+      ML.El.addClass(tooltip, tooltip.MLTooltip.activeClass);
       ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
-      ML.El.addClass(tooltip, 'tooltip-' + tooltip._options.align + '-align');
+      ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
 
-      tooltip.style.width = tooltip._options.width + 'px';
-      setPosition(tip, tooltip, tooltip._options.align);
+      tooltip.style.width = tooltip.MLTooltip.width + 'px';
+      setPosition(tip, tooltip, tooltip.MLTooltip.align);
     };
 
     /**
      * Updates the tooltips array.
      * @param {HTMLElement} el The tooltip to search for in array.
      * @param {object} options The options for the tooltip.
-     * @return {HTMLElement} The tooltip found in the array of modals.
+     * @return {HTMLElement} The tooltip found in the array of tooltips.
      * @private
      */
     function updateTooltips(el, options) {
@@ -169,7 +187,6 @@
         if (el.id === tooltips[i].id) {
           tooltip = tooltips[i];
 
-          // TODO: Separate out into separate function.
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
           }
@@ -182,7 +199,11 @@
             options.align = DEFAULTS.align;
           }
 
-          tooltips[i]._options = options;
+          if (ML.isUndef(options.activeClass, true)) {
+            options.activeClass = DEFAULTS.activeClass;
+          }
+
+          tooltips[i].MLTooltip = options;
         }
       }
 
@@ -233,10 +254,13 @@
 
     /**
      * Hides all the tooltips.
+     *
+     * @example
+     * tooltips.hide();
      */
     this.hide = function() {
       ML.loop(tooltips, function(tooltip) {
-        ML.El.removeClass(tooltip, tooltip._options.activeClass);
+        ML.El.removeClass(tooltip, tooltip.MLTooltip.activeClass);
       });
     };
   };
