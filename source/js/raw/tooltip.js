@@ -11,11 +11,12 @@
      * @private
      */
     var DEFAULTS = {
-      selectorTooltip: 'tooltip',      // class name, can change to attr
+      selectorTooltip: 'tooltip',      // TODO: class name, can change to attr
       activeClass: 'active',
       width: 100,
       arrow: true,
-      align: 'right'
+      align: 'right',
+      smart: false
     };
 
     /**
@@ -30,7 +31,14 @@
       'tooltip-bottom-align'
     ];
 
-    var selectorTip = 'data-tooltip';
+    var ALIGNS = [
+      'left',
+      'right',
+      'top',
+      'bottom'
+    ];
+
+    var selectorTip = 'data-tooltip';   // TODO: class name, can change to attr
 
     var options = {};
     var tooltips = [];
@@ -74,6 +82,10 @@
         options.arrow = DEFAULTS.arrow;
       }
 
+      if (!ML.isBool(options.smart)) {
+        options.smart = DEFAULTS.smart;
+      }
+
       if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
         options.align = DEFAULTS.align;
       }
@@ -106,7 +118,8 @@
      * @private
      */
     function mouseOver(e) {
-      self.show(ML.El.clicked(e).rel, ML.parObj(ML.El.data(clicked, 'tooltip')));
+      var clicked = ML.El.clicked(e);
+      self.show(clicked, ML.parObj(ML.El.data(clicked, 'tooltip')));
     }
 
     /**
@@ -149,12 +162,14 @@
      * `activeClass`, `width`, `arrow` and `align` will be overriden. Other settings are ignored.
      *
      * @example
-     * // Shows modal element with id of unique-id1 with a width of 300 pixels.
+     * // Shows the tooltip with id of unique-id1 with a width of 300 pixels.
      * tooltips.show('unique-id1', {width: 400});
      */
     this.show = function(tip, tooltipOptions) {
       var tooltip = updateTooltips(ML.El.$(tip.rel), ML.extend(options, tooltipOptions));
       var arrow = null;
+      var collides = {};
+      var count = 0;
 
       if (tooltip.MLTooltip.arrow) {
         if (ML.El.$C('tooltip-arrow', tooltip).length > 0) {
@@ -166,12 +181,56 @@
       }
 
       ML.El.addClass(tooltip, tooltip.MLTooltip.activeClass);
+      tooltip.style.width = tooltip.MLTooltip.width + 'px';
+
+      // TODO: Combining alignment and width setting into one function
       ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
       ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
 
-      tooltip.style.width = tooltip.MLTooltip.width + 'px';
       setPosition(tip, tooltip, tooltip.MLTooltip.align);
+
+      collides = collide('right', tooltip) || collide('left', tooltip) ||
+        collide('top', tooltip) || collide('bottom', tooltip);
+      count = 0;
+
+      if (tooltip.MLTooltip.smart) {
+        while (collides) {
+          ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
+          ML.El.addClass(tooltip, 'tooltip-' + ALIGNS[count] + '-align');
+
+          setPosition(tip, tooltip, ALIGNS[count]);
+
+          collides = collide('right', tooltip) || collide('left', tooltip) ||
+            collide('top', tooltip) || collide('bottom', tooltip);
+          count++;
+
+          if (count > 4) {
+            tooltip.style.width = DEFAULTS.width + 'px';
+            
+            ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
+            ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
+            
+            setPosition(tip, tooltip, tooltip.MLTooltip.align);
+            
+            collides = collide('right', tooltip) || collide('left', tooltip) ||
+              collide('top', tooltip) || collide('bottom', tooltip);
+            count = 0;
+          }
+        }
+      }   
     };
+
+    function collide(side, el) {
+      var windowDimen = {width: ML.windowDimen().w, height: ML.windowDimen().h, x: 0, y: 0};
+      var sides = {
+        right: ML.extend(windowDimen, {x: -ML.windowDimen().w}),
+        left: ML.extend(windowDimen, {x: ML.windowDimen().w}),
+        bottom: ML.extend(windowDimen, {y: ML.windowDimen().h}),
+        top: ML.extend(windowDimen, {y: -ML.windowDimen().h})
+      };
+
+      return ML.El.collides(sides[side], el);
+    }
 
     /**
      * Updates the tooltips array.
