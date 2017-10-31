@@ -614,8 +614,8 @@ ML.El = {
    */
   dimens: function(elem) {
     return {
-      width: elem.style.width || elem.offsetWidth,
-      height: elem.style.height || elem.offsetHeight,
+      width: elem.offsetWidth,
+      height: elem.offsetHeight,
       x: ML.El.position(elem).x,
       y: ML.El.position(elem).y
     };
