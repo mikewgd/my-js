@@ -16,7 +16,9 @@
       width: 100,
       arrow: true,
       align: 'right',
-      smart: false
+      smart: false,
+      delay: false,
+      delayTime: 3000
     };
 
     /**
@@ -44,6 +46,7 @@
     var tooltips = [];
     var tips = [];
     var self = this;
+    var delayTimer = null;
 
     /**
      * Initializes the tooltip class.
@@ -74,6 +77,10 @@
         options.width = DEFAULTS.width;
       }
 
+      if (!ML.isNum(options.delayTime)) {
+        options.delayTime = DEFAULTS.delayTime;
+      }
+
       if (ML.isUndef(options.activeClass, true)) {
         options.activeClass = DEFAULTS.activeClass;
       }
@@ -84,6 +91,10 @@
 
       if (!ML.isBool(options.smart)) {
         options.smart = DEFAULTS.smart;
+      }
+
+      if (!ML.isBool(options.delay)) {
+        options.delay = DEFAULTS.delay;
       }
 
       if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
@@ -119,6 +130,8 @@
      */
     function mouseOver(e) {
       var clicked = ML.El.clicked(e);
+
+      clearTimeout(delayTimer);
       self.show(clicked, ML.parObj(ML.El.data(clicked, 'tooltip')));
     }
 
@@ -128,7 +141,16 @@
      * @private
      */
     function mouseOut(e) {
-      self.hide();
+      var tooltip = ML.El.$(ML.El.clicked(e).rel);
+
+      if (tooltip.MLTooltip.delay) {
+        delayTimer = setTimeout(function() {
+          self.hide();
+          clearTimeout(delayTimer);
+        }, tooltip.MLTooltip.delayTime);
+      } else {
+        self.hide();
+      }
     }
 
     /**
