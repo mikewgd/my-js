@@ -4,6 +4,63 @@
 (function () {
   'use strict';
 
+  /**
+   * * A message that appears when a cursor is positioned over an element
+   * * Each tooltip should have a unique `id` attribute to match the element's `rel` attribute.
+   * * Nested tooltips are not supported.
+   * * You can show tooltips via `data-tooltop` or JavaScript.
+   * * Valid align options are: `right`, `left`, `top` and `bottom` to the element 
+   * activating the tooltip overlay.
+   * * When setting `smart: true`, the tooltip will only detect collision with `window`.
+   * * Custom tooltip based on `title` attribute.
+   *
+   * @example <caption>Sample markup of tooltip HTML.</caption> {@lang xml}
+   * <div class="tooltip" id="unique-id1">
+   *   <div class="tooltip-content">
+   *     <h1 class="tight">Hello! I am a tooltip</h1>
+   *     <p class="tight">Im some text about the tooltip.</p>
+   *   </div>
+   * </div>
+   *
+   * @example <caption>You can show tooltips via data attribute, <code>data-tooltip="width:200:align:bottom"</code>.
+   * The only lines of JavaScript would be two lines. The <code>rel</code> attribute needs to equal
+   * the ID of the tooltip HTML element.</caption> {@lang xml}
+   * <a href="#" rel="unique-id1" data-tooltip="width:200:align:bottom">open modal</a>
+   *
+   * // Only JavaScript needed:
+   * <script>
+   *   var tooltips = new ML.Tooltip({
+   *     arrow: false, // Global configuration.
+   *     delay: true
+   *   });
+   *   
+   *   tooltips.init();
+   * </script>
+   *
+   * // Other javascript files go here.
+   *
+   * @example <caption>The tooltip can be triggered via JavaScript instead of or in addition
+   * to <code>data-tooltip</code></caption>
+   * // Will show the tooltip HTML with id of unique-id1 with a width of `50 pixels and will
+   * // add the class name 'show me' to the tooltip element.
+   * tooltips.show('unique-id1', {width: `50, activeClass: 'show-me'});
+   *
+   * @example <caption>Dynamic tooltip that shows a tooltip with the content "I am a tooltip" inside.</caption> {@lang xml}
+   * <a href="#" data-tooltip="smart:true:delay:true" title="I am a tooltip">tooltip link</a>
+   *
+   * @param {object} [settings] Configuration settings.
+   * @param {string} [settings.selectorTooltip=tooltip] The selector for the tooltip.
+   * @param {string} [settings.activeclass=active] The class to show the tooltip.
+   * @param {number} [settings.width=100] The width of the tooltip.
+   * @param {boolean} [settings.arrow=true] Whether to show an arrow or not.
+   * @param {string} [settings.align=right] Where to align the tooltip.
+   * @param {boolean} [settings.smart=false] If the tooltip should change position or width
+   * to not overlap the window.
+   * @param {boolean} [settings.delay=false] Delay the tooltip going away on `mouseout`.
+   * @param {number} [settings.delayTime=3000] Duration to keep the tooltip visible 
+   * when setting `delay: true`
+   * @constructor
+   */
   ML.Tooltip = function(settings) {
     /**
      * Tooltip defaults.
