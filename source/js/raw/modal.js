@@ -122,11 +122,16 @@
 
       ML.loop(tags, function(element) {
         if (element.getAttribute(selectorToggle) !== null) {
-          toggles.push(element);
+          if (ML.isUndef(element.rel, true)) {
+            throw new Error('Element to show the modal must have a valid rel attribute.');
+          } else {
+            toggles.push(element);
+          }
         }
       });
 
       document.body.appendChild(overlay);
+      updateModals(null, options);
       bindEvents();
     };
 
@@ -199,8 +204,10 @@
      * @private
      */
     function toggleClick(e) {
+      var clicked = ML.El.clicked(e);
       e.preventDefault();
-      self.show(ML.El.clicked(e).rel, ML.parObj(ML.El.data(ML.El.clicked(e), 'modal')));
+
+      self.show(clicked.rel, ML.parObj(ML.El.data(clicked, 'modal')));
     }
 
     /**
@@ -313,7 +320,7 @@
       var modal = {};
 
       for (var i = 0, len = modals.length; i < len; i++) {
-        if (el.id === modals[i].id) {
+        if (el === null || el.id === modals[i].id) {
           modal = modals[i];
 
           if (!ML.isNum(options.width)) {
