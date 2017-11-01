@@ -103,10 +103,20 @@
 
       ML.loop(tags, function(element) {
         if (element.getAttribute(selectorTip) !== null) {
+          if (ML.isUndef(element.rel, true)) {
+            if (element.title) {
+              element.rel = 'MLTooltip-' + new Date().getTime();
+              createTooltip(element);
+            } else {
+              throw new Error('Element to show the tooltip must have a valid rel attribute.');
+            }
+          }
+
           tips.push(element);
         }
       });
 
+      updateTooltips(null, options);
       bindEvents();
     };
 
@@ -153,6 +163,20 @@
       }
     }
 
+    function createTooltip(link) {
+      var tooltip = ML.El.create('div', {id: link.rel, class: options.selectorTooltip});
+
+      tooltip.innerHTML = '<div class="tooltip-content">' +
+                            '<p>' + link.title + '</p>' +
+                          '</div>';
+
+      link.setAttribute('data-title', link.title);
+      link.removeAttribute('title');
+
+      document.body.appendChild(tooltip);
+      tooltips = ML.El.$C(options.selectorTooltip);
+    }
+
     /**
      * Destroys the tooltip init.
      *
@@ -163,6 +187,14 @@
       ML.loop(tips, function(element) {
         element.removeEventListener('mouseover', mouseOver, false);
         element.removeEventListener('mouseout', mouseOut, false);
+
+        if (ML.El.getAttr(element, 'data-title')) {
+          element.title = ML.El.data(element, 'title');
+          element.removeAttribute('data-title')
+
+          ML.El.$(element.rel).parentNode.removeChild(ML.El.$(element.rel));
+          element.removeAttribute('rel');
+        }
       });
 
       ML.loop(tooltips, function(element) {
@@ -265,7 +297,7 @@
       var tooltip = {};
 
       for (var i = 0, len = tooltips.length; i < len; i++) {
-        if (el.id === tooltips[i].id) {
+        if (el === null || el.id === tooltips[i].id) {
           tooltip = tooltips[i];
 
           if (!ML.isNum(options.width)) {
