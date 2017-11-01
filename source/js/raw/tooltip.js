@@ -311,35 +311,37 @@
 
       setPosition(tip, tooltip, tooltip.MLTooltip.align);
 
-      collides = collide('right', tooltip) || collide('left', tooltip) ||
-        collide('top', tooltip) || collide('bottom', tooltip);
-      count = 0;
-
       if (tooltip.MLTooltip.smart) {
-        while (collides) {
-          ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
-          ML.El.addClass(tooltip, 'tooltip-' + ALIGNS[count] + '-align');
+        collides = collide('right', tooltip) || collide('left', tooltip) ||
+          collide('top', tooltip) || collide('bottom', tooltip);
+        count = 0;
 
-          setPosition(tip, tooltip, ALIGNS[count]);
-
-          collides = collide('right', tooltip) || collide('left', tooltip) ||
-            collide('top', tooltip) || collide('bottom', tooltip);
-          count++;
-
-          if (count > 4) {
-            tooltip.style.width = DEFAULTS.width + 'px';
-            
+        if (tooltip.MLTooltip.smart) {
+          while (collides) {
             ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
-            ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
-            
-            setPosition(tip, tooltip, tooltip.MLTooltip.align);
-            
+            ML.El.addClass(tooltip, 'tooltip-' + ALIGNS[count] + '-align');
+
+            setPosition(tip, tooltip, ALIGNS[count]);
+
             collides = collide('right', tooltip) || collide('left', tooltip) ||
               collide('top', tooltip) || collide('bottom', tooltip);
-            count = 0;
+            count++;
+
+            if (count > 4) {
+              tooltip.style.width = DEFAULTS.width + 'px';
+              
+              ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
+              ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
+              
+              setPosition(tip, tooltip, tooltip.MLTooltip.align);
+              
+              collides = collide('right', tooltip) || collide('left', tooltip) ||
+                collide('top', tooltip) || collide('bottom', tooltip);
+              count = 0;
+            }
           }
-        }
-      }   
+        }  
+      }
     };
 
     /**
