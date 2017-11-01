@@ -15,6 +15,7 @@
    * * Each modal should have a unique `id` attribute.
    * * When a modal is opened the class name `modal-opened` is appended to the `<body>`.
    * * You can show modals via `data-modal` or JavaScript.
+   * * Every modal element gets `MLModal` added to the element.
    *
    * // TODO: comment for showing modal via link.
    *
@@ -57,6 +58,8 @@
    * @param {string} [settings.selectorClose=modal-close] The selector that closes modals.
    * @param {string} [settings.activeclass=active] The class to show the modal.
    * @param {number} [settings.width=600] The width of the modal.
+   * @param {boolean} [settings.smart=false] If the modal should adjust the width when the
+   * window is resized.
    * @constructor
    */
   ML.Modal = function(settings) {
@@ -69,7 +72,8 @@
       selectorModal: 'modal',           // TODO: class name, can change to attr
       selectorClose: 'modal-close',     // TODO: class name, can change to attr
       activeClass: 'active',
-      width: 600
+      width: 600,
+      smart: false
     };
 
     var selectorToggle = 'data-modal';  // TODO: class name, can change to attr
@@ -148,7 +152,7 @@
 
       ML.El.evt(document, 'click', closeClick);
 
-      ML.El.evt(window, 'resize.throttle', windowResize);
+      // ML.El.evt(window, 'resize.throttle', windowResize);
     }
 
     /**
@@ -262,6 +266,13 @@
 
       modal.MLModal.width = parseInt(modal.MLModal.width); 
       openedModal = modal;
+
+      if (modal.MLModal.smart) {
+        // To prevent being bound more than once.
+        if (!ML.El.isBound(window, 'resize.throttle', 'windowResize')) {
+          ML.El.evt(window, 'resize.throttle', windowResize);
+        }
+      }
 
       centerModal(modal, modal.MLModal.width);
   	};
