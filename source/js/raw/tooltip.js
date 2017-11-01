@@ -33,6 +33,11 @@
       'tooltip-bottom-align'
     ];
 
+    /**
+     * Alignment names
+     * @type {array}
+     * @private
+     */
     var ALIGNS = [
       'left',
       'right',
@@ -163,6 +168,11 @@
       }
     }
 
+    /**
+     * Creates a tooltip element for a dynamic tooltip.
+     * @param {HTMLElement} link Element to trigger tooltip.
+     * @private
+     */
     function createTooltip(link) {
       var tooltip = ML.El.create('div', {id: link.rel, class: options.selectorTooltip});
 
@@ -274,6 +284,13 @@
       }   
     };
 
+    /**
+     * When the tooltip element collides with the window.
+     * @param {string} side The side the tooltip coliddes with the window.
+     * @param {HTMLElement} el The tooltip element.
+     * @return {boolean}
+     * @private
+     */
     function collide(side, el) {
       var windowDimen = {width: ML.windowDimen().w, height: ML.windowDimen().h, x: 0, y: 0};
       var sides = {
