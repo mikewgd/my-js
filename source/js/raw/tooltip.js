@@ -13,6 +13,7 @@
    * activating the tooltip overlay.
    * * When setting `smart: true`, the tooltip will only detect collision with `window`.
    * * Custom tooltip based on `title` attribute.
+   * * Every tooltip element gets `MLToolip` added to the element.
    *
    * @example <caption>Sample markup of tooltip HTML.</caption> {@lang xml}
    * <div class="tooltip" id="unique-id1">
