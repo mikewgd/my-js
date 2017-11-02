@@ -3,7 +3,8 @@
     "allowUnknownTags": true
   },
   "opts": {
-    "destination": "./docs"
+    "destination": "./docs",
+    "readme": "./README.md"
   },
   "plugins": [
     "plugins/markdown"
@@ -11,7 +12,7 @@
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false,
-    "theme": "lumen",
+    "theme": "cerulean",
     "navType": "vertical",
     "linenums": true,
     "dateFormat": "MMMM Do YYYY, h:mm:ss a"

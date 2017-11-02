@@ -65,9 +65,9 @@ gulp.task('scripts', ['lint', 'uglify'], function() {
   .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('doc', ['build-all'], function (cb) {
-  gulp.src('dist/js/scripts.js')
-    .pipe(jsdoc(jsdocConfig, cb));
+gulp.task('document', function() {
+  return gulp.src('dist/js/scripts.js')
+    .pipe(jsdoc(jsdocConfig));
 });
 
 gulp.task('build-all', function() {
@@ -77,6 +77,10 @@ gulp.task('build-all', function() {
   .pipe(rename({ suffix: '.min' }))
   .pipe(gulp.dest('dist/js'));
 });
+
+gulp.task('docs', function() {
+  runSequence('clean', 'build-all', 'document');
+})
 
 gulp.task('custom-build', ['clean'], function() {
   var arg = process.argv.slice(3)[1];
