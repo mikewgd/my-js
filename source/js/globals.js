@@ -869,10 +869,11 @@ ML.Animate = function(el, props, settings, cb) {
    * @private
    */
   function move() {
+    var value = 0
     getCurrs();
 
     timer = setInterval(function() {
-      var value = 0;
+      value = 0;
       progress = (new Date() - time) / options.duration;
 
       if (progress > 1) {
