@@ -234,13 +234,13 @@
     }
   };
 
-  // TODO: In comments mention events bound to inputs, are still bound show example.
   // TODO: Search for elements in container instead of all inputs on page. (browser support)
 
   /**
    * Custom radio buttons and checkboxes.
    * Creates `<span>` elements after the radio and checkbox inputs.
    * When an input is checked it adds a `checked` class to the `<span>` element.
+   * Events bound to the `<input>` are bound to the custom radios and checkboxes. Events supported: `focus`, `blur`, `click` and `mouseup`.
    * @namespace
    *
    * @example {@lang xml}

@@ -12,8 +12,6 @@
    * * You can show modals via `data-modal` or JavaScript.
    * * Every modal element gets `MLModal` added to the element.
    *
-   * // TODO: comment for showing modal via link.
-   *
    * @example <caption>Sample markup of modal HTML.</caption> {@lang xml}
    * <div class="modal" id="unique-id3">
    *   <div class="modal-header">

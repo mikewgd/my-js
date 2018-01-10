@@ -367,7 +367,6 @@
     }
   };
 
-  // TODO: In comments mention events bound to selects, are still bound show example.
   // TODO: Search for elements in container instead of all selects on page. (browser support)
   
   /**
@@ -375,6 +374,7 @@
    * This script changes all select menus and creates an HTML menu.
    * If you do not want custom radio buttons or checkboxes add `system` class name to
    * the input.
+   * Events bound to the `<select>` are bound to the custom select menu. Events supported: `focus`, `blur` and `change`.
    * @namespace
    *
    * @example {@lang xml}
