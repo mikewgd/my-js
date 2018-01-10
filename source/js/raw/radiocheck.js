@@ -1,9 +1,4 @@
-/* jshint browser: true, latedef: false */
-/* global ML */
-
 (function () {
-  'use strict';
-
   /**
    * Custom radio buttons and checkboxes.
    * @private

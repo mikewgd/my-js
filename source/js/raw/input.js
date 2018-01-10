@@ -1,9 +1,4 @@
-/* jshint browser: true, latedef: false */
-/* global ML */
-
 (function () {
-  'use strict';
-
   /**
    * Input polyfill.
    * @private

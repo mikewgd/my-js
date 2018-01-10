@@ -1,9 +1,4 @@
-/* jshint browser: true, latedef: false */
-/* global ML */
-
 (function () {
-  'use strict';
-
   /**
    * * A message that appears when a cursor is positioned over an element
    * * Each tooltip should have a unique `id` attribute to match the element's `rel` attribute.
@@ -258,7 +253,7 @@
 
         if (ML.El.getAttr(element, 'data-title')) {
           element.title = ML.El.data(element, 'title');
-          element.removeAttribute('data-title')
+          element.removeAttribute('data-title');
 
           ML.El.$(element.rel).parentNode.removeChild(ML.El.$(element.rel));
           element.removeAttribute('rel');

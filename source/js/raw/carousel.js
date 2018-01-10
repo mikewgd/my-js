@@ -1,9 +1,4 @@
-/* jshint browser: true, latedef: false */
-/* global ML */
-
 (function () {
-  'use strict';
-
   /**
    * * A component for cycling through images, text and other elements, like a carousel.
    * * Nested carousels are not supported, and generally not compliant with accessibility standards.

@@ -497,7 +497,6 @@ ML.El = {
    * @return {HTMLElement}
    */
   $C: function(cn, parent) {
-    var d = parent || document;
     var elms = [];
     var cnSplit = cn.split('.');
     var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
@@ -869,7 +868,7 @@ ML.Animate = function(el, props, settings, cb) {
    * @private
    */
   function move() {
-    var value = 0
+    var value = 0;
     getCurrs();
 
     timer = setInterval(function() {

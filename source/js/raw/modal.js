@@ -1,9 +1,4 @@
-/* jshint browser: true, latedef: false */
-/* global ML */
-
 (function () {
-  'use strict';
-  
   /**
    * * Allows you to add dialogs to your site for lightboxes, user notifications,
    * custom content and etc...
