@@ -6,19 +6,19 @@
   var InputControl = {
     /**
      * Stores all the inputs that the polyfill gets applied to.
-     * @type {array}
+     * @type {Array}
      */
     inputs: [],
 
     /**
      * The timer object for moving the cursor.
-     * @type {object}
+     * @type {Object}
      */
     cursorTimer: null,
 
     /**
-     * Returns true/false if the placeholder attribute is supported.
-     * @return {boolean}
+     * Returns `true` or `false` if the placeholder attribute is supported.
+     * @return {Boolean}
      */
     isSupported: function() {
       return ('placeholder' in ML.El.create('input')) ? true : false;

@@ -46,19 +46,19 @@
    * // add the class name 'show me' to the modal element.
    * modals.show('unique-id3', {width: 750, activeClass: 'show-me'});
    * 
-   * @param {object} [settings] Configuration settings.
-   * @param {string} [settings.selectorModal=modal] The selector for modal window.
-   * @param {string} [settings.selectorClose=modal-close] The selector that closes modals.
-   * @param {string} [settings.activeclass=active] The class to show the modal.
-   * @param {number} [settings.width=600] The width of the modal.
-   * @param {boolean} [settings.smart=false] If the modal should adjust the width when the
+   * @param {Object} [settings] Configuration settings.
+   * @param {String} [settings.selectorModal=modal] The selector for modal window.
+   * @param {String} [settings.selectorClose=modal-close] The selector that closes modals.
+   * @param {String} [settings.activeclass=active] The class to show the modal.
+   * @param {Number} [settings.width=600] The width of the modal.
+   * @param {Boolean} [settings.smart=false] If the modal should adjust the width when the
    * window is resized.
    * @constructor
    */
   ML.Modal = function(settings) {
     /**
      * Modal defaults.
-     * @type {object}
+     * @type {Object}
      * @private
      */
   	var DEFAULTS = {
@@ -240,8 +240,8 @@
     /**
      * Shows a modal.
      * Used when showing modal without `data-modal`.
-     * @param {string} id The id of the modal you want to display.
-     * @param {object} modalOptions Configuration settings to overwrite defaults. Only
+     * @param {String} id The id of the modal you want to display.
+     * @param {Object} modalOptions Configuration settings to overwrite defaults. Only
      * `activeClass` and `width` will be overriden. Other settings are ignored.
      *
      * @example
@@ -274,7 +274,7 @@
      * Handles setting the width based on certain parameters.
      * Centers the modal within the window.
      * @param {HTMLElement} modal The modal DOM element.
-     * @param {number} [width] The width to set the modal.
+     * @param {Number} [width] The width to set the modal.
      * @private
      */
     function centerModal(modal, width) {
@@ -316,7 +316,7 @@
     /**
      * Updates the modals array.
      * @param {HTMLElement} el The modal to search for in array.
-     * @param {object} options The options for the modal.
+     * @param {Object} options The options for the modal.
      * @return {HTMLElement} The modal found in the array of modals.
      * @private
      */

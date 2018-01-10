@@ -6,19 +6,19 @@
   var CustomRadios = {
     /**
      * All radios and checkboxes on the page are stored here.
-     * @type {array}
+     * @type {Array}
      */
     inputs: [],
 
     /**
      * Custom radios and checkboxes are stored here.
-     * @type {array}
+     * @type {Array}
      */
     customInputs: [],
 
     /**
      * Click/Focus/Blur Events attached to INPUT elements.
-     * @type {object}
+     * @type {Object}
      */
     attachedEvents: {
       click: [],
@@ -100,8 +100,8 @@
     /**
      * Attaches the old events stored in the event object to be applied.
      * @param {HTMLElement} el The element to find event attached to it.
-     * @param {string} eventType The type of event to look for.
-     * @return {function}
+     * @param {String} eventType The type of event to look for.
+     * @return {Function}
      */
     attachOldEvt: function(el, eventType) {
       var evt = this.attachedEvents[eventType];

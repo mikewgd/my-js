@@ -44,23 +44,23 @@
    * @example <caption>Dynamic tooltip that shows a tooltip with the content "I am a tooltip" inside.</caption> {@lang xml}
    * <a href="#" data-tooltip="smart:true:delay:true" title="I am a tooltip">tooltip link</a>
    *
-   * @param {object} [settings] Configuration settings.
-   * @param {string} [settings.selectorTooltip=tooltip] The selector for the tooltip.
-   * @param {string} [settings.activeclass=active] The class to show the tooltip.
-   * @param {number} [settings.width=100] The width of the tooltip.
-   * @param {boolean} [settings.arrow=true] Whether to show an arrow or not.
-   * @param {string} [settings.align=right] Where to align the tooltip.
-   * @param {boolean} [settings.smart=false] If the tooltip should change position or width
+   * @param {Object} [settings] Configuration settings.
+   * @param {String} [settings.selectorTooltip=tooltip] The selector for the tooltip.
+   * @param {String} [settings.activeclass=active] The class to show the tooltip.
+   * @param {Number} [settings.width=100] The width of the tooltip.
+   * @param {Boolean} [settings.arrow=true] Whether to show an arrow or not.
+   * @param {String} [settings.align=right] Where to align the tooltip.
+   * @param {Boolean} [settings.smart=false] If the tooltip should change position or width
    * to not overlap the window.
-   * @param {boolean} [settings.delay=false] Delay the tooltip going away on `mouseout`.
-   * @param {number} [settings.delayTime=3000] Duration to keep the tooltip visible 
+   * @param {Boolean} [settings.delay=false] Delay the tooltip going away on `mouseout`.
+   * @param {Number} [settings.delayTime=3000] Duration to keep the tooltip visible 
    * when setting `delay: true`
    * @constructor
    */
   ML.Tooltip = function(settings) {
     /**
      * Tooltip defaults.
-     * @type {object}
+     * @type {Object}
      * @private
      */
     var DEFAULTS = {
@@ -76,7 +76,7 @@
 
     /**
      * Tooltip alignment class names.
-     * @type {array}
+     * @type {Array}
      * @private
      */
     var ALIGNMENT_CLASSES = [
@@ -88,7 +88,7 @@
 
     /**
      * Alignment names
-     * @type {array}
+     * @type {Array}
      * @private
      */
     var ALIGNS = [
@@ -274,8 +274,8 @@
     /**
      * Shows a tooltip.
      * Used when showing a tooltip without `data-tooltip`.
-     * @param {string} id The id of the tooltip you want to display.
-     * @param {object} tooltipOptions Configuration settings to overwrite defaults. Only
+     * @param {String} id The id of the tooltip you want to display.
+     * @param {Object} tooltipOptions Configuration settings to overwrite defaults. Only
      * `activeClass`, `width`, `arrow` and `align` will be overriden. Other settings are ignored.
      *
      * @example
@@ -340,10 +340,10 @@
     };
 
     /**
-     * When the tooltip element collides with the window.
-     * @param {string} side The side the tooltip coliddes with the window.
+     * Returns `true` or `false` if tooltip element collides with the window.
+     * @param {String} side The side the tooltip collides with the window.
      * @param {HTMLElement} el The tooltip element.
-     * @return {boolean}
+     * @return {Boolean}
      * @private
      */
     function collide(side, el) {
@@ -361,7 +361,7 @@
     /**
      * Updates the tooltips array.
      * @param {HTMLElement} el The tooltip to search for in array.
-     * @param {object} options The options for the tooltip.
+     * @param {Object} options The options for the tooltip.
      * @return {HTMLElement} The tooltip found in the array of tooltips.
      * @private
      */
@@ -399,7 +399,7 @@
      * Sets the position of the tooltip
      * @param {HTMLElement} tip The link when moused over to show the tooltip.
      * @param {HTMLElement} tooltip The tooltip element.
-     * @param {string} align Where to position the tooltip element.
+     * @param {String} align Where to position the tooltip element.
      * @private
      */
     function setPosition(tip, tooltip, align) {

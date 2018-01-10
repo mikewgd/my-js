@@ -45,8 +45,8 @@ window.ML = window.ML || function() {};
 ML = {
   /**
    * Returns query paramaters.
-   * @param {string|object} arg Query parameter.
-   * @return {string}
+   * @param {String|Object} arg Query parameter.
+   * @return {String}
    *
    * @example
    * var str = 'animal=cat&fruit=apple'; // 'animal=cat&fruit=apple' is returned.
@@ -71,8 +71,8 @@ ML = {
   /**
    * Pass in a string and it will be returned as a boolean.
    * If the string is not `true` or `false`, the string passed will be returned.
-   * @param {string} str The string to convert into a boolean.
-   * @return {boolean}
+   * @param {String} str The string to convert into a boolean.
+   * @return {Boolean}
    */
   bool: function(str) {
     if ((typeof str).toLowerCase() === 'string') {
@@ -89,11 +89,11 @@ ML = {
   },
 
   /**
-   * Returns if a value is undefined or not.
+   * Returns `true` or `false` if a value is undefined or not.
    * @param {*} val The value to test if undefined.
-   * @param {boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
+   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
    * optional. If a value is empty and paramter is not set, `false` is returned.
-   * @return {boolean}
+   * @return {Boolean}
    */
   isUndef: function(val, empty) {
     var undef = (val === null || val === false || val === undefined);
@@ -106,27 +106,27 @@ ML = {
   },
 
   /**
-   * Returns whether the value is a boolean.
+   * Returns `true` or `false` if value is a boolean.
    * @param {*} val The value to test if a boolean.
-   * @return {boolean}
+   * @return {Boolean}
    */
   isBool: function(val) {
     return ((typeof ML.bool(val)).toLowerCase() === 'boolean');
   },
 
   /**
-   * Returns whether the value is a number.
+   * Returns `true` or `false` if value is a number.
    * @param {*} val The value to test if a number.
-   * @return {boolean}
+   * @return {Boolean}
    */
   isNum: function(val) {
     return !isNaN(val);
   },
 
   /**
-   * Returns whether the value is a string.
+   * Returns `true` or `false` if value is a string.
    * @param {*} val The value to test if a string.
-   * @return {boolean}
+   * @return {Boolean}
    */
   isString: function(val) {
     return (typeof val).toLowerCase() === 'string';  
@@ -134,9 +134,9 @@ ML = {
 
   /**
    * Merge defaults with user options.
-   * @param {object} defaults Default settings.
-   * @param {object} options User options.
-   * @return {object} Merged values of defaults and options.
+   * @param {Object} defaults Default settings.
+   * @param {Object} options User options.
+   * @return {Object} Merged values of defaults and options.
    */
   extend: function(defaults, options) {
     var extended = {};
@@ -164,10 +164,10 @@ ML = {
   /**
    * Loop through an array with callback.
    * 
-   * @param {array} arr The array to loop though.
-   * @param {function} cb Function to be called during loop.
+   * @param {Arrays} arr The array to loop though.
+   * @param {Function} cb Function to be called during loop.
    * @param {*} cb.element The value of the array element.
-   * @param {number} cb.index The index of the array element.
+   * @param {Number} cb.index The index of the array element.
    * 
    * @example
    * var arr = ['apple', 'orange', 'blueberry', 'strawberry'];
@@ -188,7 +188,7 @@ ML = {
 
   /**
    * Returns the width and height of the window. [credit](http://www.howtocreate.co.uk/tutorials/javascript/browserwindow)
-   * @return {object}
+   * @return {Object}
    */
   windowDimen: function() {
     var h = 0;
@@ -213,10 +213,10 @@ ML = {
 
   /**
    * Parses a string into an object.
-   * @param {string} str String to be parse.
-   * @param {string} base Base of the string to be removed.
-   * @param {string} sep Used to separate each property.
-   * @return {object}
+   * @param {String} str String to be parse.
+   * @param {String} base Base of the string to be removed.
+   * @param {String} sep Used to separate each property.
+   * @return {Object}
    */
   parObj: function(str, base, sep) {
     var obj = {};
@@ -239,8 +239,8 @@ ML = {
 
   /**
    * Returns a string with whitespace removed.
-   * @param {string} str String to remove whitespace.
-   * @return {string}
+   * @param {String} str String to remove whitespace.
+   * @return {String}
    */
   trim: function(str) {
     return str.replace(/(^\s+|\s+$)/g, '');
@@ -254,13 +254,19 @@ ML = {
 ML.El = {
   /**
    * Stores events bound to elements.
-   * @type {array}
+   * @type {Arrays}
    */
   Events: [],
 
-  // TODO: comment
+  /**
+   * Returns parent element specified.
+   * Returns false if element is not found.
+   * @param {HTMLElement} el The child element to search for ancestor elements.
+   * @param {String} tag Name of tag to search for.
+   * @param {String} classN Class name of the tag to search for.
+   * @return {HTMLElement|Boolean}
+   */
   findParent: function (el, tag, classN) {
-    // TODO: validate args
     while (el.parentNode) {
       el = el.parentNode;
       if (el.tagName === tag && ML.El.hasClass(el, classN)) {
@@ -271,7 +277,13 @@ ML.El = {
     return false;
   },
   
-  // TODO: comment
+  /**
+   * Returns `true` or `false` if an event is bound to an element.
+   * @param {HTMLElement} node The HTML element to track.
+   * @param {String} type The type of event, i.e. `click`, `focus` etc...
+   * @param {String} funcName The name of the function bound to the element.
+   * @return {Boolean}
+   */
   isBound: function(node, type, funcName) {
     var result = false;
     var boundEvt = null;
@@ -280,8 +292,6 @@ ML.El = {
       throw new Error('The type of event i.e. "click" must be a string and the name' +
         ' of the function must be a string.');
     }
-
-    // TODO: validate node
 
     for (var i = 0, len = this.Events.length; i < len; i++) {
       boundEvt = this.Events[i];
@@ -296,10 +306,10 @@ ML.El = {
   },
 
   /**
-   * Returns true/false if an element collides with another one.
-   * @param {HTMLElement|object} arg1 Element to detect collision or object with coordinates.
-   * @param {HTMLElement|object} arg2 Second element to detect collision or object with coordinates.
-   * @return {boolean}
+   * Returns `true` or `false` if an element collides with another one.
+   * @param {HTMLElement|Object} arg1 Element to detect collision or object with coordinates.
+   * @param {HTMLElement|Object} arg2 Second element to detect collision or object with coordinates.
+   * @return {Boolean}
    *
    * @example
    * var elem1 = ML.El.$('test-elem-1');
@@ -337,10 +347,10 @@ ML.El = {
   /**
    * Event listener bound to elements.
    * @param {HTMLElement} el The element to bind an event to.
-   * @param {string} type The type of event.
-   * @param {function} cb Callback function.
+   * @param {String} type The type of event.
+   * @param {Function} cb Callback function.
    * @param {Event} cb.e The Event Object.
-   * @param {boolean} [capture]
+   * @param {Boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
     var resize = {
@@ -384,7 +394,7 @@ ML.El = {
   /**
    * Trigger events bound to elements.
    * @param {HTMLElement} el The element to trigger an event on.
-   * @param {string} type The type of event to trigger.
+   * @param {String} type The type of event to trigger.
    */
   evtTrigger: function(el, type) {
     var event;
@@ -458,7 +468,7 @@ ML.El = {
 
   /**
    * Returns HTMLElement based on id attriube.
-   * @param {string} id The id of the element to return.
+   * @param {String} id The id of the element to return.
    * @return {HTMLElement}
    */
   $: function(id) {
@@ -472,7 +482,7 @@ ML.El = {
   /**
    * Returns an element based on tag.
    * If you provide a parent you can limit the amount of elements that get returned.
-   * @param {string} tag The tag name of the element.
+   * @param {String} tag The tag name of the element.
    * @param {HTMLElement} [parent=document] The parent element, default is `document`.
    * @return {HTMLElement}
    */
@@ -492,7 +502,7 @@ ML.El = {
 
   /**
    * Returns an element based on class name.
-   * @param {string} cn The class name of the element.
+   * @param {String} cn The class name of the element.
    * @param {HTMLElement} [parent=document] The parent element, default is `document`.
    * @return {HTMLElement}
    */
@@ -525,8 +535,8 @@ ML.El = {
   /**
    * Removes a class name from an element. [credit](http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass)
    * @param {HTMLElement} elem The element of the class name to be removed.
-   * @param {string} classN Class names to be removed.
-   * @param {boolean} [multiple] If there are multiple class names to be removed.
+   * @param {String} classN Class names to be removed.
+   * @param {Boolean} [multiple] If there are multiple class names to be removed.
    */
   removeClass: function(elem, classN, multiple) {
     var currClass = ML.trim(elem.className);
@@ -544,10 +554,10 @@ ML.El = {
   },
 
   /**
-   * Returns true/flase if an element has a specific class name.
+   * Returns `true` or `false` if an element has a specific class name.
    * @param {HTMLElement} elem Element to check if it has a specific class name.
-   * @param {string} classN The class name to check for.
-   * @return {boolean}
+   * @param {String} classN The class name to check for.
+   * @return {Boolean}
    */
   hasClass: function(elem, classN) {
     var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
@@ -557,7 +567,7 @@ ML.El = {
   /**
    * Adds a class name to the element passed.
    * @param {HTMLElement} elem The element to add a class name to.
-   * @param {string} classN The class name to add.
+   * @param {String} classN The class name to add.
    */
   addClass: function(elem, classN) {
     var currClass = ML.trim(elem.className);
@@ -571,8 +581,8 @@ ML.El = {
   /**
    * Toggles the class name of an element.
    * @param {HTMLElement} elem The element to toggle class name.
-   * @param {string} classN The class name to toggle.
-   * @param {boolean} [cond] Boolean value to determine whether class name should be added or removed.
+   * @param {String} classN The class name to toggle.
+   * @param {Boolean} [cond] Boolean value to determine whether class name should be added or removed.
    */
   toggleClass: function(elem, classN, cond) {
     var _cond = ML.bool(cond);
@@ -588,7 +598,7 @@ ML.El = {
   /**
    * Returns the x and y position of an element.
    * @param {HTMLElement} elem The element's x and y position.
-   * @return {object}
+   * @return {Object}
    */
   position: function(elem) {
     var posX = 0;
@@ -609,7 +619,7 @@ ML.El = {
   /**
    * Returns the width, height, x and y position of an element.
    * @param {HTMLElement} elem The element's dimensions.
-   * @return {object}
+   * @return {Object}
    */
   dimens: function(elem) {
     return {
@@ -623,7 +633,7 @@ ML.El = {
   /**
    * Returns an element to be created in the DOM with attributes passed.
    * @param {HTMLElement} element The tag to create, i.e. `div`.
-   * @param {object} [attrs] Attributes to add to tag.
+   * @param {Object} [attrs] Attributes to add to tag.
    * @return {HTMLElement}
    * 
    * @example
@@ -648,7 +658,7 @@ ML.El = {
 
   /**
    * Returns the computed style. [credit](http://snipplr.com/view/13523/getcomputedstyle-for-ie)
-   * @return {string}
+   * @return {String}
    */
   compStyle: function() {
     if (!window.getComputedStyle) {
@@ -677,8 +687,8 @@ ML.El = {
   /**
    * Returns a style for a specific element.
    * @param {HTMLElement} element The element to get styles for.
-   * @param {string} styleProp Style property to get the value of.
-   * @return {object}
+   * @param {String} styleProp Style property to get the value of.
+   * @return {Object}
    */
   getStyle: function(element, styleProp) {
     var y;
@@ -696,7 +706,7 @@ ML.El = {
   /**
    * Styles an element.
    * @param {HTMLElement} element The element to set styles to.
-   * @param {object} props Style properties and values.
+   * @param {Object} props Style properties and values.
    */
   setStyles: function(element, props) {
     for (var prop in props) {
@@ -707,8 +717,8 @@ ML.El = {
   /**
    * Returns attribute value for passed attribute.
    * @param {HTMLElement} element The element to get the attribute value for.
-   * @param {string} attr The attribute to get a value from.
-   * @return {string|number}
+   * @param {String} attr The attribute to get a value from.
+   * @return {String|Number}
    */
   getAttr: function(element, attr) {
     var att;
@@ -727,8 +737,8 @@ ML.El = {
   /**
    * Returns a data attribute.
    * @param {HTMLElement} element The element to get the data attribute value for.
-   * @param {string} attr The data attribute, excluding `data-`.
-   * @return {string|number}
+   * @param {String} attr The data attribute, excluding `data-`.
+   * @return {String|Number}
    */
   data: function(element, attr) {
     return ML.El.getAttr(element, 'data-' + attr);
@@ -753,18 +763,18 @@ ML.El = {
  * });
  * 
  * @param {HTMLElement} el Element to animate.
- * @param {object} props CSS properties to animate.
- * @param {object} [settings] Configuration settings.
- * @param {number} [settings.duration=400] The duration of the animation, defaults to 400ms.
- * @param {number} [settings.delay=13] The delay of the animation, defaults to 13.
- * @param {string} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
- * @param {function} [cb] Callback function.
+ * @param {Object} props CSS properties to animate.
+ * @param {Object} [settings] Configuration settings.
+ * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
+ * @param {Number} [settings.delay=13] The delay of the animation, defaults to 13.
+ * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
+ * @param {Function} [cb] Callback function.
  * @constructor
  */
 ML.Animate = function(el, props, settings, cb) {
   /**
    * Animate defaults.
-   * @type {object}
+   * @type {Object}
    * @private
    */
   var DEFAULTS = {
@@ -955,22 +965,22 @@ ML.Animate = function(el, props, settings, cb) {
  *   jsonpCallback: 'callbackFunction'
  * });
  * 
- * @param {object} params Configuration settings.
- * @param {string} [params.method=GET] The type of request.
- * @param {string} params.url The URL to make a request to.
- * @param {object} [params.headers={'Content-type': 'application/x-www-form-urlencoded'}] Adds headers to your request: `request.setRequestHeader(key, value)`
- * @param {string} [params.responseType=text] Format of the response. [info](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType)
- * @param {boolean} [params.cors=false] Cross domain request. 
- * @param {object|string} [params.data=null] Data to send with the request.
- * @param {string} params.jsonpCallback The name of the function for JSONP callback.
- * @param {function} params.success If the request is successful. XHR is returned.
- * @param {function} params.error If the request errors out. XHR is returned.
+ * @param {Object} params Configuration settings.
+ * @param {String} [params.method=GET] The type of request.
+ * @param {String} params.url The URL to make a request to.
+ * @param {Object} [params.headers={'Content-type': 'application/x-www-form-urlencoded'}] Adds headers to your request: `request.setRequestHeader(key, value)`
+ * @param {String} [params.responseType=text] Format of the response. [info](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType)
+ * @param {Boolean} [params.cors=false] Cross domain request. 
+ * @param {Object|String} [params.data=null] Data to send with the request.
+ * @param {String} params.jsonpCallback The name of the function for JSONP callback.
+ * @param {Function} params.success If the request is successful. XHR is returned.
+ * @param {Function} params.error If the request errors out. XHR is returned.
  * @constructor
  */
 ML.Ajax = function(params) {
   /**
    * Ajax defaults.
-   * @type {object}
+   * @type {Object}
    * @private
    */
   var DEFAULTS = {
@@ -1089,7 +1099,7 @@ ML.Ajax = function(params) {
 
   /**
    * Returns the XHR.
-   * @return {object|string}
+   * @return {Object|String}
    */
   this.xhr = xhr;
   

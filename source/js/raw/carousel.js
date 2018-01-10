@@ -78,23 +78,23 @@
    * </script>
    * 
    * @param {HTMLElement} el The carousel element.
-   * @param {object} [settings] Configuration settings.
-   * @param {number} [settings.current=0] The current slide to start on. 0 based.
-   * @param {boolean} [settings.autoplay=false] The carousel will start automatically.
-   * @param {number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
-   * @param {boolean} [settings.dots=false] Dot navigation.
-   * @param {boolean} [settings.nav=true] Arrow navigation.
-   * @param {boolean} [settings.arrowKeys=false] Arrow keyboard navigation.
-   * @param {boolean} [settings.infinite=false] Infinte amount of slides.
-   * @param {function} cb Callback function after slide has animated.
-   * @param {number} cb.index The current slide index.
+   * @param {Object} [settings] Configuration settings.
+   * @param {Number} [settings.current=0] The current slide to start on. 0 based.
+   * @param {Boolean} [settings.autoplay=false] The carousel will start automatically.
+   * @param {Number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
+   * @param {Boolean} [settings.dots=false] Dot navigation.
+   * @param {Boolean} [settings.nav=true] Arrow navigation.
+   * @param {Boolean} [settings.arrowKeys=false] Arrow keyboard navigation.
+   * @param {Boolean} [settings.infinite=false] Infinte amount of slides.
+   * @param {Function} cb Callback function after slide has animated.
+   * @param {Number} cb.index The current slide index.
    * @param {HTMLElement} cb.el The carousel element.
    * @constructor
    */
   ML.Carousel = function(el, settings, cb) {
     /**
      * Carousel defaults.
-     * @type {object}
+     * @type {Object}
      * @private
      */
     var DEFAULTS = {
@@ -271,7 +271,7 @@
 
     /**
      * Goes to a specific slide.
-     * @param {number} index The slide index.
+     * @param {Number} index The slide index.
      */
     this.goTo = function(index) {
       if (initialized) {
@@ -291,7 +291,7 @@
 
     /**
      * Toggle autoplay.
-     * @param {boolean} start Starts or stops autoplay.
+     * @param {Boolean} start Starts or stops autoplay.
      */
     this.autoplay = function(start) {
       var timer = null;
@@ -357,7 +357,7 @@
 
     /**
      * Returns the slide elements.
-     * @return {array}
+     * @return {Array}
      * @private
      */
     function getSlides() {
@@ -439,7 +439,7 @@
     /**
      * Keydown event bound to document to change current slide.
      * @param {Event} e The Event object.
-     * @return {boolean}
+     * @return {Boolean}
      * @private
      */
     function paginationKeydown(e) {
@@ -567,7 +567,7 @@
 
     /**
     * Function to be called after each slide.
-    * @param {boolean} init Intialization of the callback.
+    * @param {Boolean} init Intialization of the callback.
     * Used to set elements inactive/active on load.
     * @private
     */

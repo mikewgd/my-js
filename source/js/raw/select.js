@@ -6,20 +6,20 @@
   var Dropdown = {
     /**
      * All select menus on the page are stored here.
-     * @type {array}
+     * @type {Array}
      * @private
      */
     selects: [],
 
     /**
      * Custom select menus are stored here.
-     * @type {array}
+     * @type {Array}
      */
     customSelects: [],
 
     /**
      * Click/Focus/Blur/Change Events attached to SELECT elements.
-     * @type {object}
+     * @type {Object}
      */
     attachedEvents: {
       click: [],
@@ -30,7 +30,7 @@
 
     /**
      * Links found inside the dropdown.
-     * @type {array}
+     * @type {Array}
      */
     optionLinks: [],
 
@@ -89,7 +89,7 @@
     /**
      * Creates the LI elements inside the dropdown.
      * @param {HTMLElement} div The dropdown.
-     * @param {array} options An array of all the OPTION tags from the select menu.
+     * @param {Array} options An array of all the OPTION tags from the select menu.
      */
     createLis: function(div, options) {
       var li = null;
@@ -147,8 +147,8 @@
     /**
      * Attaches the old events stored in the event object to be applied.
      * @param {HTMLElement} el The element to find event attached to it.
-     * @param {string} eventType The type of event to look for.
-     * @return {function}
+     * @param {String} eventType The type of event to look for.
+     * @return {Function}
      */
     attachOldEvt: function(el, eventType) {
       var evt = this.attachedEvents[eventType];
@@ -312,10 +312,10 @@
     /**
      * Handles the changing of the selected item in the dropdown as well as the SELECT.
      * @param {HTMLElement} el The dropdown.
-     * @param {object} option
-     * @param {number} option.index Index position in the DOM.
-     * @param {string} option.value The value of the option/link selected.
-     * @param {string} option.text The text within the option/link.
+     * @param {Object} option
+     * @param {Number} option.index Index position in the DOM.
+     * @param {String} option.value The value of the option/link selected.
+     * @param {String} option.text The text within the option/link.
      */
     selectOption: function(el, option) {
       var select = el.previousSibling;
