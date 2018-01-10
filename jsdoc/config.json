@@ -4,7 +4,8 @@
   },
   "opts": {
     "destination": "./docs",
-    "readme": "./README.md"
+    "readme": "./README.md",
+    "watch": true
   },
   "plugins": [
     "plugins/markdown"
