@@ -149,6 +149,8 @@
         options.autoplay = ML.bool(options.autoplay);
         options.dots = ML.bool(options.dots);
         options.nav = ML.bool(options.nav);
+        options.infinite = ML.bool(options.infinite);
+        options.arrowKeys = ML.bool(options.arrowKeys);
 
         if (!ML.isNum(current)) {
           current = DEFAULTS.current;
@@ -168,6 +170,10 @@
 
         if (!ML.isBool(options.infinite)) {
           options.infinite = DEFAULTS.infinite;
+        }
+
+        if (!ML.isBool(options.arrowKeys)) {
+          options.arrowKeys = DEFAULTS.arrowKeys;
         }
 
         if (!ML.isBool(options.dots)) {

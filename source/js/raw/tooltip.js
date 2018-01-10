@@ -120,6 +120,9 @@
       options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
       options.selectorTooltip = options.selectorTooltip.toString();
       options.width = parseInt(options.width);
+      options.arrow = ML.bool(options.arrow);
+      options.smart = ML.bool(options.smart);
+      options.delay = ML.bool(options.delay);
 
       if (!ML.isUndef(options.activeClass, true) && ML.isString(options.activeClass)) {
         options.activeClass = options.activeClass.toString();
@@ -372,20 +375,37 @@
         if (el === null || el.id === tooltips[i].id) {
           tooltip = tooltips[i];
 
+          options.width = parseInt(options.width);
+          options.arrow = ML.bool(options.arrow);
+          options.smart = ML.bool(options.smart);
+          options.delay = ML.bool(options.delay);
+
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
+          }
+
+          if (!ML.isNum(options.delayTime)) {
+            options.delayTime = DEFAULTS.delayTime;
+          }
+
+          if (ML.isUndef(options.activeClass, true)) {
+            options.activeClass = DEFAULTS.activeClass;
           }
 
           if (!ML.isBool(options.arrow)) {
             options.arrow = DEFAULTS.arrow;
           }
 
-          if (!/^left$|^right$|^top$|^bottom$/.test(options.align)) {
-            options.align = DEFAULTS.align;
+          if (!ML.isBool(options.smart)) {
+            options.smart = DEFAULTS.smart;
           }
 
-          if (ML.isUndef(options.activeClass, true)) {
-            options.activeClass = DEFAULTS.activeClass;
+          if (!ML.isBool(options.delay)) {
+            options.delay = DEFAULTS.delay;
+          }
+
+          if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
+            options.align = DEFAULTS.align;
           }
 
           tooltips[i].MLTooltip = options;

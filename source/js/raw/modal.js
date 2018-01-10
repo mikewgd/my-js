@@ -97,6 +97,7 @@
       options.selectorModal = options.selectorModal.toString();
       options.selectorClose = options.selectorClose.toString();
       options.width = parseInt(options.width);
+      options.smart = ML.bool(options.smart);
 
       if (!ML.isUndef(options.activeClass, true) && ML.isString(options.activeClass)) {
         options.activeClass = options.activeClass.toString();
@@ -115,6 +116,10 @@
 
       if (ML.isUndef(options.activeClass, true)) {
         options.activeClass = DEFAULTS.activeClass;
+      }
+
+      if (!ML.isBool(options.smart)) {
+        options.smart = DEFAULTS.smart;
       }
 
       ML.loop(tags, function(element) {
@@ -327,12 +332,19 @@
         if (el === null || el.id === modals[i].id) {
           modal = modals[i];
 
+          options.width = parseInt(options.width);
+          options.smart = ML.bool(options.smart);
+
           if (!ML.isNum(options.width)) {
             options.width = DEFAULTS.width;
           }
 
           if (ML.isUndef(options.activeClass, true)) {
             options.activeClass = DEFAULTS.activeClass;
+          }
+
+          if (!ML.isBool(options.smart)) {
+            options.smart = DEFAULTS.smart;
           }
           
           modals[i].MLModal = options;
