@@ -290,6 +290,10 @@
       var arrow = null;
       var collides = {};
       var count = 0;
+      var collidesAll = function(tooltip) {
+        return collide('right', tooltip) || collide('left', tooltip) ||
+          collide('top', tooltip) || collide('bottom', tooltip);
+      };
 
       if (tooltip.MLTooltip.arrow) {
         if (ML.El.$C('tooltip-arrow', tooltip).length > 0) {
@@ -301,46 +305,42 @@
       }
 
       ML.El.addClass(tooltip, tooltip.MLTooltip.activeClass);
-      tooltip.style.width = tooltip.MLTooltip.width + 'px';
-
-      // TODO: Combining alignment and width setting into one function
-      ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
-      ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
-
-      setPosition(tip, tooltip, tooltip.MLTooltip.align);
+      
+      setDimens(tip, tooltip, {align: 'ml', width: 'ml'})
 
       if (tooltip.MLTooltip.smart) {
-        collides = collide('right', tooltip) || collide('left', tooltip) ||
-          collide('top', tooltip) || collide('bottom', tooltip);
+        collides = collidesAll(tooltip);
         count = 0;
 
-        if (tooltip.MLTooltip.smart) {
-          while (collides) {
-            ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
-            ML.El.addClass(tooltip, 'tooltip-' + ALIGNS[count] + '-align');
+        while (collides) {
+          setDimens(tip, tooltip, {align: ALIGNS[count], width: false})
 
-            setPosition(tip, tooltip, ALIGNS[count]);
+          collides = collidesAll(tooltip);
+          count++;
 
-            collides = collide('right', tooltip) || collide('left', tooltip) ||
-              collide('top', tooltip) || collide('bottom', tooltip);
-            count++;
-
-            if (count > 4) {
-              tooltip.style.width = DEFAULTS.width + 'px';
-              
-              ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
-              ML.El.addClass(tooltip, 'tooltip-' + tooltip.MLTooltip.align + '-align');
-              
-              setPosition(tip, tooltip, tooltip.MLTooltip.align);
-              
-              collides = collide('right', tooltip) || collide('left', tooltip) ||
-                collide('top', tooltip) || collide('bottom', tooltip);
-              count = 0;
-            }
+          if (count > 4) {
+            setDimens(tip, tooltip, {align: 'ml', width: DEFAULTS.width})
+            
+            collides = collidesAll(tooltip);
+            count = 0;
           }
-        }  
+        }
       }
     };
+
+    function setDimens(tip, tooltip, obj) {
+      var align = (obj.align === 'ml') ? tooltip.MLTooltip.align : obj.align;
+      var width = (obj.width === 'ml') ? tooltip.MLTooltip.width : obj.width;
+
+      if (obj.width) {
+        tooltip.style.width = width + 'px';
+      }
+
+      ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
+      ML.El.addClass(tooltip, 'tooltip-' + align + '-align');
+
+      setPosition(tip, tooltip, align);
+    }
 
     /**
      * Returns `true` or `false` if tooltip element collides with the window.
