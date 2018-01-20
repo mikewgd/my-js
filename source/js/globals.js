@@ -35,6 +35,36 @@ if (!Array.prototype.indexOf) {
   };
 }
 
+// Polyfill: window.getComputedStyle
+if (!window.getComputedStyle) {
+  window.getComputedStyle = function(el) {
+    this.el = el;
+    this.getPropertyValue = function(prop) {
+      var re = /(\-([a-z]){1})/g;
+      if (prop === 'float') {
+        prop = 'styleFloat';
+      }
+
+      if (re.test(prop)) {
+        prop = prop.replace(re, function() {
+          return arguments[2].toUpperCase();
+        });
+      }
+
+      return el.currentStyle[prop] ? el.currentStyle[prop] : null;
+    };
+
+    return this;
+  };
+}
+
+// Polyfill: Event.preventDefault()
+if (!Event.prototype.preventDefault) {
+  Event.prototype.preventDefault = function() {
+    this.returnValue = false;
+  };
+}
+
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
@@ -297,7 +327,8 @@ ML.El = {
       boundEvt = this.Events[i];
 
       if (node === boundEvt[0] && type === boundEvt[1] && funcName === boundEvt[2].name) {
-        result = true;
+        boundEvt[3] = i;
+        result = boundEvt;
         break;
       }
     }
@@ -389,6 +420,16 @@ ML.El = {
     }
 
     ML.El.Events.push([el, type, cb]);
+  },
+
+  removeEvt: function(el, type, cb) {
+    if (el.removeEventListener) {
+      el.removeEventListener(type, cb, false);
+    } else if (el.detachEvent) {
+      el.detachEvent("on" + type, cb);
+    } else {
+      el["on" + type] = null;
+    }
   },
 
   /**
@@ -661,27 +702,7 @@ ML.El = {
    * @return {String}
    */
   compStyle: function() {
-    if (!window.getComputedStyle) {
-      window.getComputedStyle = function(el) {
-        this.el = el;
-        this.getPropertyValue = function(prop) {
-          var re = /(\-([a-z]){1})/g;
-          if (prop === 'float') {
-            prop = 'styleFloat';
-          }
-
-          if (re.test(prop)) {
-            prop = prop.replace(re, function() {
-              return arguments[2].toUpperCase();
-            });
-          }
-
-          return el.currentStyle[prop] ? el.currentStyle[prop] : null;
-        };
-
-        return this;
-      };
-    }
+    
   },
 
   /**
@@ -694,10 +715,12 @@ ML.El = {
     var y;
 
     if (element.currentStyle === undefined) {
-      ML.El.compStyle();
       y = window.getComputedStyle(element, '').getPropertyValue(styleProp);
     } else {
-      y = element.currentStyle[styleProp];
+      // TODO: Added for IE < 9 kebab case to camelCase.
+      y = element.currentStyle[styleProp.replace(/-([a-z])/g, function (m, w) {
+        return w.toUpperCase();
+      })];
     }
 
     return y;
