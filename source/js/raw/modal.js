@@ -108,6 +108,9 @@
       } else {
         modals = ML.El.$C(options.selectorModal);
         overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
+
+        // IE
+        overlay.style.filter = 'alpha(opacity=50)';
       }
 
       if (!ML.isNum(options.width)) {
@@ -221,10 +224,10 @@
     this.destroy = function() {
       // remove event listeners.
       ML.loop(toggles, function(element) {
-        element.removeEventListener('click', toggleClick, false);
+        ML.El.removeEvt(element, 'click', toggleClick);
       });
 
-      document.removeEventListener('click', closeClick, false);
+      ML.El.removeEvt(document, 'click', closeClick);
 
       if (ML.El.$C('modal-overlay').length > 0) {
         document.body.removeChild(overlay);
