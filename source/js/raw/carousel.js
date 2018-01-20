@@ -490,15 +490,17 @@
      * @private
      */
     function paginationClick(e) {
+      var clicked = ML.El.clicked(e);
+
       e.preventDefault();
 
-      if (ML.El.hasClass(e.currentTarget, 'inactive') || animating) {
+      if (ML.El.hasClass(clicked, 'inactive') || animating) {
         return;
       }
 
-      slideDirection = (ML.El.hasClass(e.currentTarget, 'prev')) ? 'prev' : 'next';
+      slideDirection = (ML.El.hasClass(clicked, 'prev')) ? 'prev' : 'next';
 
-      if (ML.El.hasClass(e.currentTarget, 'prev')) {
+      if (ML.El.hasClass(clicked, 'prev')) {
         self.prev();
       } else {
         self.next();
@@ -515,7 +517,7 @@
 
       if (options.infinite) {
         var delta = (slideDirection === 'prev') ? -1 : 1;
-        desired = parseInt(getComputedStyle(ul).left) + (-width * delta);
+        desired = parseInt(window.getComputedStyle(ul).left) + (-width * delta);
       }
 
       ML.Animate(ul, {left: desired}, {}, function() {
