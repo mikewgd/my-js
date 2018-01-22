@@ -422,6 +422,14 @@ ML.El = {
     ML.El.Events.push([el, type, cb]);
   },
 
+  /**
+   * Remove event listener bound to an element.
+   * @param {HTMLElement} el The element to remove the event from.
+   * @param {String} type The type of event.
+   * @param {Function} cb Callback function.
+   * @param {Event} cb.e The Event Object.
+   * @param {Boolean} [capture]
+   */
   removeEvt: function(el, type, cb) {
     if (el.removeEventListener) {
       el.removeEventListener(type, cb, false);
@@ -678,7 +686,8 @@ ML.El = {
    * @return {HTMLElement}
    * 
    * @example
-   * var div = ML.El.create('div', {'id': 'test-elem'});
+   * // NOTE: When setting class name make sure to put in quotes, see example:
+   * var div = ML.El.create('div', {'id': 'test-elem', 'class': 'cool-div'});
    */
   create: function(element, attrs) {
     var elem = document.createElement(element);
