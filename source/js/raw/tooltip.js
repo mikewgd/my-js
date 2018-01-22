@@ -230,7 +230,7 @@
      * @private
      */
     function createTooltip(link) {
-      var tooltip = ML.El.create('div', {id: link.rel, class: options.selectorTooltip});
+      var tooltip = ML.El.create('div', {id: link.rel, 'class': options.selectorTooltip});
 
       tooltip.innerHTML = '<div class="tooltip-content">' +
                             '<p>' + link.title + '</p>' +
