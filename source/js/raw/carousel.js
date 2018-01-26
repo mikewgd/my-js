@@ -224,6 +224,7 @@
       bindEvents();
       callback(true);
 
+
       if (options.autoplay) {
         this.autoplay(true);
       }
@@ -246,6 +247,7 @@
       }
 
       self.autoplay(false);
+      slideDirection = 'next';
 
       current++;
       el.MLCarousel.currentSlideIndex = current;
@@ -269,6 +271,7 @@
       }
 
       self.autoplay(false);
+      slideDirection = 'prev';
 
       current--;
       el.MLCarousel.currentSlideIndex = current;
@@ -476,12 +479,15 @@
      * @private
      */
     function dotClick(e) {
+      var target = (e.currentTarget) ? e.currentTarget : e.srcElement;
+
       e.preventDefault();
-      if (self.animating || e.currentTarget.rel === self.curr) {
+
+      if (self.animating || target.rel === self.curr) {
         return;
       }
 
-      self.goTo(parseInt(e.currentTarget.rel));
+      self.goTo(parseInt(target.rel));
     }
 
     /**
@@ -490,17 +496,22 @@
      * @private
      */
     function paginationClick(e) {
-      var clicked = ML.El.clicked(e);
+      var target = (e.currentTarget) ? e.currentTarget : e.srcElement;
 
       e.preventDefault();
 
-      if (ML.El.hasClass(clicked, 'inactive') || animating) {
+      if (ML.El.hasClass(target, 'inactive') || animating) {
         return;
       }
 
-      slideDirection = (ML.El.hasClass(clicked, 'prev')) ? 'prev' : 'next';
+      // Added for IE.
+      if (/carousel-nav/.test(target.parentNode.className)) {
+        target = target.parentNode;
+      }
 
-      if (ML.El.hasClass(clicked, 'prev')) {
+      // slideDirection = (ML.El.hasClass(target, 'prev')) ? 'prev' : 'next';
+
+      if (ML.El.hasClass(target, 'prev')) {
         self.prev();
       } else {
         self.next();
@@ -517,10 +528,10 @@
 
       if (options.infinite) {
         var delta = (slideDirection === 'prev') ? -1 : 1;
-        desired = parseInt(window.getComputedStyle(ul).left) + (-width * delta);
+        desired = parseInt(window.getComputedStyle(ul).getPropertyValue("left")) + (-width * delta);
       }
 
-      ML.Animate(ul, {left: desired}, {}, function() {
+      ML.Animate(ul, {left: desired}, {relative: false}, function() {
         animating = false;
         callback(false);
 
@@ -543,7 +554,7 @@
       var desired = -(width * (current + 1));
       animating = false;
 
-      ML.Animate(ul, {left: desired}, {}, function() {
+      ML.Animate(ul, {left: desired}, {relative: false}, function() {
         animating = false;
         callback(false);
       });
@@ -618,6 +629,7 @@
 
   for (var i = 0; i < carouselEl.length; i++) {
     if (ML.El.data(carouselEl[i], 'carousel') !== null) {
+
       settings = ML.parObj(ML.El.data(carouselEl[i], 'carousel'));
       carousel = new ML.Carousel(carouselEl[i], settings);
       carousel.init();
