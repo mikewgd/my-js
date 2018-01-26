@@ -799,6 +799,7 @@ ML.El = {
  * @param {Object} [settings] Configuration settings.
  * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
  * @param {Number} [settings.delay=13] The delay of the animation, defaults to 13.
+ * @param {Boolean} [settings.relative=true] Ability to override animating relative values.
  * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
  * @param {Function} [cb] Callback function.
  * @constructor
@@ -812,7 +813,8 @@ ML.Animate = function(el, props, settings, cb) {
   var DEFAULTS = {
     duration: 400,
     delay: 13,
-    easing: 'linear'
+    easing: 'linear',
+    relative: true
   };
 
   var Easing = {
@@ -871,6 +873,10 @@ ML.Animate = function(el, props, settings, cb) {
         options.delay = DEFAULTS.delay;
       }
 
+      if (!ML.isBool(options.relative)) {
+        options.relative = DEFAULTS.relative;
+      }
+
       if (ML.isUndef(Easing[options.easing])) {
         options.easing = Easing[DEFAULTS.easing];
       } else {
@@ -895,14 +901,16 @@ ML.Animate = function(el, props, settings, cb) {
     }
   }
 
+  /**
+   * Fade in/out an element.
+   * @private
+   */
   function fadeEl() {
     var curr = (currProps.opacity * 100);
     var desr = (props.opacity * 100);
     var whole = Math.round(curr + (desr - curr) * options.easing(progress));
 
     el.style.opacity = whole / 100;
-
-    console.log();
   }
 
   /**
@@ -925,7 +933,7 @@ ML.Animate = function(el, props, settings, cb) {
         if (prop === 'opacity') {
           fadeEl();
         } else {
-          if (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop])) {
+          if (options.relative && (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop]))) {
             value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
           } else {
             value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));

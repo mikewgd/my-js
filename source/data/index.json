@@ -3,6 +3,10 @@
   "script": false,
   "pages": [
     {
+      "title": "Animate",
+      "page": "animate"
+    },
+    {
       "title": "Carousel",
       "page": "carousel"
     },
