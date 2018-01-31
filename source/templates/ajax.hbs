@@ -9,7 +9,7 @@
 
   <div class="ajax-content-1">
     <h2>GET</h2>
-    <button>make request</button>
+    <button id="ajaxBtn1">make request</button>
 
     <div id="ajaxContent1">
       <pre><code>new ML.Ajax({<br>  responseType: 'json',<br>  url: 'https://reqres.in/api/users/2',<br>  success: function(xhr) {<br>    console.log(xhr.response.data);<br>  },<br>  error: function(xhr) {<br>    console.log('ERROR', xhr);<br>  }<br>});</code></pre>
@@ -18,7 +18,7 @@
 
   <div class="ajax-content-2">
     <h2>POST</h2>
-    <button>make request</button>
+    <button id="ajaxBtn2">make request</button>
 
     <div id="ajaxContent2">
       <pre><code>new ML.Ajax({<br>  url: 'https://reqres.in/api/users',<br>  method: 'POST',<br>  responseType: 'json',<br>  data: {<br>    name: 'john smith',<br>    age: 22<br>  }<br>  success: function(xhr) {<br>    console.log(xhr.response);<br>  },<br>  error: function(xhr) {<br>    console.log('ERROR', xhr);<br>  }<br>});</code></pre>
@@ -27,7 +27,7 @@
 
   <div class="ajax-content-3">
     <h2>JSONP</h2>
-    <button>make request</button>
+    <button id="ajaxBtn3">make request</button>
 
     <div id="ajaxContent3">
       <pre><code>var callbackFunction = function(response) {<br>  console.log(response);<br>};<br><br>new ML.Ajax({<br>  url: 'https://jsfiddle.net/echo/jsonp',<br>  method: 'JSONP',<br>  data: {<br>    name: 'john smith',<br>    age: 22<br>  },<br>  jsonpCallback: 'callbackFunction'<br>});</code></pre>
@@ -36,57 +36,55 @@
 
 {{#> footer}}
   <script>
-    var buttons = ML.El._$('button');
+    var btn1 = ML.El.$('ajaxBtn1');
+    var btn2 = ML.El.$('ajaxBtn2');
+    var btn3 = ML.El.$('ajaxBtn3');
 
     var callbackFunction = function(response) {
       console.log(response);
     };
 
-    for (var i = 0, len = buttons.length; i < len; i++) {
-      ML.El.evt(buttons[i], 'click', function(e) {
-        switch (this.parentNode.className) {
-          case 'ajax-content-1':
-            new ML.Ajax({
-              responseType: 'json',
-              url: 'https://reqres.in/api/users/2',
-              success: function(xhr) {
-                console.log(xhr.response.data);
-              },
-              error: function(xhr) {
-                console.log('ERROR', xhr);
-              }
-            });
-            break;
-          case 'ajax-content-2':
-            new ML.Ajax({
-              url: 'https://reqres.in/api/users',
-              method: 'POST',
-              responseType: 'json',
-              data: {
-                name: 'john smith',
-                age: 22
-              },
-              success: function(xhr) {
-                console.log(xhr.response);
-              },
-              error: function(xhr) {
-                console.log('ERROR', xhr);
-              }
-            });
-            break;
-          case 'ajax-content-3':
-            new ML.Ajax({
-              url: 'https://jsfiddle.net/echo/jsonp',
-              method: 'JSONP',
-              data: {
-                name: 'john smith',
-                age: 22
-              },
-              jsonpCallback: 'callbackFunction'
-            });
-            break;
+    ML.El.evt(btn1, 'click', function(e) {
+      new ML.Ajax({
+        responseType: 'json',
+        url: 'https://reqres.in/api/users/2',
+        success: function(xhr) {
+          console.log(xhr.response.data);
+        },
+        error: function(xhr) {
+          console.log('ERROR', xhr);
         }
       });
-    }
+    });
+
+    ML.El.evt(btn2, 'click', function(e) {
+      new ML.Ajax({
+        url: 'https://reqres.in/api/users',
+        method: 'POST',
+        responseType: 'json',
+        data: {
+          name: 'john smith',
+          age: 22
+        },
+        success: function(xhr) {
+          console.log(xhr.response);
+        },
+        error: function(xhr) {
+          console.log('ERROR', xhr);
+        }
+      });
+    });
+
+    ML.El.evt(btn3, 'click', function(e) {
+      new ML.Ajax({
+        url: 'https://jsfiddle.net/echo/jsonp',
+        method: 'JSONP',
+        data: {
+          name: 'john smith',
+          age: 22
+        },
+        jsonpCallback: 'callbackFunction'
+      });
+    });
   </script>
 {{/footer}}
