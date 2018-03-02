@@ -7,7 +7,7 @@ Please feel free to use any of the scripts for our own use.
 
 There are different branches within the repository that differ in terms of browser support.
 
-Any feedback on what could be done better, bugs you see please put in [Github](google.com).
+Any feedback on what could be done better, bugs you see please put in [Github](https://github.com/mikewgd/my-js/issues).
 
 ## The scripts
 | Name                                | Description                                                                                                                |
