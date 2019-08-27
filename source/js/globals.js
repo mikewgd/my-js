@@ -2,39 +2,6 @@
 
 'use strict';
 
-// Polyfill: Array.indexOf
-if (!Array.prototype.indexOf) {
-  Array.prototype.indexOf = function(e) {
-    if (this === null) {
-      throw new TypeError();
-    }
-    var t = Object(this);
-    var n = t.length >>> 0;
-    if (n === 0) {
-      return -1;
-    }
-    var r = 0;
-    if (arguments.length > 1) {
-      r = Number(arguments[1]);
-      if (r !== r) {
-        r = 0;
-      } else if (r !== 0 && r !== Infinity && r !== -Infinity) {
-        r = (r > 0 || -1) * Math.floor(Math.abs(r));
-      }
-    }
-    if (r >= n) {
-      return -1;
-    }
-    var i = r >= 0 ? r : Math.max(n - Math.abs(r), 0);
-    for (; i < n; i++) {
-      if (i in t && t[i] === e) {
-        return i;
-      }
-    }
-    return -1;
-  };
-}
-
 // Polyfill: window.getComputedStyle
 if (!window.getComputedStyle) {
   window.getComputedStyle = function(el) {
