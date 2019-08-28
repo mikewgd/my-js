@@ -113,7 +113,7 @@
      * tooltips.init();
      */
     this.init = function() {
-      var tags = ML.El._$('*');
+      var tags = Array.prototype.slice.call(ML.El._$('*'));
 
       self.destroy();
 
@@ -162,7 +162,7 @@
         options.align = DEFAULTS.align;
       }
 
-      ML.loop(tags, function(element) {
+      tags.map(function(element) {
         if (element.getAttribute(selectorTip) !== null) {
           if (ML.isUndef(element.rel, true)) {
             if (element.title) {
@@ -187,7 +187,7 @@
      */
     function bindEvents() {
       if (tips.length > 0) {
-        ML.loop(tips, function(element) {
+        tips.forEach(function(element) {
           ML.El.evt(element, 'mouseover', mouseOver);
           ML.El.evt(element, 'mouseout', mouseOut);
         });
@@ -250,7 +250,7 @@
      * tooltips.destroy();
      */
     this.destroy = function() {
-      ML.loop(tips, function(element) {
+      tips.forEach(function(element) {
         element.removeEventListener('mouseover', mouseOver, false);
         element.removeEventListener('mouseout', mouseOut, false);
 
@@ -263,7 +263,7 @@
         }
       });
 
-      ML.loop(tooltips, function(element) {
+      Array.prototype.slice.call(tooltips).map(function(element) {
         element.removeAttribute('style');
         ML.El.removeClass(element, ALIGNMENT_CLASSES.join(' '), true);
         ML.El.removeClass(element, element.MLTooltip.activeClass);
@@ -464,7 +464,7 @@
      * tooltips.hide();
      */
     this.hide = function() {
-      ML.loop(tooltips, function(tooltip) {
+      Array.prototype.slice.call(tooltips).map(function(tooltip) {
         ML.El.removeClass(tooltip, tooltip.MLTooltip.activeClass);
       });
     };

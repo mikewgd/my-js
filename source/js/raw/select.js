@@ -40,10 +40,10 @@
      * Events placed on the SELECT are stored in an object for later use.
      */
     init: function() {
-      var selects = ML.El._$('select');
+      var selects = Array.prototype.slice.call(ML.El._$('select'));
       var self = this;
 
-      ML.loop(selects, function(select) {
+      selects.map(function(select) {
         if (ML.El.hasClass(select, 'system') || ML.El.hasClass(select, 'styled')) {
           return;
         }
@@ -172,7 +172,7 @@
     bindEvents: function() {
       var self = this;
 
-      ML.loop(this.optionLinks, function(optionLink) {
+      this.optionLinks.map(function(optionLink) {
         ML.El.evt(optionLink, 'click', self.optionClick);
 
         ML.El.evt(optionLink, 'mouseover', self.optionMouseOver);
@@ -180,7 +180,7 @@
 
       ML.El.evt(document, 'click', self.documentClick);
 
-      ML.loop(this.selects, function(select) {
+      this.selects.map(function(select) {
         ML.El.evt(select, 'focus', self.selectFocus, true);
 
         ML.El.evt(select, 'blur', self.selectBlur);
@@ -225,7 +225,7 @@
       var clicked = ML.El.clicked(e);
       var ul = clicked.parentNode.parentNode;
 
-      ML.loop(ML.El._$('li', ul), function(li){
+      Array.prototype.slice.call(ML.El._$('li', ul)).map(function(li){
         ML.El.removeClass(li, 'selected');
       });
     },
@@ -345,7 +345,7 @@
           }
 
           // Handles the toggling of the select menu and allowing only one to be open at a time.
-          ML.loop(Dropdown.customSelects, function(c) {
+          Dropdown.customSelects.map(function(c) {
             if (c !== clickedParent) {
               ML.El.removeClass(c, 'active');
               ML.El.removeClass(c, 'focus');

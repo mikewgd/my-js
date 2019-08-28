@@ -129,31 +129,6 @@ ML = {
   },
 
   /**
-   * Loop through an array with callback.
-   * 
-   * @param {Arrays} arr The array to loop though.
-   * @param {Function} cb Function to be called during loop.
-   * @param {*} cb.element The value of the array element.
-   * @param {Number} cb.index The index of the array element.
-   * 
-   * @example
-   * var arr = ['apple', 'orange', 'blueberry', 'strawberry'];
-   * ML.loop(arr, function(element, index) {
-   *   console.log(element); // Will console out: apple, orange, etc...
-   *   console.log(index); // Will console out the array item's index: 0, 1, etc...
-   * })
-   */
-  loop: function(arr, cb) {
-    for (var i = 0, len = arr.length; i < len; i++) {
-      if (typeof arr[i] === 'object') {
-        ML.El.clean(arr[i]);
-      }
-
-      cb.call(this, arr[i], i);
-    }
-  },
-
-  /**
    * Returns the width and height of the window. [credit](http://www.howtocreate.co.uk/tutorials/javascript/browserwindow)
    * @return {Object}
    */
@@ -518,14 +493,14 @@ ML.El = {
   removeClass: function(elem, classN, multiple) {
     var currClass = elem.classList;
 
-    currClass.remove(classN);
-
     if (multiple) {
-      var classNames = currClass.split(' ');
+      var classnames = classN.split(' ');
 
-      for (var i = 0, len = classNames.length; i < len; i++) {
-        currClass(classNames[i]);
+      for (var i = 0, len = classnames.length; i < len; i++) {
+        currClass.remove(classnames[i]);
       }
+    } else {
+      currClass.remove(classN);
     }
   },
 
@@ -625,14 +600,6 @@ ML.El = {
     }
 
     return elem;
-  },
-
-  /**
-   * Returns the computed style. [credit](http://snipplr.com/view/13523/getcomputedstyle-for-ie)
-   * @return {String}
-   */
-  compStyle: function() {
-    
   },
 
   /**

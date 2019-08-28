@@ -328,7 +328,7 @@
       if (options.dots) {
         var dotLinks = ML.El._$('a', dotsUl);
 
-        ML.loop(dotLinks, function(item) {
+        dotLinks.map(function(item) {
           item.removeEventListener('click', dotClick, false);
         });
 
@@ -426,9 +426,9 @@
      */
     function bindEvents() {
       if (options.dots) {
-        var dotLinks = ML.El._$('a', dotsUl);
+        var dotLinks = Array.prototype.slice.call(ML.El._$('a', dotsUl));
 
-        ML.loop(dotLinks, function(item) {
+        dotLinks.map(function(item) {
           ML.El.evt(item, 'click', dotClick);
         });
       }
@@ -611,7 +611,7 @@
       }
       
       if (options.dots) {
-        ML.loop(dotsLis, function(li, i) {
+        dotsLis.map(function(li, i) {
           ML.El.removeClass(li, 'active');
           if (i === current) {
             ML.El.addClass(li, 'active');

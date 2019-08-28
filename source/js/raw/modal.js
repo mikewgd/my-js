@@ -89,7 +89,7 @@
      * modals.init();
      */
     this.init = function() {
-      var tags = ML.El._$('*');
+      var tags = Array.prototype.slice.call(ML.El._$('*'));
 
       self.destroy();
 
@@ -125,7 +125,7 @@
         options.smart = DEFAULTS.smart;
       }
 
-      ML.loop(tags, function(element) {
+      tags.map(function(element) {
         if (element.getAttribute(selectorToggle) !== null) {
           if (ML.isUndef(element.rel, true)) {
             throw new Error('Element to show the modal must have a valid rel attribute.');
@@ -146,7 +146,7 @@
      */
     function bindEvents() {
       if (toggles.length > 0) {
-        ML.loop(toggles, function(element) {
+        toggles.map(function(element) {
           ML.El.evt(element, 'click', toggleClick);
         });
       }
@@ -223,7 +223,7 @@
      */
     this.destroy = function() {
       // remove event listeners.
-      ML.loop(toggles, function(element) {
+      toggles.map(function(element) {
         ML.El.removeEvt(element, 'click', toggleClick);
       });
 
@@ -233,7 +233,7 @@
         document.body.removeChild(overlay);
       }
 
-      ML.loop(modals, function(element) {
+      modals.map(function(element) {
         element.removeAttribute('style');
         ML.El.removeClass(element, element.MLModal.activeClass);
       });
