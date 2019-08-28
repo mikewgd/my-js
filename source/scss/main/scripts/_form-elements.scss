@@ -1,23 +1,40 @@
 /* CUSTOM FORM ELEMENTS */
 
-.checkbox, 
-.radio {
-  margin: 0 5px 0 0;
-  width: 15px;
-  height: 15px;
-}
+input.styled {
+  &[type="radio"] {
+    & + label:before {
+      background-image: url(../images/radio.gif);
+    }
+  }
 
-.checkbox {
-  background-image: url(../images/checkbox.gif);
-}
+  &[type="checkbox"] {
+    & + label:before {
+      background-image: url(../images/checkbox.gif);
+    }
+  }
 
-.radio {
-  background-image: url(../images/radio.gif);
+  &[type="checkbox"],
+  &[type="radio"] {
+    &:checked + label:before {
+      background-position: 0 15px;
+    }
+    & + label {
+      display: flex;
+      align-items: center;
+    }
+    & + label:before {
+      content: '';
+      margin: 0 5px 0 0;
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+    }
+  }
 }
 
 .checked {
   background-position: 0 15px;
-  background-position: 0 15px;
+  
 }
 
 /* Select Menu */
