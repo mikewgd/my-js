@@ -90,6 +90,20 @@ ul.list li {
   }
 }
 
+.notes {
+  background-color: $gray;
+  padding: 8px;
+
+  h3 {
+    margin: 0 0 4px 0;
+  }
+
+  ul {
+    padding: 0 0 0 16px;
+    margin: 0;
+  }
+}
+
 /* Script specific styles */
 @import 
   "main/scripts/carousel",

@@ -202,15 +202,6 @@ ML = {
     }
     
     return obj;
-  },
-
-  /**
-   * Returns a string with whitespace removed.
-   * @param {String} str String to remove whitespace.
-   * @return {String}
-   */
-  trim: function(str) {
-    return str.replace(/(^\s+|\s+$)/g, '');
   }
 };
 
