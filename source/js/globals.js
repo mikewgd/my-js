@@ -129,27 +129,13 @@ ML = {
   },
 
   /**
-   * Returns the width and height of the window. [credit](http://www.howtocreate.co.uk/tutorials/javascript/browserwindow)
+   * Returns the width and height of the window.
    * @return {Object}
    */
   windowDimen: function() {
-    var h = 0;
-    var w = 0;
-
-    if (typeof(window.innerWidth) === 'number') {
-      w = window.innerWidth;
-      h = window.innerHeight;
-    } else if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
-      w = document.documentElement.clientWidth;
-      h = document.documentElement.clientHeight;
-    } else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
-      w = document.body.clientWidth;
-      h = document.body.clientHeight;
-    }
-
     return {
-      w: w,
-      h: h
+      w: window.innerWidth,
+      h: window.innerHeight
     };
   },
 
@@ -314,14 +300,7 @@ ML.El = {
       return;
     }
 
-    if (el.addEventListener) {// other browsers
-      el.addEventListener(type, cb, capture);
-    } else if (el.attachEvent) { // ie 8 and below
-      el.attachEvent('on' + type, cb);
-    } else { // for older browsers
-      el['on' + type] = cb;
-    }
-
+    el.addEventListener(type, cb, capture);
     ML.El.Events.push([el, type, cb]);
   },
 
@@ -334,42 +313,20 @@ ML.El = {
    * @param {Boolean} [capture]
    */
   removeEvt: function(el, type, cb) {
-    if (el.removeEventListener) {
-      el.removeEventListener(type, cb, false);
-    } else if (el.detachEvent) {
-      el.detachEvent("on" + type, cb);
-    } else {
-      el["on" + type] = null;
-    }
+    el.removeEventListener(type, cb, false);
   },
 
   /**
-   * Trigger events bound to elements.
+   * Trigger native events bound to elements.
    * @param {HTMLElement} el The element to trigger an event on.
    * @param {String} type The type of event to trigger.
    */
   evtTrigger: function(el, type) {
-    var event;
+    var event = document.createEvent('HTMLEvents');
 
-    if (document.createEvent) {
-      event = document.createEvent('HTMLEvents');
-      event.initEvent(type, true, true);
-    } else if (document.createEventObject) { // IE < 9
-      event = document.createEventObject();
-      event.eventType = type;
-    }
-
+    event.initEvent(type, true, true);
     event.type = type;
-
-    if (el.dispatchEvent) {
-      el.dispatchEvent(event);
-    } else if (el.fireEvent) { // IE < 9
-      el.fireEvent('on' + event.eventType, event); // can trigger only real event (e.g. 'click')
-    } else if (el[type]) {
-      el[type]();
-    } else if (el['on' + type]) {
-      el['on' + type]();
-    }
+    el.dispatchEvent(event);
   },
 
   /**
@@ -609,18 +566,7 @@ ML.El = {
    * @return {Object}
    */
   getStyle: function(element, styleProp) {
-    var y;
-
-    if (element.currentStyle === undefined) {
-      y = window.getComputedStyle(element, '').getPropertyValue(styleProp);
-    } else {
-      // TODO: Added for IE < 9 kebab case to camelCase.
-      y = element.currentStyle[styleProp.replace(/-([a-z])/g, function (m, w) {
-        return w.toUpperCase();
-      })];
-    }
-
-    return y;
+    return window.getComputedStyle(element, '').getPropertyValue(styleProp);
   },
 
   /**
