@@ -375,6 +375,34 @@ ML.El = {
     return element;
   },
 
+  // @TODO: Comment
+  $q: function(selector) {
+    var qs = null;
+    if (ML.isUndef(document.querySelector(selector), true)) {
+      throw new Error('Element can\'t be found.');
+    } else {
+      qs = document.querySelectorAll(selector);
+
+      if (qs.length === 1) {
+        return qs[0];
+      }
+
+      return qs;
+    }
+  },
+
+  // @TODO: Comment
+  cssTransition: function(el, values) {
+    el.style.webkitTransition = values;
+    el.style.transition = values;
+  },
+
+  // @TODO: Comment
+  cssTransform: function(el, values) {
+    el.style.webkitTransform = values;
+    el.style.transform = values;
+  },
+
   /**
    * Returns HTMLElement based on id attriube.
    * @param {String} id The id of the element to return.
