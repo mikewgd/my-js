@@ -24,7 +24,7 @@
    * @example <caption>Rendered HTML with all settings.</caption> {@lang xml}
    * <div class="carousel animals js-carousel-initialized" data-carousel="autoplay:true:dots:true:arrowKeys:true:autoplay:true:infinite:true:current:1" tabindex="0">
    *   <div class="carousel-viewer" style="overflow: hidden;">
-   *     <ul style="left: -620px;">
+   *     <ul>
    *       <li class="carousel-slide"><span>3</span><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
    *       <li class="carousel-slide"><span>0</span><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
    *       <li class="carousel-slide"><span>1</span><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
@@ -48,7 +48,7 @@
    * </div>
    *
    * @example <caption>Initializing carousel via JavaScript</caption>
-   * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
+   * var carousel = new ML.Carousel(ML.El.$q('#initCarousel'), {
    *   dots: true,
    *   arrowKeys: true,
    *   infinite: true
@@ -66,13 +66,13 @@
    * <button id="carouselNext">Next button</button>
    *
    * <script>
-   *   var carousel = ML.El.$('customCarousel').MLCarousel;
+   *   var carousel = ML.El.$q('#customCarousel').MLCarousel;
    *   
    *   carousel.complete(function(index, el) {
    *     console.log(index, el);
    *   });
    *   
-   *   ML.El.evt(ML.El.$('carouselNext'), 'click', function(e) {
+   *   ML.El.evt(ML.El.$q('carouselNext'), 'click', function(e) {
    *     carousel.next();
    *   });
    * </script>
@@ -115,8 +115,7 @@
     var ul = null;
     var nextButton = null;
     var prevButton = null;
-    var dotsUl = null;
-    var dotsLis = [];
+    var carouselDots = null;
     var initialized = false;
 
     var animating = false;
@@ -127,6 +126,7 @@
     var firstSlide = null;
     var lastSlide = null;
     var slideDirection = 'next';
+    var transitionValue = 'transform 400ms 13ms linear';
 
     var methods = {
       complete: function() {}
@@ -188,8 +188,8 @@
 
       if (!options.infinite) {
         el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHTML + '</div>';
-        ul = ML.El._$('ul', el)[0];
-        ul.style.left = -(width * current) + 'px';
+        ul = el.querySelector('ul:first-child');
+        ML.El.cssTransform(ul, 'translateX(' + -(width * current) + 'px)');
       } else {
         firstSlide = slides[0];
         lastSlide = slides[total - 1];
@@ -198,9 +198,11 @@
         lastSlide.parentNode.insertBefore(firstSlide.cloneNode(true), lastSlide.nextSibling);
 
         el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + el.innerHTML + '</div>';
-        ul = ML.El._$('ul', el)[0];
-        ul.style.left = -(width * (current + 1)) + 'px';
+        ul = el.querySelector('ul:first-child');
+        ML.El.cssTransform(ul, 'translateX(' + -(width * (current + 1)) + 'px)');
       }
+
+      ML.El.cssTransition(ul, '-webkit-' + transitionValue + ', ' + transitionValue);
 
       if (options.nav) {
         createNav();
@@ -215,7 +217,6 @@
       el.MLCarousel.init = true;
       el.MLCarousel.complete = function(cb2) {
         methods.complete = cb2;
-        // return el.MLCarousel;
       };
       el.MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
@@ -223,7 +224,6 @@
 
       bindEvents();
       callback(true);
-
 
       if (options.autoplay) {
         this.autoplay(true);
@@ -326,13 +326,13 @@
       this.autoplay(false);
 
       if (options.dots) {
-        var dotLinks = ML.El._$('a', dotsUl);
+        var dotLinks = Array.prototype.slice.call(carouselDots.querySelectorAll('a'));
 
         dotLinks.map(function(item) {
           item.removeEventListener('click', dotClick, false);
         });
 
-        dotsUl.parentNode.removeChild(dotsUl);
+        carouselDots.parentNode.removeChild(carouselDots);
       }
 
       if (options.nav) {
@@ -354,8 +354,7 @@
       ML.El.removeClass(el, 'js-carousel-initialized');
 
       current = 0;
-      dotsUl = null;
-      dotsLis = [];
+      carouselDots = null;
 
       animating = false;
       autoplayTimer = null;
@@ -370,16 +369,11 @@
      * @private
      */
     function getSlides() {
-      var lis = ML.El._$('li', el);
-      var arr = [];
-
-      for (var i = 0, len = lis.length; i < len; i++) {
-        if (lis[i].className === 'carousel-slide') {
-          arr.push(lis[i]);
-        }
-      }
-
-      return arr;
+      var lis = Array.prototype.slice.call(el.querySelectorAll('li'));
+      
+      return lis.filter(function(li) {
+        return li.className === 'carousel-slide';
+      });
     }
 
     /**
@@ -387,14 +381,17 @@
      * @private
      */
     function createNav() {
-      nextButton = ML.El.create('a', {'href': '#', 'class': 'carousel-nav next'});
-      prevButton = ML.El.create('a', {'href': '#', 'class': 'carousel-nav prev'});
+      var node1 = ML.El.create('a', {'href': '#', 'class': 'carousel-nav next'});
+      var node2 = ML.El.create('a', {'href': '#', 'class': 'carousel-nav prev'});
+      
+      node1.innerHTML = '<span>Next</span> <i>&rarr;</i>';
+      node2.innerHTML = '<i>&larr;</i> <span>Previous</span>';
 
-      prevButton.innerHTML = '<i>&larr;</i> <span>Previous</span>';
-      nextButton.innerHTML = '<span>Next</span> <i>&rarr;</i>';
+      el.appendChild(node1);
+      el.appendChild(node2);
 
-      el.appendChild(prevButton);
-      el.appendChild(nextButton);
+      nextButton = el.querySelector('.carousel-nav.next');
+      prevButton = el.querySelector('.carousel-nav.prev');
     }
 
     /**
@@ -402,22 +399,15 @@
      * @private
      */
     function createDots() {
-      var div = ML.El.create('div', {'class': 'carousel-dots'});
-      var li = null;
-      var link = null;
-      dotsUl = ML.El.create('ul');
-
-      div.appendChild(dotsUl);
-      el.appendChild(div);
+      carouselDots = ML.El.create('div', {'class': 'carousel-dots'});
+      var dots = '';
 
       for (var i = 0, len = slides.length; i < len; i++) {
-        li = ML.El.create('li');
-        link = ML.El.create('a', {'href': '#', 'rel': i});
-        link.innerHTML = '&bull;';
-        dotsLis.push(li);
-        li.appendChild(link);
-        dotsUl.appendChild(li);
+        dots += '<li><a href="#" rel="' + i + '">&bull;</a></li>';
       }
+
+      carouselDots.innerHTML = '<ul>' + dots + '</ul>';
+      el.appendChild(carouselDots);
     }
 
     /**
@@ -426,9 +416,9 @@
      */
     function bindEvents() {
       if (options.dots) {
-        var dotLinks = Array.prototype.slice.call(ML.El._$('a', dotsUl));
+        var dotLinks = el.querySelectorAll('.carousel-dots a');
 
-        dotLinks.map(function(item) {
+        dotLinks.forEach(function(item) {
           ML.El.evt(item, 'click', dotClick);
         });
       }
@@ -509,8 +499,6 @@
         target = target.parentNode;
       }
 
-      // slideDirection = (ML.El.hasClass(target, 'prev')) ? 'prev' : 'next';
-
       if (ML.El.hasClass(target, 'prev')) {
         self.prev();
       } else {
@@ -524,25 +512,31 @@
     */
     function slide() {
       var desired = -(width * current);
+      var currTransform = new WebKitCSSMatrix(window.getComputedStyle(ul).transform);
       animating = true;
 
       if (options.infinite) {
         var delta = (slideDirection === 'prev') ? -1 : 1;
-        desired = parseInt(window.getComputedStyle(ul).getPropertyValue("left")) + (-width * delta);
+        desired = currTransform.e + (-width * delta);
+        ML.El.cssTransition(ul, '-webkit-' + transitionValue + ', ' + transitionValue);
       }
 
-      ML.Animate(ul, {left: desired}, {relative: false}, function() {
+      ML.El.cssTransform(ul, 'translateX(' + desired + 'px)');
+
+      ul.addEventListener('transitionend', function() {
         animating = false;
         callback(false);
 
         if (options.infinite) {
           if (current === 0 && slideDirection === 'next') {
-            ul.style.left = -width + 'px';
+            ML.El.cssTransition(ul, 'none');
+            ML.El.cssTransform(ul, 'translateX(' + -width + 'px)');
           } else if (current === (total - 1) && slideDirection === 'prev') {
-            ul.style.left = -(width * total) + 'px';
+            ML.El.cssTransition(ul, 'none');
+            ML.El.cssTransform(ul, 'translateX(' + -(width * total) + 'px)');
           }
         }
-      });
+      })
     }
 
     /**
@@ -554,7 +548,9 @@
       var desired = -(width * (current + 1));
       animating = false;
 
-      ML.Animate(ul, {left: desired}, {relative: false}, function() {
+      ML.El.cssTransform(ul, 'translateX(' + desired + 'px)');
+
+      ul.addEventListener('transitionend', function() {
         animating = false;
         callback(false);
       });
@@ -611,7 +607,7 @@
       }
       
       if (options.dots) {
-        dotsLis.map(function(li, i) {
+        carouselDots.querySelectorAll('li').forEach(function(li, i) {
           ML.El.removeClass(li, 'active');
           if (i === current) {
             ML.El.addClass(li, 'active');
@@ -623,16 +619,13 @@
 })();
 
 (function() {
-  var carouselEl = ML.El._$('div');
   var carousel = null;
   var settings = {};
+  var carousels = [ML.El.$q('[data-carousel]')];
 
-  for (var i = 0; i < carouselEl.length; i++) {
-    if (ML.El.data(carouselEl[i], 'carousel') !== null) {
-
-      settings = ML.parObj(ML.El.data(carouselEl[i], 'carousel'));
-      carousel = new ML.Carousel(carouselEl[i], settings);
-      carousel.init();
-    }
-  }
+  carousels.map(function(carouselEl) {
+    settings = ML.parObj(ML.El.data(carouselEl, 'carousel'));
+    carousel = new ML.Carousel(carouselEl, settings);
+    carousel.init();
+  });
 })();

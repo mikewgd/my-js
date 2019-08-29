@@ -35,27 +35,27 @@
 
 {{#> footer}}
   <script>
-    var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
+    var carousel = new ML.Carousel(ML.El.$q('#initCarousel'), {
       dots: true,
       arrowKeys: true,
       infinite: true
     }, function(index) {
-      ML.El.$('indexNum').innerHTML = index;
+      ML.El.$q('#indexNum').innerHTML = index;
     })
 
-    ML.El.evt(ML.El.$('carouselNext'), 'click', function(e) {
+    ML.El.evt(ML.El.$q('#carouselNext'), 'click', function(e) {
       carousel.next();
     });
 
-    ML.El.evt(ML.El.$('carouselPrev'), 'click', function(e) {
+    ML.El.evt(ML.El.$q('#carouselPrev'), 'click', function(e) {
       carousel.prev();
     });
 
-    ML.El.evt(ML.El.$('carouselAutoplayStart'), 'click', function(e) {
+    ML.El.evt(ML.El.$q('#carouselAutoplayStart'), 'click', function(e) {
       carousel.autoplay(true);
     });
 
-    ML.El.evt(ML.El.$('carouselAutoplayStop'), 'click', function(e) {
+    ML.El.evt(ML.El.$q('#carouselAutoplayStop'), 'click', function(e) {
       carousel.autoplay(false);
     });
 
