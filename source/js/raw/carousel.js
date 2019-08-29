@@ -536,7 +536,7 @@
             ML.El.cssTransform(ul, 'translateX(' + -(width * total) + 'px)');
           }
         }
-      })
+      });
     }
 
     /**
