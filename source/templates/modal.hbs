@@ -54,9 +54,29 @@
     </div>
   </div>
 
+  <div class="fixer" style="height:20px;"></div>
+
+  <div class="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>Centering modal via CSS transforms</li>
+      <li><code>smart</code> removed, can accomplish with <code>max-width</code>.</li>
+    </ul>
+  </div>
+
 {{#> footer}}
   <script>
     var modals = new ML.Modal();
     modals.init();
+
+    document.addEventListener('modal.opened', function(event) {
+      console.log('Modal is opened')
+      console.log(event.detail.modal);
+    });
+
+    document.addEventListener('modal.closed', function(event) {
+      console.log('Modal is closed')
+      console.log(event.detail.modal);
+    })
   </script>
 {{/footer}}
