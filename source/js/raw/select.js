@@ -55,7 +55,7 @@
       var div = ML.El.create('div', {'class': 'dropdown'});
       var ul = null;
 
-      div.innerHTML = '<a href="" class="dropdown-link" tabindex="-1"></a>' +
+      div.innerHTML = '<a href="#" class="dropdown-link" tabindex="-1"></a>' +
                       '<ul class="dropdown-menu"></ul>';
 
       this.customSelects.push(div);
@@ -329,15 +329,12 @@
         if (clicked.className === 'dropdown-link') {
           var div = clickedParent;
 
-          if (!ML.El.hasClass(div, 'focus')) {
-            ML.El.addClass(div, 'focus');
-          }
+          ML.El.toggleClass(div, 'focus', !ML.El.hasClass(div, 'focus'));
 
           // Handles the toggling of the select menu and allowing only one to be open at a time.
           Dropdown.customSelects.map(function(c) {
             if (c !== clickedParent) {
-              ML.El.removeClass(c, 'active');
-              ML.El.removeClass(c, 'focus');
+              ML.El.removeClass(c, 'active focus', true);
             }
           });
 
@@ -349,8 +346,7 @@
         }
       } else {
         for (var i = 0, len = Dropdown.customSelects.length; i < len; i++) {
-          ML.El.removeClass(Dropdown.customSelects[i], 'active');
-          ML.El.removeClass(Dropdown.customSelects[i], 'focus');
+          ML.El.removeClass(Dropdown.customSelects[i], 'active focus', true);
         }
       }
     }

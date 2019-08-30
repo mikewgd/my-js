@@ -515,6 +515,10 @@ ML.El = {
    * @return {Boolean}
    */
   hasClass: function(elem, classN) {
+    if (ML.isUndef(elem.classList)) {
+      return;
+    }
+
     return elem.classList.contains(classN);
   },
 
@@ -534,14 +538,7 @@ ML.El = {
    * @param {Boolean} [cond] Boolean value to determine whether class name should be added or removed.
    */
   toggleClass: function(elem, classN, cond) {
-    var _cond = ML.bool(cond);
-    var someCond = ML.isBool(_cond) ? _cond : ML.El.hasClass(elem, classN);
-
-    if (someCond) {
-      ML.El.removeClass(elem, classN);
-    } else {
-      ML.El.addClass(elem, classN);
-    }
+    elem.classList.toggle(classN, cond);
   },
 
   /**
