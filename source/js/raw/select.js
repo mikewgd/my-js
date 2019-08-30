@@ -29,28 +29,19 @@
     },
 
     /**
-     * Links found inside the dropdown.
-     * @type {Array}
-     */
-    optionLinks: [],
-
-    /**
      * Loops through all selects on the page and creates a dropdown that will be used
      * as the dropdown.
      * Events placed on the SELECT are stored in an object for later use.
      */
     init: function() {
-      var selects = Array.prototype.slice.call(ML.El._$('select'));
       var self = this;
 
-      selects.map(function(select) {
-        if (ML.El.hasClass(select, 'system') || ML.El.hasClass(select, 'styled')) {
-          return;
+      self.selects = Array.prototype.slice.call(ML.El.$q('select')).filter(function(select) {
+        if (!ML.El.hasClass(select, 'system') || !ML.El.hasClass(select, 'styled')) {
+          self.createCustom(select);
+          self.pushEvents(select);
+          return select;
         }
-
-        self.selects.push(select);
-        self.createCustom(select);
-        self.pushEvents(select);
       });
 
       this.bindEvents();
@@ -62,11 +53,10 @@
      */
     createCustom: function(select) {
       var div = ML.El.create('div', {'class': 'dropdown'});
-      var ul = ML.El.create('ul', {'class': 'dropdown-menu'});
-      var dropdownLink = ML.El.create('a', {href: '#', 'class': 'dropdown-link', tabIndex: -1});
+      var ul = null;
 
-      div.appendChild(dropdownLink);
-      div.appendChild(ul);
+      div.innerHTML = '<a href="" class="dropdown-link" tabindex="-1"></a>' +
+                      '<ul class="dropdown-menu"></ul>';
 
       this.customSelects.push(div);
       ML.El.addClass(select, 'styled');
@@ -80,7 +70,8 @@
         ML.El.addClass(div, 'disabled');
       }
 
-      this.createLis(div, ML.El._$('option', select));
+      this.createLis(div, select.querySelectorAll('option'));
+      ul = div.querySelector('.dropdown-menu');
 
       // sets the width of the new select div to the width of the <ul>
       div.style.width = ul.offsetWidth + 'px';
@@ -92,34 +83,31 @@
      * @param {Array} options An array of all the OPTION tags from the select menu.
      */
     createLis: function(div, options) {
-      var li = null;
-      var ul = ML.El._$('ul', div)[0];
-      var a = null;
-      var txt = '';
-      var dropdownLink = ML.El._$('a', div)[0];
+      var ul = div.querySelector('.dropdown-menu');
+      var dropdownLink = div.querySelector('.dropdown-link');
+      var lis = '';
 
-      for (var i = 0, len = options.length; i < len; i++) {
-        li = ML.El.create('li', {'data-value': options[i].value, 'data-index': i});
-        a = ML.El.create('a', {'href': '#', tabIndex: -1});
-        txt = document.createTextNode(options[i].innerHTML);
-
-        li.appendChild(a);
-        a.appendChild(txt);
-        ul.appendChild(li);
-
-        this.optionLinks.push(a);
-
-        if (options[i].disabled) {
-          ML.El.addClass(li, 'disabled');
+      options.forEach(function(option, index) {
+        if (option.disabled) {
+          lis += '<li class="disabled" data-value="' + option.value + '" data-index="' + index + '">';
+        } else {
+          lis += '<li data-value="' + option.value + '" data-index="' + index + '">';
         }
+
+        lis += '<a href="#" tabindex="-1">' +
+                  option.innerHTML +
+              '</a>' +
+          '</li>';
 
         // if there is a selected option, put it in the dropdown link
-        if (options[i].selected) {
-          dropdownLink.innerHTML = options[i].innerHTML;
-          dropdownLink.setAttribute('data-index', i);
-          div.setAttribute('data-value', options[i].value);
+        if (option.selected) {
+          dropdownLink.innerHTML = option.innerHTML;
+          dropdownLink.setAttribute('data-index', index);
+          div.setAttribute('data-value', option.value);
         }
-      }
+      });
+
+      ul.innerHTML = lis;
     },
 
     /**
@@ -172,10 +160,11 @@
     bindEvents: function() {
       var self = this;
 
-      this.optionLinks.map(function(optionLink) {
-        ML.El.evt(optionLink, 'click', self.optionClick);
-
-        ML.El.evt(optionLink, 'mouseover', self.optionMouseOver);
+      self.customSelects.forEach(function(item) {
+        item.querySelectorAll('li a').forEach(function(link) {
+          ML.El.evt(link, 'click', self.optionClick);
+          ML.El.evt(link, 'mouseover', self.optionMouseOver);
+        });
       });
 
       ML.El.evt(document, 'click', self.documentClick);
@@ -225,7 +214,7 @@
       var clicked = ML.El.clicked(e);
       var ul = clicked.parentNode.parentNode;
 
-      Array.prototype.slice.call(ML.El._$('li', ul)).map(function(li){
+      Array.prototype.slice.call(ul.querySelectorAll('li')).map(function(li){
         ML.El.removeClass(li, 'selected');
       });
     },
@@ -319,7 +308,7 @@
      */
     selectOption: function(el, option) {
       var select = el.previousSibling;
-      var dropdownLink = ML.El._$('a', el)[0];
+      var dropdownLink = el.querySelector('.dropdown-link');
 
       dropdownLink.innerHTML = option.text;
       dropdownLink.setAttribute('data-index', option.index);
@@ -355,7 +344,7 @@
           ML.El.toggleClass(div, 'active');
 
           // Adds selected to currently selected item
-          ML.El._$('li', div)[ML.El.data(clicked, 'index')].className = 'selected';
+          div.querySelectorAll('li')[ML.El.data(clicked, 'index')].className = 'selected';
           Dropdown.attachOldEvt(div.previousSibling, 'click');
         }
       } else {
@@ -366,8 +355,6 @@
       }
     }
   };
-
-  // TODO: Search for elements in container instead of all selects on page. (browser support)
   
   /**
    * Custom select menu/dropdown.
