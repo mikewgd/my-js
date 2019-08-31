@@ -326,7 +326,7 @@
       this.autoplay(false);
 
       if (options.dots) {
-        var dotLinks = Array.prototype.slice.call(carouselDots.querySelectorAll('a'));
+        var dotLinks = ML.nodeArr(carouselDots.querySelectorAll('a'));
 
         dotLinks.map(function(item) {
           item.removeEventListener('click', dotClick, false);
@@ -369,7 +369,7 @@
      * @private
      */
     function getSlides() {
-      var lis = Array.prototype.slice.call(el.querySelectorAll('li'));
+      var lis = ML.nodeArr(el.querySelectorAll('li'));
       
       return lis.filter(function(li) {
         return li.className === 'carousel-slide';

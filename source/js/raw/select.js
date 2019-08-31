@@ -36,7 +36,7 @@
     init: function() {
       var self = this;
 
-      self.selects = Array.prototype.slice.call(ML.El.$q('select')).filter(function(select) {
+      self.selects = ML.nodeArr(ML.El.$q('select')).filter(function(select) {
         if (!ML.El.hasClass(select, 'system') || !ML.El.hasClass(select, 'styled')) {
           self.createCustom(select);
           self.pushEvents(select);
@@ -214,7 +214,7 @@
       var clicked = ML.El.clicked(e);
       var ul = clicked.parentNode.parentNode;
 
-      Array.prototype.slice.call(ul.querySelectorAll('li')).map(function(li){
+      ML.nodeArr(ul.querySelectorAll('li')).map(function(li){
         ML.El.removeClass(li, 'selected');
       });
     },

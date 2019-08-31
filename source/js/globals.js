@@ -158,6 +158,11 @@ ML = {
     };
   },
 
+  // @TODO: Comment
+  nodeArr: function(nodeList) {
+    return Array.prototype.slice.call(nodeList);
+  },
+
   /**
    * Parses a string into an object.
    * @param {String} str String to be parse.
