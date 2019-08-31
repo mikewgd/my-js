@@ -1023,3 +1023,46 @@ ML.Ajax = function(params) {
   
   init();
 };
+
+// Custom events: scroll up, scroll down, resize throttle
+(function() {
+  function eventDispatcher(name) {
+    document.dispatchEvent(name);
+  }
+
+  function ResizeThrottleEvent() {
+    var RESIZE_THROTTLE_EVENT = new CustomEvent('resize.throttle');
+    var delay = 100;
+    var timeout = null;
+    var throttled = false;
+
+    ML.El.evt(window, 'resize', function() {
+      if (!throttled) {
+        eventDispatcher(RESIZE_THROTTLE_EVENT);
+        throttled = true;
+        timeout = setTimeout(function() {
+          throttled = false;
+          clearTimeout(timeout);
+        }, delay);
+      } 
+    }, false);
+  }
+
+  function ScrollUpDownEvent() {
+    var lastScrollTop = 0;
+    var SCROLL_UP_EVENT = new CustomEvent('scroll.up');
+    var SCROLL_DOWN_EVENT = new CustomEvent('scroll.down');
+
+    ML.El.evt(document, 'scroll', function() {
+      var currScroll = window.pageYOffset;
+
+      if (currScroll < lastScrollTop) {
+        eventDispatcher(SCROLL_UP_EVENT);
+      } else {
+        eventDispatcher(SCROLL_DOWN_EVENT);
+      }
+
+      lastScrollTop = currScroll;
+    });
+  }
+})();
