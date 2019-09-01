@@ -122,12 +122,6 @@
       self.show(clicked.rel, ML.parObj(ML.El.data(clicked, 'modal')));
     }
 
-    // @TODO: comment
-    function triggerCustomEvent(name) {
-      modalCustomEvent = new CustomEvent(name, {detail: {modal: openedModal}});
-      document.dispatchEvent(modalCustomEvent);
-    }
-
     /**
      * Destroys the modal init.
      *
@@ -182,7 +176,7 @@
       ML.El.addClass(document.documentElement, 'js-modal-opened');
 
       openedModal = modal;
-      triggerCustomEvent('modal.opened');
+      ML.El.customEventTrigger('modal.opened', {modal: openedModal});
 
       if (modalOptions) {
         modal.style.maxWidth = modalOptions.width + 'px';
@@ -198,7 +192,7 @@
   	this.hide = function() {
       if (openedModal) {
         ML.El.removeClass(openedModal, 'active');
-        triggerCustomEvent('modal.closed');
+        ML.El.customEventTrigger('modal.closed', {modal: openedModal});
       }
 
       ML.El.addClass(overlay, 'hidden');

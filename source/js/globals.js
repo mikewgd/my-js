@@ -353,6 +353,13 @@ ML.El = {
     el.dispatchEvent(event);
   },
 
+  // @TODO: Comment
+  customEventTrigger: function(name, data, el) {
+    var eventName = new CustomEvent(name, {detail: data});
+    var element = ML.isUndef(el) ? document : el;
+    element.dispatchEvent(eventName);
+  },
+
   /**
    * Returns an element without whitespace.
    * @param {HTMLElement} node The element to remove whitespace from.
