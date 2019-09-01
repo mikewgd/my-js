@@ -63,7 +63,7 @@
     var DEFAULTS = {
       width: 150,
       align: 'right',
-      smart: true,
+      smart: false,
       delay: false,
       delayTime: 3000
     };
@@ -280,19 +280,19 @@
       tooltip.MLTooltip = ML.extend(DEFAULTS, tooltipOptions);
       ML.El.addClass(tooltip, 'active');
       
-      setDimens(tip, tooltip, {align: 'ml', width: 'ml'})
+      setDimens(tip, tooltip, {align: 'ml', width: 'ml'});
 
       if (tooltip.MLTooltip.smart) {
         collides = collidesAll(tooltip);
         count = 0;
 
         while (collides) {
-          setDimens(tip, tooltip, {align: ALIGNS[count], width: false})
+          setDimens(tip, tooltip, {align: ALIGNS[count], width: false});
           collides = collidesAll(tooltip);
           count++;
 
           if (count > 4) {
-            setDimens(tip, tooltip, {align: 'ml', width: DEFAULTS.width})
+            setDimens(tip, tooltip, {align: 'ml', width: DEFAULTS.width});
             collides = collidesAll(tooltip);
             count = 0;
           }
@@ -300,6 +300,7 @@
       }
     };
 
+    // @TODO: comment
     function setDimens(tip, tooltip, obj) {
       var align = (obj.align === 'ml') ? tooltip.MLTooltip.align : obj.align;
       var width = (obj.width === 'ml') ? tooltip.MLTooltip.width : obj.width;
