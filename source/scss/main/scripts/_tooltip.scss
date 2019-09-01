@@ -1,9 +1,9 @@
 /* TOOLTIP */
 
 .tooltip {
-  &-arrow {
-    background-image: url(../images/carats.png);
-    position: absolute;
+  &:after {
+    background: #fff;
+    border: 1px solid #ccc;
   }
   
   &-content {
@@ -16,61 +16,4 @@
     }
   }
 
-  &-left-align,
-  &-right-align {
-    .tooltip-arrow {
-      width: 8px;
-      height: 14px;
-      margin-top: -13px;
-    }
-  }
-
-  &-top-align,
-  &-bottom-align {
-    .tooltip-arrow {
-      width: 14px;
-      height: 7px;
-      margin-left: -7px;
-    }
-  }
-
-  &-left-align {
-    .tooltip-arrow {
-      background-position: -5px -39px;
-    }
-
-    .tooltip-content {
-      margin-right: 6px;
-    }
-  }
-
-  &-right-align {
-    .tooltip-arrow {
-      background-position: 0 -22px;
-    }
-
-    .tooltip-content {
-      margin-left: 7px;
-    }
-  }
-
-  &-top-align {
-    .tooltip-arrow {
-      background-position: 0 -11px;
-    }
-
-    .tooltip-content {
-      margin-bottom: 6px;
-    }
-  }
-
-  &-bottom-align {
-    .tooltip-arrow {
-      background-position: 0 0;
-    }
-
-    .tooltip-content {
-      margin-top: 6px;
-    }
-  }
 }
