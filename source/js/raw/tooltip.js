@@ -343,33 +343,38 @@
     function setPosition(tip, tooltip, align) {
       var tipDimens = ML.El.dimens(tip);
       var tooltipDimens = ML.El.dimens(tooltip);
+      var arrowSize = parseInt(
+        window.getComputedStyle(tooltip, '::after')
+          .getPropertyValue('width')
+          .replace('px', '')
+      );
 
       switch (align) {
         case 'left':
           ML.El.setStyles(tooltip, {
             top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) - 7 + 'px',
-            left: tipDimens.x - tooltip.offsetWidth - 7 + 'px'
+            left: tipDimens.x - tooltip.offsetWidth - arrowSize + 'px'
           });
           break;
 
         case 'top':
           ML.El.setStyles(tooltip, {
-            top: tipDimens.y - tooltipDimens.height - 7 + 'px',
+            top: tipDimens.y - tooltipDimens.height - arrowSize + 'px',
             left: tipDimens.x - (tooltip.offsetWidth / 2) + (tipDimens.width / 2) + 'px'
           });
           break;
 
         case 'bottom':
           ML.El.setStyles(tooltip, {
-            top: tipDimens.y + tipDimens.height + 7 + 'px',
+            top: tipDimens.y + tipDimens.height + arrowSize + 'px',
             left: tipDimens.x - (tooltip.offsetWidth / 2) + (tipDimens.width / 2) + 'px'
           });
           break;
         
         default:
           ML.El.setStyles(tooltip, {
-            top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) - 7 + 'px',
-            left: tipDimens.x  + tipDimens.width + 7 + 'px'
+            top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) - arrowSize + 'px',
+            left: tipDimens.x  + tipDimens.width + arrowSize + 'px'
           });
           break;
       }

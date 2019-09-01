@@ -22,8 +22,6 @@
     &:after {
       bottom: 0;
       left: 50%;
-      margin-left: -3px;
-      margin-bottom: -3px;
       border-left: 0;
       border-top: 0;
     }
@@ -33,8 +31,6 @@
     &:after {
       top: 0;
       left: 50%;
-      margin-left: -3px;
-      margin-top: -3px;
       border-right: 0;
       border-bottom: 0;
     }
@@ -42,9 +38,7 @@
 
   &-left-align {
     &:after {
-      right: -3px;
       top: 50%;
-      margin-top: -3px;
       border-left: 0;
       border-bottom: 0;
     }
@@ -53,8 +47,6 @@
   &-right-align {
     &:after {
       top: 50%;
-      margin-top: -3px;
-      left: -3px;
       border-top: 0;
       border-right: 0;
     }
