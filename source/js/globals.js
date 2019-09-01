@@ -428,72 +428,6 @@ ML.El = {
   },
 
   /**
-   * Returns HTMLElement based on id attriube.
-   * @param {String} id The id of the element to return.
-   * @return {HTMLElement}
-   */
-  $: function(id) {
-    if (ML.isUndef(document.getElementById(id), true)) {
-      throw new Error('Element can\'t be found.');
-    } else {
-      return document.getElementById(id);
-    }
-  },
-
-  /**
-   * Returns an element based on tag.
-   * If you provide a parent you can limit the amount of elements that get returned.
-   * @param {String} tag The tag name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is `document`.
-   * @return {HTMLElement}
-   */
-  _$: function(tag, parent) {
-    var result = document.getElementsByTagName(tag);
-
-    if (result.length < 1) {
-      throw new Error('The first parameter needs to be a valid tag.');
-    }
-
-    if ((typeof parent).toLowerCase() === 'object') {
-      result = parent.getElementsByTagName(tag);
-    }
-
-    return result;
-  },
-
-  /**
-   * Returns an element based on class name.
-   * @param {String} cn The class name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is `document`.
-   * @return {HTMLElement}
-   */
-  $C: function(cn, parent) {
-    var elms = [];
-    var cnSplit = cn.split('.');
-    var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
-
-    if (document.getElementsByClassName) { // for browsers that support getElementsByClassName
-      if ((typeof parent).toLowerCase() === 'object') {
-        elms = parent.getElementsByClassName(classN);
-      } else {
-        elms = document.getElementsByClassName(classN);
-      }
-    } else {
-      var tags = ((typeof parent).toLowerCase() === 'object') ?
-        ML.El._$('*', parent) : ML.El._$('*', document);
-      var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
-
-      for (var i = 0, len = tags.length; i < len; i++) {
-        if (regex.test(tags[i].className)) {
-          elms.push(tags[i]);
-        }
-      }      
-    }
-
-    return elms;
-  },
-
-  /**
    * Removes a class name from an element. [credit](http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass)
    * @param {HTMLElement} elem The element of the class name to be removed.
    * @param {String} classN Class names to be removed.
@@ -1037,7 +971,6 @@ ML.Ajax = function(params) {
 
   function ResizeThrottleEvent() {
     var RESIZE_THROTTLE_EVENT = new CustomEvent('resize.throttle');
-    var delay = 100;
     var timeout = null;
     var throttled = false;
 
@@ -1045,10 +978,10 @@ ML.Ajax = function(params) {
       if (!throttled) {
         eventDispatcher(RESIZE_THROTTLE_EVENT);
         throttled = true;
-        timeout = setTimeout(function() {
+        timeout = requestAnimationFrame(function() {
           throttled = false;
-          clearTimeout(timeout);
-        }, delay);
+          cancelAnimationFrame(timeout);
+        });
       } 
     }, false);
   }
