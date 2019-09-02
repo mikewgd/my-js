@@ -62,7 +62,6 @@
     var overlay = null;
     var self = this;
     var openedModal = null;
-    var modalCustomEvent = null;
 
     /**
      * Initializes the modal class.
