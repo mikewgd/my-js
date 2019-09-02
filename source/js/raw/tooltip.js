@@ -9,6 +9,8 @@
    * * When setting `smart: true`, the tooltip will only detect collision with `window`.
    * * Custom tooltip based on `title` attribute.
    * * Every tooltip element gets `MLToolip` added to the element.
+   * * You can listen to if a tooltip is opened or closed via custom events: `tooltip.opened` and
+   * `tooltip.closed`. See example below.
    *
    * @example <caption>Sample markup of tooltip HTML.</caption> {@lang xml}
    * <div class="tooltip" id="unique-id1">
@@ -44,6 +46,15 @@
    * @example <caption>Dynamic tooltip that shows a tooltip with the content "I am a tooltip" inside.</caption> {@lang xml}
    * <a href="#" data-tooltip="smart:true:delay:true" title="I am a tooltip">tooltip link</a>
    *
+   * @example <caption>Using custom events to identify tooltip opened and/or closed.</caption>
+   * document.addEventListener('tooltip.opened', function(event) {
+   *    console.log(event.detail);
+   * });
+   * 
+   * document.addEventListener('tooltip.closed', function(event) {
+   *    console.log(event.detail);
+   * });
+   * 
    * @param {Object} [settings] Configuration settings.
    * @param {Number} [settings.width=100] The width of the tooltip.
    * @param {String} [settings.align=right] Where to align the tooltip.
@@ -312,6 +323,10 @@
       ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
       ML.El.addClass(tooltip, 'tooltip-' + align + '-align');
       setPosition(tip, tooltip, align);
+      ML.El.customEventTrigger('tooltip.opened', {
+        tooltip: tooltip, 
+        options: tooltip.MLTooltip
+      });
     }
 
     /**
@@ -388,7 +403,13 @@
      */
     this.hide = function() {
       tooltips.map(function(tooltip) {
-        ML.El.removeClass(tooltip, 'active');
+        if (ML.El.hasClass(tooltip, 'active')) {
+          ML.El.customEventTrigger('tooltip.closed', {
+            tooltip: tooltip, 
+            options: tooltip.MLTooltip
+          });
+          ML.El.removeClass(tooltip, 'active');
+        }
       });
     };
   };
