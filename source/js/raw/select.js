@@ -70,7 +70,7 @@
         ML.El.addClass(div, 'disabled');
       }
 
-      this.createLis(div, select.querySelectorAll('option'));
+      this.createLis(div, ML.nodeArr(select.querySelectorAll('option')));
       ul = div.querySelector('.dropdown-menu');
 
       // sets the width of the new select div to the width of the <ul>
@@ -161,7 +161,7 @@
       var self = this;
 
       self.customSelects.forEach(function(item) {
-        item.querySelectorAll('li a').forEach(function(link) {
+        ML.nodeArr(item.querySelectorAll('li a')).forEach(function(link) {
           ML.El.evt(link, 'click', self.optionClick);
           ML.El.evt(link, 'mouseover', self.optionMouseOver);
         });
