@@ -169,7 +169,7 @@
         options.delay = DEFAULTS.delay;
       }
 
-      if (options.align.includes(ALIGNS)) {
+      if (ALIGNS.indexOf(options.align) < 0) {
         options.align = DEFAULTS.align;
       }
 
