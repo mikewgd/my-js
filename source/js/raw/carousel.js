@@ -416,7 +416,7 @@
      */
     function bindEvents() {
       if (options.dots) {
-        var dotLinks = el.querySelectorAll('.carousel-dots a');
+        var dotLinks = ML.nodeArr(el.querySelectorAll('.carousel-dots a'));
 
         dotLinks.forEach(function(item) {
           ML.El.evt(item, 'click', dotClick);
@@ -505,6 +505,7 @@
         self.next();
       }
     }
+    
 
     /**
     * Animates the carousel to slide to each desired slide.
@@ -512,7 +513,9 @@
     */
     function slide() {
       var desired = -(width * current);
-      var currTransform = new WebKitCSSMatrix(window.getComputedStyle(ul).transform);
+      var ulTransform = window.getComputedStyle(ul).transform;
+      var currTransform = typeof WebKitCSSMatrix === 'undefined' ? new MSCSSMatrix(ulTransform) :
+        new WebKitCSSMatrix(ulTransform);
       animating = true;
 
       if (options.infinite) {
@@ -607,7 +610,7 @@
       }
       
       if (options.dots) {
-        carouselDots.querySelectorAll('li').forEach(function(li, i) {
+        ML.nodeArr(carouselDots.querySelectorAll('li')).forEach(function(li, i) {
           ML.El.removeClass(li, 'active');
           if (i === current) {
             ML.El.addClass(li, 'active');
