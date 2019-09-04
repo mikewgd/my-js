@@ -104,7 +104,7 @@
     function closeClick(e) {
       e.preventDefault();
       var clicked = ML.El.clicked(e);
-      if (ML.El.hasClass(clicked, 'modal-close')) {
+      if (ML.El.hasClass(clicked, 'modal-close') || ML.El.hasClass(clicked, 'modal-overlay')) {
         self.hide();
       }
     }
