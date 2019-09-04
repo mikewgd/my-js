@@ -158,7 +158,11 @@ ML = {
     };
   },
 
-  // @TODO: Comment
+  /**
+   * Returns nodes as an array.
+   * @param {Nodes} nodeList Nodes from a list of nodes.
+   * @returns {Array}
+   */
   nodeArr: function(nodeList) {
     return Array.prototype.slice.call(nodeList);
   },
@@ -307,23 +311,6 @@ ML.El = {
       capture = false;
     }
 
-    // TODO: Separate out into separate event + function.
-    // Make into custom event.
-    if (type === 'resize.throttle') {
-      ML.El.evt(window, 'resize', function() {
-        
-        if (!resize.throttled) {
-          cb();
-          resize.throttled = true;
-          resize.timeout = setTimeout(function() {
-            resize.throttled = false;
-            clearTimeout(resize.timeout);
-          }, resize.delay);
-        } 
-      }, capture);
-      return;
-    }
-
     el.addEventListener(type, cb, capture);
     ML.El.Events.push([el, type, cb]);
   },
@@ -353,7 +340,12 @@ ML.El = {
     el.dispatchEvent(event);
   },
 
-  // @TODO: Comment
+  /**
+   * 
+   * @param {String} name The name of the custom event.
+   * @param {Object} data Data to send with the custom event.
+   * @param {HTMLElement} [el] Element to attach the custom event to.
+   */
   customEventTrigger: function(name, data, el) {
     var eventName = new CustomEvent(name, {detail: data});
     var element = ML.isUndef(el) ? document : el;
@@ -406,7 +398,11 @@ ML.El = {
     return element;
   },
 
-  // @TODO: Comment
+  /**
+   * Returns an HTML element.
+   * @param {String} selector The selector to find in the DOM.
+   * @returns {HTMLElement}
+   */
   $q: function(selector) {
     var qs = null;
     if (ML.isUndef(document.querySelector(selector), true)) {
@@ -422,13 +418,21 @@ ML.El = {
     }
   },
 
-  // @TODO: Comment
+  /**
+   * Applies a CSS transition to an element.
+   * @param {HTMLElement} el Element to apply style to.
+   * @param {String} values The css transition values to apply.
+   */
   cssTransition: function(el, values) {
     el.style.webkitTransition = values;
     el.style.transition = values;
   },
 
-  // @TODO: Comment
+  /**
+   * Applies CSS transform to an element.
+   * @param {HTMLElement} el Element to apply style to.
+   * @param {String} values The CSS transform values to apply.
+   */
   cssTransform: function(el, values) {
     el.style.webkitTransform = values;
     el.style.transform = values;
