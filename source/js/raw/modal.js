@@ -10,8 +10,8 @@
    * * Each modal should have a unique `id` attribute.
    * * When a modal is opened the class name `js-modal-opened` is appended to the `<html>`.
    * * You can show modals via `data-modal` or JavaScript.
-   * * You can listen to if a modal is opened or closed via custom events: `modal.opened` and
-   * `modal.closed`. See example below.
+   * * You can listen to if a modal is opened or closed via custom events: `modal.opened`, 
+   * `modal.closed` and `modal.destroyed`. See example below.
    *
    * @example <caption>Sample markup of modal HTML.</caption> {@lang xml}
    * <div class="modal" id="unique-id3">
@@ -149,6 +149,7 @@
         });
       }
 
+      ML.El.customEventTrigger('modal.destroyed', {modal: openedModal});
       overlay = null;
       openedModal = null;
       modals = [];
