@@ -9,8 +9,12 @@
    * * When setting `smart: true`, the tooltip will only detect collision with `window`.
    * * Custom tooltip based on `title` attribute.
    * * Every tooltip element gets `MLToolip` added to the element.
-   * * You can listen to if a tooltip is opened or closed via custom events: `tooltip.opened` and
-   * `tooltip.closed`. See example below.
+   * * You can listen to custom events fired by the tooltip. Returns the tooltip and options. See example below.
+   * 
+   * | Event Name | Description |
+   * |----------------|------------------------------------------------------|
+   * | `tooltip.opened` | Triggered when a tooltip is opened. |
+   * | `tooltip.closed` | Triggered when a tooltip is closed. |
    *
    * @example <caption>Sample markup of tooltip HTML.</caption> {@lang xml}
    * <div class="tooltip" id="unique-id1">
@@ -46,13 +50,11 @@
    * @example <caption>Dynamic tooltip that shows a tooltip with the content "I am a tooltip" inside.</caption> {@lang xml}
    * <a href="#" data-tooltip="smart:true:delay:true" title="I am a tooltip">tooltip link</a>
    *
-   * @example <caption>Using custom events to identify tooltip opened and/or closed.</caption>
+   * @example <caption>Using custom events.</caption>
    * document.addEventListener('tooltip.opened', function(event) {
-   *    console.log(event.detail);
-   * });
-   * 
-   * document.addEventListener('tooltip.closed', function(event) {
-   *    console.log(event.detail);
+   *    var eventDetails = event.detail;
+   *    console.log('opened tooltip', eventDetails.tooltip);
+   *    console.log('opened tooltip options', eventDetails.options);
    * });
    * 
    * @param {Object} [settings] Configuration settings.
@@ -141,7 +143,10 @@
       bindEvents();
     };
 
-    // @TODO: comment
+    /**
+     * Validates the options for the tooltip.
+     * @private
+     */
     function validateOptions() {
       options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
       options.width = parseInt(options.width);
@@ -272,8 +277,8 @@
      * Shows a tooltip.
      * Used when showing a tooltip without `data-tooltip`.
      * @param {String} id The id of the tooltip you want to display.
-     * @param {Object} tooltipOptions Configuration settings to overwrite defaults. Only
-     * `activeClass`, `width`, `arrow` and `align` will be overriden. Other settings are ignored.
+     * @param {Object} tooltipOptions Configuration settings to overwrite defaults. Only 
+     * `width`, `arrow` and `align` will be overriden. Other settings are ignored.
      *
      * @example
      * // Shows the tooltip with id of unique-id1 with a width of 300 pixels.
@@ -311,7 +316,13 @@
       }
     };
 
-    // @TODO: comment
+    /**
+     * Sets dimensions for the tooltip.
+     * @param {HTMLElement} tip The tooltip toggle link.
+     * @param {HTMLElement} tooltip The tooltip element.
+     * @param {Object} obj Tooltip options
+     * @private
+     */
     function setDimens(tip, tooltip, obj) {
       var align = (obj.align === 'ml') ? tooltip.MLTooltip.align : obj.align;
       var width = (obj.width === 'ml') ? tooltip.MLTooltip.width : obj.width;

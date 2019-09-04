@@ -10,6 +10,15 @@
    * * You can initialize carousels via `data-carousel` or JavaScript.
    * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
    * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
+   * * You can listen to custom events fired by the carousel. The carousel and carousel options are returned. See example below.
+   * 
+   * | Event Name | Description |
+   * |----------------------|----------------------------------------------------|
+   * | `carousel.init` | Triggered when a carousel is initialized. |
+   * | `carousel.next` | Triggered when next function is triggered. |
+   * | `carousel.prev` | Triggered when prev function is triggered. |
+   * | `carousel.slide` | When slide is triggered. |
+   * | `carousel.slide.end` | Triggered when the animation of slide is complete. |
    *
    * @example <caption>Sample carousel HTML (initialized via <code>data-</code> with default settings.):</caption> {@lang xml}
    * <div class="carousel" id="customCarousel" data-carousel>
@@ -76,6 +85,13 @@
    *     carousel.next();
    *   });
    * </script>
+   * 
+   * @example <caption>Using custom events.</caption>
+   * document.addEventListener('carousel.next', function(event) {
+    *    var eventDetails = event.detail;
+    *    console.log('carousel next slide', eventDetails.carousel);
+    *    console.log('carousel options', eventDetails.options);
+    * });
    * 
    * @param {HTMLElement} el The carousel element.
    * @param {Object} [settings] Configuration settings.
@@ -228,6 +244,10 @@
       if (options.autoplay) {
         this.autoplay(true);
       }
+      ML.El.customEventTrigger('carousel.init', {
+        carousel: el, 
+        options: options
+      });
     };
 
     /**
@@ -251,6 +271,10 @@
 
       current++;
       el.MLCarousel.currentSlideIndex = current;
+      ML.El.customEventTrigger('carousel.next', {
+        carousel: el, 
+        options: el.MLCarousel
+      });
       slide();
     };
 
@@ -275,6 +299,10 @@
 
       current--;
       el.MLCarousel.currentSlideIndex = current;
+      ML.El.customEventTrigger('carousel.prev', {
+        carousel: el, 
+        options: el.MLCarousel
+      });
       slide();
     };
 
@@ -525,6 +553,10 @@
       }
 
       ML.El.cssTransform(ul, 'translateX(' + desired + 'px)');
+      ML.El.customEventTrigger('carousel.slide', {
+        carousel: el, 
+        options: el.MLCarousel
+      });
 
       ul.addEventListener('transitionend', function() {
         animating = false;
@@ -539,6 +571,10 @@
             ML.El.cssTransform(ul, 'translateX(' + -(width * total) + 'px)');
           }
         }
+        ML.El.customEventTrigger('carousel.slide.end', {
+          carousel: el, 
+          options: el.MLCarousel
+        });
       });
     }
 

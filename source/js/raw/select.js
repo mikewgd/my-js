@@ -7,7 +7,6 @@
     /**
      * All select menus on the page are stored here.
      * @type {Array}
-     * @private
      */
     selects: [],
 
@@ -155,7 +154,6 @@
 
     /**
      * Events bound to the SELECT and custom inputs DIV.
-     * @private
      */
     bindEvents: function() {
       var self = this;

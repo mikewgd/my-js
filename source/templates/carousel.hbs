@@ -43,6 +43,10 @@
       ML.El.$q('#indexNum').innerHTML = index;
     })
 
+    document.addEventListener('carousel.init', function(event) {
+      console.log('carousel initialized')
+    });
+
     ML.El.evt(ML.El.$q('#carouselNext'), 'click', function(e) {
       carousel.next();
     });

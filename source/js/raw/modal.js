@@ -10,8 +10,12 @@
    * * Each modal should have a unique `id` attribute.
    * * When a modal is opened the class name `js-modal-opened` is appended to the `<html>`.
    * * You can show modals via `data-modal` or JavaScript.
-   * * You can listen to if a modal is opened or closed via custom events: `modal.opened`, 
-   * `modal.closed` and `modal.destroyed`. See example below.
+   * * You can listen to custom events fired by the modal. See example below.
+   * 
+   * | Event Name | Description |
+   * |----------------|------------------------------------------------------|
+   * | `modal.opened` | Triggered when a modal is opened. Returns the modal. |
+   * | `modal.closed` | Triggered when a modal is closed. Returns the modal. |
    *
    * @example <caption>Sample markup of modal HTML.</caption> {@lang xml}
    * <div class="modal" id="unique-id3">
@@ -24,17 +28,6 @@
    *     <p>Modal content.</p>
    *   </div>
    * </div>
-   * 
-   * @example <caption>Using custom events to identify modal opened and/or closed.</caption>
-   * document.addEventListener('modal.opened', function(event) {
-   *    console.log('Modal is opened');
-   *    console.log(event.detail.modal);
-   * });
-   * 
-   * document.addEventListener('modal.closed', function(event) {
-   *    console.log('Modal is closed');
-   *    console.log(event.detail.modal);
-   * });
    *
    * @example <caption>You can show modals via data attribute, <code>data-modal="width:700"</code>.
    * The only lines of JavaScript would be two lines. The <code>rel</code> attribute needs to equal
@@ -54,6 +47,13 @@
    * to <code>data-modal</code></caption>
    * // Will show the modal HTML with id of unique-id3 with a width of 750 pixels
    * modals.show('unique-id3', {width: 750});
+   * 
+   * @example <caption>Using custom events.</caption>
+   * document.addEventListener('modal.opened', function(event) {
+    *    var eventDetails = event.detail;
+    *    console.log('opened modal', eventDetails.modal);
+    * });
+   * 
    * @constructor
    */
   ML.Modal = function() {
@@ -161,10 +161,6 @@
      * @param {String} id The id of the modal you want to display.
      * @param {Object} modalOptions Configuration settings to overwrite defaults. Only
      * `width` will be overriden. Other settings are ignored.
-     *
-     * @example
-     * // Shows modal element with id of unique-id3 with a width of 400 pixels.
-     * modals.show('unique-id3', {width: 400});
      */
   	this.show = function(id, modalOptions) {
       var modal = ML.El.$q('#' + id);
