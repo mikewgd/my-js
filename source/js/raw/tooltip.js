@@ -120,7 +120,7 @@
     this.init = function() {
       self.destroy();
 
-      tips = ML.nodeArr(ML.El.$q('[data-tooltip]'));
+      tips = ML.El.$qAll('[data-tooltip]');
       options = validateOptions();
       
       tips.map(function(tip) {
@@ -134,7 +134,7 @@
         }
       });
 
-      tooltips = ML.nodeArr(ML.El.$q('.tooltip'));
+      tooltips = ML.El.$qAll('.tooltip');
 
       if (tooltips.length < 1) {
         throw new Error('There are no tooltips on the page.');
@@ -249,7 +249,10 @@
      * tooltips.destroy();
      */
     this.destroy = function() {
+      var tooltip = null;
+
       tips.forEach(function(element) {
+        tooltip = ML.El.$q('#' + element.rel);
         element.removeEventListener('mouseover', mouseOver, false);
         element.removeEventListener('mouseout', mouseOut, false);
 
@@ -257,7 +260,7 @@
           element.title = ML.El.data(element, 'title');
           element.removeAttribute('data-title');
 
-          ML.El.$q('#' + element.rel).parentNode.removeChild(ML.El.$q('#' + element.rel));
+          tooltip.parentNode.removeChild(tooltip);
           element.removeAttribute('rel');
         }
       });

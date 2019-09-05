@@ -72,8 +72,8 @@
     this.init = function() {
       self.destroy();
 
-      modalToggle = ML.nodeArr(ML.El.$q('[data-modal]'));
-      modals = ML.nodeArr(ML.El.$q('.modal'));
+      modalToggle = ML.El.$qAll('[data-modal]');
+      modals = ML.El.$qAll('.modal');
 
       if (modals.length < 1) {
         throw new Error('There are no modals on the page.');

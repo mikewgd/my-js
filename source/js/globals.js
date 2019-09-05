@@ -398,18 +398,24 @@ ML.El = {
    * @returns {HTMLElement}
    */
   $q: function(selector) {
-    var qs = null;
     if (ML.isUndef(document.querySelector(selector), true)) {
       throw new Error('Element can\'t be found.');
-    } else {
-      qs = document.querySelectorAll(selector);
-
-      if (qs.length === 1) {
-        return qs[0];
-      }
-
-      return qs;
     }
+
+    return document.querySelector(selector);
+  },
+
+  /**
+   * Returns a NodeList of DOM elements.
+   * @param {String} selectors Selectors to find in the DOM.
+   * @returns {Array}
+   */
+  $qAll: function(selectors) {
+    if (ML.isUndef(document.querySelectorAll(selectors), true)) {
+      throw new Error('Element(s) can\'t be found.');
+    }
+
+    return ML.nodeArr(document.querySelectorAll(selectors));
   },
 
   /**

@@ -418,8 +418,8 @@
       el.appendChild(node1);
       el.appendChild(node2);
 
-      nextButton = el.querySelector('.carousel-nav.next');
-      prevButton = el.querySelector('.carousel-nav.prev');
+      nextButton = el.querySelector('.carousel-nav.next:not(.inactive)');
+      prevButton = el.querySelector('.carousel-nav.prev:not(.inactive)');
     }
 
     /**
@@ -518,7 +518,7 @@
 
       e.preventDefault();
 
-      if (ML.El.hasClass(target, 'inactive') || animating) {
+      if (animating) {
         return;
       }
 
@@ -534,7 +534,6 @@
       }
     }
     
-
     /**
     * Animates the carousel to slide to each desired slide.
     * @private
@@ -660,7 +659,7 @@
 (function() {
   var carousel = null;
   var settings = {};
-  var carousels = [ML.El.$q('[data-carousel]')];
+  var carousels = ML.El.$qAll('[data-carousel]');
 
   carousels.map(function(carouselEl) {
     settings = ML.parObj(ML.El.data(carouselEl, 'carousel'));

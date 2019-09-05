@@ -34,15 +34,12 @@
      */
     init: function() {
       var self = this;
+      self.selects = ML.El.$qAll('select:not(.system):not(.styled)');
 
-      self.selects = ML.nodeArr(ML.El.$q('select')).filter(function(select) {
-        if (!ML.El.hasClass(select, 'system') || !ML.El.hasClass(select, 'styled')) {
-          self.createCustom(select);
-          self.pushEvents(select);
-          return select;
-        }
+      ML.nodeArr(self.selects).map(function(select) {
+        self.createCustom(select);
+        self.pushEvents(select);
       });
-
       this.bindEvents();
     },
 
@@ -159,7 +156,7 @@
       var self = this;
 
       self.customSelects.forEach(function(item) {
-        ML.nodeArr(item.querySelectorAll('li a')).forEach(function(link) {
+        ML.nodeArr(item.querySelectorAll('li:not(.disabled) a')).forEach(function(link) {
           ML.El.evt(link, 'click', self.optionClick);
           ML.El.evt(link, 'mouseover', self.optionMouseOver);
         });
@@ -190,10 +187,6 @@
         'value': attr(li, 'value'),
         'text': clicked.innerHTML
       };
-
-      if (ML.El.hasClass(li, 'disabled')) {
-        return;
-      }
 
       if (args.value !== ML.El.getAttr(custom, 'data-value')) {
         Dropdown.selectOption(custom, args);
