@@ -33,10 +33,6 @@
     {
       "title": "AJAX",
       "page": "ajax"
-    },
-    {
-      "title": "Custom Events: resize.debounce & scroll.up / scroll.down",
-      "page": "custom-events"
     }
   ]
 }

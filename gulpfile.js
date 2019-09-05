@@ -22,6 +22,12 @@ const jshint = require('gulp-jshint');
 const jsdoc = require('gulp-jsdoc3');
 const jsdocConfig = require('./jsdoc/config.json');
 
+const handlebarsJS = require('handlebars');
+
+handlebarsJS.registerHelper('upper', function(str){
+  return str.toUpperCase();
+});
+
 const paths = {
   src: { root: 'source' },
   dist: { root: 'dist' },
@@ -42,8 +48,7 @@ const paths = {
       'modal.js': [jsGlobalPath, `${jsRawPath}/modal.js`],
       'radiocheck.js': [jsGlobalPath, `${jsRawPath}/radiocheck.js`],
       'select.js': [jsGlobalPath, `${jsRawPath}/select.js`],
-      'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`],
-      'custom-events.js': [jsGlobalPath, `${jsRawPath}/custom-events.js`]
+      'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`]
     },
 
     this.dist.css = `${this.dist.root}/css`;
@@ -59,6 +64,20 @@ gulp.task('templates', () => {
   var opts = {
     ignorePartials: true,
     batch: [`${paths.src.root}/templates/partials`],
+    helpers: {
+      capitals: function(str){
+				return str.toUpperCase();
+      },
+      emptyArr: function(total, options) {
+        var ret = "";
+
+        for(var i=0, j=total.length; i<j; i++) {
+          ret = ret + options.fn(total[i]);
+        }
+
+        return ret;
+      }
+    }
   };
 
   return gulp.src([`${paths.src.root}/templates/*.hbs`])
