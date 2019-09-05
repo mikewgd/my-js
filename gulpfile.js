@@ -42,7 +42,8 @@ const paths = {
       'modal.js': [jsGlobalPath, `${jsRawPath}/modal.js`],
       'radiocheck.js': [jsGlobalPath, `${jsRawPath}/radiocheck.js`],
       'select.js': [jsGlobalPath, `${jsRawPath}/select.js`],
-      'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`]
+      'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`],
+      'custom-events.js': [jsGlobalPath, `${jsRawPath}/custom-events.js`]
     },
 
     this.dist.css = `${this.dist.root}/css`;

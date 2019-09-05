@@ -1,0 +1,49 @@
+{{>header}}
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <a href="docs.html#carousel">Documentation</a>
+  </div>
+
+  <h2>Resize.throttle event</h2>
+  <div class="throttled">-</div>
+  <div class="resize">-</div>
+  <div class="scroll-direction"></div>
+
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+  <div style="height:100px;clear:both;">scroll</div>
+
+{{#> footer}}
+  <script>
+    var resize = document.querySelector('.resize');
+    var throttle = document.querySelector('.throttled');
+    var scrollDirection = document.querySelector('.scroll-direction');
+
+    ML.El.evt(window, 'resize', function() {
+      resize.innerHTML = window.innerWidth + 'px';
+    });
+
+    ML.El.evt(document, 'resize.debounce', function(event) {
+      throttle.innerHTML = window.innerWidth + 'px';
+    });
+
+    ML.El.evt(document, 'scroll.up', function(event) {
+      scrollDirection.innerHTML = 'up ↑';
+    });
+
+    ML.El.evt(document, 'scroll.down', function(event) {
+      scrollDirection.innerHTML = 'down ↓';
+    });
+  </script>
+{{/footer}}

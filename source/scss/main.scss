@@ -33,6 +33,32 @@ body {
   font-weight: bold;
 }
 
+.throttled,
+.resize {
+  padding: 6px 0;
+}
+
+.throttled:before {
+  content: "Throttled: ";
+  font-weight: bold;
+}
+
+.resize:before {
+  content: "Resize: ";
+  font-weight: bold;
+}
+
+.scroll-direction {
+  position: fixed;
+  background: #ccc;
+  padding: 10px;
+
+  &:before {
+    content: "scroll direction: ";
+    font-weight: bold;
+  }
+}
+
 /* General Classes */
 .fl {
   float: left;

@@ -301,12 +301,6 @@ ML.El = {
    * @param {Boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
-    var resize = {
-      delay: 100,
-      timeout: null,
-      throttled: false
-    };
-
     if (ML.isUndef(capture, true)) {
       capture = false;
     }
@@ -973,45 +967,3 @@ ML.Ajax = function(params) {
   
   init();
 };
-
-// Custom events: scroll up, scroll down, resize throttle
-(function() {
-  function eventDispatcher(name) {
-    document.dispatchEvent(name);
-  }
-
-  function ResizeThrottleEvent() {
-    var RESIZE_THROTTLE_EVENT = new CustomEvent('resize.throttle');
-    var timeout = null;
-    var throttled = false;
-
-    ML.El.evt(window, 'resize', function() {
-      if (!throttled) {
-        eventDispatcher(RESIZE_THROTTLE_EVENT);
-        throttled = true;
-        timeout = requestAnimationFrame(function() {
-          throttled = false;
-          cancelAnimationFrame(timeout);
-        });
-      } 
-    }, false);
-  }
-
-  function ScrollUpDownEvent() {
-    var lastScrollTop = 0;
-    var SCROLL_UP_EVENT = new CustomEvent('scroll.up');
-    var SCROLL_DOWN_EVENT = new CustomEvent('scroll.down');
-
-    ML.El.evt(document, 'scroll', function() {
-      var currScroll = window.pageYOffset;
-
-      if (currScroll < lastScrollTop) {
-        eventDispatcher(SCROLL_UP_EVENT);
-      } else {
-        eventDispatcher(SCROLL_DOWN_EVENT);
-      }
-
-      lastScrollTop = currScroll;
-    });
-  }
-})();
