@@ -29,12 +29,11 @@
 
   .carousel-dots a {
     text-decoration: none;
-    color: #ccc;
-    font-size: 40px;
+    background-color: #ccc;
   }
 
   .active a {
-    color: #000;
+    background-color: #000;
   }
 
   .inactive {

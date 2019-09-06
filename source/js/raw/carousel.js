@@ -431,7 +431,7 @@
       var dots = '';
 
       for (var i = 0, len = slides.length; i < len; i++) {
-        dots += '<li><a href="#" rel="' + i + '">&bull;</a></li>';
+        dots += '<li><a href="#" rel="' + i + '">' + (i + 1) + '</a></li>';
       }
 
       carouselDots.innerHTML = '<ul>' + dots + '</ul>';
