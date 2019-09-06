@@ -973,3 +973,25 @@ ML.Ajax = function(params) {
   
   init();
 };
+
+(function() {
+  var stylesheets = document.styleSheets;
+  var styleSheetRules = [];
+  var cssRules = [];
+  // var rule = null;
+  var cssMedia = [];
+
+  for (var ii = 0; ii < stylesheets.length; ii++) {
+    styleSheetRules.push(stylesheets[ii].cssRules);
+  }
+
+  styleSheetRules.forEach(function(item) {
+    ML.nodeArr(item).forEach(function(item2) {
+      if (item2.media) {
+        cssMedia.push(item2.media.mediaText);
+      }
+    })
+  });
+
+  console.log(cssMedia)
+})();
