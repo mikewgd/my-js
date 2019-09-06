@@ -980,6 +980,14 @@ ML.Ajax = function(params) {
   var cssRules = [];
   // var rule = null;
   var cssMedia = [];
+  var sizeNames = [
+    'xs',
+    'sm',
+    'md',
+    'lg',
+    'xlg',
+    'xxlg'
+  ];
 
   for (var ii = 0; ii < stylesheets.length; ii++) {
     styleSheetRules.push(stylesheets[ii].cssRules);
