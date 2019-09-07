@@ -3,12 +3,12 @@
    * * A message that appears when a cursor is positioned over an element
    * * Each tooltip should have a unique `id` attribute to match the element's `rel` attribute.
    * * Nested tooltips are not supported.
-   * * You can show tooltips via `data-tooltop` or JavaScript.
+   * * You can show tooltips via `data-tooltip` or JavaScript.
    * * Valid align options are: `right`, `left`, `top` and `bottom` to the element 
    * activating the tooltip overlay.
    * * When setting `smart: true`, the tooltip will only detect collision with `window`.
    * * Custom tooltip based on `title` attribute.
-   * * Every tooltip element gets `MLToolip` added to the element.
+   * * Every tooltip element gets `MLTooltip` added to the element.
    * * You can listen to custom events fired by the tooltip. Returns the tooltip and options. See example below.
    * 
    * | Event Name | Description |
@@ -32,7 +32,6 @@
    * // Only JavaScript needed:
    * <script>
    *   var tooltips = new ML.Tooltip({
-   *     arrow: false, // Global configuration.
    *     delay: true
    *   });
    *   
@@ -58,12 +57,12 @@
    * });
    * 
    * @param {Object} [settings] Configuration settings.
-   * @param {Number} [settings.width=100] The width of the tooltip.
+   * @param {Number} [settings.width=150] The width of the tooltip.
    * @param {String} [settings.align=right] Where to align the tooltip.
    * @param {Boolean} [settings.smart=false] If the tooltip should change position or width
    * to not overlap the window.
    * @param {Boolean} [settings.delay=false] Delay the tooltip going away on `mouseout`.
-   * @param {Number} [settings.delayTime=3000] Duration to keep the tooltip visible 
+   * @param {Number} [settings.delayTime=3000] Duration to keep the tooltip visible, in ms.
    * when setting `delay: true`
    * @constructor
    */

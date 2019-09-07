@@ -25,7 +25,7 @@ window.ML = window.ML || function() {};
 })();
 
 /**
- * The main namespace.
+ * Main namespace.
  * @namespace
  */
 ML = {
@@ -75,10 +75,10 @@ ML = {
   },
 
   /**
-   * Returns `true` or `false` if a value is undefined or not.
-   * @param {*} val The value to test if undefined.
-   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
-   * optional. If a value is empty and paramter is not set, `false` is returned.
+   * Returns `true` or `false` if a value is undefined.
+   * @param {*} val Test value.
+   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". 
+   * If a value is empty and parameter is not set, `false` is returned.
    * @return {Boolean}
    */
   isUndef: function(val, empty) {
@@ -93,7 +93,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a boolean.
-   * @param {*} val The value to test if a boolean.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isBool: function(val) {
@@ -102,7 +102,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a number.
-   * @param {*} val The value to test if a number.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isNum: function(val) {
@@ -111,7 +111,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a string.
-   * @param {*} val The value to test if a string.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isString: function(val) {
@@ -200,7 +200,7 @@ ML = {
 */
 ML.El = {
   /**
-   * Stores events bound to elements.
+   * Stored Element Events.
    * @type {Arrays}
    */
   Events: [],
@@ -298,7 +298,7 @@ ML.El = {
    * @param {String} type The type of event.
    * @param {Function} cb Callback function.
    * @param {Event} cb.e The Event Object.
-   * @param {Boolean} [capture]
+   * @param {Boolean} [capture=false]
    */
   evt: function(el, type, cb, capture) {
     if (ML.isUndef(capture, true)) {
@@ -322,23 +322,10 @@ ML.El = {
   },
 
   /**
-   * Trigger native events bound to elements.
-   * @param {HTMLElement} el The element to trigger an event on.
-   * @param {String} type The type of event to trigger.
-   */
-  evtTrigger: function(el, type) {
-    var event = document.createEvent('HTMLEvents');
-
-    event.initEvent(type, true, true);
-    event.type = type;
-    el.dispatchEvent(event);
-  },
-
-  /**
    * 
    * @param {String} name The name of the custom event.
    * @param {Object} data Data to send with the custom event.
-   * @param {HTMLElement} [el] Element to attach the custom event to.
+   * @param {HTMLElement} [el=document] Element to attach the custom event to.
    */
   customEventTrigger: function(name, data, el) {
     var eventName = new CustomEvent(name, {detail: data});
@@ -372,7 +359,7 @@ ML.El = {
   },
 
   /**
-   * Returns element that was clicked on.
+   * Returns element that was clicked.
    * @param {Event} evt The event object.
    * @return {HTMLElement}
    */
@@ -393,8 +380,8 @@ ML.El = {
   },
 
   /**
-   * Returns an HTML element.
-   * @param {String} selector The selector to find in the DOM.
+   * Returns a DOM element.
+   * @param {String} selector The DOM selector.
    * @returns {HTMLElement}
    */
   $q: function(selector) {
@@ -406,7 +393,7 @@ ML.El = {
   },
 
   /**
-   * Returns a NodeList of DOM elements.
+   * Returns an array of DOM ellements.
    * @param {String} selectors Selectors to find in the DOM.
    * @returns {Array}
    */
@@ -439,10 +426,10 @@ ML.El = {
   },
 
   /**
-   * Removes a class name from an element. [credit](http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass)
+   * Removes a class name from an element.
    * @param {HTMLElement} elem The element of the class name to be removed.
-   * @param {String} classN Class names to be removed.
-   * @param {Boolean} [multiple] If there are multiple class names to be removed.
+   * @param {String} classN Class name(s) to be removed.
+   * @param {Boolean} [multiple=false] If there are multiple class names to be removed.
    */
   removeClass: function(elem, classN, multiple) {
     var currClass = elem.classList;
@@ -603,184 +590,6 @@ ML.El = {
   data: function(element, attr) {
     return ML.El.getAttr(element, 'data-' + attr);
   }
-};
-
-/**
- * * Easily animate CSS values. [credit](https://javascript.info/js-animation)
- * * Only `px` values can be animated at this time.
- * * Animated properties can be relative. If the value leads with  `+` or `-`, then 
- * the target value is computed by adding or subtracting the given number from the current value of the property.
- * * For now `opacity` can not be animated with a relative value. 
- * * The following easing options are available: `linear` (default), `elastic`, `quad`,
- * `quint`, `circ`, `back` or `bounce`.
- * 
- * @example
- * var props = {width: 100, height: 100};
- * var settings = {delay: 15, duration: 500, easing: 'bounce'};
- * 
- * new ML.Animate(ML.$('el'), props, settings, function() {
- *   alert('animation is complete');
- * });
- * 
- * @param {HTMLElement} el Element to animate.
- * @param {Object} props CSS properties to animate.
- * @param {Object} [settings] Configuration settings.
- * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
- * @param {Number} [settings.delay=13] The delay of the animation, defaults to 13.
- * @param {Boolean} [settings.relative=true] Ability to override animating relative values.
- * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
- * @param {Function} [cb] Callback function.
- * @constructor
- */
-ML.Animate = function(el, props, settings, cb) {
-  /**
-   * Animate defaults.
-   * @type {Object}
-   * @private
-   */
-  var DEFAULTS = {
-    duration: 400,
-    delay: 13,
-    easing: 'linear',
-    relative: true
-  };
-
-  var Easing = {
-    linear: function(progress) {
-      return progress;
-    },
-
-    elastic: function(progress) {
-      return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * 1.5 / 3 * progress);
-    },
-
-    quad: function(progress) {
-      return Math.pow(progress, 2);
-    },
-
-    quint: function(progress) {
-      return Math.pow(progress, 5);
-    },
-
-    circ: function(progress) {
-      return 1 - Math.sin(Math.acos(progress));
-    },
-
-    back: function(progress) {
-      return Math.pow(progress, 2) * ((1 + 1.5) * progress - 1.5);
-    },
-
-    bounce: function(progress) {
-      for (var a = 0, b = 1; 1; a += b, b /= 2) {
-        if (progress >= (7 - 4 * a) / 11) {
-          return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
-        }
-      }
-    }
-  };
-
-  var options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
-  var timer = null;
-  var currProps = {};
-  var progress = false;
-  var time = new Date();
-
-  /**
-   * Initialization of animating elements.
-   * @private
-   */
-  function init() {
-    if (ML.isUndef(el.tagName)) {
-      throw new Error('You can only animate a valid element on the page.');
-    } else {
-      if (!ML.isNum(options.duration)) {
-        options.duration = DEFAULTS.duration;
-      }
-
-      if (!ML.isNum(options.delay)) {
-        options.delay = DEFAULTS.delay;
-      }
-
-      if (!ML.isBool(options.relative)) {
-        options.relative = DEFAULTS.relative;
-      }
-
-      if (ML.isUndef(Easing[options.easing])) {
-        options.easing = Easing[DEFAULTS.easing];
-      } else {
-        options.easing = Easing[options.easing];
-      }
-    }
-
-    move();
-  }
-
-  /**
-   * Gets the current CSS values of the properties being animated.
-   * @private
-   */
-  function getCurrs() {
-    var currProp = '';
-    currProps = {};
-
-    for (var prop in props) {
-      currProp = parseFloat(ML.El.getStyle(el, prop).replace('px', ''));
-      currProps[prop] = currProp;
-    }
-  }
-
-  /**
-   * Fade in/out an element.
-   * @private
-   */
-  function fadeEl() {
-    var curr = (currProps.opacity * 100);
-    var desr = (props.opacity * 100);
-    var whole = Math.round(curr + (desr - curr) * options.easing(progress));
-
-    el.style.opacity = whole / 100;
-  }
-
-  /**
-   * Animates the element with the new CSS values provided.
-   * @private
-   */
-  function move() {
-    var value = 0;
-    getCurrs();
-
-    timer = setInterval(function() {
-      value = 0;
-      progress = (new Date() - time) / options.duration;
-
-      if (progress > 1) {
-        progress = 1;
-      }
-
-      for (var prop in props) {
-        if (prop === 'opacity') {
-          fadeEl();
-        } else {
-          if (options.relative && (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop]))) {
-            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
-          } else {
-            value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
-          }
-          
-          el.style[prop] = value + 'px';
-        }
-      }
-
-      if (progress === 1) {
-        clearInterval(timer);
-        if (typeof cb === 'function') {
-          cb();
-        }
-      }
-    }, options.delay);
-  }
-
-  init();
 };
 
 /**
@@ -973,33 +782,3 @@ ML.Ajax = function(params) {
   
   init();
 };
-
-(function() {
-  var stylesheets = document.styleSheets;
-  var styleSheetRules = [];
-  var cssRules = [];
-  // var rule = null;
-  var cssMedia = [];
-  var sizeNames = [
-    'xs',
-    'sm',
-    'md',
-    'lg',
-    'xlg',
-    'xxlg'
-  ];
-
-  for (var ii = 0; ii < stylesheets.length; ii++) {
-    styleSheetRules.push(stylesheets[ii].cssRules);
-  }
-
-  styleSheetRules.forEach(function(item) {
-    ML.nodeArr(item).forEach(function(item2) {
-      if (item2.media) {
-        cssMedia.push(item2.media.mediaText);
-      }
-    })
-  });
-
-  console.log(cssMedia)
-})();
