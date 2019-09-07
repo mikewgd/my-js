@@ -237,6 +237,7 @@
       el.MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
       el.setAttribute('tabindex', 0);
+      ul.style.width = 'calc(100% * ' + total + ')';
 
       bindEvents();
       callback(true);

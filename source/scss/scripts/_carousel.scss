@@ -23,8 +23,13 @@
         border-radius: 100%;
         width: 8px;
         height: 8px;
+        background-color: #ccc;
       }
 
+      .active a {
+        background-color: #000;
+      }
+      
       li {
         display: inline-block;
       }

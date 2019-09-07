@@ -2,7 +2,7 @@
 
 .animals {
   position: relative;
-  width: 300px;
+  max-width: 300px;
   margin: 0 auto;
 
   .next {
@@ -14,8 +14,7 @@
     position: relative;
 
     img {
-      width: 300px;
-      height: 237px;
+      max-width: 300px;
     }
 
     span {
@@ -27,21 +26,12 @@
     }
   }
 
-  .carousel-dots a {
-    text-decoration: none;
-    background-color: #ccc;
-  }
-
-  .active a {
-    background-color: #000;
-  }
-
   .inactive {
     color: #ccc;
   }
 }
 
 .carousel-status {
-  width: 300px;
+  max-width: 300px;
   margin: 0 auto;
 }
