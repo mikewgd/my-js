@@ -1,10 +1,5 @@
 {{>header}}
 
-  <div class="script-header">
-    <h1>{{title}}</h1>
-    <a href="docs.html#carousel">Documentation</a>
-  </div>
-  
   <div class="animate-header">
     <div class="actions fl">
     {{#actions}}
@@ -30,20 +25,31 @@
     <div class="animate-box" id="animateBox"></div>
   </div>
 
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>Only px values can be animated at this time.</li>
+      <li>Animation done using requestAnimationFrame</li>
+      <li>Easing functions are supported, view easing dropdown.</li>
+      <li>
+        <em>With CSS transitions, most of this is obsolete.</em>
+        <a target="_blank" href="https://developers.google.com/web/fundamentals/design-and-ux/animations/css-vs-javascript">
+          CSS Animation vs JS Animation
+        </a>
+      </li>
+    </ul>
+  </div>
+
 {{#> footer}}
   <script>
-    var box = ML.El.$('animateBox');
-    var easing = ML.El.$('animateEasing');
-    var inc = 50;
+    var box = ML.El.$q('#animateBox');
+    var easing = ML.El.$q('#animateEasing');
+    var inc = 100;
     
-    var animRight = ML.El.$('animRight');
-    var animLeft = ML.El.$('animLeft');
-    var animBtm = ML.El.$('animBtm');    
-    var animWidth = ML.El.$('animWidth');
-    var animHeight = ML.El.$('animHeight');
-    var animWidthHeight = ML.El.$('animWidthHeight');
-    var animOpacOut = ML.El.$('animOpacOut');
-    var animOpacIn = ML.El.$('animOpacIn');
+    var animWidth = ML.El.$q('#animWidth');
+    var animHeight = ML.El.$q('#animHeight');
+    var animOpacOut = ML.El.$q('#animOpacOut');
+    var animOpacIn = ML.El.$q('#animOpacIn');
 
     var animateEl = function(props) {
       new ML.Animate(box, props, {easing: easing.value});
@@ -54,23 +60,7 @@
     });
 
     ML.El.evt(animHeight, 'click', function() {
-      animateEl({height: inc + 20});
-    });
-
-    ML.El.evt(animWidthHeight, 'click', function() {
-      animateEl({height: '+' + inc, width: '+' + inc});
-    });
-
-    ML.El.evt(animRight, 'click', function() {
-      animateEl({left: '+' + inc});
-    });
-
-    ML.El.evt(animLeft, 'click', function() {
-      animateEl({left: '-' + inc});
-    });
-
-    ML.El.evt(animBtm, 'click', function() {
-      animateEl({top: '+' + inc});
+      animateEl({height: inc});
     });
 
     ML.El.evt(animOpacOut, 'click', function() {

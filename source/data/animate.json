@@ -1,26 +1,15 @@
 {
   "title": "Animate",
-  "script": "global",
+  "docs": "ML.Animate",
+  "script": "animate",
   "actions": [
     {
-      "id": "animRight",
-      "text": "move to the right"
-    },
-    {
-      "id": "animLeft",
-      "text": "move to the left"
-    },
-    {
       "id": "animWidth",
-      "text": "width 50px"
+      "text": "width 100px"
     },
     {
       "id": "animHeight",
-      "text": "height 70px"
-    },
-    {
-      "id": "animBtm",
-      "text": "move to the bottom"
+      "text": "height 100px"
     },
     {
       "id": "animOpacOut",
@@ -29,10 +18,6 @@
     {
       "id": "animOpacIn",
       "text": "fade in"
-    },
-    {
-      "id": "animWidthHeight",
-      "text": "increase width & height"
     }
   ]
 }
