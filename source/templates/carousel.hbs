@@ -1,9 +1,4 @@
 {{>header}}
-
-  <div class="script-header">
-    <h1>{{title}}</h1>
-    <a href="docs.html#carousel">Documentation</a>
-  </div>
       
   <div class="carousel animals" id="initCarousel">
     <ul>
@@ -30,6 +25,13 @@
     {{#items}}
       <li class="carousel-slide"><img alt="" src="images/carousel-imgs/{{this}}.jpg" /></li>
     {{/items}}
+    </ul>
+  </div>
+
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>It is best to set a specific width in CSS or slide can be affected.</li>
     </ul>
   </div>
 

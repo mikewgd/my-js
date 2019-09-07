@@ -17,31 +17,6 @@ body {
   }
 }
 
-body:after {
-  display: none;
-  content: "xs,0"; 
-}
-@media (min-width: 544px) {
-  body:after {
-    content: "sm,544px";
-  }
-}
-@media (min-width: 768px) {
-  body:after {
-    content: "md,768px";
-  }
-}
-@media (min-width: 992px) {
-  body:after {
-    content: "lg,992px";
-  }
-}
-@media (min-width: 1200px) {
-  body:after {
-    content: "xl,1200px";
-  }
-}
-
 .container {
   max-width: 985px;
   margin: 0 auto;
@@ -143,7 +118,10 @@ ul.list li {
 
 .notes {
   background-color: $gray;
-  padding: 8px;
+  padding: 14px;
+  margin-top: 50px;
+  border: 1px solid #999;
+  display: inline-block;
 
   h3 {
     margin: 0 0 4px 0;

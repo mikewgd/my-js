@@ -1,6 +1,7 @@
 {
   "title": "Directory",
   "script": false,
+  "docs": "index",
   "pages": [
     {
       "title": "Animate",

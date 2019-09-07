@@ -1,5 +1,6 @@
 {
   "title": "Custom Form Elements - Select menu",
+  "docs": "ML.Dropdown",
   "script": "select",
   "select1": [
     "January",
