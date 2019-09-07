@@ -1,5 +1,5 @@
 {
   "title": "Ajax Request",
   "docs": "ML.Ajax",
-  "script": "global"
+  "script": "ajax"
 }

@@ -49,7 +49,8 @@ const paths = {
       'radiocheck.js': [jsGlobalPath, `${jsRawPath}/radiocheck.js`],
       'select.js': [jsGlobalPath, `${jsRawPath}/select.js`],
       'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`],
-      'animate.js': [jsGlobalPath, `${jsRawPath}/animate.js`]
+      'animate.js': [jsGlobalPath, `${jsRawPath}/animate.js`],
+      'ajax.js': [jsGlobalPath, `${jsRawPath}/ajax.js`],
     },
 
     this.dist.css = `${this.dist.root}/css`;
