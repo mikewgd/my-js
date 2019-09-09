@@ -2,7 +2,6 @@
   /**
    * * Allows you to add dialogs to your site for lightboxes, user notifications,
    * custom content and etc...
-   * * Clicking on the overlay or dark background behind the modal, will close the modal.
    * * Nested modals aren’t supported. Avoid nesting modals in fixed elements. The modals
    * use `position: fixed`, which can sometimes be a bit particular about its rendering. 
    * * When possible, place your modal HTML in a top-level position to avoid interference
@@ -102,9 +101,9 @@
      * @private
      */
     function closeClick(e) {
-      e.preventDefault();
       var clicked = ML.El.clicked(e);
       if (ML.El.hasClass(clicked, 'modal-close') || ML.El.hasClass(clicked, 'modal-overlay')) {
+        e.preventDefault();
         self.hide();
       }
     }

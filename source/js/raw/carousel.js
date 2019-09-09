@@ -6,7 +6,7 @@
    * * Every initialized carousel gets `MLCarousel` added to the element. For an example see example below.
    * * When setting `arrowKeys: true`, please note you need to focus on the carousel or an 
    * element within the carousel for the arrow keys to work correctly.
-   * * Adds a `js-carousel-initialized` class to the carousel element.
+   * * `js-carousel-initialized` class name gets added to the carousel element.
    * * You can initialize carousels via `data-carousel` or JavaScript.
    * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
    * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
@@ -95,7 +95,7 @@
    * 
    * @param {HTMLElement} el The carousel element.
    * @param {Object} [settings] Configuration settings.
-   * @param {Number} [settings.current=0] The current slide to start on. 0 based.
+   * @param {Number} [settings.current=0] The current slide to start on.
    * @param {Boolean} [settings.autoplay=false] The carousel will start automatically.
    * @param {Number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
    * @param {Boolean} [settings.dots=false] Dot navigation.

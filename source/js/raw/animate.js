@@ -30,6 +30,10 @@ ML.Animate = function(el, props, settings, cb) {
     easing: 'linear'
   };
 
+  /**
+   * Easing functions
+   * @private
+   */
   var Easing = {
     linear: function(progress) {
       return progress;
