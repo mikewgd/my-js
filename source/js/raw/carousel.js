@@ -31,7 +31,7 @@
    * </div>
    *
    * @example <caption>Rendered HTML with all settings.</caption> {@lang xml}
-   * <div class="carousel animals js-carousel-initialized" data-carousel="autoplay:true:dots:true:arrowKeys:true:autoplay:true:infinite:true:current:1" tabindex="0">
+   * <div class="carousel animals js-carousel-initialized" data-carousel="autoplay:true:dots:true:arrowKeys:true:infinite:true:current:1" tabindex="0">
    *   <div class="carousel-viewer" style="overflow: hidden;">
    *     <ul>
    *       <li class="carousel-slide"><span>3</span><img alt="" src="images/carousel-imgs/lion.jpg" /></li>

@@ -71,8 +71,25 @@ form {
   margin: 0;
 }
 
+ul {
+  padding: 0 0 0 20px;
+  margin: 0;
+
+  li {
+    margin-top: 6px;
+  }
+}
+
 ul.list li {
   margin-bottom: 5px;
+}
+
+p {
+  margin: 0 0 15px 0;
+
+  &:last-child {
+    margin: 0;
+  }
 }
 
 /* Script Header */
@@ -120,26 +137,9 @@ ul.list li {
   border: 1px solid #999;
   display: inline-block;
 
-  li {
-    margin-top: 6px;
-  }
 
   h3 {
     margin: 0;
-  }
-
-  ul {
-    padding: 0 0 0 16px;
-    margin: 0;
-  }
-}
-
-.scripts {
-  margin: 0;
-  padding: 0 0 0 20px;
-
-  li {
-    margin-bottom: 6px;
   }
 }
 

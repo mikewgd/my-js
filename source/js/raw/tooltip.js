@@ -42,9 +42,8 @@
    *
    * @example <caption>The tooltip can be triggered via JavaScript instead of or in addition
    * to <code>data-tooltip</code></caption>
-   * // Will show the tooltip HTML with id of unique-id1 with a width of `50 pixels and will
-   * // add the class name 'show me' to the tooltip element.
-   * tooltips.show('unique-id1', {width: `50, activeClass: 'show-me'});
+   * // Will show the tooltip HTML with id of unique-id1 with a width of `50 pixels
+   * tooltips.show('unique-id1', {width: 50});
    *
    * @example <caption>Dynamic tooltip that shows a tooltip with the content "I am a tooltip" inside.</caption> {@lang xml}
    * <a href="#" data-tooltip="smart:true:delay:true" title="I am a tooltip">tooltip link</a>

@@ -10,8 +10,19 @@
       <span> &ndash; {{{this.description}}}</span>
     </li>
   {{/examples}}
-    <li><a data-tooltip title="Hello I was created." href="#">Dynamic Tooltip</a> - Usage shown in the code.</li>
+    <li><a data-tooltip="width:180" title="Hello I was created. 😎" href="#">Dynamic Tooltip</a> - Usage shown in the code.</li>
   </ul>
+
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li><code>smart: true</code>, detects collision with window and will change width and/or alignment.</li>
+      <li>A <code>delay</code> option is available, which delays hiding the tooltip when mouse out event is fired.<br>
+      You can also specify the delay time in ms.</li>
+      <li>Custom events are available to identify if a tooltip is opened and/or closed.</li>
+      <li>Only mouseover and mouseout are supported events for showing and hidding the tooltip.</li>
+    </ul>
+  </div>
 
   <div class="tooltip" id="unique-id1">
     <div class="tooltip-content">
@@ -24,10 +35,5 @@
   <script>
     var tooltips = new ML.Tooltip();
     tooltips.init();
-
-    document.addEventListener('tooltip.opened', function(event) {
-      console.log('tooltip is opened')
-      console.log(event.detail);
-    });
   </script>
 {{/footer}}
