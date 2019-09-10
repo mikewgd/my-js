@@ -29,6 +29,7 @@
     <h3>Notes</h3>
     <ul>
       <li>Only px values can be animated at this time.</li>
+      <li>Chaining is supported.</li>
       <li>Using requestAnimationFrame</li>
       <li>Duration is defaulted to 400ms and is configurable.</li>
       <li>
@@ -42,7 +43,6 @@
 
 {{#> footer}}
   <script>
-    var box = ML.El.$q('#animateBox');
     var easing = ML.El.$q('#animateEasing');
     var inc = 100;
     
@@ -50,25 +50,22 @@
     var animHeight = ML.El.$q('#animHeight');
     var animOpacOut = ML.El.$q('#animOpacOut');
     var animOpacIn = ML.El.$q('#animOpacIn');
-
-    var animateEl = function(props) {
-      new ML.Animate(box, props, {easing: easing.value});
-    };
+    var animateEl = new ML.Animate(ML.El.$q('#animateBox'), {easing: easing.value});
 
     ML.El.evt(animWidth, 'click', function() {
-      animateEl({width: inc});
+      animateEl.to({width: 100}, {delay: 0});
     });
 
     ML.El.evt(animHeight, 'click', function() {
-      animateEl({height: inc});
+      animateEl.to({height: 100});
     });
 
     ML.El.evt(animOpacOut, 'click', function() {
-      animateEl({opacity: 0});
+      animateEl.to({opacity: 0});
     });
 
     ML.El.evt(animOpacIn, 'click', function() {
-      animateEl({opacity: 1});
+      animateEl.to({opacity: 1});
     });
   </script>
 {{/footer}}

@@ -4,22 +4,21 @@
  * `quint`, `circ`, `back` or `bounce`.
  * 
  * @example
- * var props = {width: 100, height: 100};
  * var settings = {duration: 500, easing: 'bounce'};
- * 
- * new ML.Animate(ML.$('el'), props, settings, function() {
- *   alert('animation is complete');
- * });
+ * var animation = new ML.Animate(ML.El.$q('#el'), settings);
+ * animation.to({ width: 100 }, { delay: 400 }, function() {
+ *  console.log('animation complete');
+ * })
  * 
  * @param {HTMLElement} el Element to animate.
- * @param {Object} props CSS properties to animate.
- * @param {Object} [settings] Configuration settings.
+ * @param {Object} [settings] Global configuration settings.
  * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
+ * @param {Number} [settings.delay=100] Delay the animation, in ms.
  * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
- * @param {Function} [cb] Callback function.
+ * @class
  * @constructor
  */
-ML.Animate = function(el, props, settings, cb) {
+ML.Animate = function(el, settings) {
   /**
    * Animate defaults.
    * @type {Object}
@@ -27,6 +26,7 @@ ML.Animate = function(el, props, settings, cb) {
    */
   var DEFAULTS = {
     duration: 400,
+    delay: 100,
     easing: 'linear'
   };
 
@@ -68,33 +68,58 @@ ML.Animate = function(el, props, settings, cb) {
     }
   };
 
-  var options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
+  /**
+   * Validates animation settings.
+   * @param {Object} overrides Custom animation settings.
+   * @returns {Object}
+   */
+  this.validateSettings = function(overrides) {
+    var options = ML.extend(DEFAULTS, (ML.isUndef(overrides, true)) ? {} : overrides);
+
+    if (!ML.isNum(options.duration)) {
+      options.duration = DEFAULTS.duration;
+    }
+
+    if (!ML.isNum(options.delay)) {
+      options.delay = DEFAULTS.delay;
+    }
+
+    if (ML.isUndef(Easing[options.easing])) {
+      options.easing = Easing[DEFAULTS.easing];
+    } else {
+      options.easing = Easing[options.easing];
+    }
+
+    return options;
+  };
+
+  if (ML.isUndef(el.tagName)) {
+    throw new Error('You can only animate a valid element on the page.');
+  }
+
+  this.el = el;
+  this.options = this.validateSettings(settings);
+};
+
+/**
+ * Animate element.
+ * 
+ * @param {Object} props CSS properties to animate.
+ * @param {Object} [settings] Override Global Configuration settings.
+ * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
+ * @param {Number} [settings.delay=100] Delay the animation, in ms.
+ * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
+ * @param {Function} [cb] Callback function.
+ * @memberof ML.Animate
+ */
+ML.Animate.prototype.to = function(props, settings, cb) {
+  var options = this.validateSettings(settings);
+  var el = this.el;
   var timer = null;
+  var delayTimer = null;
   var currProps = {};
   var progress = false;
   var time = new Date();
-
-  /**
-   * Initialization of animating elements.
-   * @private
-   */
-  function init() {
-    if (ML.isUndef(el.tagName)) {
-      throw new Error('You can only animate a valid element on the page.');
-    } else {
-      if (!ML.isNum(options.duration)) {
-        options.duration = DEFAULTS.duration;
-      }
-
-      if (ML.isUndef(Easing[options.easing])) {
-        options.easing = Easing[DEFAULTS.easing];
-      } else {
-        options.easing = Easing[options.easing];
-      }
-    }
-
-    timer = requestAnimationFrame(move);
-  }
 
   /**
    * Gets the current CSS values of the properties being animated.
@@ -157,5 +182,10 @@ ML.Animate = function(el, props, settings, cb) {
     timer = requestAnimationFrame(move);
   }
 
-  init();
+  delayTimer = setTimeout(function() {
+    timer = requestAnimationFrame(move);
+    clearTimeout(delayTimer);
+  }, options.delay);
+  
+  return this;
 };
