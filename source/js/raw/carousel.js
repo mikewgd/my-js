@@ -101,6 +101,7 @@
    * @param {Boolean} [settings.dots=false] Dot navigation.
    * @param {Boolean} [settings.nav=true] Arrow navigation.
    * @param {Boolean} [settings.arrowKeys=false] Arrow keyboard navigation.
+   * @param {Boolean} [settings.touch=false] Swipe support.
    * @param {Boolean} [settings.infinite=false] Infinte amount of slides.
    * @param {Function} cb Callback function after slide has animated.
    * @param {Number} cb.index The current slide index.
@@ -120,6 +121,7 @@
       dots: false,
       nav: true,
       arrowKeys: false,
+      touch: false,
       infinite: false
     };
 
@@ -142,7 +144,13 @@
     var firstSlide = null;
     var lastSlide = null;
     var slideDirection = 'next';
-    var transitionValue = 'transform 400ms 13ms linear';
+    var swipeTransitionValue = 'transform 100ms linear';
+    var slideTransitionValue = 'transform 400ms 13ms linear';
+    
+    var posX1 = 0;
+    var posX2 = 0;
+    var posStart = 0;
+    var posFinal = 0;
 
     var methods = {
       complete: function() {}
@@ -192,6 +200,10 @@
           options.arrowKeys = DEFAULTS.arrowKeys;
         }
 
+        if (!ML.isBool(options.touch)) {
+          options.touch = DEFAULTS.touch;
+        }
+
         if (!ML.isBool(options.dots)) {
           options.dots = DEFAULTS.dots;
         }
@@ -218,7 +230,7 @@
         ML.El.cssTransform(ul, 'translateX(' + -(width * (current + 1)) + 'px)');
       }
 
-      ML.El.cssTransition(ul, '-webkit-' + transitionValue + ', ' + transitionValue);
+      ML.El.cssTransition(ul, '-webkit-' + slideTransitionValue + ', ' + slideTransitionValue);
 
       if (options.nav) {
         createNav();
@@ -375,7 +387,15 @@
       if (options.arrowKeys) {
         document.removeEventListener('keydown', paginationKeydown, false);
         el.removeAttribute('tabindex');
-      }      
+      }     
+      
+      if (options.touch) {
+        ul.removeEventListener('touchstart', dragStart, false);
+        ul.removeEventListener('touchend', dragEnd, false);
+        ul.removeEventListener('touchmove', dragAction, false);
+        document.removeEventListener('onmouseup', dragEnd, false);
+        document.removeEventListener('onmouseove', dragAction, false);
+      }
 
       delete el.MLCarousel;
       el.innerHTML = carouselHTML;
@@ -440,6 +460,62 @@
     }
 
     /**
+     * Touchstart event for swipe.
+     * @param {Event} e The Event object.
+     * @private
+     */
+    function dragStart(e) {
+      e.preventDefault();
+      posStart = getTransform();
+
+      if (e.type === 'touchstart') {
+        posX1 = e.touches[0].clientX;
+      } else {
+        posX1 = e.clientX;
+        ML.El.evt(document, 'mouseup', dragEnd);
+        ML.El.evt(document, 'mousemove', dragAction);
+      }
+    }
+
+    /**
+     * Touchmove and mousmove event for swipe.
+     * @param {Event} e The Event object.
+     * @private
+     */
+    function dragAction(e) {
+      if (e.type === 'touchmove') {
+        posX2 = posX1 - e.touches[0].clientX;
+        posX1 = e.touches[0].clientX;
+      } else {
+        posX2 = posX1 - e.clientX;
+        posX1 = e.clientX;
+      }
+      ML.El.cssTransition(ul, 'none');
+      ML.El.cssTransform(ul, 'translateX(' + (getTransform() - posX2) + 'px)');
+    }
+    
+    /**
+     * Touchend event for swipe.
+     * @private
+     */
+    function dragEnd() {
+      posFinal = getTransform();
+        
+      if (posFinal - posStart < -100) {
+        self.next();
+        slide(true);
+      } else if (posFinal - posStart > 100) {
+        self.prev();
+        slide(true);
+      } else {
+        ML.El.cssTransition(ul, '-webkit-' + swipeTransitionValue + ', ' + swipeTransitionValue);
+        ML.El.cssTransform(ul, 'translateX(' + (posStart) + 'px)');
+      }
+      document.removeEventListener('onmouseup', dragEnd, false);
+      document.removeEventListener('onmouseove', dragAction, false);
+    }
+
+    /**
      * Events bound to elements.
      * @private
      */
@@ -455,6 +531,12 @@
       ML.El.evt(nextButton, 'click', paginationClick);
 
       ML.El.evt(prevButton, 'click', paginationClick);
+
+      if (options.touch) {
+        ML.El.evt(ul, 'touchstart', dragStart);
+        ML.El.evt(ul, 'touchend', dragEnd);
+        ML.El.evt(ul, 'touchmove', dragAction);
+      }
 
       if (options.arrowKeys) {
         // To prevent being bound more than once.
@@ -534,23 +616,38 @@
         self.next();
       }
     }
-    
+
     /**
-    * Animates the carousel to slide to each desired slide.
-    * @private
-    */
-    function slide() {
-      var desired = -(width * current);
+     * Returns current transform of ul.
+     * @private
+     * @returns {Number}
+     */
+    function getTransform() {
       var ulTransform = window.getComputedStyle(ul).transform;
       var currTransform = typeof WebKitCSSMatrix === 'undefined' ? new MSCSSMatrix(ulTransform) :
         new WebKitCSSMatrix(ulTransform);
+
+      return currTransform.e;
+    }
+    
+    /**
+    * Animates the carousel to slide to each desired slide.
+    * @param {Boolean} [touch=false] Touch option is enabled.
+    * @private
+    */
+    function slide(touch) {
+      var desired = -(width * current);
+      var ulTransform = touch ? posStart : getTransform();
+      var transitionValue = touch ? swipeTransitionValue : slideTransitionValue;
+      
       animating = true;
 
       if (options.infinite) {
         var delta = (slideDirection === 'prev') ? -1 : 1;
-        desired = currTransform.e + (-width * delta);
-        ML.El.cssTransition(ul, '-webkit-' + transitionValue + ', ' + transitionValue);
+        desired = ulTransform + (-width * delta);
       }
+
+      ML.El.cssTransition(ul, '-webkit-' + transitionValue + ', ' + transitionValue);
 
       ML.El.cssTransform(ul, 'translateX(' + desired + 'px)');
       ML.El.customEventTrigger('carousel.slide', {
