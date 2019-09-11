@@ -353,6 +353,7 @@
    * If you do not want custom radio buttons or checkboxes add `system` class name to
    * the input.
    * Events bound to the `<select>` are bound to the custom select menu. Events supported: `focus`, `blur` and `change`.
+   * [Demo](/form-select.html)
    * @namespace
    *
    * @example {@lang xml}

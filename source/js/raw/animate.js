@@ -2,6 +2,7 @@
  * * Easily animate CSS values. [credit](https://javascript.info/js-animation)
  * * The following easing options are available: `linear`, `elastic`, `quad`,
  * `quint`, `circ`, `back` or `bounce`.
+ * * [Demo](/animate.html)
  * 
  * @example
  * var settings = {duration: 500, easing: 'bounce'};

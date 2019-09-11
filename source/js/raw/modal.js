@@ -10,6 +10,7 @@
    * * When a modal is opened the class name `js-modal-opened` is appended to the `<html>`.
    * * You can show modals via `data-modal` or JavaScript.
    * * You can listen to custom events fired by the modal. See example below.
+   * * [Demo](/modal.html)
    * 
    * | Event Name | Description |
    * |----------------|------------------------------------------------------|

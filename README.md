@@ -9,19 +9,6 @@ There are different branches within the repository that differ in terms of brows
 
 Any feedback on what could be done better, bugs you see please put in [Github](https://github.com/mikewgd/my-js/issues).
 
-## The scripts
-| Name                                | Description                                                                                                                |
-|-------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| Ajax                                | Easily make ajax requests (GET, POST, PUT, DELETE and even JSONP)                                                          |
-| Animate                             | Animate CSS attributes on HTML elements.                                                                                   |
-| Carousel                            | Cycle through images, text and other elements.                                                                             |
-| Dropdown                            | Select menu that gets transformed into HTML, that functions as a select menu does.                                         |
-| Custom Radio Buttons and Checkboxes | Radio buttons and checkboxes turned into HTML and function exactly as the form elements.                                   |
-| Input polyfill                      | Polyfill that adds placeholder support and adds unique classes for browsers that do not acknowledge focus state and etc... |
-| Modals                              | Allows you to add dialogs to your site for lightboxes, user notifications, custom content and etc...                       |
-| Tooltips                            | A message that appears when a cursor is positioned over an element                                                         |
-| Elements                            | Provides functionality for creating elements, attaching events and etc...                                                  |
-
 ## Running the Project
 ```
 $ npm install

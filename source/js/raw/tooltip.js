@@ -10,6 +10,7 @@
    * * Custom tooltip based on `title` attribute.
    * * Every tooltip element gets `MLTooltip` added to the element.
    * * You can listen to custom events fired by the tooltip. Returns the tooltip and options. See example below.
+   * * [Demo](/tooltip.html)
    * 
    * | Event Name | Description |
    * |----------------|------------------------------------------------------|

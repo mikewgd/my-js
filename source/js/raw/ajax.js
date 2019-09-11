@@ -3,6 +3,7 @@
  * * Supports `GET`, `POST`, `PUT`, `DELETE`, `JSONP` methods.
  * * When using `JSONP` request, you need to setup a global callback function and
  * pass in the function name as a string in `jsonpCallback`.
+ * * [Demo](/ajax.html)
  *
  * @example <caption>GET Request</caption>
  * new ML.Ajax({

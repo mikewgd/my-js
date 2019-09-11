@@ -11,6 +11,7 @@
    * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
    * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
    * * You can listen to custom events fired by the carousel. The carousel and carousel options are returned. See example below.
+   * * [Demo](/carousel.html)
    * 
    * | Event Name | Description |
    * |----------------------|----------------------------------------------------|
