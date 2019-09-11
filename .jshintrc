@@ -17,11 +17,12 @@
   "globals": {
     "WebKitCSSMatrix": false,
     "window": false,
-    "document":false,
     "navigator": false,
     "CustomEvent": false,
     "ML": false,
     "requestAnimationFrame":false,
-    "document":false
+    "document":false,
+    "MSCSSMatrix": false,
+    "ActiveXObject": false
   }
 }

@@ -320,7 +320,7 @@
         if (clicked.className === 'dropdown-link') {
           var div = clickedParent;
           var dropdownLink = div.querySelector('.dropdown-link');
-          var menu = div.querySelector('.dropdown-menu')
+          var menu = div.querySelector('.dropdown-menu');
 
           ML.El.toggleClass(div, 'focus', !ML.El.hasClass(div, 'focus'));
 
