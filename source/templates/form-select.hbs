@@ -11,7 +11,7 @@
     <div style="height:10px;clear:both;"></div>    
 
     <label for="year-born">Year Born: </label>
-    <select id="year-born" class="system" name="year-born">
+    <select id="year-born" class="" name="year-born">
     {{#select2}}
       <option value="{{this}}">{{this}}</option>
     {{/select2}}
@@ -26,6 +26,7 @@
     <ul>
       <li>Selects that have <code>system</code> as a class name will not be a custom select menu.</li>
       <li>Events bound to the select, will be bound to the custom select as well.</li>
+      <li>Not accessible</li>
     </ul>
   </div>
 

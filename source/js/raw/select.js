@@ -319,6 +319,8 @@
       if (ML.El.hasClass(clickedParent, 'dropdown')) {
         if (clicked.className === 'dropdown-link') {
           var div = clickedParent;
+          var dropdownLink = div.querySelector('.dropdown-link');
+          var menu = div.querySelector('.dropdown-menu')
 
           ML.El.toggleClass(div, 'focus', !ML.El.hasClass(div, 'focus'));
 
@@ -330,6 +332,8 @@
           });
 
           ML.El.toggleClass(div, 'active');
+          menu.style.maxHeight = window.innerHeight -
+            div.offsetTop - dropdownLink.offsetHeight - 20 + 'px';
 
           // Adds selected to currently selected item
           div.querySelectorAll('li')[ML.El.data(clicked, 'index')].className = 'selected';
