@@ -5,6 +5,8 @@
     {{#actions}}
       <button id="{{this.id}}">{{this.text}}</button>
     {{/actions}}
+      <button id="plus25">add 25 to width</button>
+      <button id="sequence">subtract 25 from width, wait, fade out</button>
     </div>
 
     <div class="fr">
@@ -50,10 +52,20 @@
     var animHeight = ML.El.$q('#animHeight');
     var animOpacOut = ML.El.$q('#animOpacOut');
     var animOpacIn = ML.El.$q('#animOpacIn');
+    var plus25 = ML.El.$q('#plus25');
+    var sequence = ML.El.$q('#sequence');
     var animateEl = new ML.Animate(ML.El.$q('#animateBox'), {easing: easing.value});
 
+    ML.El.evt(plus25, 'click', function() {
+      animateEl.to({width: '+25'});
+    });
+
+    ML.El.evt(sequence, 'click', function() {
+      animateEl.to({width: '-25'}).to({opacity: 0});
+    })
+
     ML.El.evt(animWidth, 'click', function() {
-      animateEl.to({width: 100}, {delay: 0});
+      animateEl.to({width: 100});
     });
 
     ML.El.evt(animHeight, 'click', function() {

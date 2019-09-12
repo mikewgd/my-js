@@ -13,8 +13,7 @@
  * 
  * @param {HTMLElement} el Element to animate.
  * @param {Object} [settings] Global configuration settings.
- * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
- * @param {Number} [settings.delay=100] Delay the animation, in ms.
+ * @param {Number} [settings.duration=200] The duration of the animation, in ms.
  * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
  * @class
  * @constructor
@@ -26,8 +25,7 @@ ML.Animate = function(el, settings) {
    * @private
    */
   var DEFAULTS = {
-    duration: 400,
-    delay: 100,
+    duration: 200,
     easing: 'linear'
   };
 
@@ -107,8 +105,7 @@ ML.Animate = function(el, settings) {
  * 
  * @param {Object} props CSS properties to animate.
  * @param {Object} [settings] Override Global Configuration settings.
- * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
- * @param {Number} [settings.delay=100] Delay the animation, in ms.
+ * @param {Number} [settings.duration=200] The duration of the animation, defaults to 400ms.
  * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
  * @param {Function} [cb] Callback function.
  * @memberof ML.Animate
@@ -117,10 +114,23 @@ ML.Animate.prototype.to = function(props, settings, cb) {
   var options = this.validateSettings(settings);
   var el = this.el;
   var timer = null;
-  var delayTimer = null;
   var currProps = {};
+  var initialProps = {};
   var progress = false;
   var time = new Date();
+
+  /**
+   * Sets initial props for animating relative values.
+   * @private
+   */
+  function setInitialProps() {
+    var currProp = '';
+
+    for (var prop in props) {
+      currProp = parseFloat(ML.El.getStyle(el, prop).replace('px', ''));
+      initialProps[prop] = currProp;
+    }
+  }
 
   /**
    * Gets the current CSS values of the properties being animated.
@@ -154,6 +164,7 @@ ML.Animate.prototype.to = function(props, settings, cb) {
    */
   function move() {
     var value = 0;
+    var firstChar = '';
     getCurrs();
     
     value = 0;
@@ -164,11 +175,17 @@ ML.Animate.prototype.to = function(props, settings, cb) {
     }
 
     for (var prop in props) {
+      firstChar = props[prop].toString().charAt(0);
       if (prop === 'opacity') {
         fadeEl();
       } else {
-        value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
-        el.style[prop] = value + 'px';
+        if (firstChar.charAt(0) === '+' || firstChar === '-') {
+          value = initialProps[prop] + parseFloat(props[prop]) * options.easing(progress);
+        } else {
+          value = currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress);
+        }
+        
+        el.style[prop] = Math.round(value) + 'px';
       }
     }
 
@@ -183,10 +200,8 @@ ML.Animate.prototype.to = function(props, settings, cb) {
     timer = requestAnimationFrame(move);
   }
 
-  delayTimer = setTimeout(function() {
-    timer = requestAnimationFrame(move);
-    clearTimeout(delayTimer);
-  }, options.delay);
+  setInitialProps();
+  timer = requestAnimationFrame(move);
   
   return this;
 };
