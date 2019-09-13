@@ -6,7 +6,7 @@
       <button id="{{this.id}}">{{this.text}}</button>
     {{/actions}}
       <button id="plus25">add 25 to width</button>
-      <button id="sequence">subtract 25 from width, wait, fade out</button>
+      <button id="sequence">sequence</button>
     </div>
 
     <div class="fr">
@@ -30,16 +30,21 @@
   <div class="notes" id="notes">
     <h3>Notes</h3>
     <ul>
+      <li>
+        Multiple delays need to be added up. For example if your first delay is 1s and<br>
+        second delay you want to be 1s, 2s will need to be placed (see code source).
+      </li>
+      <li>Animate 1 element at a time.</li>
       <li>Only px values can be animated at this time.</li>
-      <li>Chaining is supported.</li>
+      <li>Chaining is supported (see source code).</li>
       <li>Using requestAnimationFrame</li>
-      <li>Duration is defaulted to 400ms and is configurable.</li>
       <li>
         <em>With CSS transitions, most of this is obsolete.</em>
         <a target="_blank" href="https://developers.google.com/web/fundamentals/design-and-ux/animations/css-vs-javascript">
           CSS Animation vs JS Animation
         </a>
       </li>
+      <li>Animating relative values (see source code).</li>
     </ul>
   </div>
 
@@ -61,7 +66,12 @@
     });
 
     ML.El.evt(sequence, 'click', function() {
-      animateEl.to({width: '-25'}).to({opacity: 0});
+      animateEl
+        .to({ width: '+25', left: '+10' })
+        .delay(1000)
+        .to({ opacity: 0 })
+        .delay(2000)
+        .to({ opacity: 1, height: '+50' })
     })
 
     ML.El.evt(animWidth, 'click', function() {

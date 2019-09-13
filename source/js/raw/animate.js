@@ -2,12 +2,18 @@
  * * Easily animate CSS values. [credit](https://javascript.info/js-animation)
  * * The following easing options are available: `linear`, `elastic`, `quad`,
  * `quint`, `circ`, `back` or `bounce`.
+ * * You can animate relative values by doing `+25` or `-25` for a value. Which will take the 
+ * current property value and increase or decrease the property balue by 25 (see demo). 
+ * * The `to` menthod is used to animate css values and override global configuration.
+ * * The `delay` method is used to delay the animation from occuring.
  * * [Demo](/animate.html)
  * 
  * @example
+ * // Global configuration
  * var settings = {duration: 500, easing: 'bounce'};
  * var animation = new ML.Animate(ML.El.$q('#el'), settings);
- * animation.to({ width: 100 }, { delay: 400 }, function() {
+ *
+ * animation.to({ width: 100 }, {}, function() {
  *  console.log('animation complete');
  * })
  * 
@@ -67,11 +73,6 @@ ML.Animate = function(el, settings) {
     }
   };
 
-  /**
-   * Validates animation settings.
-   * @param {Object} overrides Custom animation settings.
-   * @returns {Object}
-   */
   this.validateSettings = function(overrides) {
     var options = ML.extend(DEFAULTS, (ML.isUndef(overrides, true)) ? {} : overrides);
 
@@ -98,6 +99,9 @@ ML.Animate = function(el, settings) {
 
   this.el = el;
   this.options = this.validateSettings(settings);
+  this.delayed = [];
+  this.delayExecution = false;
+  this.delayCount = 0;   
 };
 
 /**
@@ -111,6 +115,7 @@ ML.Animate = function(el, settings) {
  * @memberof ML.Animate
  */
 ML.Animate.prototype.to = function(props, settings, cb) {
+  var self = this;
   var options = this.validateSettings(settings);
   var el = this.el;
   var timer = null;
@@ -118,6 +123,16 @@ ML.Animate.prototype.to = function(props, settings, cb) {
   var initialProps = {};
   var progress = false;
   var time = new Date();
+
+  /**
+   * Handles the delay of an animation happening.
+   * @param {Function} func The callback function
+   * @private
+   */
+  function handleDelay(func){
+    self.delayed.push(func);
+    self.delayCount++;
+  }
 
   /**
    * Sets initial props for animating relative values.
@@ -200,8 +215,44 @@ ML.Animate.prototype.to = function(props, settings, cb) {
     timer = requestAnimationFrame(move);
   }
 
-  setInitialProps();
-  timer = requestAnimationFrame(move);
+  if (self.delayExecution) {
+    var toArgs = arguments;
+    handleDelay(function() {
+      self.to(toArgs[0], toArgs[1], toArgs[2]);
+    });
+  } else {
+    setInitialProps();
+    timer = requestAnimationFrame(move);
+  }
   
+  return this;
+};
+
+/**
+ * Delays animating the element.
+ * 
+ * @param {Number} time The amount of time to delay the animation, in ms.
+ * @memberof ML.Animate
+ */
+ML.Animate.prototype.delay = function(time) {
+  var self = this;
+  this.delayExecution = true;
+
+  var delayDone = function() {
+    self.delayExecution = false;
+     if (typeof(self.delayed[0]) === 'function') {
+       self.delayed[0]();
+       self.delayed.splice(0, 1);
+     }
+     if (self.delayed.length > 0) {
+      self.delayExecution = true;
+     }
+  };
+
+  var timer = setTimeout(function(){
+    delayDone();
+    clearTimeout(timer);
+  }, time);
+
   return this;
 };
