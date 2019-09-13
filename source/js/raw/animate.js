@@ -162,18 +162,6 @@ ML.Animate.prototype.to = function(props, settings, cb) {
   }
 
   /**
-   * Fade in/out an element.
-   * @private
-   */
-  function fadeEl() {
-    var curr = (currProps.opacity * 100);
-    var desr = (props.opacity * 100);
-    var whole = Math.round(curr + (desr - curr) * options.easing(progress));
-
-    el.style.opacity = whole / 100;
-  }
-
-  /**
    * Animates the element with the new CSS values provided.
    * @private
    */
@@ -191,15 +179,14 @@ ML.Animate.prototype.to = function(props, settings, cb) {
 
     for (var prop in props) {
       firstChar = props[prop].toString().charAt(0);
-      if (prop === 'opacity') {
-        fadeEl();
+      if (firstChar.charAt(0) === '+' || firstChar === '-') {
+        value = initialProps[prop] + parseFloat(props[prop]) * options.easing(progress);
       } else {
-        if (firstChar.charAt(0) === '+' || firstChar === '-') {
-          value = initialProps[prop] + parseFloat(props[prop]) * options.easing(progress);
-        } else {
-          value = currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress);
-        }
-        
+        value = currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress);
+      }
+      if (prop === 'opacity') {
+        el.style.opacity = value;
+      } else {
         el.style[prop] = Math.round(value) + 'px';
       }
     }
