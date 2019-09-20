@@ -20,9 +20,8 @@ const runSequence = require('run-sequence');
 const data = require('gulp-data');
 const jshint = require('gulp-jshint');
 const jsdoc = require('gulp-jsdoc3');
-const jsdocConfig = require('./jsdoc/config.json');
-
 const handlebarsJS = require('handlebars');
+const jsdocConfig = require('./jsdoc/config.json');
 
 handlebarsJS.registerHelper('upper', function(str){
   return str.toUpperCase();
@@ -51,6 +50,7 @@ const paths = {
       'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`],
       'animate.js': [jsGlobalPath, `${jsRawPath}/animate.js`],
       'ajax.js': [jsGlobalPath, `${jsRawPath}/ajax.js`],
+      'breakpoints.js': [jsGlobalPath, `${jsRawPath}/bpEvent.js`]
     },
 
     this.dist.css = `${this.dist.root}/css`;
@@ -188,12 +188,8 @@ gulp.task('serve', () => {
   });
 });
 
-gulp.task('docs', function() {
-  runSequence('build', 'document');
-})
-
 gulp.task('clean', () => {
-  return del.sync([paths.dist.root, 'docs'])
+  return del.sync(paths.dist.root)
 });
 
 gulp.task('watch', () => {
@@ -210,7 +206,15 @@ watch(paths.src.files, () => {
 function buildFn(cb) {
   runSequence(
     'clean',
-    ['images', 'files', 'styles', 'scripts', 'build-scripts', 'templates'],
+    [
+      'images', 
+      'files', 
+      'styles', 
+      'scripts', 
+      'build-scripts', 
+      'templates'
+    ],
+    'document',
     cb
   );
 }
@@ -227,6 +231,9 @@ gulp.task('build', buildFn);
 
 gulp.task('default', watchFn);
 
-/*gulp.on('stop', () => {
-  process.exit(0);
-});*/
+
+gulp.on('stop', () => {
+  setTimeout(function() {
+    process.exit(0);
+  }, 1000);
+});
