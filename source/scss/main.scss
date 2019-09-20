@@ -143,6 +143,16 @@ p {
   }
 }
 
+.current-bp {
+  background: #ccc;
+  padding: 10px;
+
+  &:before {
+    content: 'Current Breakpoint: ';
+    font-weight: bold;
+  }
+}
+
 /* Script specific styles */
 @import 
   "main/scripts/carousel",

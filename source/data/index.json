@@ -34,6 +34,10 @@
     {
       "title": "Tooltip",
       "page": "tooltip"
+    },
+    {
+      "title": "Breakpoints",
+      "page": "breakpoints"
     }
   ]
 }
