@@ -17,6 +17,10 @@
     {{/select2}}
     </select>
 
+    <div id="customContainer" style="margin:10px 0">
+      <button id="convert">convert into custom select</button>
+    </div>
+
     <div style="height:10px;clear:both;"></div> 
     <button type="submit">submit</button>
   </form>
@@ -24,10 +28,25 @@
   <div class="notes" id="notes">
     <h3>Notes</h3>
     <ul>
+      <li><code>optgroup</code> and multiple selections are not supported.</li>
       <li>Selects that have <code>system</code> as a class name will not be a custom select menu.</li>
       <li>Events bound to the select, will be bound to the custom select as well.</li>
-      <li>Not accessible</li>
+      <li>Not accessible (keyboard events, maybe soon 😉)</li>
     </ul>
   </div>
 
-{{>footer}}
+{{#> footer}}
+  <script>
+    var customContainer = ML.El.$q('#customContainer');
+    var convert = ML.El.$q('#convert');
+    var newSelect = ML.El.create('select');
+
+    newSelect.innerHTML = '<option>Created via JS</option>';
+    customContainer.appendChild(newSelect);
+
+    ML.El.evt(convert, 'click', function(e) {
+      e.preventDefault();
+      ML.Dropdown();
+    });
+  </script>
+{{/footer}}
