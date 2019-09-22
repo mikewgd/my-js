@@ -322,7 +322,7 @@ ML.El = {
   },
 
   /**
-   * 
+   * Create a custom event.
    * @param {String} name The name of the custom event.
    * @param {Object} data Data to send with the custom event.
    * @param {HTMLElement} [el=document] Element to attach the custom event to.
