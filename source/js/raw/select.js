@@ -356,7 +356,7 @@
    * If the `<select>` has a class name of `system`, a custom select will not be created.
    * This script changes all select menus and creates an HTML menu.
    * Events bound to the `<select>` are bound to the custom select menu. Events supported: `focus`, `blur` and `change`.
-   * [Demo](/form-select.html)
+   * [See it in action + some notes! 😀](/form-select.html)
    * @namespace
    *
    * @example {@lang xml}
