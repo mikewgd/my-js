@@ -2,8 +2,7 @@
 
 .animals {
   position: relative;
-  width: 300px;
-  margin: 0 auto;
+  max-width: 300px;
 
   .next {
     float: right;
@@ -12,29 +11,22 @@
   li {
     margin-right: 10px;
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
 
     img {
-      width: 300px;
-      height: 237px;
+      max-width: 300px;
+      margin-bottom: 14px;
     }
 
     span {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      background: #fff;
+      font-size: 20px;
+      text-align: center;
+      background: #efefef;
+      margin-top: 0;
+      margin-bottom: auto;
     }
-  }
-
-  .carousel-dots a {
-    text-decoration: none;
-    color: #ccc;
-    font-size: 40px;
-  }
-
-  .active a {
-    color: #000;
   }
 
   .inactive {
@@ -43,6 +35,17 @@
 }
 
 .carousel-status {
-  width: 300px;
+  max-width: 300px;
+  @media screen and (min-width: 667px) {
+    padding-left: 40px;
+  }
+}
+
+.carousel-container {
   margin: 0 auto;
+
+  @media screen and (min-width: 667px) {
+    display: flex;
+    max-width: 700px;
+  }
 }

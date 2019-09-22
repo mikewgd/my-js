@@ -1,0 +1,22 @@
+{{>header}}
+
+  <div class="current-bp"></div>
+
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>Only <code>min-width</code> media queries supported.</li>
+      <li>Pixel values supported for <code>min-width</code> media queries.</li>
+      <li>Name of the media query is called <code>bp-{width}</code>.</li>
+      <li>Custom event gets fired on load.</li>
+    </ul>
+  </div>
+
+{{#> footer}}
+  <script>
+    var currentBp = ML.El.$q('.current-bp');
+    ML.El.evt(window, 'switch', function(e) {
+      currentBp.innerHTML = JSON.stringify(e.detail);
+    });
+  </script>
+{{/footer}}

@@ -2,8 +2,8 @@
 
 .animate-playground {
   border: 2px solid $gray;
-  width: 400px;
-  height: 400px;
+  max-width: 400px;
+  height: 200px;
   position: relative;
 
   .animate-box {
@@ -19,7 +19,9 @@
 .animate-header {
   overflow: auto;
   margin: 20px 0;
-  width: 400px;
+  max-width: 400px;
+  display: flex;
+  
 
   button {
     margin: 0 2px 2px 0;

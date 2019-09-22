@@ -3,7 +3,7 @@
 /* MAIN */
 
 body {
-  font: 12px "Arial", Helvetica, sans-serif;
+  font: 14px "Arial", Helvetica, sans-serif;
   color: #000;
   margin: 0;
   padding: 0;
@@ -18,20 +18,11 @@ body {
 }
 
 .container {
-  max-width: 985px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.go-back {
-  display: block;
-  padding: 12px;
-  background: #CCC;
-  text-decoration: none;
-  color: #333;
-  border-bottom: 1px solid #666;
-  font-weight: bold;
-}
 
 /* General Classes */
 .fl {
@@ -40,6 +31,19 @@ body {
 
 .fr {
   float: right;
+}
+
+.hide-desktop {
+  @media screen and (min-width: 667px) {
+    display: none;
+  }
+}
+
+.hide-mobile {
+  display: none;
+  @media screen and (min-width: 667px) {
+    display: inline;
+  }
 }
 
 .hidden {
@@ -67,26 +71,85 @@ form {
   margin: 0;
 }
 
+ul {
+  padding: 0 0 0 20px;
+  margin: 0;
+
+  li {
+    margin-top: 6px;
+  }
+}
+
 ul.list li {
   margin-bottom: 5px;
 }
 
+p {
+  margin: 0 0 15px 0;
+
+  &:last-child {
+    margin: 0;
+  }
+}
+
 /* Script Header */
 .script-header {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   border-bottom: 1px solid #ccc;
-  overflow: auto;
+  padding-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  
+  
+  @media screen and (min-width: 667px) {
+    flex-wrap: nowrap;
+    flex-direction: row;
+  }
 
   h1 {
-    float: left;
     margin: 0;
+
+    @media screen and (min-width: 667px) {
+      flex-basis: 70%;
+    }
+  }
+
+  .links {
+    @media screen and (min-width: 667px) {
+      flex-basis: 30%;
+      text-align: right;
+    }
   }
 
   a {
-    float: right;
     font-size: 14px;
     font-weight: bold;
-    padding: 10px;
+    display: inline-block;
+    padding: 10px 10px 10px 0;
+  }
+}
+
+.notes {
+  background-color: $gray;
+  padding: 14px;
+  margin-top: 50px;
+  border: 1px solid #999;
+  display: inline-block;
+
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.current-bp {
+  background: #ccc;
+  padding: 10px;
+
+  &:before {
+    content: 'Current Breakpoint: ';
+    font-weight: bold;
   }
 }
 

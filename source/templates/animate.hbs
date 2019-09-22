@@ -1,15 +1,12 @@
 {{>header}}
 
-  <div class="script-header">
-    <h1>{{title}}</h1>
-    <a href="docs.html#carousel">Documentation</a>
-  </div>
-  
   <div class="animate-header">
     <div class="actions fl">
     {{#actions}}
       <button id="{{this.id}}">{{this.text}}</button>
     {{/actions}}
+      <button id="plus25">add 25 to width</button>
+      <button id="sequence">sequence</button>
     </div>
 
     <div class="fr">
@@ -30,55 +27,67 @@
     <div class="animate-box" id="animateBox"></div>
   </div>
 
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>
+        Multiple delays need to be added up. For example if your first delay is 1s and<br>
+        second delay you want to be 1s, 2s will need to be placed (see code source).
+      </li>
+      <li>Animate 1 element at a time.</li>
+      <li>Only px values can be animated at this time.</li>
+      <li>Chaining is supported (see source code).</li>
+      <li>Using requestAnimationFrame</li>
+      <li>
+        <em>With CSS transitions, most of this is obsolete.</em>
+        <a target="_blank" href="https://developers.google.com/web/fundamentals/design-and-ux/animations/css-vs-javascript">
+          CSS Animation vs JS Animation
+        </a>
+      </li>
+      <li>Animating relative values (see source code).</li>
+    </ul>
+  </div>
+
 {{#> footer}}
   <script>
-    var box = ML.El.$('animateBox');
-    var easing = ML.El.$('animateEasing');
-    var inc = 50;
+    var easing = ML.El.$q('#animateEasing');
+    var inc = 100;
     
-    var animRight = ML.El.$('animRight');
-    var animLeft = ML.El.$('animLeft');
-    var animBtm = ML.El.$('animBtm');    
-    var animWidth = ML.El.$('animWidth');
-    var animHeight = ML.El.$('animHeight');
-    var animWidthHeight = ML.El.$('animWidthHeight');
-    var animOpacOut = ML.El.$('animOpacOut');
-    var animOpacIn = ML.El.$('animOpacIn');
+    var animWidth = ML.El.$q('#animWidth');
+    var animHeight = ML.El.$q('#animHeight');
+    var animOpacOut = ML.El.$q('#animOpacOut');
+    var animOpacIn = ML.El.$q('#animOpacIn');
+    var plus25 = ML.El.$q('#plus25');
+    var sequence = ML.El.$q('#sequence');
+    var animateEl = new ML.Animate(ML.El.$q('#animateBox'), {easing: easing.value});
 
-    var animateEl = function(props) {
-      new ML.Animate(box, props, {easing: easing.value});
-    };
+    ML.El.evt(plus25, 'click', function() {
+      animateEl.to({width: '+25'});
+    });
+
+    ML.El.evt(sequence, 'click', function() {
+      animateEl
+        .to({ width: '+25', left: '+10' })
+        .delay(1000)
+        .to({ opacity: 0 })
+        .delay(2000)
+        .to({ opacity: 1, height: '+50' })
+    })
 
     ML.El.evt(animWidth, 'click', function() {
-      animateEl({width: inc});
+      animateEl.to({width: 100});
     });
 
     ML.El.evt(animHeight, 'click', function() {
-      animateEl({height: inc + 20});
-    });
-
-    ML.El.evt(animWidthHeight, 'click', function() {
-      animateEl({height: '+' + inc, width: '+' + inc});
-    });
-
-    ML.El.evt(animRight, 'click', function() {
-      animateEl({left: '+' + inc});
-    });
-
-    ML.El.evt(animLeft, 'click', function() {
-      animateEl({left: '-' + inc});
-    });
-
-    ML.El.evt(animBtm, 'click', function() {
-      animateEl({top: '+' + inc});
+      animateEl.to({height: 100});
     });
 
     ML.El.evt(animOpacOut, 'click', function() {
-      animateEl({opacity: 0});
+      animateEl.to({opacity: 0});
     });
 
     ML.El.evt(animOpacIn, 'click', function() {
-      animateEl({opacity: 1});
+      animateEl.to({opacity: 1});
     });
   </script>
 {{/footer}}

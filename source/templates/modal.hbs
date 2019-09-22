@@ -1,10 +1,5 @@
 {{>header}}
 
-  <div class="script-header">
-    <h1>{{title}}</h1>
-    <a href="docs.html#overlays-modals">Documentation</a>
-  </div>
-
   <h2>Examples:</h2>
   <ul class="list">
   {{#examples}}
@@ -14,6 +9,16 @@
     </li>
   {{/examples}}
   </ul>
+
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>Centering modal via CSS transforms</li>
+      <li><code>smart</code> removed, can accomplish with <code>max-width</code> and media queries.</li>
+      <li>You can use custom events to know when a modal is opened and/or closed.</li>
+      <li>Clicking on the overlay or dark background behind the modal, will close the modal.</li>
+    </ul>
+  </div>
 
   <div class="modal" id="unique-id3">
     <div class="modal-header">
@@ -53,6 +58,8 @@
       <img style="max-width:200px;" src="images/carousel-imgs/eagle.jpg" alt="">
     </div>
   </div>
+
+  
 
 {{#> footer}}
   <script>

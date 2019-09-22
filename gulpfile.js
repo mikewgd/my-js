@@ -20,7 +20,12 @@ const runSequence = require('run-sequence');
 const data = require('gulp-data');
 const jshint = require('gulp-jshint');
 const jsdoc = require('gulp-jsdoc3');
+const handlebarsJS = require('handlebars');
 const jsdocConfig = require('./jsdoc/config.json');
+
+handlebarsJS.registerHelper('upper', function(str){
+  return str.toUpperCase();
+});
 
 const paths = {
   src: { root: 'source' },
@@ -42,7 +47,10 @@ const paths = {
       'modal.js': [jsGlobalPath, `${jsRawPath}/modal.js`],
       'radiocheck.js': [jsGlobalPath, `${jsRawPath}/radiocheck.js`],
       'select.js': [jsGlobalPath, `${jsRawPath}/select.js`],
-      'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`]
+      'tooltip.js': [jsGlobalPath, `${jsRawPath}/tooltip.js`],
+      'animate.js': [jsGlobalPath, `${jsRawPath}/animate.js`],
+      'ajax.js': [jsGlobalPath, `${jsRawPath}/ajax.js`],
+      'breakpoints.js': [jsGlobalPath, `${jsRawPath}/bpEvent.js`]
     },
 
     this.dist.css = `${this.dist.root}/css`;
@@ -58,6 +66,20 @@ gulp.task('templates', () => {
   var opts = {
     ignorePartials: true,
     batch: [`${paths.src.root}/templates/partials`],
+    helpers: {
+      capitals: function(str){
+				return str.toUpperCase();
+      },
+      emptyArr: function(total, options) {
+        var ret = "";
+
+        for(var i=0, j=total.length; i<j; i++) {
+          ret = ret + options.fn(total[i]);
+        }
+
+        return ret;
+      }
+    }
   };
 
   return gulp.src([`${paths.src.root}/templates/*.hbs`])
@@ -166,12 +188,8 @@ gulp.task('serve', () => {
   });
 });
 
-gulp.task('docs', function() {
-  runSequence('build', 'document');
-})
-
 gulp.task('clean', () => {
-  return del.sync([paths.dist.root, 'docs'])
+  return del.sync(paths.dist.root)
 });
 
 gulp.task('watch', () => {
@@ -188,7 +206,15 @@ watch(paths.src.files, () => {
 function buildFn(cb) {
   runSequence(
     'clean',
-    ['images', 'files', 'styles', 'scripts', 'build-scripts', 'templates'],
+    [
+      'images', 
+      'files', 
+      'styles', 
+      'scripts', 
+      'build-scripts', 
+      'templates'
+    ],
+    'document',
     cb
   );
 }
@@ -205,6 +231,9 @@ gulp.task('build', buildFn);
 
 gulp.task('default', watchFn);
 
-/*gulp.on('stop', () => {
-  process.exit(0);
-});*/
+
+gulp.on('stop', () => {
+  setTimeout(function() {
+    process.exit(0);
+  }, 1000);
+});

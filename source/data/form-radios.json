@@ -1,6 +1,6 @@
 {
   "title": "Custom Form Elements - Radio buttons & Checkboxes",
-  "script": "radiocheck",
+  "script": null,
   "radiosSameName": [
     "male",
     "female",

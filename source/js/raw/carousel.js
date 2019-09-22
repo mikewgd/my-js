@@ -3,13 +3,23 @@
    * * A component for cycling through images, text and other elements, like a carousel.
    * * Nested carousels are not supported, and generally not compliant with accessibility standards.
    * * Each carousel should have a unique `id` attribute.
-   * * Every initialized carousel gets `MLCarousel` added to the element. For an example see example below.
+   * * Every initialized carousel gets `MLCarousel` added to the element. 
    * * When setting `arrowKeys: true`, please note you need to focus on the carousel or an 
    * element within the carousel for the arrow keys to work correctly.
-   * * Adds a `js-carousel-initialized` class to the carousel element.
+   * * `js-carousel-initialized` class name gets added to the carousel element.
    * * You can initialize carousels via `data-carousel` or JavaScript.
    * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
    * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
+   * * You can listen to custom events fired by the carousel. The carousel and carousel options are returned. See example below.
+   * * [See it in action + some notes! 😀](/carousel.html)
+   * 
+   * | Event Name | Description |
+   * |----------------------|----------------------------------------------------|
+   * | `carousel.init` | Triggered when a carousel is initialized. |
+   * | `carousel.next` | Triggered when next function is triggered. |
+   * | `carousel.prev` | Triggered when prev function is triggered. |
+   * | `carousel.slide` | When slide is triggered. |
+   * | `carousel.slide.end` | Triggered when the animation of slide is complete. |
    *
    * @example <caption>Sample carousel HTML (initialized via <code>data-</code> with default settings.):</caption> {@lang xml}
    * <div class="carousel" id="customCarousel" data-carousel>
@@ -22,9 +32,9 @@
    * </div>
    *
    * @example <caption>Rendered HTML with all settings.</caption> {@lang xml}
-   * <div class="carousel animals js-carousel-initialized" data-carousel="autoplay:true:dots:true:arrowKeys:true:autoplay:true:infinite:true:current:1" tabindex="0">
+   * <div class="carousel animals js-carousel-initialized" data-carousel="autoplay:true:dots:true:arrowKeys:true:infinite:true:current:1" tabindex="0">
    *   <div class="carousel-viewer" style="overflow: hidden;">
-   *     <ul style="left: -620px;">
+   *     <ul>
    *       <li class="carousel-slide"><span>3</span><img alt="" src="images/carousel-imgs/lion.jpg" /></li>
    *       <li class="carousel-slide"><span>0</span><img alt="" src="images/carousel-imgs/giraffe.jpg" /></li>
    *       <li class="carousel-slide"><span>1</span><img alt="" src="images/carousel-imgs/eagle.jpg" /></li>
@@ -48,7 +58,7 @@
    * </div>
    *
    * @example <caption>Initializing carousel via JavaScript</caption>
-   * var carousel = new ML.Carousel(ML.El.$('initCarousel'), {
+   * var carousel = new ML.Carousel(ML.El.$q('#initCarousel'), {
    *   dots: true,
    *   arrowKeys: true,
    *   infinite: true
@@ -66,25 +76,33 @@
    * <button id="carouselNext">Next button</button>
    *
    * <script>
-   *   var carousel = ML.El.$('customCarousel').MLCarousel;
+   *   var carousel = ML.El.$q('#customCarousel').MLCarousel;
    *   
    *   carousel.complete(function(index, el) {
    *     console.log(index, el);
    *   });
    *   
-   *   ML.El.evt(ML.El.$('carouselNext'), 'click', function(e) {
+   *   ML.El.evt(ML.El.$q('carouselNext'), 'click', function(e) {
    *     carousel.next();
    *   });
    * </script>
    * 
+   * @example <caption>Using custom events.</caption>
+   * document.addEventListener('carousel.next', function(event) {
+    *    var eventDetails = event.detail;
+    *    console.log('carousel next slide', eventDetails.carousel);
+    *    console.log('carousel options', eventDetails.options);
+    * });
+   * 
    * @param {HTMLElement} el The carousel element.
    * @param {Object} [settings] Configuration settings.
-   * @param {Number} [settings.current=0] The current slide to start on. 0 based.
+   * @param {Number} [settings.current=0] The current slide to start on.
    * @param {Boolean} [settings.autoplay=false] The carousel will start automatically.
    * @param {Number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
    * @param {Boolean} [settings.dots=false] Dot navigation.
    * @param {Boolean} [settings.nav=true] Arrow navigation.
    * @param {Boolean} [settings.arrowKeys=false] Arrow keyboard navigation.
+   * @param {Boolean} [settings.touch=false] Swipe support.
    * @param {Boolean} [settings.infinite=false] Infinte amount of slides.
    * @param {Function} cb Callback function after slide has animated.
    * @param {Number} cb.index The current slide index.
@@ -104,6 +122,7 @@
       dots: false,
       nav: true,
       arrowKeys: false,
+      touch: false,
       infinite: false
     };
 
@@ -115,8 +134,7 @@
     var ul = null;
     var nextButton = null;
     var prevButton = null;
-    var dotsUl = null;
-    var dotsLis = [];
+    var carouselDots = null;
     var initialized = false;
 
     var animating = false;
@@ -127,6 +145,13 @@
     var firstSlide = null;
     var lastSlide = null;
     var slideDirection = 'next';
+    var swipeTransitionValue = 'transform 100ms linear';
+    var slideTransitionValue = 'transform 400ms 13ms linear';
+    
+    var posX1 = 0;
+    var posX2 = 0;
+    var posStart = 0;
+    var posFinal = 0;
 
     var methods = {
       complete: function() {}
@@ -176,6 +201,10 @@
           options.arrowKeys = DEFAULTS.arrowKeys;
         }
 
+        if (!ML.isBool(options.touch)) {
+          options.touch = DEFAULTS.touch;
+        }
+
         if (!ML.isBool(options.dots)) {
           options.dots = DEFAULTS.dots;
         }
@@ -188,8 +217,8 @@
 
       if (!options.infinite) {
         el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + carouselHTML + '</div>';
-        ul = ML.El._$('ul', el)[0];
-        ul.style.left = -(width * current) + 'px';
+        ul = el.querySelector('ul:first-child');
+        ML.El.cssTransform(ul, 'translateX(' + -(width * current) + 'px)');
       } else {
         firstSlide = slides[0];
         lastSlide = slides[total - 1];
@@ -198,9 +227,11 @@
         lastSlide.parentNode.insertBefore(firstSlide.cloneNode(true), lastSlide.nextSibling);
 
         el.innerHTML = '<div class="carousel-viewer" style="overflow: hidden;">' + el.innerHTML + '</div>';
-        ul = ML.El._$('ul', el)[0];
-        ul.style.left = -(width * (current + 1)) + 'px';
+        ul = el.querySelector('ul:first-child');
+        ML.El.cssTransform(ul, 'translateX(' + -(width * (current + 1)) + 'px)');
       }
+
+      ML.El.cssTransition(ul, '-webkit-' + slideTransitionValue + ', ' + slideTransitionValue);
 
       if (options.nav) {
         createNav();
@@ -215,19 +246,22 @@
       el.MLCarousel.init = true;
       el.MLCarousel.complete = function(cb2) {
         methods.complete = cb2;
-        // return el.MLCarousel;
       };
       el.MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
       el.setAttribute('tabindex', 0);
+      ul.style.width = 'calc(100% * ' + total + ')';
 
       bindEvents();
       callback(true);
 
-
       if (options.autoplay) {
         this.autoplay(true);
       }
+      ML.El.customEventTrigger('carousel.init', {
+        carousel: el, 
+        options: options
+      });
     };
 
     /**
@@ -251,6 +285,10 @@
 
       current++;
       el.MLCarousel.currentSlideIndex = current;
+      ML.El.customEventTrigger('carousel.next', {
+        carousel: el, 
+        options: el.MLCarousel
+      });
       slide();
     };
 
@@ -275,6 +313,10 @@
 
       current--;
       el.MLCarousel.currentSlideIndex = current;
+      ML.El.customEventTrigger('carousel.prev', {
+        carousel: el, 
+        options: el.MLCarousel
+      });
       slide();
     };
 
@@ -326,13 +368,13 @@
       this.autoplay(false);
 
       if (options.dots) {
-        var dotLinks = ML.El._$('a', dotsUl);
+        var dotLinks = ML.nodeArr(carouselDots.querySelectorAll('a'));
 
-        ML.loop(dotLinks, function(item) {
+        dotLinks.map(function(item) {
           item.removeEventListener('click', dotClick, false);
         });
 
-        dotsUl.parentNode.removeChild(dotsUl);
+        carouselDots.parentNode.removeChild(carouselDots);
       }
 
       if (options.nav) {
@@ -346,7 +388,15 @@
       if (options.arrowKeys) {
         document.removeEventListener('keydown', paginationKeydown, false);
         el.removeAttribute('tabindex');
-      }      
+      }     
+      
+      if (options.touch) {
+        ul.removeEventListener('touchstart', dragStart, false);
+        ul.removeEventListener('touchend', dragEnd, false);
+        ul.removeEventListener('touchmove', dragAction, false);
+        document.removeEventListener('onmouseup', dragEnd, false);
+        document.removeEventListener('onmouseove', dragAction, false);
+      }
 
       delete el.MLCarousel;
       el.innerHTML = carouselHTML;
@@ -354,8 +404,7 @@
       ML.El.removeClass(el, 'js-carousel-initialized');
 
       current = 0;
-      dotsUl = null;
-      dotsLis = [];
+      carouselDots = null;
 
       animating = false;
       autoplayTimer = null;
@@ -370,16 +419,11 @@
      * @private
      */
     function getSlides() {
-      var lis = ML.El._$('li', el);
-      var arr = [];
-
-      for (var i = 0, len = lis.length; i < len; i++) {
-        if (lis[i].className === 'carousel-slide') {
-          arr.push(lis[i]);
-        }
-      }
-
-      return arr;
+      var lis = ML.nodeArr(el.querySelectorAll('li'));
+      
+      return lis.filter(function(li) {
+        return li.className === 'carousel-slide';
+      });
     }
 
     /**
@@ -387,14 +431,17 @@
      * @private
      */
     function createNav() {
-      nextButton = ML.El.create('a', {'href': '#', 'class': 'carousel-nav next'});
-      prevButton = ML.El.create('a', {'href': '#', 'class': 'carousel-nav prev'});
+      var node1 = ML.El.create('a', {'href': '#', 'class': 'carousel-nav next'});
+      var node2 = ML.El.create('a', {'href': '#', 'class': 'carousel-nav prev'});
+      
+      node1.innerHTML = '<span>Next</span> <i>&rarr;</i>';
+      node2.innerHTML = '<i>&larr;</i> <span>Previous</span>';
 
-      prevButton.innerHTML = '<i>&larr;</i> <span>Previous</span>';
-      nextButton.innerHTML = '<span>Next</span> <i>&rarr;</i>';
+      el.appendChild(node1);
+      el.appendChild(node2);
 
-      el.appendChild(prevButton);
-      el.appendChild(nextButton);
+      nextButton = el.querySelector('.carousel-nav.next:not(.inactive)');
+      prevButton = el.querySelector('.carousel-nav.prev:not(.inactive)');
     }
 
     /**
@@ -402,22 +449,71 @@
      * @private
      */
     function createDots() {
-      var div = ML.El.create('div', {'class': 'carousel-dots'});
-      var li = null;
-      var link = null;
-      dotsUl = ML.El.create('ul');
-
-      div.appendChild(dotsUl);
-      el.appendChild(div);
+      carouselDots = ML.El.create('div', {'class': 'carousel-dots'});
+      var dots = '';
 
       for (var i = 0, len = slides.length; i < len; i++) {
-        li = ML.El.create('li');
-        link = ML.El.create('a', {'href': '#', 'rel': i});
-        link.innerHTML = '&bull;';
-        dotsLis.push(li);
-        li.appendChild(link);
-        dotsUl.appendChild(li);
+        dots += '<li><a href="#" rel="' + i + '">' + (i + 1) + '</a></li>';
       }
+
+      carouselDots.innerHTML = '<ul>' + dots + '</ul>';
+      el.appendChild(carouselDots);
+    }
+
+    /**
+     * Touchstart event for swipe.
+     * @param {Event} e The Event object.
+     * @private
+     */
+    function dragStart(e) {
+      e.preventDefault();
+      posStart = getTransform();
+
+      if (e.type === 'touchstart') {
+        posX1 = e.touches[0].clientX;
+      } else {
+        posX1 = e.clientX;
+        ML.El.evt(document, 'mouseup', dragEnd);
+        ML.El.evt(document, 'mousemove', dragAction);
+      }
+    }
+
+    /**
+     * Touchmove and mousmove event for swipe.
+     * @param {Event} e The Event object.
+     * @private
+     */
+    function dragAction(e) {
+      if (e.type === 'touchmove') {
+        posX2 = posX1 - e.touches[0].clientX;
+        posX1 = e.touches[0].clientX;
+      } else {
+        posX2 = posX1 - e.clientX;
+        posX1 = e.clientX;
+      }
+      ML.El.cssTransition(ul, 'none');
+      ML.El.cssTransform(ul, 'translateX(' + (getTransform() - posX2) + 'px)');
+    }
+    
+    /**
+     * Touchend event for swipe.
+     * @private
+     */
+    function dragEnd() {
+      posFinal = getTransform();
+        
+      if (posFinal - posStart < -100) {
+        self.next();
+        slide(true);
+      } else if (posFinal - posStart > 100) {
+        self.prev();
+        slide(true);
+      } else {
+        ML.El.cssTransition(ul, '-webkit-' + swipeTransitionValue + ', ' + swipeTransitionValue);
+        ML.El.cssTransform(ul, 'translateX(' + (posStart) + 'px)');
+      }
+      document.removeEventListener('onmouseup', dragEnd, false);
+      document.removeEventListener('onmouseove', dragAction, false);
     }
 
     /**
@@ -426,9 +522,9 @@
      */
     function bindEvents() {
       if (options.dots) {
-        var dotLinks = ML.El._$('a', dotsUl);
+        var dotLinks = ML.nodeArr(el.querySelectorAll('.carousel-dots a'));
 
-        ML.loop(dotLinks, function(item) {
+        dotLinks.forEach(function(item) {
           ML.El.evt(item, 'click', dotClick);
         });
       }
@@ -436,6 +532,12 @@
       ML.El.evt(nextButton, 'click', paginationClick);
 
       ML.El.evt(prevButton, 'click', paginationClick);
+
+      if (options.touch) {
+        ML.El.evt(ul, 'touchstart', dragStart);
+        ML.El.evt(ul, 'touchend', dragEnd);
+        ML.El.evt(ul, 'touchmove', dragAction);
+      }
 
       if (options.arrowKeys) {
         // To prevent being bound more than once.
@@ -500,7 +602,7 @@
 
       e.preventDefault();
 
-      if (ML.El.hasClass(target, 'inactive') || animating) {
+      if (animating) {
         return;
       }
 
@@ -508,8 +610,6 @@
       if (/carousel-nav/.test(target.parentNode.className)) {
         target = target.parentNode;
       }
-
-      // slideDirection = (ML.El.hasClass(target, 'prev')) ? 'prev' : 'next';
 
       if (ML.El.hasClass(target, 'prev')) {
         self.prev();
@@ -519,29 +619,60 @@
     }
 
     /**
+     * Returns current transform of ul.
+     * @private
+     * @returns {Number}
+     */
+    function getTransform() {
+      var ulTransform = window.getComputedStyle(ul).transform;
+      var currTransform = typeof WebKitCSSMatrix === 'undefined' ? new MSCSSMatrix(ulTransform) :
+        new WebKitCSSMatrix(ulTransform);
+
+      return currTransform.e;
+    }
+    
+    /**
     * Animates the carousel to slide to each desired slide.
+    * @param {Boolean} [touch=false] Touch option is enabled.
     * @private
     */
-    function slide() {
+    function slide(touch) {
       var desired = -(width * current);
+      var ulTransform = touch ? posStart : getTransform();
+      var transitionValue = touch ? swipeTransitionValue : slideTransitionValue;
+      
       animating = true;
 
       if (options.infinite) {
         var delta = (slideDirection === 'prev') ? -1 : 1;
-        desired = parseInt(window.getComputedStyle(ul).getPropertyValue("left")) + (-width * delta);
+        desired = ulTransform + (-width * delta);
       }
 
-      ML.Animate(ul, {left: desired}, {relative: false}, function() {
+      ML.El.cssTransition(ul, '-webkit-' + transitionValue + ', ' + transitionValue);
+
+      ML.El.cssTransform(ul, 'translateX(' + desired + 'px)');
+      ML.El.customEventTrigger('carousel.slide', {
+        carousel: el, 
+        options: el.MLCarousel
+      });
+
+      ul.addEventListener('transitionend', function() {
         animating = false;
         callback(false);
 
         if (options.infinite) {
           if (current === 0 && slideDirection === 'next') {
-            ul.style.left = -width + 'px';
+            ML.El.cssTransition(ul, 'none');
+            ML.El.cssTransform(ul, 'translateX(' + -width + 'px)');
           } else if (current === (total - 1) && slideDirection === 'prev') {
-            ul.style.left = -(width * total) + 'px';
+            ML.El.cssTransition(ul, 'none');
+            ML.El.cssTransform(ul, 'translateX(' + -(width * total) + 'px)');
           }
         }
+        ML.El.customEventTrigger('carousel.slide.end', {
+          carousel: el, 
+          options: el.MLCarousel
+        });
       });
     }
 
@@ -554,7 +685,9 @@
       var desired = -(width * (current + 1));
       animating = false;
 
-      ML.Animate(ul, {left: desired}, {relative: false}, function() {
+      ML.El.cssTransform(ul, 'translateX(' + desired + 'px)');
+
+      ul.addEventListener('transitionend', function() {
         animating = false;
         callback(false);
       });
@@ -611,7 +744,7 @@
       }
       
       if (options.dots) {
-        ML.loop(dotsLis, function(li, i) {
+        ML.nodeArr(carouselDots.querySelectorAll('li')).forEach(function(li, i) {
           ML.El.removeClass(li, 'active');
           if (i === current) {
             ML.El.addClass(li, 'active');
@@ -623,16 +756,13 @@
 })();
 
 (function() {
-  var carouselEl = ML.El._$('div');
   var carousel = null;
   var settings = {};
+  var carousels = ML.El.$qAll('[data-carousel]');
 
-  for (var i = 0; i < carouselEl.length; i++) {
-    if (ML.El.data(carouselEl[i], 'carousel') !== null) {
-
-      settings = ML.parObj(ML.El.data(carouselEl[i], 'carousel'));
-      carousel = new ML.Carousel(carouselEl[i], settings);
-      carousel.init();
-    }
-  }
+  carousels.map(function(carouselEl) {
+    settings = ML.parObj(ML.El.data(carouselEl, 'carousel'));
+    carousel = new ML.Carousel(carouselEl, settings);
+    carousel.init();
+  });
 })();

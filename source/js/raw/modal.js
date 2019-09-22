@@ -2,15 +2,20 @@
   /**
    * * Allows you to add dialogs to your site for lightboxes, user notifications,
    * custom content and etc...
-   * * Clicking on the overlay or dark background behind the modal, will close the modal.
    * * Nested modals aren’t supported. Avoid nesting modals in fixed elements. The modals
    * use `position: fixed`, which can sometimes be a bit particular about its rendering. 
    * * When possible, place your modal HTML in a top-level position to avoid interference
    * from other elements.
    * * Each modal should have a unique `id` attribute.
-   * * When a modal is opened the class name `modal-opened` is appended to the `<body>`.
+   * * When a modal is opened the class name `js-modal-opened` is appended to the `<html>`.
    * * You can show modals via `data-modal` or JavaScript.
-   * * Every modal element gets `MLModal` added to the element.
+   * * You can listen to custom events fired by the modal. See example below.
+   * * [See it in action + some notes! 😀](/modal.html)
+   * 
+   * | Event Name | Description |
+   * |----------------|------------------------------------------------------|
+   * | `modal.opened` | Triggered when a modal is opened. Returns the modal. |
+   * | `modal.closed` | Triggered when a modal is closed. Returns the modal. |
    *
    * @example <caption>Sample markup of modal HTML.</caption> {@lang xml}
    * <div class="modal" id="unique-id3">
@@ -31,9 +36,7 @@
    *
    * // Only JavaScript needed:
    * <script>
-   *   var modals = new ML.Modal({
-   *     width: 800 // Global configuration.
-   *   });
+   *   var modals = new ML.Modal();
    *   
    *   modals.init();
    * </script>
@@ -42,45 +45,23 @@
    *
    * @example <caption>The modal can be triggered via JavaScript instead of or in addition
    * to <code>data-modal</code></caption>
-   * // Will show the modal HTML with id of unique-id3 with a width of 750 pixels and will
-   * // add the class name 'show me' to the modal element.
-   * modals.show('unique-id3', {width: 750, activeClass: 'show-me'});
+   * // Will show the modal HTML with id of unique-id3 with a width of 750 pixels
+   * modals.show('unique-id3', {width: 750});
    * 
-   * @param {Object} [settings] Configuration settings.
-   * @param {String} [settings.selectorModal=modal] The selector for modal window.
-   * @param {String} [settings.selectorClose=modal-close] The selector that closes modals.
-   * @param {String} [settings.activeclass=active] The class to show the modal.
-   * @param {Number} [settings.width=600] The width of the modal.
-   * @param {Boolean} [settings.smart=false] If the modal should adjust the width when the
-   * window is resized.
+   * @example <caption>Using custom events.</caption>
+   * document.addEventListener('modal.opened', function(event) {
+    *    var eventDetails = event.detail;
+    *    console.log('opened modal', eventDetails.modal);
+    * });
+   * 
    * @constructor
    */
-  ML.Modal = function(settings) {
-    /**
-     * Modal defaults.
-     * @type {Object}
-     * @private
-     */
-  	var DEFAULTS = {
-      selectorModal: 'modal',           // TODO: class name, can change to attr
-      selectorClose: 'modal-close',     // TODO: class name, can change to attr
-      activeClass: 'active',
-      width: 600,
-      smart: false
-    };
-
-    var selectorToggle = 'data-modal';  // TODO: class name, can change to attr
-    var options = {};
-    var modals = [];
-    var toggles = [];
+  ML.Modal = function() {
+    var modalToggle = null;
+    var modals = null;
     var overlay = null;
     var self = this;
     var openedModal = null;
-
-    var resizeAdjust = 1.25;
-    var currResize = ML.windowDimen().w;
-    var resizeDirection = (currResize < lastResize) ? 'down' : 'up';
-    var lastResize = ML.windowDimen().w;
 
     /**
      * Initializes the modal class.
@@ -89,54 +70,17 @@
      * modals.init();
      */
     this.init = function() {
-      var tags = ML.El._$('*');
-
       self.destroy();
 
-      options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
-      options.selectorModal = options.selectorModal.toString();
-      options.selectorClose = options.selectorClose.toString();
-      options.width = parseInt(options.width);
-      options.smart = ML.bool(options.smart);
+      modalToggle = ML.El.$qAll('[data-modal]');
+      modals = ML.El.$qAll('.modal');
 
-      if (!ML.isUndef(options.activeClass, true) && ML.isString(options.activeClass)) {
-        options.activeClass = options.activeClass.toString();
-      }
-     
-      if (ML.El.$C(options.selectorModal).length < 1) {
-        throw new Error('There are no <div class="' + options.selectorModal + '" /> on the page.');
-      } else {
-        modals = ML.El.$C(options.selectorModal);
-        overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
-
-        // IE
-        overlay.style.filter = 'alpha(opacity=50)';
+      if (modals.length < 1) {
+        throw new Error('There are no modals on the page.');
       }
 
-      if (!ML.isNum(options.width)) {
-        options.width = DEFAULTS.width;
-      }
-
-      if (ML.isUndef(options.activeClass, true)) {
-        options.activeClass = DEFAULTS.activeClass;
-      }
-
-      if (!ML.isBool(options.smart)) {
-        options.smart = DEFAULTS.smart;
-      }
-
-      ML.loop(tags, function(element) {
-        if (element.getAttribute(selectorToggle) !== null) {
-          if (ML.isUndef(element.rel, true)) {
-            throw new Error('Element to show the modal must have a valid rel attribute.');
-          } else {
-            toggles.push(element);
-          }
-        }
-      });
-
+      overlay = ML.El.create('div', {'class': 'modal-overlay hidden'});
       document.body.appendChild(overlay);
-      updateModals(null, options);
       bindEvents();
     };
 
@@ -145,48 +89,11 @@
      * @private
      */
     function bindEvents() {
-      if (toggles.length > 0) {
-        ML.loop(toggles, function(element) {
-          ML.El.evt(element, 'click', toggleClick);
-        });
-      }
+      modalToggle.map(function(element) {
+        ML.El.evt(element, 'click', toggleClick);
+      });
 
       ML.El.evt(document, 'click', closeClick);
-
-      // ML.El.evt(window, 'resize.throttle', windowResize);
-    }
-
-    /**
-     * Event attached to window resize.
-     * @private
-     */
-    function windowResize() {
-      currResize = ML.windowDimen().w;
-      resizeDirection = (currResize < lastResize) ? 'down' : 'up';
-      lastResize = ML.windowDimen().w;
-
-      if (openedModal) {
-        adjustModal();
-      }
-    }
-
-    /**
-     * Adjusts the width of the modal according to the window dimensions.
-     * @private
-     */
-    function adjustModal() {
-      var collideRight = ML.El.collides({
-        width: ML.windowDimen().w,
-        height: ML.windowDimen().h,
-        x: -ML.windowDimen().w,
-        y: 0
-      }, openedModal);
-
-      if (collideRight) {
-        centerModal(openedModal, Math.round(openedModal.offsetWidth / resizeAdjust));
-      } else if (resizeDirection === 'up' && openedModal.offsetWidth <= openedModal.MLModal.width) {
-        centerModal(openedModal, Math.round(openedModal.offsetWidth * resizeAdjust));
-      }
     }
 
     /**
@@ -195,10 +102,9 @@
      * @private
      */
     function closeClick(e) {
-      e.preventDefault();
       var clicked = ML.El.clicked(e);
-      if (ML.El.hasClass(clicked, options.selectorClose) ||
-        ML.El.hasClass(clicked, 'modal-overlay')) {
+      if (ML.El.hasClass(clicked, 'modal-close') || ML.El.hasClass(clicked, 'modal-overlay')) {
+        e.preventDefault();
         self.hide();
       }
     }
@@ -223,26 +129,30 @@
      */
     this.destroy = function() {
       // remove event listeners.
-      ML.loop(toggles, function(element) {
-        ML.El.removeEvt(element, 'click', toggleClick);
-      });
+
+      if (modalToggle) {
+        modalToggle.map(function(element) {
+          ML.El.removeEvt(element, 'click', toggleClick);
+        });
+      }
 
       ML.El.removeEvt(document, 'click', closeClick);
 
-      if (ML.El.$C('modal-overlay').length > 0) {
+      if (overlay) {
         document.body.removeChild(overlay);
       }
 
-      ML.loop(modals, function(element) {
-        element.removeAttribute('style');
-        ML.El.removeClass(element, element.MLModal.activeClass);
-      });
+      if (modals) {
+        modals.map(function(element) {
+          element.removeAttribute('style');
+          ML.El.removeClass(element, 'active');
+        });
+      }
 
-      options = null;
+      ML.El.customEventTrigger('modal.destroyed', {modal: openedModal});
       overlay = null;
       openedModal = null;
       modals = [];
-      toggles = [];
     };
 
     /**
@@ -250,112 +160,24 @@
      * Used when showing modal without `data-modal`.
      * @param {String} id The id of the modal you want to display.
      * @param {Object} modalOptions Configuration settings to overwrite defaults. Only
-     * `activeClass` and `width` will be overriden. Other settings are ignored.
-     *
-     * @example
-     * // Shows modal element with id of unique-id3 with a width of 400 pixels.
-     * modals.show('unique-id3', {width: 400});
+     * `width` will be overriden. Other settings are ignored.
      */
   	this.show = function(id, modalOptions) {
-      var modal = updateModals(ML.El.$(id), ML.extend(options, modalOptions));
+      var modal = ML.El.$q('#' + id);
 
       self.hide();
       
-      ML.El.addClass(modal, modal.MLModal.activeClass);
+      ML.El.addClass(modal, 'active');
       ML.El.removeClass(overlay, 'hidden');
-      ML.El.addClass(document.body, 'modal-opened');
+      ML.El.addClass(document.documentElement, 'js-modal-opened');
 
-      modal.MLModal.width = parseInt(modal.MLModal.width); 
       openedModal = modal;
+      ML.El.customEventTrigger('modal.opened', {modal: openedModal});
 
-      if (modal.MLModal.smart) {
-        // To prevent being bound more than once.
-        if (!ML.El.isBound(window, 'resize.throttle', 'windowResize')) {
-          ML.El.evt(window, 'resize.throttle', windowResize);
-        }
+      if (modalOptions) {
+        modal.style.maxWidth = modalOptions.width + 'px';
       }
-
-      centerModal(modal, modal.MLModal.width);
   	};
-
-    /**
-     * Handles setting the width based on certain parameters.
-     * Centers the modal within the window.
-     * @param {HTMLElement} modal The modal DOM element.
-     * @param {Number} [width] The width to set the modal.
-     * @private
-     */
-    function centerModal(modal, width) {
-      var height = modal.offsetHeight;
-
-      if (ML.isUndef(width)) {
-        width = modal.offsetWidth;
-      } 
-
-      if (width > ML.windowDimen().w) {
-        width = ML.windowDimen().w - 10;
-      } 
-
-      // Prevents the modal's width from going over the options set.
-      if (ML.windowDimen().w > modal.MLModal.width) {
-        width = modal.MLModal.width;
-      } 
-
-      // On mobile, make size of the window.
-      if (ML.windowDimen().w <= 400) {
-        width = ML.windowDimen().w;
-      }
-
-      if (modal.offsetHeight >= ML.windowDimen().h) {
-        height = ML.windowDimen().h;
-        modal.style.maxHeight = height + 'px';
-      } else {
-        modal.style.maxHeight = 'none';
-      }
-
-      ML.El.setStyles(modal, {
-        'width': width + 'px',
-        'overflow': 'auto',
-        'marginTop': '-' + (height / 2) + 'px',
-        'marginLeft': '-' + (width / 2) + 'px'
-      });
-    }
-
-    /**
-     * Updates the modals array.
-     * @param {HTMLElement} el The modal to search for in array.
-     * @param {Object} options The options for the modal.
-     * @return {HTMLElement} The modal found in the array of modals.
-     * @private
-     */
-    function updateModals(el, options) {
-      var modal = {};
-
-      for (var i = 0, len = modals.length; i < len; i++) {
-        if (el === null || el.id === modals[i].id) {
-          modal = modals[i];
-
-          options.width = parseInt(options.width);
-          options.smart = ML.bool(options.smart);
-
-          if (!ML.isNum(options.width)) {
-            options.width = DEFAULTS.width;
-          }
-
-          if (ML.isUndef(options.activeClass, true)) {
-            options.activeClass = DEFAULTS.activeClass;
-          }
-
-          if (!ML.isBool(options.smart)) {
-            options.smart = DEFAULTS.smart;
-          }
-          
-          modals[i].MLModal = options;
-        }
-      }
-
-      return modal;
-    }
 
     /**
      * Hides all the modals.
@@ -365,11 +187,12 @@
      */
   	this.hide = function() {
       if (openedModal) {
-        ML.El.removeClass(openedModal, openedModal.MLModal.activeClass);
+        ML.El.removeClass(openedModal, 'active');
+        ML.El.customEventTrigger('modal.closed', {modal: openedModal});
       }
 
       ML.El.addClass(overlay, 'hidden');
-      ML.El.removeClass(document.body, 'modal-opened');
+      ML.El.removeClass(document.documentElement, 'js-modal-opened');
       openedModal = null;
     };
   };

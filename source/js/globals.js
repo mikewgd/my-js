@@ -2,74 +2,30 @@
 
 'use strict';
 
-// Polyfill: Array.indexOf
-if (!Array.prototype.indexOf) {
-  Array.prototype.indexOf = function(e) {
-    if (this === null) {
-      throw new TypeError();
-    }
-    var t = Object(this);
-    var n = t.length >>> 0;
-    if (n === 0) {
-      return -1;
-    }
-    var r = 0;
-    if (arguments.length > 1) {
-      r = Number(arguments[1]);
-      if (r !== r) {
-        r = 0;
-      } else if (r !== 0 && r !== Infinity && r !== -Infinity) {
-        r = (r > 0 || -1) * Math.floor(Math.abs(r));
-      }
-    }
-    if (r >= n) {
-      return -1;
-    }
-    var i = r >= 0 ? r : Math.max(n - Math.abs(r), 0);
-    for (; i < n; i++) {
-      if (i in t && t[i] === e) {
-        return i;
-      }
-    }
-    return -1;
-  };
-}
-
-// Polyfill: window.getComputedStyle
-if (!window.getComputedStyle) {
-  window.getComputedStyle = function(el) {
-    this.el = el;
-    this.getPropertyValue = function(prop) {
-      var re = /(\-([a-z]){1})/g;
-      if (prop === 'float') {
-        prop = 'styleFloat';
-      }
-
-      if (re.test(prop)) {
-        prop = prop.replace(re, function() {
-          return arguments[2].toUpperCase();
-        });
-      }
-
-      return el.currentStyle[prop] ? el.currentStyle[prop] : null;
-    };
-
-    return this;
-  };
-}
-
-// Polyfill: Event.preventDefault()
-if (!Event.prototype.preventDefault) {
-  Event.prototype.preventDefault = function() {
-    this.returnValue = false;
-  };
-}
-
 var ML = {} || function() {};
 window.ML = window.ML || function() {};
 
+// Polyfill: Custom Event < IE 11
+// https://gomakethings.com/custom-events-with-vanilla-javascript/
+(function () {
+  if (typeof window.CustomEvent === 'function') {
+    return false;
+  }
+
+  function CustomEvent (event, params) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+   }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+})();
+
 /**
- * The main namespace.
+ * Main namespace.
  * @namespace
  */
 ML = {
@@ -119,10 +75,10 @@ ML = {
   },
 
   /**
-   * Returns `true` or `false` if a value is undefined or not.
-   * @param {*} val The value to test if undefined.
-   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
-   * optional. If a value is empty and paramter is not set, `false` is returned.
+   * Returns `true` or `false` if a value is undefined.
+   * @param {*} val Test value.
+   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". 
+   * If a value is empty and parameter is not set, `false` is returned.
    * @return {Boolean}
    */
   isUndef: function(val, empty) {
@@ -137,7 +93,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a boolean.
-   * @param {*} val The value to test if a boolean.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isBool: function(val) {
@@ -146,7 +102,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a number.
-   * @param {*} val The value to test if a number.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isNum: function(val) {
@@ -155,7 +111,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a string.
-   * @param {*} val The value to test if a string.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isString: function(val) {
@@ -192,53 +148,23 @@ ML = {
   },
 
   /**
-   * Loop through an array with callback.
-   * 
-   * @param {Arrays} arr The array to loop though.
-   * @param {Function} cb Function to be called during loop.
-   * @param {*} cb.element The value of the array element.
-   * @param {Number} cb.index The index of the array element.
-   * 
-   * @example
-   * var arr = ['apple', 'orange', 'blueberry', 'strawberry'];
-   * ML.loop(arr, function(element, index) {
-   *   console.log(element); // Will console out: apple, orange, etc...
-   *   console.log(index); // Will console out the array item's index: 0, 1, etc...
-   * })
-   */
-  loop: function(arr, cb) {
-    for (var i = 0, len = arr.length; i < len; i++) {
-      if (typeof arr[i] === 'object') {
-        ML.El.clean(arr[i]);
-      }
-
-      cb.call(this, arr[i], i);
-    }
-  },
-
-  /**
-   * Returns the width and height of the window. [credit](http://www.howtocreate.co.uk/tutorials/javascript/browserwindow)
+   * Returns the width and height of the window.
    * @return {Object}
    */
   windowDimen: function() {
-    var h = 0;
-    var w = 0;
-
-    if (typeof(window.innerWidth) === 'number') {
-      w = window.innerWidth;
-      h = window.innerHeight;
-    } else if (document.documentElement && (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
-      w = document.documentElement.clientWidth;
-      h = document.documentElement.clientHeight;
-    } else if (document.body && (document.body.clientWidth || document.body.clientHeight)) {
-      w = document.body.clientWidth;
-      h = document.body.clientHeight;
-    }
-
     return {
-      w: w,
-      h: h
+      w: window.innerWidth,
+      h: window.innerHeight
     };
+  },
+
+  /**
+   * Returns nodes as an array.
+   * @param {Nodes} nodeList Nodes from a list of nodes.
+   * @returns {Array}
+   */
+  nodeArr: function(nodeList) {
+    return Array.prototype.slice.call(nodeList);
   },
 
   /**
@@ -265,15 +191,6 @@ ML = {
     }
     
     return obj;
-  },
-
-  /**
-   * Returns a string with whitespace removed.
-   * @param {String} str String to remove whitespace.
-   * @return {String}
-   */
-  trim: function(str) {
-    return str.replace(/(^\s+|\s+$)/g, '');
   }
 };
 
@@ -283,7 +200,7 @@ ML = {
 */
 ML.El = {
   /**
-   * Stores events bound to elements.
+   * Stored Element Events.
    * @type {Arrays}
    */
   Events: [],
@@ -381,44 +298,14 @@ ML.El = {
    * @param {String} type The type of event.
    * @param {Function} cb Callback function.
    * @param {Event} cb.e The Event Object.
-   * @param {Boolean} [capture]
+   * @param {Boolean} [capture=false]
    */
   evt: function(el, type, cb, capture) {
-    var resize = {
-      delay: 100,
-      timeout: null,
-      throttled: false
-    };
-
     if (ML.isUndef(capture, true)) {
       capture = false;
     }
 
-    // TODO: Separate out into separate event + function.
-    // Make into custom event.
-    if (type === 'resize.throttle') {
-      ML.El.evt(window, 'resize', function() {
-        
-        if (!resize.throttled) {
-          cb();
-          resize.throttled = true;
-          resize.timeout = setTimeout(function() {
-            resize.throttled = false;
-            clearTimeout(resize.timeout);
-          }, resize.delay);
-        } 
-      }, capture);
-      return;
-    }
-
-    if (el.addEventListener) {// other browsers
-      el.addEventListener(type, cb, capture);
-    } else if (el.attachEvent) { // ie 8 and below
-      el.attachEvent('on' + type, cb);
-    } else { // for older browsers
-      el['on' + type] = cb;
-    }
-
+    el.addEventListener(type, cb, capture);
     ML.El.Events.push([el, type, cb]);
   },
 
@@ -431,42 +318,19 @@ ML.El = {
    * @param {Boolean} [capture]
    */
   removeEvt: function(el, type, cb) {
-    if (el.removeEventListener) {
-      el.removeEventListener(type, cb, false);
-    } else if (el.detachEvent) {
-      el.detachEvent("on" + type, cb);
-    } else {
-      el["on" + type] = null;
-    }
+    el.removeEventListener(type, cb, false);
   },
 
   /**
-   * Trigger events bound to elements.
-   * @param {HTMLElement} el The element to trigger an event on.
-   * @param {String} type The type of event to trigger.
+   * Create a custom event.
+   * @param {String} name The name of the custom event.
+   * @param {Object} data Data to send with the custom event.
+   * @param {HTMLElement} [el=document] Element to attach the custom event to.
    */
-  evtTrigger: function(el, type) {
-    var event;
-
-    if (document.createEvent) {
-      event = document.createEvent('HTMLEvents');
-      event.initEvent(type, true, true);
-    } else if (document.createEventObject) { // IE < 9
-      event = document.createEventObject();
-      event.eventType = type;
-    }
-
-    event.type = type;
-
-    if (el.dispatchEvent) {
-      el.dispatchEvent(event);
-    } else if (el.fireEvent) { // IE < 9
-      el.fireEvent('on' + event.eventType, event); // can trigger only real event (e.g. 'click')
-    } else if (el[type]) {
-      el[type]();
-    } else if (el['on' + type]) {
-      el['on' + type]();
-    }
+  customEventTrigger: function(name, data, el) {
+    var eventName = new CustomEvent(name, {detail: data});
+    var element = ML.isUndef(el) ? document : el;
+    element.dispatchEvent(eventName);
   },
 
   /**
@@ -495,7 +359,7 @@ ML.El = {
   },
 
   /**
-   * Returns element that was clicked on.
+   * Returns element that was clicked.
    * @param {Event} evt The event object.
    * @return {HTMLElement}
    */
@@ -516,89 +380,68 @@ ML.El = {
   },
 
   /**
-   * Returns HTMLElement based on id attriube.
-   * @param {String} id The id of the element to return.
-   * @return {HTMLElement}
+   * Returns a DOM element.
+   * @param {String} selector The DOM selector.
+   * @returns {HTMLElement}
    */
-  $: function(id) {
-    if (ML.isUndef(document.getElementById(id), true)) {
+  $q: function(selector) {
+    if (ML.isUndef(document.querySelector(selector), true)) {
       throw new Error('Element can\'t be found.');
-    } else {
-      return document.getElementById(id);
     }
+
+    return document.querySelector(selector);
   },
 
   /**
-   * Returns an element based on tag.
-   * If you provide a parent you can limit the amount of elements that get returned.
-   * @param {String} tag The tag name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is `document`.
-   * @return {HTMLElement}
+   * Returns an array of DOM ellements.
+   * @param {String} selectors Selectors to find in the DOM.
+   * @returns {Array}
    */
-  _$: function(tag, parent) {
-    var result = document.getElementsByTagName(tag);
-
-    if (result.length < 1) {
-      throw new Error('The first parameter needs to be a valid tag.');
+  $qAll: function(selectors) {
+    if (ML.isUndef(document.querySelectorAll(selectors), true)) {
+      throw new Error('Element(s) can\'t be found.');
     }
 
-    if ((typeof parent).toLowerCase() === 'object') {
-      result = parent.getElementsByTagName(tag);
-    }
-
-    return result;
+    return ML.nodeArr(document.querySelectorAll(selectors));
   },
 
   /**
-   * Returns an element based on class name.
-   * @param {String} cn The class name of the element.
-   * @param {HTMLElement} [parent=document] The parent element, default is `document`.
-   * @return {HTMLElement}
+   * Applies a CSS transition to an element.
+   * @param {HTMLElement} el Element to apply style to.
+   * @param {String} values The css transition values to apply.
    */
-  $C: function(cn, parent) {
-    var elms = [];
-    var cnSplit = cn.split('.');
-    var classN = (cnSplit.length > 1) ? cnSplit[1] : cnSplit[0];
-
-    if (document.getElementsByClassName) { // for browsers that support getElementsByClassName
-      if ((typeof parent).toLowerCase() === 'object') {
-        elms = parent.getElementsByClassName(classN);
-      } else {
-        elms = document.getElementsByClassName(classN);
-      }
-    } else {
-      var tags = ((typeof parent).toLowerCase() === 'object') ?
-        ML.El._$('*', parent) : ML.El._$('*', document);
-      var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
-
-      for (var i = 0, len = tags.length; i < len; i++) {
-        if (regex.test(tags[i].className)) {
-          elms.push(tags[i]);
-        }
-      }      
-    }
-
-    return elms;
+  cssTransition: function(el, values) {
+    el.style.webkitTransition = values;
+    el.style.transition = values;
   },
 
   /**
-   * Removes a class name from an element. [credit](http://blkcreative.com/words/simple-javascript-addclass-removeclass-and-hasclass)
+   * Applies CSS transform to an element.
+   * @param {HTMLElement} el Element to apply style to.
+   * @param {String} values The CSS transform values to apply.
+   */
+  cssTransform: function(el, values) {
+    el.style.webkitTransform = values;
+    el.style.transform = values;
+  },
+
+  /**
+   * Removes a class name from an element.
    * @param {HTMLElement} elem The element of the class name to be removed.
-   * @param {String} classN Class names to be removed.
-   * @param {Boolean} [multiple] If there are multiple class names to be removed.
+   * @param {String} classN Class name(s) to be removed.
+   * @param {Boolean} [multiple=false] If there are multiple class names to be removed.
    */
   removeClass: function(elem, classN, multiple) {
-    var currClass = ML.trim(elem.className);
-    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)', 'g');
-
-    elem.className = ML.trim(currClass.replace(regex, ' '));
+    var currClass = elem.classList;
 
     if (multiple) {
-      var classNames = classN.split(' ');
+      var classnames = classN.split(' ');
 
-      for (var i = 0, len = classNames.length; i < len; i++) {
-        ML.El.removeClass(elem, classNames[i]);
+      for (var i = 0, len = classnames.length; i < len; i++) {
+        currClass.remove(classnames[i]);
       }
+    } else {
+      currClass.remove(classN);
     }
   },
 
@@ -609,8 +452,11 @@ ML.El = {
    * @return {Boolean}
    */
   hasClass: function(elem, classN) {
-    var regex = new RegExp('(^|\\s)' + classN + '(\\s|$)');
-    return regex.test(elem.className);
+    if (ML.isUndef(elem.classList)) {
+      return;
+    }
+
+    return elem.classList.contains(classN);
   },
 
   /**
@@ -619,12 +465,7 @@ ML.El = {
    * @param {String} classN The class name to add.
    */
   addClass: function(elem, classN) {
-    var currClass = ML.trim(elem.className);
-    var addedClass = (currClass.length === 0) ? classN : currClass + ' ' + classN;
-
-    if (!ML.El.hasClass(elem, classN)) {
-      elem.className = addedClass;
-    }
+    elem.classList.add(classN);
   },
 
   /**
@@ -634,14 +475,7 @@ ML.El = {
    * @param {Boolean} [cond] Boolean value to determine whether class name should be added or removed.
    */
   toggleClass: function(elem, classN, cond) {
-    var _cond = ML.bool(cond);
-    var someCond = ML.isBool(_cond) ? _cond : ML.El.hasClass(elem, classN);
-
-    if (someCond) {
-      ML.El.removeClass(elem, classN);
-    } else {
-      ML.El.addClass(elem, classN);
-    }
+    elem.classList.toggle(classN, cond);
   },
 
   /**
@@ -707,32 +541,13 @@ ML.El = {
   },
 
   /**
-   * Returns the computed style. [credit](http://snipplr.com/view/13523/getcomputedstyle-for-ie)
-   * @return {String}
-   */
-  compStyle: function() {
-    
-  },
-
-  /**
    * Returns a style for a specific element.
    * @param {HTMLElement} element The element to get styles for.
    * @param {String} styleProp Style property to get the value of.
    * @return {Object}
    */
   getStyle: function(element, styleProp) {
-    var y;
-
-    if (element.currentStyle === undefined) {
-      y = window.getComputedStyle(element, '').getPropertyValue(styleProp);
-    } else {
-      // TODO: Added for IE < 9 kebab case to camelCase.
-      y = element.currentStyle[styleProp.replace(/-([a-z])/g, function (m, w) {
-        return w.toUpperCase();
-      })];
-    }
-
-    return y;
+    return window.getComputedStyle(element, '').getPropertyValue(styleProp);
   },
 
   /**
@@ -775,373 +590,4 @@ ML.El = {
   data: function(element, attr) {
     return ML.El.getAttr(element, 'data-' + attr);
   }
-};
-
-/**
- * * Easily animate CSS values. [credit](https://javascript.info/js-animation)
- * * Only `px` values can be animated at this time.
- * * Animated properties can be relative. If the value leads with  `+` or `-`, then 
- * the target value is computed by adding or subtracting the given number from the current value of the property.
- * * For now `opacity` can not be animated with a relative value. 
- * * The following easing options are available: `linear` (default), `elastic`, `quad`,
- * `quint`, `circ`, `back` or `bounce`.
- * 
- * @example
- * var props = {width: 100, height: 100};
- * var settings = {delay: 15, duration: 500, easing: 'bounce'};
- * 
- * new ML.Animate(ML.$('el'), props, settings, function() {
- *   alert('animation is complete');
- * });
- * 
- * @param {HTMLElement} el Element to animate.
- * @param {Object} props CSS properties to animate.
- * @param {Object} [settings] Configuration settings.
- * @param {Number} [settings.duration=400] The duration of the animation, defaults to 400ms.
- * @param {Number} [settings.delay=13] The delay of the animation, defaults to 13.
- * @param {Boolean} [settings.relative=true] Ability to override animating relative values.
- * @param {String} [settings.easing=linear] Type of animation (`bounce`, `elastic`, etc..), defaults to `linear`
- * @param {Function} [cb] Callback function.
- * @constructor
- */
-ML.Animate = function(el, props, settings, cb) {
-  /**
-   * Animate defaults.
-   * @type {Object}
-   * @private
-   */
-  var DEFAULTS = {
-    duration: 400,
-    delay: 13,
-    easing: 'linear',
-    relative: true
-  };
-
-  var Easing = {
-    linear: function(progress) {
-      return progress;
-    },
-
-    elastic: function(progress) {
-      return Math.pow(2, 10 * (progress - 1)) * Math.cos(20 * Math.PI * 1.5 / 3 * progress);
-    },
-
-    quad: function(progress) {
-      return Math.pow(progress, 2);
-    },
-
-    quint: function(progress) {
-      return Math.pow(progress, 5);
-    },
-
-    circ: function(progress) {
-      return 1 - Math.sin(Math.acos(progress));
-    },
-
-    back: function(progress) {
-      return Math.pow(progress, 2) * ((1 + 1.5) * progress - 1.5);
-    },
-
-    bounce: function(progress) {
-      for (var a = 0, b = 1; 1; a += b, b /= 2) {
-        if (progress >= (7 - 4 * a) / 11) {
-          return -Math.pow((11 - 6 * a - 11 * progress) / 4, 2) + Math.pow(b, 2);
-        }
-      }
-    }
-  };
-
-  var options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
-  var timer = null;
-  var currProps = {};
-  var progress = false;
-  var time = new Date();
-
-  /**
-   * Initialization of animating elements.
-   * @private
-   */
-  function init() {
-    if (ML.isUndef(el.tagName)) {
-      throw new Error('You can only animate a valid element on the page.');
-    } else {
-      if (!ML.isNum(options.duration)) {
-        options.duration = DEFAULTS.duration;
-      }
-
-      if (!ML.isNum(options.delay)) {
-        options.delay = DEFAULTS.delay;
-      }
-
-      if (!ML.isBool(options.relative)) {
-        options.relative = DEFAULTS.relative;
-      }
-
-      if (ML.isUndef(Easing[options.easing])) {
-        options.easing = Easing[DEFAULTS.easing];
-      } else {
-        options.easing = Easing[options.easing];
-      }
-    }
-
-    move();
-  }
-
-  /**
-   * Gets the current CSS values of the properties being animated.
-   * @private
-   */
-  function getCurrs() {
-    var currProp = '';
-    currProps = {};
-
-    for (var prop in props) {
-      currProp = parseFloat(ML.El.getStyle(el, prop).replace('px', ''));
-      currProps[prop] = currProp;
-    }
-  }
-
-  /**
-   * Fade in/out an element.
-   * @private
-   */
-  function fadeEl() {
-    var curr = (currProps.opacity * 100);
-    var desr = (props.opacity * 100);
-    var whole = Math.round(curr + (desr - curr) * options.easing(progress));
-
-    el.style.opacity = whole / 100;
-  }
-
-  /**
-   * Animates the element with the new CSS values provided.
-   * @private
-   */
-  function move() {
-    var value = 0;
-    getCurrs();
-
-    timer = setInterval(function() {
-      value = 0;
-      progress = (new Date() - time) / options.duration;
-
-      if (progress > 1) {
-        progress = 1;
-      }
-
-      for (var prop in props) {
-        if (prop === 'opacity') {
-          fadeEl();
-        } else {
-          if (options.relative && (/^\+/g.test(props[prop]) || /^\-/g.test(props[prop]))) {
-            value = Math.round(currProps[prop] + parseFloat(props[prop]) * options.easing(progress));
-          } else {
-            value = Math.round(currProps[prop] + (props[prop] - currProps[prop]) * options.easing(progress));
-          }
-          
-          el.style[prop] = value + 'px';
-        }
-      }
-
-      if (progress === 1) {
-        clearInterval(timer);
-        if (typeof cb === 'function') {
-          cb();
-        }
-      }
-    }, options.delay);
-  }
-
-  init();
-};
-
-/**
- * * Vanilla ajax requests
- * * Supports `GET`, `POST`, `PUT`, `DELETE`, `JSONP` methods.
- * * When using `JSONP` request, you need to setup a global callback function and
- * pass in the function name as a string in `jsonpCallback`.
- *
- * @example <caption>GET Request</caption>
- * new ML.Ajax({
- *   responseType: 'json',
- *   url: 'https://reqres.in/api/users/2',
- *   success: function(xhr) {
- *     console.log(xhr.response.data);
- *   },
- *   error: function(xhr) {
- *     console.log('ERROR', xhr);
- *   }
- * });
- *
- * @example <caption>POST Request</caption>
- * new ML.Ajax({
- *   url: 'https://reqres.in/api/users',
- *   method: 'POST',
- *   responseType: 'json',
- *   data: {
- *     name: 'john smith',
- *     age: 22
- *   },
- *   success: function(xhr) {
- *     console.log(xhr.response);
- *   },
- *   error: function(xhr) {
- *     console.log('ERROR', xhr);
- *   }
- * });
- *
- * @example <caption>JSONP Request</caption>
- * var callbackFunction = function(response) {
- *   console.log(response);
- * };
- * 
- * new ML.Ajax({
- *   url: 'https://jsfiddle.net/echo/jsonp',
- *   method: 'JSONP',
- *   data: {
- *     name: 'john smith',
- *     age: 22
- *   },
- *   jsonpCallback: 'callbackFunction'
- * });
- * 
- * @param {Object} params Configuration settings.
- * @param {String} [params.method=GET] The type of request.
- * @param {String} params.url The URL to make a request to.
- * @param {Object} [params.headers={'Content-type': 'application/x-www-form-urlencoded'}] Adds headers to your request: `request.setRequestHeader(key, value)`
- * @param {String} [params.responseType=text] Format of the response. [info](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType)
- * @param {Boolean} [params.cors=false] Cross domain request. 
- * @param {Object|String} [params.data=null] Data to send with the request.
- * @param {String} params.jsonpCallback The name of the function for JSONP callback.
- * @param {Function} params.success If the request is successful. XHR is returned.
- * @param {Function} params.error If the request errors out. XHR is returned.
- * @constructor
- */
-ML.Ajax = function(params) {
-  /**
-   * Ajax defaults.
-   * @type {Object}
-   * @private
-   */
-  var DEFAULTS = {
-    method: 'GET',
-    url: null,
-    headers: {
-      'Content-type': 'application/x-www-form-urlencoded'
-    },
-    responseType: 'text',
-    cors: false, 
-    data: null,
-    jsonpCallback: '',
-    success: function() {},
-    error: function() {}
-  };
-
-  var xhr = null;
-  var options = ML.extend(DEFAULTS, (ML.isUndef(params, true)) ? {} : params);
-
-  /**
-   * Initialization of ajax.
-   * @private
-   */
-  function init() {
-    if (window.location.host === '') {
-      throw new Error('Must be hosted on a server.');
-    } else {
-      xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-      options.method = options.method.toString().toUpperCase();
-      options.cors = ML.bool(options.cors);
-
-      if (!/[^/]+$/.test(options.url)) {
-        throw new Error('Not a valid URL.');
-      }
-
-      if (!/^GET$|^POST$|^JSONP$|^PUT$|^DELETE$/.test(options.method)) {
-        options.method = DEFAULTS.method;
-      }
-
-      if (ML.isUndef(options.responseType, true)) {
-        options.responseType = DEFAULTS.responseType;
-      }
-
-      if (!ML.isBool(options.cors)) {
-        options.cors = DEFAULTS.cors;
-      }
-
-      if ((typeof options.data) !== 'object') {
-        options.data = DEFAULTS.data;
-      } else {
-        options.data = ML.urlParams(options.data);
-      }
-
-      if (options.method === 'JSONP') {
-        jsonpRequest();
-      } else {
-        xhrRequest();
-      }
-    }
-  }
-
-  /**
-   * JSONP Request.
-   * @private
-   */
-  function jsonpRequest() {
-    var script = ML.El.create('script');
-    options.url += (options.url.indexOf('?') + 1 ? '&' : '?') + ML.urlParams(options.data);
-    options.url += (options.url.indexOf('?') + 1 ? '&' : '?') + 'callback=' + options.jsonpCallback;
-    script.src = options.url;
-
-    document.body.appendChild(script);
-  }
-
-  /**
-   * XHR Request: GET, POST, PUT, JSONP, DELETE
-   * @private
-   */
-  function xhrRequest() {
-    var readyState = function() {
-      // Only run if the request is complete
-      if (xhr.readyState !== 4) {
-        return;
-      }
-
-      if (xhr.status >= 200 && xhr.status < 300) {
-        options.success(xhr);
-      } else {
-        options.error(xhr);
-      }
-    };
-
-    ML.El.evt(xhr, 'readystatechange', readyState);
-
-    if (options.cors) {
-      if ('withCredentials' in xhr) {
-        xhr.withCredentials = true;
-      } else if (typeof XDomainRequest !== 'undefined') {
-        xhr = new XDomainRequest();
-      } else {
-        throw new Error('CORS is not supported.');
-      } 
-    }
-
-    xhr.open(options.method, options.url);
-    xhr.responseType = options.responseType;
-
-    for (var header in options.headers) {
-      if (options.headers.hasOwnProperty(header)) {
-        xhr.setRequestHeader(header, options.headers[header]);
-      }
-    }
-
-    xhr.send(options.data);
-  }
-
-  /**
-   * Returns the XHR.
-   * @return {Object|String}
-   */
-  this.xhr = xhr;
-  
-  init();
 };

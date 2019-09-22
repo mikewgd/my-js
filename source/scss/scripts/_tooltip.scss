@@ -3,53 +3,52 @@
 .tooltip {
   position: absolute;
   z-index: 10000;
-  zoom: 1;
   display: none;
 
-  &.active, 
-  .tooltip-content {
+  &:after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    display: block;
+    position: absolute;
+    transform: rotate(45deg);
+  }
+
+  &.active {
     display: block;
   }
 
-  .tooltip-arrow {
-    position: absolute;
-  }
-
-  &.tooltip-left-align,
-  &.tooltip-right-align {
-    .tooltip-arrow {
-      top: 50%;
-    }
-  }
-
-  &.tooltip-bottom-align,
-  &.tooltip-top-align {
-    .tooltip-arrow {
-      left: 50%;
-    }
-  }
-
-  &.tooltip-left-align {
-    .tooltip-arrow {
-      right: 0;
-    }
-  }
-
-  &.tooltip-right-align {
-    .tooltip-arrow {
-      left: 0;
-    }
-  }
-
-  &.tooltip-bottom-align {
-    .tooltip-arrow {
-      top: 0;
-    }
-  }
-
-  &.tooltip-top-align {
-    .tooltip-arrow {
+  &-top-align {
+    &:after {
       bottom: 0;
+      left: 50%;
+      border-left: 0;
+      border-top: 0;
+    }
+  }
+
+  &-bottom-align {
+    &:after {
+      top: 0;
+      left: 50%;
+      border-right: 0;
+      border-bottom: 0;
+    }
+  }
+
+  &-left-align {
+    &:after {
+      top: 50%;
+      border-left: 0;
+      border-bottom: 0;
+    }
+  }
+
+  &-right-align {
+    &:after {
+      top: 50%;
+      border-top: 0;
+      border-right: 0;
     }
   }
 }

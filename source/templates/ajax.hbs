@@ -1,10 +1,5 @@
 {{>header}}
 
-  <div class="script-header">
-    <h1>{{title}}</h1>
-    <a href="docs.html#carousel">Documentation</a>
-  </div>
-
   <p>Click on "make request" and check the console for the response.</p>
 
   <div class="ajax-content-1">
@@ -34,11 +29,19 @@
     </div>
   </div>
 
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li>CORS is configurable.</li>
+      <li>You can specify response type & headers.</li>
+    </ul>
+  </div>
+
 {{#> footer}}
   <script>
-    var btn1 = ML.El.$('ajaxBtn1');
-    var btn2 = ML.El.$('ajaxBtn2');
-    var btn3 = ML.El.$('ajaxBtn3');
+    var btn1 = ML.El.$q('#ajaxBtn1');
+    var btn2 = ML.El.$q('#ajaxBtn2');
+    var btn3 = ML.El.$q('#ajaxBtn3');
 
     var callbackFunction = function(response) {
       console.log(response);

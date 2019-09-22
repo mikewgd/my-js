@@ -1,21 +1,35 @@
 /* CAROUSEL */
 
 .carousel {
-  overflow: hidden;
-
-  &--viewer {
+  &-viewer {
     overflow-y: hidden;
     overflow-x: scroll;
     position: relative;
   }
 
-  &--dots {
+  &-dots {
+    margin: 14px 0;
+    text-align: center;
+
     ul {
       padding: 0;
       margin: 0;
       list-style-type: none;
-      text-align: center;
 
+      a {
+        text-indent: -9999em;
+        text-decoration: none;
+        display: block;
+        border-radius: 100%;
+        width: 8px;
+        height: 8px;
+        background-color: #ccc;
+      }
+
+      .active a {
+        background-color: #000;
+      }
+      
       li {
         display: inline-block;
       }
@@ -26,12 +40,13 @@
     padding: 0;
     margin: 0;
     list-style-type: none;
-    width: 99999em;
     position: relative;
+    display: flex;
+  }
 
-    li {
-      float: left;
-    }
+  img {
+    user-select: none;
+		pointer-events: none
   }
 
   .inactive {

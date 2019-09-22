@@ -4,13 +4,16 @@
   color: #999;
 }
 
-.disabled {
-  opacity: 0.5;
-  filter: alpha(opacity = 50);
+input[disabled] {
+  & + label:before {
+    opacity: 0.5;
+  } 
 }
 
-.focus {
-  outline: 1px solid #F60;
+input:focus {
+  & + label:before {
+    outline: 1px solid #F60;
+  }
 }
 
 /* custom radio and checkboxes */
@@ -22,12 +25,6 @@ select.styled {
   overflow: hidden;
   left: -9000em;
   margin: 0;
-}
-
-.checkbox,
-.radio {
-  float: left;
-  zoom: 1;
 }
 
 /* select menu */
@@ -64,7 +61,8 @@ select.styled {
     cursor: pointer;
     z-index: 10000;
     left: -99999em;
-    zoom: 1;
+    max-height: 0;
+    overflow: auto;
   }
 
   li {

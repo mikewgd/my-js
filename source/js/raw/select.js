@@ -1,24 +1,23 @@
 (function () {
   /**
-   * Custom select menu/dropdown.
+   * Custom select.
    * @private
    */
   var Dropdown = {
     /**
-     * All select menus on the page are stored here.
+     * <select> stored here.
      * @type {Array}
-     * @private
      */
     selects: [],
 
     /**
-     * Custom select menus are stored here.
+     * Custom selects are stored here.
      * @type {Array}
      */
     customSelects: [],
 
     /**
-     * Click/Focus/Blur/Change Events attached to SELECT elements.
+     * Click/Focus/Blur/Change Events attached to <select>.
      * @type {Object}
      */
     attachedEvents: {
@@ -29,102 +28,85 @@
     },
 
     /**
-     * Links found inside the dropdown.
-     * @type {Array}
-     */
-    optionLinks: [],
-
-    /**
-     * Loops through all selects on the page and creates a dropdown that will be used
-     * as the dropdown.
-     * Events placed on the SELECT are stored in an object for later use.
+     * Loops through all `<select>` on the page and creates a dropdown.
      */
     init: function() {
-      var selects = ML.El._$('select');
       var self = this;
+      self.selects = ML.El.$qAll('select:not(.system):not(.styled)');
 
-      ML.loop(selects, function(select) {
-        if (ML.El.hasClass(select, 'system') || ML.El.hasClass(select, 'styled')) {
-          return;
-        }
-
-        self.selects.push(select);
+      ML.nodeArr(self.selects).map(function(select) {
         self.createCustom(select);
         self.pushEvents(select);
       });
-
       this.bindEvents();
     },
 
     /**
      * Creates the custom select.
-     * @param {HTMLELement} select The SELECT element to customize.
+     * @param {HTMLELement} select The `<select>` element.
      */
     createCustom: function(select) {
       var div = ML.El.create('div', {'class': 'dropdown'});
-      var ul = ML.El.create('ul', {'class': 'dropdown-menu'});
-      var dropdownLink = ML.El.create('a', {href: '#', 'class': 'dropdown-link', tabIndex: -1});
+      var ul = null;
 
-      div.appendChild(dropdownLink);
-      div.appendChild(ul);
+      div.innerHTML = '<a href="#" class="dropdown-link" tabindex="-1"></a>' +
+                      '<ul class="dropdown-menu"></ul>';
 
       this.customSelects.push(div);
       ML.El.addClass(select, 'styled');
 
       ML.El.clean(select.parentNode);
 
-      // adds the custom select after the <select>
+      // Adds the custom select after the <select>
       select.parentNode.insertBefore(div, select.nextSibling);
 
       if (select.disabled) {
         ML.El.addClass(div, 'disabled');
       }
 
-      this.createLis(div, ML.El._$('option', select));
+      this.createLis(div, ML.nodeArr(select.querySelectorAll('option')));
+      ul = div.querySelector('.dropdown-menu');
 
-      // sets the width of the new select div to the width of the <ul>
-      div.style.width = ul.offsetWidth + 'px';
+      // Sets the width of the new select div to the width of the <ul>
+      div.style.width = (ul.offsetWidth + 1) + 'px';
     },
 
     /**
-     * Creates the LI elements inside the dropdown.
+     * Creates the `<li>` elements inside the dropdown.
      * @param {HTMLElement} div The dropdown.
-     * @param {Array} options An array of all the OPTION tags from the select menu.
+     * @param {Array} options An array of all the `<option>` tags from the `<select>`.
      */
     createLis: function(div, options) {
-      var li = null;
-      var ul = ML.El._$('ul', div)[0];
-      var a = null;
-      var txt = '';
-      var dropdownLink = ML.El._$('a', div)[0];
+      var ul = div.querySelector('.dropdown-menu');
+      var dropdownLink = div.querySelector('.dropdown-link');
+      var lis = '';
 
-      for (var i = 0, len = options.length; i < len; i++) {
-        li = ML.El.create('li', {'data-value': options[i].value, 'data-index': i});
-        a = ML.El.create('a', {'href': '#', tabIndex: -1});
-        txt = document.createTextNode(options[i].innerHTML);
-
-        li.appendChild(a);
-        a.appendChild(txt);
-        ul.appendChild(li);
-
-        this.optionLinks.push(a);
-
-        if (options[i].disabled) {
-          ML.El.addClass(li, 'disabled');
+      options.forEach(function(option, index) {
+        if (option.disabled) {
+          lis += '<li class="disabled" data-value="' + option.value + '" data-index="' + index + '">';
+        } else {
+          lis += '<li data-value="' + option.value + '" data-index="' + index + '">';
         }
 
-        // if there is a selected option, put it in the dropdown link
-        if (options[i].selected) {
-          dropdownLink.innerHTML = options[i].innerHTML;
-          dropdownLink.setAttribute('data-index', i);
-          div.setAttribute('data-value', options[i].value);
+        lis += '<a href="#" tabindex="-1">' +
+                  option.innerHTML +
+              '</a>' +
+          '</li>';
+
+        // If there is a selected option, put it in the dropdown link
+        if (option.selected) {
+          dropdownLink.innerHTML = option.innerHTML;
+          dropdownLink.setAttribute('data-index', index);
+          div.setAttribute('data-value', option.value);
         }
-      }
+      });
+
+      ul.innerHTML = lis;
     },
 
     /**
-     * Any events attached to the SELECT are pushed into an array to be used later.
-     * @param {HTMLElement} select The SELECT to get attached events for.
+     * Any events attached to the `<select>` are pushed into an array to be used later.
+     * @param {HTMLElement} select The `<select>` to get attached events for.
      */
     pushEvents: function(select) {
       var events = ML.El.Events;
@@ -137,7 +119,7 @@
         type = events[i][1];
         func = events[i][2];
 
-        // Only pushes the events if SELECT has any events attached to it.
+        // Only pushes the events if `<select>` has any events attached to it.
         if (elem === select) {
           this.attachedEvents[type].push([elem, func]);
         }
@@ -166,21 +148,27 @@
     },
 
     /**
-     * Events bound to the SELECT and custom inputs DIV.
-     * @private
+     * Events bound to the `<select>` and custom select.
      */
     bindEvents: function() {
       var self = this;
 
-      ML.loop(this.optionLinks, function(optionLink) {
-        ML.El.evt(optionLink, 'click', self.optionClick);
-
-        ML.El.evt(optionLink, 'mouseover', self.optionMouseOver);
+      self.customSelects.forEach(function(item) {
+        ML.nodeArr(item.querySelectorAll('li:not(.disabled) a')).forEach(function(link) {
+          ML.El.evt(link, 'click', self.optionClick);
+          ML.El.evt(link, 'mouseover', self.optionMouseOver);
+        });
       });
 
       ML.El.evt(document, 'click', self.documentClick);
 
-      ML.loop(this.selects, function(select) {
+      ML.El.evt(window, 'blur', function() {
+        for (var i = 0, len = Dropdown.customSelects.length; i < len; i++) {
+          ML.El.removeClass(Dropdown.customSelects[i], 'active focus', true);
+        }
+      });
+
+      this.selects.map(function(select) {
         ML.El.evt(select, 'focus', self.selectFocus, true);
 
         ML.El.evt(select, 'blur', self.selectBlur);
@@ -204,10 +192,6 @@
         'text': clicked.innerHTML
       };
 
-      if (ML.El.hasClass(li, 'disabled')) {
-        return;
-      }
-
       if (args.value !== ML.El.getAttr(custom, 'data-value')) {
         Dropdown.selectOption(custom, args);
         Dropdown.attachOldEvt(custom.previousSibling, 'change');
@@ -225,7 +209,7 @@
       var clicked = ML.El.clicked(e);
       var ul = clicked.parentNode.parentNode;
 
-      ML.loop(ML.El._$('li', ul), function(li){
+      ML.nodeArr(ul.querySelectorAll('li')).map(function(li){
         ML.El.removeClass(li, 'selected');
       });
     },
@@ -250,7 +234,7 @@
     },
 
     /**
-     * Focus event attached to SELECT.
+     * Focus event attached to `<select>`.
      * @param {Event} e The Event object.
      */
     selectFocus: function(e) {
@@ -270,7 +254,7 @@
     },
 
     /**
-     * Blur event attached to SELECT.
+     * Blur event attached to `<select>`.
      * @param {Event} e The Event object.
      */
     selectBlur: function(e) {
@@ -294,7 +278,7 @@
     },
 
     /**
-     * Change event attached to SELECT.
+     * Change event attached to `<select>`.
      * @param {Event} e The Event object.
      */
     selectChange: function(e) {
@@ -310,7 +294,7 @@
     },
 
     /**
-     * Handles the changing of the selected item in the dropdown as well as the SELECT.
+     * Handles the changing of the selected item in the dropdown as well as the `<select>`.
      * @param {HTMLElement} el The dropdown.
      * @param {Object} option
      * @param {Number} option.index Index position in the DOM.
@@ -319,7 +303,7 @@
      */
     selectOption: function(el, option) {
       var select = el.previousSibling;
-      var dropdownLink = ML.El._$('a', el)[0];
+      var dropdownLink = el.querySelector('.dropdown-link');
 
       dropdownLink.innerHTML = option.text;
       dropdownLink.setAttribute('data-index', option.index);
@@ -330,8 +314,8 @@
 
     /**
      * Opens and closes the dropdown and only one to be open at a time.
-     * Also events attached to the LI element to remove the selected state,
-     * to replicate the <select> functionality.
+     * Also events attached to the `<li>` element to remove the selected state,
+     * to replicate the <`<select>`> functionality.
      * @param {HTMLElement} clicked Element being clicked, event is bound to the document too.
      * @param {HTMLElement} clickedParent Parent element to clicked element being clicked on.
      */
@@ -339,42 +323,40 @@
       if (ML.El.hasClass(clickedParent, 'dropdown')) {
         if (clicked.className === 'dropdown-link') {
           var div = clickedParent;
+          var dropdownLink = div.querySelector('.dropdown-link');
+          var menu = div.querySelector('.dropdown-menu');
 
-          if (!ML.El.hasClass(div, 'focus')) {
-            ML.El.addClass(div, 'focus');
-          }
+          ML.El.toggleClass(div, 'focus', !ML.El.hasClass(div, 'focus'));
 
           // Handles the toggling of the select menu and allowing only one to be open at a time.
-          ML.loop(Dropdown.customSelects, function(c) {
+          Dropdown.customSelects.map(function(c) {
             if (c !== clickedParent) {
-              ML.El.removeClass(c, 'active');
-              ML.El.removeClass(c, 'focus');
+              ML.El.removeClass(c, 'active focus', true);
             }
           });
 
           ML.El.toggleClass(div, 'active');
+          menu.style.maxHeight = window.innerHeight -
+            div.offsetTop - dropdownLink.offsetHeight - 20 + 'px';
 
           // Adds selected to currently selected item
-          ML.El._$('li', div)[ML.El.data(clicked, 'index')].className = 'selected';
+          div.querySelectorAll('li')[ML.El.data(clicked, 'index')].className = 'selected';
           Dropdown.attachOldEvt(div.previousSibling, 'click');
         }
       } else {
         for (var i = 0, len = Dropdown.customSelects.length; i < len; i++) {
-          ML.El.removeClass(Dropdown.customSelects[i], 'active');
-          ML.El.removeClass(Dropdown.customSelects[i], 'focus');
+          ML.El.removeClass(Dropdown.customSelects[i], 'active focus', true);
         }
       }
     }
   };
-
-  // TODO: Search for elements in container instead of all selects on page. (browser support)
   
   /**
-   * Custom select menu/dropdown.
+   * Custom select.
+   * If the `<select>` has a class name of `system`, a custom select will not be created.
    * This script changes all select menus and creates an HTML menu.
-   * If you do not want custom radio buttons or checkboxes add `system` class name to
-   * the input.
    * Events bound to the `<select>` are bound to the custom select menu. Events supported: `focus`, `blur` and `change`.
+   * [See it in action + some notes! 😀](/form-select.html)
    * @namespace
    *
    * @example {@lang xml}
@@ -385,7 +367,7 @@
    * </select>
    *
    * @example <caption>The script is initialized on page load, but if new <code>&lt;select&gt;</code>
-   * added to the page dynamically. Use the line below:</caption>
+   * are added, use the line below:</caption>
    * ML.Dropdown();
    *
    * @example <caption>The markup the plugin creates:</caption> {@lang xml}
