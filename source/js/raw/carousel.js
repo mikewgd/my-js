@@ -3,7 +3,7 @@
    * * A component for cycling through images, text and other elements, like a carousel.
    * * Nested carousels are not supported, and generally not compliant with accessibility standards.
    * * Each carousel should have a unique `id` attribute.
-   * * Every initialized carousel gets `MLCarousel` added to the element. For an example see example below.
+   * * Every initialized carousel gets `MLCarousel` added to the element. 
    * * When setting `arrowKeys: true`, please note you need to focus on the carousel or an 
    * element within the carousel for the arrow keys to work correctly.
    * * `js-carousel-initialized` class name gets added to the carousel element.
@@ -11,7 +11,7 @@
    * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
    * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
    * * You can listen to custom events fired by the carousel. The carousel and carousel options are returned. See example below.
-   * * [Demo](/carousel.html)
+   * * [See it in action + some notes! 😀](/carousel.html)
    * 
    * | Event Name | Description |
    * |----------------------|----------------------------------------------------|
