@@ -174,6 +174,7 @@
    * Creates a custom event called `switch`, which gets fired when the breakpoint has changed.
    * The custom event provides the name of the breakpoint and width in pixels.
    * Each breakpoint name is in the following format: `bp-{number}`.
+   * [See it in action + some notes! 😀](/breakpoints.html)
    * @namespace
    * 
    * @example <caption>Using the custom event.</caption>
