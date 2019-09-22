@@ -6,7 +6,7 @@
  * current property value and increase or decrease the property balue by 25 (see demo). 
  * * The `to` menthod is used to animate css values and override global configuration.
  * * The `delay` method is used to delay the animation from occuring.
- * * [Demo](/animate.html)
+ * * [See it in action + some notes! 😀](/animate.html)
  * 
  * @example
  * // Global configuration
