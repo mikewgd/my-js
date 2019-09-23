@@ -1,6 +1,7 @@
 {
   "title": "Custom Form Elements - Radio buttons & Checkboxes",
   "script": "radiocheck",
+  "docs": "ML.CustomRadios",
   "radiosSameName": [
     "male",
     "female",

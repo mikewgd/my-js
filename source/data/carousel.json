@@ -1,5 +1,6 @@
 {
   "title": "Carousel",
+  "docs": "ML.Carousel",
   "script": "carousel",
   "items": [
     "giraffe",

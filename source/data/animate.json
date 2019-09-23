@@ -1,5 +1,6 @@
 {
   "title": "Animate",
+  "docs": "ML.Animate",
   "script": "animate",
   "actions": [
     {

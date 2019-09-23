@@ -1,7 +1,12 @@
 {
   "title": "Directory",
   "script": false,
+  "docs": "index",
   "pages": [
+    {
+      "title": "AJAX",
+      "page": "ajax"
+    },
     {
       "title": "Animate",
       "page": "animate"
@@ -9,14 +14,6 @@
     {
       "title": "Carousel",
       "page": "carousel"
-    },
-    {
-      "title": "Modal",
-      "page": "modal"
-    },
-    {
-      "title": "Tooltip",
-      "page": "tooltip"
     },
     {
       "title": "Placeholder Polyfill",
@@ -31,8 +28,12 @@
       "page": "form-select"
     },
     {
-      "title": "AJAX",
-      "page": "ajax"
+      "title": "Modal",
+      "page": "modal"
+    },
+    {
+      "title": "Tooltip",
+      "page": "tooltip"
     }
   ]
 }
