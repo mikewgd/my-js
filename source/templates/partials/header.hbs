@@ -10,3 +10,11 @@
 <body>
 
 <div class="container">
+
+  <div class="script-header">
+    <h1>{{title}}</h1>
+    <div class="links">
+      <a href="#notes">Notes</a>
+      {{#if docs}}<a href="docs/{{docs}}.html">Docs / Features</a>{{/if}}
+    </div>
+  </div>
