@@ -1,6 +1,6 @@
 {
   "title": "Animate",
-  "script": "global",
+  "script": "animate",
   "actions": [
     {
       "id": "animRight",
