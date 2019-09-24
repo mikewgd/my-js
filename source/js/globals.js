@@ -384,31 +384,8 @@ ML.El = {
    * @param {Boolean} [capture]
    */
   evt: function(el, type, cb, capture) {
-    var resize = {
-      delay: 100,
-      timeout: null,
-      throttled: false
-    };
-
     if (ML.isUndef(capture, true)) {
       capture = false;
-    }
-
-    // TODO: Separate out into separate event + function.
-    // Make into custom event.
-    if (type === 'resize.throttle') {
-      ML.El.evt(window, 'resize', function() {
-        
-        if (!resize.throttled) {
-          cb();
-          resize.throttled = true;
-          resize.timeout = setTimeout(function() {
-            resize.throttled = false;
-            clearTimeout(resize.timeout);
-          }, resize.delay);
-        } 
-      }, capture);
-      return;
     }
 
     if (el.addEventListener) {// other browsers
