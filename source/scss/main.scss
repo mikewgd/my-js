@@ -103,6 +103,19 @@ p {
   }
 }
 
+.notes {
+  background-color: $gray;
+  padding: 14px;
+  margin-top: 50px;
+  border: 1px solid #999;
+  display: inline-block;
+
+
+  h3 {
+    margin: 0;
+  }
+}
+
 /* Script specific styles */
 @import 
   "main/scripts/carousel",
