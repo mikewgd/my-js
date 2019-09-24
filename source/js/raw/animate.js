@@ -1,12 +1,11 @@
 
 /**
  * * Easily animate CSS values. [credit](https://javascript.info/js-animation)
- * * Only `px` values can be animated at this time.
- * * Animated properties can be relative. If the value leads with  `+` or `-`, then 
- * the target value is computed by adding or subtracting the given number from the current value of the property.
- * * For now `opacity` can not be animated with a relative value. 
- * * The following easing options are available: `linear` (default), `elastic`, `quad`,
+ * * The following easing options are available: `linear`, `elastic`, `quad`,
  * `quint`, `circ`, `back` or `bounce`.
+ * * You can animate relative values by doing `+25` or `-25` for a value. Which will take the 
+ * current property value and increase or decrease the property balue by 25 (see demo). 
+ * * [See it in action + some notes!](/animate.html)
  * 
  * @example
  * var props = {width: 100, height: 100};
