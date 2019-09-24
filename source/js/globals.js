@@ -119,10 +119,10 @@ ML = {
   },
 
   /**
-   * Returns `true` or `false` if a value is undefined or not.
-   * @param {*} val The value to test if undefined.
-   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". Parameter is
-   * optional. If a value is empty and paramter is not set, `false` is returned.
+   * Returns `true` or `false` if a value is undefined.
+   * @param {*} val Test value.
+   * @param {Boolean} [empty=false] Checks if the value is empty, i.e. "". 
+   * If a value is empty and parameter is not set, `false` is returned.
    * @return {Boolean}
    */
   isUndef: function(val, empty) {
@@ -137,7 +137,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a boolean.
-   * @param {*} val The value to test if a boolean.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isBool: function(val) {
@@ -146,7 +146,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a number.
-   * @param {*} val The value to test if a number.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isNum: function(val) {
@@ -155,7 +155,7 @@ ML = {
 
   /**
    * Returns `true` or `false` if value is a string.
-   * @param {*} val The value to test if a string.
+   * @param {*} val Test value.
    * @return {Boolean}
    */
   isString: function(val) {
@@ -194,10 +194,10 @@ ML = {
   /**
    * Loop through an array with callback.
    * 
-   * @param {Arrays} arr The array to loop though.
-   * @param {Function} cb Function to be called during loop.
-   * @param {*} cb.element The value of the array element.
-   * @param {Number} cb.index The index of the array element.
+   * @param {Arrays} arr The array.
+   * @param {Function} cb Callback function.
+   * @param {*} cb.element The value of the array.
+   * @param {Number} cb.index The index of the array.
    * 
    * @example
    * var arr = ['apple', 'orange', 'blueberry', 'strawberry'];
@@ -283,7 +283,7 @@ ML = {
 */
 ML.El = {
   /**
-   * Stores events bound to elements.
+   * Stored Element Events.
    * @type {Arrays}
    */
   Events: [],
@@ -681,14 +681,6 @@ ML.El = {
     }
 
     return elem;
-  },
-
-  /**
-   * Returns the computed style. [credit](http://snipplr.com/view/13523/getcomputedstyle-for-ie)
-   * @return {String}
-   */
-  compStyle: function() {
-    
   },
 
   /**
