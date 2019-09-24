@@ -42,7 +42,7 @@ const paths = {
     this.src.files = `${this.src.root}/files/*`;
     this.src.components = {
       'global.js': jsGlobalPath,
-      'carousel.js': [jsGlobalPath, `${jsRawPath}/carousel.js`],
+      'carousel.js': [jsGlobalPath, `${jsRawPath}/animate.js`, `${jsRawPath}/carousel.js`],
       'input.js': [jsGlobalPath, `${jsRawPath}/input.js`],
       'modal.js': [jsGlobalPath, `${jsRawPath}/modal.js`],
       'radiocheck.js': [jsGlobalPath, `${jsRawPath}/radiocheck.js`],

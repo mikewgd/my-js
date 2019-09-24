@@ -6,10 +6,11 @@
    * * Every initialized carousel gets `MLCarousel` added to the element. For an example see example below.
    * * When setting `arrowKeys: true`, please note you need to focus on the carousel or an 
    * element within the carousel for the arrow keys to work correctly.
-   * * Adds a `js-carousel-initialized` class to the carousel element.
+   * * `js-carousel-initialized` class name gets added to the carousel element.
    * * You can initialize carousels via `data-carousel` or JavaScript.
    * * Carousel should be formatted as an unordered list `<ul>` and each `<li>` should 
    * have a class name of `carousel-slide`, i.e. `<li class="carousel-slide"></li>`
+   * * [See it in action + some notes!](/carousel.html)
    *
    * @example <caption>Sample carousel HTML (initialized via <code>data-</code> with default settings.):</caption> {@lang xml}
    * <div class="carousel" id="customCarousel" data-carousel>
@@ -79,7 +80,7 @@
    * 
    * @param {HTMLElement} el The carousel element.
    * @param {Object} [settings] Configuration settings.
-   * @param {Number} [settings.current=0] The current slide to start on. 0 based.
+   * @param {Number} [settings.current=0] The current slide to start on.
    * @param {Boolean} [settings.autoplay=false] The carousel will start automatically.
    * @param {Number} [settings.autoplaySpeed=2000] The autoplay interval in milliseconds.
    * @param {Boolean} [settings.dots=false] Dot navigation.
@@ -215,7 +216,6 @@
       el.MLCarousel.init = true;
       el.MLCarousel.complete = function(cb2) {
         methods.complete = cb2;
-        // return el.MLCarousel;
       };
       el.MLCarousel.currentSlideIndex = current;
       ML.El.addClass(el, 'js-carousel-initialized');
@@ -223,7 +223,6 @@
 
       bindEvents();
       callback(true);
-
 
       if (options.autoplay) {
         this.autoplay(true);
@@ -508,8 +507,6 @@
       if (/carousel-nav/.test(target.parentNode.className)) {
         target = target.parentNode;
       }
-
-      // slideDirection = (ML.El.hasClass(target, 'prev')) ? 'prev' : 'next';
 
       if (ML.El.hasClass(target, 'prev')) {
         self.prev();
