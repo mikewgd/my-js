@@ -357,7 +357,7 @@
           });
 
           ML.El.toggleClass(div, 'active');
-          menu.style.maxHeight = window.innerHeight -
+          menu.style.height = window.innerHeight -
             div.offsetTop - clicked.offsetHeight - 20 + 'px';
 
           // Adds selected to currently selected item
