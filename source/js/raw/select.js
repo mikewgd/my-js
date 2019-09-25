@@ -357,7 +357,7 @@
           });
 
           ML.El.toggleClass(div, 'active');
-          menu.style.height = window.innerHeight -
+          menu.style.maxHeight = window.innerHeight -
             div.offsetTop - clicked.offsetHeight - 20 + 'px';
 
           // Adds selected to currently selected item
@@ -372,8 +372,6 @@
       }
     }
   };
-
-  // TODO: Search for elements in container instead of all selects on page. (browser support)
   
   /**
    * Custom select.
