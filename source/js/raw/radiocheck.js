@@ -5,19 +5,19 @@
    */
   var CustomRadios = {
     /**
-     * All radios and checkboxes on the page are stored here.
+     * Radios and checkboxes stored here.
      * @type {Array}
      */
     inputs: [],
 
     /**
-     * Custom radios and checkboxes are stored here.
+     * Custom radios and checkboxes stored here.
      * @type {Array}
      */
     customInputs: [],
 
     /**
-     * Click/Focus/Blur Events attached to INPUT elements.
+     * Click/Focus/Blur Events attached to `<input />` elements.
      * @type {Object}
      */
     attachedEvents: {
@@ -27,9 +27,7 @@
     },
 
     /**
-     * Loops through all inputs on the page and creates a SPAN that
-     * will be used as the custom input.
-     * Events placed on the input are stored in an object for later use.
+     * Loops through all `<input />` on the page and creates custom radios and checkboxes.
      */
     init: function() {
       var inputs = ML.El._$('input');
@@ -53,7 +51,7 @@
 
     /**
      * Creates the custom input.
-     * @param {HTMLELement} input The input element to customize.
+     * @param {HTMLELement} input The input element.
      */
     createCustom: function(input) {
       var span = ML.El.create('span', {'class': input.type});
@@ -77,7 +75,7 @@
 
     /**
      * Any events attached to the input are pushed into an array to be used later.
-     * @param {HTMLElement} input The input to get attached events for.
+     * @param {HTMLElement} input The input.
      */
     pushEvents: function(input) {
       var events = ML.El.Events;
@@ -90,7 +88,7 @@
         type = events[i][1];
         func = events[i][2];
 
-        // Only pushes the events if INPUT has any events attached to it.
+        // Only pushes the events if `<input />` has any events attached to it.
         if (elem === input) {
           this.attachedEvents[type].push([elem, func]);
         }
@@ -119,7 +117,7 @@
     },
 
     /**
-     * Events bound to the input and custom inputs SPAN.
+     * Events bound to the `<input />` and `<span>`
      */
     bindEvents: function() {
       var self = this;
@@ -234,12 +232,9 @@
     }
   };
 
-  // TODO: Search for elements in container instead of all inputs on page. (browser support)
-
   /**
    * Custom radio buttons and checkboxes.
-   * Creates `<span>` elements after the radio and checkbox inputs.
-   * When an input is checked it adds a `checked` class to the `<span>` element.
+   * Creates `<span>` elements after the radio and/or checkbox inputs.
    * Events bound to the `<input>` are bound to the custom radios and checkboxes. Events supported: `focus`, `blur`, `click` and `mouseup`.
    * @namespace
    *
