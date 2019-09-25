@@ -1,4 +1,5 @@
 {
   "title": "Placeholder Polyfill",
-  "script": "input"
+  "script": "input",
+  "docs": "ML.InputControl"
 }
