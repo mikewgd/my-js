@@ -16,11 +16,12 @@
 
 .modal {
   position: fixed;
-  top: 50%;
+  top: 25%;
   left: 50%;
   width: 100%;
   display: none;
   z-index: 2;
+  max-width: 600px;
 
   &.active {
     display: block;
