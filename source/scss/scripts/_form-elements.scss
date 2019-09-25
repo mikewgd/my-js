@@ -65,6 +65,8 @@ select.styled {
     z-index: 10000;
     left: -99999em;
     zoom: 1;
+    max-height: 0;
+    overflow: auto;
   }
 
   li {
