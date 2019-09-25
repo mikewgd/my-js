@@ -525,7 +525,7 @@
 
       if (options.infinite) {
         var delta = (slideDirection === 'prev') ? -1 : 1;
-        desired = parseInt(window.getComputedStyle(ul).getPropertyValue("left")) + (-width * delta);
+        desired = parseInt(window.getComputedStyle(ul).getPropertyValue('left')) + (-width * delta);
       }
 
       ML.Animate(ul, {left: desired}, {relative: false}, function() {

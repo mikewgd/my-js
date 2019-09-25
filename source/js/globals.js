@@ -411,9 +411,9 @@ ML.El = {
     if (el.removeEventListener) {
       el.removeEventListener(type, cb, false);
     } else if (el.detachEvent) {
-      el.detachEvent("on" + type, cb);
+      el.detachEvent('on' + type, cb);
     } else {
-      el["on" + type] = null;
+      el['on' + type] = null;
     }
   },
 
