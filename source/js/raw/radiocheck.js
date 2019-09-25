@@ -236,6 +236,7 @@
    * Custom radio buttons and checkboxes.
    * Creates `<span>` elements after the radio and/or checkbox inputs.
    * Events bound to the `<input>` are bound to the custom radios and checkboxes. Events supported: `focus`, `blur`, `click` and `mouseup`.
+   * [See it in action + some notes!](/form-radios.html)
    * @namespace
    *
    * @example {@lang xml}
