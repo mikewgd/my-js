@@ -10,8 +10,18 @@
       <span> &ndash; {{{this.description}}}</span>
     </li>
   {{/examples}}
-    <li><a data-tooltip title="Hello I was created." href="#">Dynamic Tooltip</a> - Usage shown in the code.</li>
+    <li><a data-tooltip="width:180" title="Hello I was created." href="#">Dynamic Tooltip</a> - Usage shown in the code.</li>
   </ul>
+
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    <ul>
+      <li><code>smart: true</code>, detects collision with window and will change width and/or alignment.</li>
+      <li>A <code>delay</code> option is available, which delays hiding the tooltip when mouse out event is fired.<br>
+      You can also specify the delay time in ms.</li>
+      <li>Only mouseover and mouseout are supported events for showing and hidding the tooltip.</li>
+    </ul>
+  </div>
 
   <div class="tooltip" id="unique-id1">
     <div class="tooltip-content">

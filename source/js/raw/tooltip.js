@@ -3,13 +3,13 @@
    * * A message that appears when a cursor is positioned over an element
    * * Each tooltip should have a unique `id` attribute to match the element's `rel` attribute.
    * * Nested tooltips are not supported.
-   * * You can show tooltips via `data-tooltop` or JavaScript.
+   * * You can show tooltips via `data-tooltip` or JavaScript.
    * * Valid align options are: `right`, `left`, `top` and `bottom` to the element 
    * activating the tooltip overlay.
    * * When setting `smart: true`, the tooltip will only detect collision with `window`.
    * * Custom tooltip based on `title` attribute.
-   * * Every tooltip element gets `MLToolip` added to the element.
-   *
+   * * Every tooltip element gets `MLTooltip` added to the element.
+   * * [See it in action + some notes!](/tooltip.html)
    * @example <caption>Sample markup of tooltip HTML.</caption> {@lang xml}
    * <div class="tooltip" id="unique-id1">
    *   <div class="tooltip-content">
@@ -26,7 +26,6 @@
    * // Only JavaScript needed:
    * <script>
    *   var tooltips = new ML.Tooltip({
-   *     arrow: false, // Global configuration.
    *     delay: true
    *   });
    *   
@@ -37,23 +36,19 @@
    *
    * @example <caption>The tooltip can be triggered via JavaScript instead of or in addition
    * to <code>data-tooltip</code></caption>
-   * // Will show the tooltip HTML with id of unique-id1 with a width of `50 pixels and will
-   * // add the class name 'show me' to the tooltip element.
-   * tooltips.show('unique-id1', {width: `50, activeClass: 'show-me'});
+   * // Will show the tooltip HTML with id of unique-id1 with a width of `50 pixels
+   * tooltips.show('unique-id1', {width: 50});
    *
    * @example <caption>Dynamic tooltip that shows a tooltip with the content "I am a tooltip" inside.</caption> {@lang xml}
    * <a href="#" data-tooltip="smart:true:delay:true" title="I am a tooltip">tooltip link</a>
    *
    * @param {Object} [settings] Configuration settings.
-   * @param {String} [settings.selectorTooltip=tooltip] The selector for the tooltip.
-   * @param {String} [settings.activeclass=active] The class to show the tooltip.
-   * @param {Number} [settings.width=100] The width of the tooltip.
-   * @param {Boolean} [settings.arrow=true] Whether to show an arrow or not.
+   * @param {Number} [settings.width=150] The width of the tooltip.
    * @param {String} [settings.align=right] Where to align the tooltip.
    * @param {Boolean} [settings.smart=false] If the tooltip should change position or width
    * to not overlap the window.
    * @param {Boolean} [settings.delay=false] Delay the tooltip going away on `mouseout`.
-   * @param {Number} [settings.delayTime=3000] Duration to keep the tooltip visible 
+   * @param {Number} [settings.delayTime=3000] Duration to keep the tooltip visible, in ms.
    * when setting `delay: true`
    * @constructor
    */
@@ -64,10 +59,7 @@
      * @private
      */
     var DEFAULTS = {
-      selectorTooltip: 'tooltip',      // TODO: class name, can change to attr
-      activeClass: 'active',
-      width: 100,
-      arrow: true,
+      width: 150,
       align: 'right',
       smart: false,
       delay: false,
@@ -98,8 +90,6 @@
       'bottom'
     ];
 
-    var selectorTip = 'data-tooltip';   // TODO: class name, can change to attr
-
     var options = {};
     var tooltips = [];
     var tips = [];
@@ -117,53 +107,16 @@
 
       self.destroy();
 
-      options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
-      options.selectorTooltip = options.selectorTooltip.toString();
-      options.width = parseInt(options.width);
-      options.arrow = ML.bool(options.arrow);
-      options.smart = ML.bool(options.smart);
-      options.delay = ML.bool(options.delay);
+      options = validateOptions();
 
-      if (!ML.isUndef(options.activeClass, true) && ML.isString(options.activeClass)) {
-        options.activeClass = options.activeClass.toString();
-      }
-
-      if (ML.El.$C(options.selectorTooltip).length < 1) {
-        throw new Error('There are no <div class="' + options.selectorTooltip + '" /> on the page.');
+      if (ML.El.$C('tooltip').length < 1) {
+        throw new Error('There are no tooltips on the page.');
       } else {
-        tooltips = ML.El.$C(options.selectorTooltip);
-      }
-
-      if (!ML.isNum(options.width)) {
-        options.width = DEFAULTS.width;
-      }
-
-      if (!ML.isNum(options.delayTime)) {
-        options.delayTime = DEFAULTS.delayTime;
-      }
-
-      if (ML.isUndef(options.activeClass, true)) {
-        options.activeClass = DEFAULTS.activeClass;
-      }
-
-      if (!ML.isBool(options.arrow)) {
-        options.arrow = DEFAULTS.arrow;
-      }
-
-      if (!ML.isBool(options.smart)) {
-        options.smart = DEFAULTS.smart;
-      }
-
-      if (!ML.isBool(options.delay)) {
-        options.delay = DEFAULTS.delay;
-      }
-
-      if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
-        options.align = DEFAULTS.align;
-      }
+        tooltips = ML.El.$C('tooltip');
+      }      
 
       ML.loop(tags, function(element) {
-        if (element.getAttribute(selectorTip) !== null) {
+        if (element.getAttribute('data-tooltip') !== null) {
           if (ML.isUndef(element.rel, true)) {
             if (element.title) {
               element.rel = 'MLTooltip-' + new Date().getTime();
@@ -177,9 +130,39 @@
         }
       });
 
-      updateTooltips(null, options);
       bindEvents();
     };
+
+    /**
+     * Validates the options for the tooltip.
+     * @private
+     */
+    function validateOptions() {
+      options = ML.extend(DEFAULTS, (ML.isUndef(settings, true)) ? {} : settings);
+      options.width = parseInt(options.width);
+      options.smart = ML.bool(options.smart);
+      options.delay = ML.bool(options.delay);
+
+      if (!ML.isNum(options.width)) {
+        options.width = DEFAULTS.width;
+      }
+
+      if (!ML.isNum(options.delayTime)) {
+        options.delayTime = DEFAULTS.delayTime;
+      }
+
+      if (!ML.isBool(options.smart)) {
+        options.smart = DEFAULTS.smart;
+      }
+
+      if (!ML.isBool(options.delay)) {
+        options.delay = DEFAULTS.delay;
+      }
+
+      if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
+        options.align = DEFAULTS.align;
+      }
+    }
 
     /**
      * Events bound to elements.
@@ -230,7 +213,7 @@
      * @private
      */
     function createTooltip(link) {
-      var tooltip = ML.El.create('div', {id: link.rel, 'class': options.selectorTooltip});
+      var tooltip = ML.El.create('div', {id: link.rel, 'class': 'tooltip'});
 
       tooltip.innerHTML = '<div class="tooltip-content">' +
                             '<p>' + link.title + '</p>' +
@@ -240,7 +223,7 @@
       link.removeAttribute('title');
 
       document.body.appendChild(tooltip);
-      tooltips = ML.El.$C(options.selectorTooltip);
+      tooltips = ML.El.$C('tooltip');
     }
 
     /**
@@ -286,7 +269,7 @@
      * tooltips.show('unique-id1', {width: 400});
      */
     this.show = function(tip, tooltipOptions) {
-      var tooltip = updateTooltips(ML.El.$(tip.rel), ML.extend(options, tooltipOptions));
+      var tooltip = ML.El.$(tip.rel);
       var arrow = null;
       var collides = {};
       var count = 0;
@@ -295,32 +278,29 @@
           collide('top', tooltip) || collide('bottom', tooltip);
       };
 
-      if (tooltip.MLTooltip.arrow) {
-        if (ML.El.$C('tooltip-arrow', tooltip).length > 0) {
-          arrow = ML.El.$C('tooltip-arrow', tooltip);
-        } else {
-          arrow = ML.El.create('span', {'class': 'tooltip-arrow'});
-          tooltip.appendChild(arrow);
-        }
+      if (ML.El.$C('tooltip-arrow', tooltip).length > 0) {
+        arrow = ML.El.$C('tooltip-arrow', tooltip);
+      } else {
+        arrow = ML.El.create('span', {'class': 'tooltip-arrow'});
+        tooltip.appendChild(arrow);
       }
 
-      ML.El.addClass(tooltip, tooltip.MLTooltip.activeClass);
+      tooltip.MLTooltip = ML.extend(DEFAULTS, tooltipOptions);
+      ML.El.addClass(tooltip, 'active');
       
-      setDimens(tip, tooltip, {align: 'ml', width: 'ml'})
+      setDimens(tip, tooltip, {align: 'ml', width: 'ml'});
 
       if (tooltip.MLTooltip.smart) {
         collides = collidesAll(tooltip);
         count = 0;
 
         while (collides) {
-          setDimens(tip, tooltip, {align: ALIGNS[count], width: false})
-
+          setDimens(tip, tooltip, {align: ALIGNS[count], width: false});
           collides = collidesAll(tooltip);
           count++;
 
           if (count > 4) {
-            setDimens(tip, tooltip, {align: 'ml', width: DEFAULTS.width})
-            
+            setDimens(tip, tooltip, {align: 'ml', width: DEFAULTS.width});
             collides = collidesAll(tooltip);
             count = 0;
           }
@@ -328,6 +308,13 @@
       }
     };
 
+    /**
+     * Sets dimensions for the tooltip.
+     * @param {HTMLElement} tip The tooltip toggle link.
+     * @param {HTMLElement} tooltip The tooltip element.
+     * @param {Object} obj Tooltip options
+     * @private
+     */
     function setDimens(tip, tooltip, obj) {
       var align = (obj.align === 'ml') ? tooltip.MLTooltip.align : obj.align;
       var width = (obj.width === 'ml') ? tooltip.MLTooltip.width : obj.width;
@@ -338,7 +325,6 @@
 
       ML.El.removeClass(tooltip, ALIGNMENT_CLASSES.join(' '), true);
       ML.El.addClass(tooltip, 'tooltip-' + align + '-align');
-
       setPosition(tip, tooltip, align);
     }
 
@@ -361,59 +347,7 @@
       return ML.El.collides(sides[side], el);
     }
 
-    /**
-     * Updates the tooltips array.
-     * @param {HTMLElement} el The tooltip to search for in array.
-     * @param {Object} options The options for the tooltip.
-     * @return {HTMLElement} The tooltip found in the array of tooltips.
-     * @private
-     */
-    function updateTooltips(el, options) {
-      var tooltip = {};
-
-      for (var i = 0, len = tooltips.length; i < len; i++) {
-        if (el === null || el.id === tooltips[i].id) {
-          tooltip = tooltips[i];
-
-          options.width = parseInt(options.width);
-          options.arrow = ML.bool(options.arrow);
-          options.smart = ML.bool(options.smart);
-          options.delay = ML.bool(options.delay);
-
-          if (!ML.isNum(options.width)) {
-            options.width = DEFAULTS.width;
-          }
-
-          if (!ML.isNum(options.delayTime)) {
-            options.delayTime = DEFAULTS.delayTime;
-          }
-
-          if (ML.isUndef(options.activeClass, true)) {
-            options.activeClass = DEFAULTS.activeClass;
-          }
-
-          if (!ML.isBool(options.arrow)) {
-            options.arrow = DEFAULTS.arrow;
-          }
-
-          if (!ML.isBool(options.smart)) {
-            options.smart = DEFAULTS.smart;
-          }
-
-          if (!ML.isBool(options.delay)) {
-            options.delay = DEFAULTS.delay;
-          }
-
-          if (!/^left$|^right$|^top$|^bottom$/.test(options.align.toString())) {
-            options.align = DEFAULTS.align;
-          }
-
-          tooltips[i].MLTooltip = options;
-        }
-      }
-
-      return tooltip;
-    }
+    
 
     /**
      * Sets the position of the tooltip
@@ -425,19 +359,13 @@
     function setPosition(tip, tooltip, align) {
       var tipDimens = ML.El.dimens(tip);
       var tooltipDimens = ML.El.dimens(tooltip);
+      var arrowSize = ML.El.$C('tooltip-arrow', tooltip)[0].offsetWidth;
 
       switch (align) {
-        case 'right':
-          ML.El.setStyles(tooltip, {
-            top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) + 'px',
-            left: tipDimens.x  + tipDimens.width + 'px'
-          });
-          break;
-
         case 'left':
           ML.El.setStyles(tooltip, {
-            top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) + 'px',
-            left: tipDimens.x - tooltip.offsetWidth + 'px'
+            top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) - 7 + 'px',
+            left: tipDimens.x - tooltip.offsetWidth - arrowSize + 'px'
           });
           break;
 
@@ -454,6 +382,13 @@
             left: tipDimens.x - (tooltip.offsetWidth / 2) + (tipDimens.width / 2) + 'px'
           });
           break;
+
+        default:
+          ML.El.setStyles(tooltip, {
+            top: Math.abs((tooltipDimens.height / 2) - tipDimens.y - tipDimens.height) - arrowSize + 'px',
+            left: tipDimens.x  + tipDimens.width + arrowSize + 'px'
+          });
+          break;
       }
     }
 
@@ -465,7 +400,7 @@
      */
     this.hide = function() {
       ML.loop(tooltips, function(tooltip) {
-        ML.El.removeClass(tooltip, tooltip.MLTooltip.activeClass);
+        ML.El.removeClass(tooltip, 'active');
       });
     };
   };

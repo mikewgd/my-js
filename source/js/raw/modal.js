@@ -177,7 +177,7 @@
 
       ML.El.setStyles(modal, {
         marginLeft: '-' + (modal.offsetWidth / 2) + 'px'
-      })
+      });
   	};
 
     /**
