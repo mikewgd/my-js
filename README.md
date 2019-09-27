@@ -10,8 +10,8 @@ There are different branches within the repository that differ in terms of brows
 Any feedback on what could be done better, bugs you see please put in [Github](https://github.com/mikewgd/my-js/issues).
 
 ## Branches
-1. Branch master: IE10 - 11+ support
-2. Branch ie6: IE6 - 7+ support.
+1. **Branch master**: IE10 - 11+ support
+2. [Branch ie6](https://github.com/mikewgd/my-js/tree/ie67): IE6 - 7+ support.
 3. Branch es5/6: Code written using classes, compiled via babel. Built off master.
 
 ## Running the Project
