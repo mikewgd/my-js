@@ -3,7 +3,7 @@
 
 backend:
   name: git-gateway # Netlify’s Git Gateway connects to Git provider’s API
-  branch: master # Branch to update (master by default)
+  branch: ie67 # Branch to update (master by default)
 
 media_folder: "assets/img/uploads" # Folder where user uploaded files should go
 
