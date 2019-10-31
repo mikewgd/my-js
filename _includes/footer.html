@@ -1,0 +1,9 @@
+<div class="footer">
+  Copyright &copy; 2019 | <a href="docs/index.html" target="_blank">Documentation</a> | <a href="https://mikewgd.com">mikewgd.com</a>
+</div>
+
+{% if page.scriptFile != '' and page.section != 'home' %}
+  <script type="text/javascript" src="assets/js/{{ page.scriptFile }}"></script>
+{% endif %}
+
+{{ page.script }}

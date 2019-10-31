@@ -1,0 +1,241 @@
+ @import "main/utils";
+
+/* MAIN */
+
+body {
+  font: 14px "Arial", Helvetica, sans-serif;
+  color: #171219;
+  margin: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 150%;
+  background-color: #F4F4F4;
+
+  a {
+    color: $portland-orange;
+  
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* General Classes */
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.hide-desktop {
+  @media screen and (min-width: 667px) {
+    display: none;
+  }
+}
+
+.hide-mobile {
+  display: none;
+  @media screen and (min-width: 667px) {
+    display: inline;
+  }
+}
+
+.hidden {
+  position: absolute;
+  top: -99999em;
+  visibility: hidden;
+  display: none;
+}
+
+.no-show {
+  display: none;
+}
+
+form {
+  padding: 5px;
+  border: 1px solid #ccc;
+
+  input[type=text] {
+    display: block;
+  }
+}
+
+h2 {
+  color: #515052;
+}
+
+.tight {
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  padding: 0 0 0 20px;
+  margin: 0;
+
+  li {
+    margin-top: 6px;
+  }
+}
+
+ul.list li {
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0 0 15px 0;
+
+  &:last-child {
+    margin: 0;
+  }
+}
+
+/* Script Header */
+.script-header {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  
+  @media screen and (min-width: 667px) {
+    flex-flow: wrap;
+  }
+
+  h1 {
+    margin: 0;
+    border-left: 5px solid $weldon-blue;
+    line-height: 135%;
+    padding: 2px 0px 2px 14px;
+    @media screen and (min-width: 667px) {
+      flex-basis: 60%;
+    }
+  }
+
+  .links {
+    @media screen and (min-width: 667px) {
+      text-align: right;
+      flex-basis: 37%;
+    }
+  }
+
+  a {
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 10px 10px 0;
+
+
+    &.back-link {
+      display: inline-block;
+      border: 1px solid $portland-orange;
+      padding: 8px;
+      max-width: 142px;
+      margin: 10px 0;
+
+      span {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border: 5px solid $portland-orange;
+        border-left-color: #F4F4F4;
+        border-bottom-color: #F4F4F4;
+        border-top-color: #F4F4F4;
+      }
+    }
+
+    &:hover {
+      background: none;
+      color: $portland-orange;
+    }
+  }
+}
+
+.notes {
+  background-color: $gray;
+  padding: 14px;
+  margin-top: 50px;
+  border: 1px solid #999;
+  display: inline-block;
+
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.current-bp {
+  background: #ccc;
+  padding: 10px;
+
+  &:before {
+    content: 'Current Breakpoint: ';
+    font-weight: bold;
+  }
+}
+
+.projects {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+
+  @media screen and (min-width: 667px) {
+    flex-direction: row;
+  }
+
+  li {
+    flex-basis: 25%;
+    margin: 0 0 8px 0;
+    overflow: hidden;
+  }
+
+  h4 {
+    margin: 0;
+    line-height: 18px;
+    color: $portland-orange;
+  }
+
+  p {
+    margin: 4px 0 0 0;
+    line-height: 18px;
+  }
+
+  a {
+    display: block;
+    padding: 10px;
+    height: 100%;
+    margin: 6px;
+    background-color: #EEE;
+    color: #000;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #EEE;
+      color: #000;
+    }
+  }
+}
+
+.footer {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Script specific styles */
+@import 
+  "main/scripts/carousel",
+  "main/scripts/form-elements",
+  "main/scripts/modal",
+  "main/scripts/tooltip",
+  "main/scripts/ajax",
+  "main/scripts/animate";

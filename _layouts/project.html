@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+{% include script-header.html %}
+
+{{ page.examples | markdownify }}
+
+{% if page.notes != '' %}
+  <div class="notes" id="notes">
+    <h3>Notes</h3>
+    {{ page.notes | markdownify }}
+  </div>
+{% endif %}
+  

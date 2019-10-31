@@ -1,4 +1,9 @@
+_site
+.sass-cache
+.jekyll-metadata
+.users.yml
 node_modules
-dist
-out
+Gemfile.lock
 docs
+assets/js
+assets/css
