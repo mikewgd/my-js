@@ -4,7 +4,12 @@ title: Custom Select Menu
 docs: ML.Dropdown.html
 scriptFile: select.js
 description: Converts a select menu into div menu dropdown.
-notes: "* `optgroup` and multiple selections are not supported.\n* Selects that have `system` as a class name will not be a custom select menu.\n* Events bound to the select, will be bound to the custom select as well.\n* Not accessible (keyboard events, maybe soon \U0001F609)"
+notes: |-
+  * IE6 maxHeight is not supported, so height is not set.
+  * `optgroup` and multiple selections are not supported.
+  * Selects that have `system` as a class name will not be a custom select menu.
+  * Events bound to the select, will be bound to the custom select as well.
+  * Not accessible (keyboard events, maybe soon)
 examples: |-
   <form id="random" method="" action="">
       <label for="month-born">Month you were born: </label>
@@ -25,8 +30,8 @@ examples: |-
 
   <div style="height:10px;clear:both;"></div>    
 
-  <label for="year-born">Year Born: </label>
-  <select id="year-born" class="" name="year-born">
+  <label for="year-born">Year Range: </label>
+  <select id="year-born" name="year-born">
     <option value="2019">2019</option>
     <option value="2018">2018</option>
     <option value="2017">2017</option>
@@ -139,8 +144,8 @@ examples: |-
     </form>
 script: |-
   <script>
-      var customContainer = ML.El.$q('#customContainer');
-      var convert = ML.El.$q('#convert');
+      var customContainer = ML.El.$('customContainer');
+      var convert = ML.El.$('convert');
       var newSelect = ML.El.create('select');
 
       newSelect.innerHTML = '<option>Created via JS</option>';
