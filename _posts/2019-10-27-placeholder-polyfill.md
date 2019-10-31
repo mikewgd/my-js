@@ -1,16 +1,18 @@
 ---
 layout: project
 title: Placeholder Polyfill
-docs: ''
-scriptFile: ''
+docs: ML.InputControl.html
+scriptFile: input.js
 description: A polyfill for input placeholder attribute.
 notes: >-
-  * No JS needed! [Browser support](https://caniuse.com/#search=placeholder)
+  * You can style when the input is focused by styling `.focus` placed on the
+  input.
 
-  * Focus state can be styled via `:focus`
+  * You can style placeholder, by styling `.js-input-placeholder` added to the
+  input.
 
-  * Placeholder text can be styled `:placeholder`, browser support varies
-  though.
+  * When form is submitted logic will need to be put in place so placeholder
+  value does not get passed when placeholder not supported.
 examples: |-
   <form id="random" method="" action="">
       <label for="first-name">First Name:</label><br />
